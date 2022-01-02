@@ -162,6 +162,7 @@ function shareMeal() {
     }
 }
 
+const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
 
 
 //pwa 설치 안내 팝업
