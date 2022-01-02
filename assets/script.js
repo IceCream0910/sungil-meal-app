@@ -69,28 +69,31 @@ function updateInfo() {
                 $('#schedule-content').html('학사 일정이 없어요');
             }
         
-            //시간표
-           $.ajax({
-        type: "GET",
-        url:  'https://sungil-school-api.vercel.app/timetable?date='+selectedDate+'&grade='+grade+'&classNum='+classNum, 
-        success: function(result2) {
-            console.log(result2)
-
-            if(JSON.stringify(result2).indexOf('해당하는 데이터가 없습니다.') > -1) {
-                $('#timetable').html('수업이 없어요😃');
+            if(!grade || !classNum) {
+                $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
             } else {
-                var length = result2.hisTimetable[0].head[0].list_total_count;
-                var timetable_result = '';
-                for(var i=0; i<length; i++) {
-                    timetable_result+=(i+1)+'교시 : '+result2.hisTimetable[1].row[i].ITRT_CNTNT+'<br>';
-                }
-                $('#timetable').html(timetable_result);
-
+                //시간표
+                $.ajax({
+                    type: "GET",
+                    url:  'https://sungil-school-api.vercel.app/timetable?date='+selectedDate+'&grade='+grade+'&classNum='+classNum, 
+                    success: function(result2) {
+                        console.log(result2)
+            
+                        if(JSON.stringify(result2).indexOf('해당하는 데이터가 없습니다.') > -1) {
+                            $('#timetable').html('수업이 없어요😃');
+                        } else {
+                            var length = result2.hisTimetable[0].head[0].list_total_count;
+                            var timetable_result = '';
+                            for(var i=0; i<length; i++) {
+                                timetable_result+=(i+1)+'교시 : '+result2.hisTimetable[1].row[i].ITRT_CNTNT+'<br>';
+                            }
+                            $('#timetable').html(timetable_result);
+            
+                        }
+                    }
+            });
             }
-        
             document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
-        }
-});
 
         }
 });
