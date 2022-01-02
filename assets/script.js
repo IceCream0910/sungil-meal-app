@@ -115,6 +115,8 @@ function updateInfo() {
             
                         if(JSON.stringify(result2).indexOf('해당하는 데이터가 없습니다.') > -1) {
                             $('#timetable').html('수업이 없어요😃');
+                            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+
                         } else {
                             var length = result2.hisTimetable[0].head[0].list_total_count;
                             var timetable_result = '';
