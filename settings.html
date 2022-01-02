@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성일고</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+    <div class="loading-overlay">
+        <div class="donut"></div>
+    </div>
+
+    <div id="settings">
+        <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
+            <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-right:20px;color:#6200ee;" onclick="javascript:history.back()">
+                <div class="mdc-fab__ripple"></div>
+                <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
+                <div class="mdc-fab__touch"></div>
+              </button>
+            <h3 style="margin-top:10px;">설정</h3>
+        </div>
+
+        <br>
+        <Br>
+        <h3 class="card__primary__title__text">학년/반 설정</h3>
+        <Br>
+        <Br>
+        <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
+            <div class="group">
+                <input id="grade" type="number" value=1 min=0 required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>학년</label>
+            </div>
+
+            <div class="group">
+                <input id="classNum" type="number" value=1 required>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>반</label>
+            </div>
+        </div>
+
+        <br>
+        <Br>
+
+        <h3 class="card__primary__title__text">앱 정보</h3>
+        <p class="lead">버전 1.0.0(Build 22010201)</p>
+
+        <a style="text-decoration: none;" href="mailto:icecream2370@kakao.com?subject=[성일고 앱 문의]">
+
+            <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label" style="font-size: 16px;color:#000;font-family: 'S-CoreDream-3Light';">개발자에게 문의하기</span>
+            </button>
+        </a>
+
+        <br>
+
+        <a style="text-decoration: none;" href="privacy.html">
+            <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label" style="font-size: 16px;color:#000;font-family: 'S-CoreDream-3Light';">오픈소스 라이선스</span>
+            </button>
+        </a>
+        <br>
+        <Br>
+
+        <p class="lead"><span class="small">Copyright 2022 Taein Yun(@Ice Cream)</span></p>
+        <br>
+        <Br>
+    </div>
+    </div>
+</body>
+
+<script src="assets/settings.js"></script>
+
+<link href="assets/style.css" rel="stylesheet">
+
+</html>
