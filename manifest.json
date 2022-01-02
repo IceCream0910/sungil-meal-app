@@ -14,7 +14,7 @@
         }
     ],
     "display": "standalone",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "background_color": "#eee",
     "theme_color": "#eee",
     "start_url": "/"
