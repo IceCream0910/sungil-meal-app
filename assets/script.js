@@ -194,7 +194,18 @@ const isIos = () => {
   // Checks if should display install popup notification:
   if (isIos() && !isInStandaloneMode()) {
     // offer app installation here
+    //
     $('.pwaBanner').show();
+    if(!isMobile) {
+        $('#desktop').show();
+    } else {
+        if(isIos) {
+            $('#ios').show();
+        } else {
+            $('#android').show();
+        }
+
+    }
+    //
   }
-  $('.pwaBanner').show();
 
