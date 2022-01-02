@@ -165,30 +165,12 @@ function shareMeal() {
 const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
 
 
-//pwa 설치 안내 팝업
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    //
-    $('.pwaBanner').show();
-    if(!isMobile) {
-        $('#desktop').show();
-    } else {
-        if(isIos) {
-            $('#ios').show();
-        } else {
-            $('#android').show();
-        }
-
-    }
-    //
-  });
-
 // Detects if device is on iOS 
 const isIos = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     return /iphone|ipad|ipod/.test( userAgent );
   }
+  
   // Detects if device is in standalone mode
   const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
   
@@ -197,16 +179,34 @@ const isIos = () => {
     // offer app installation here
     //
     $('.pwaBanner').show();
-    if(!isMobile) {
+    if(!isMobile()) {
         $('#desktop').show();
     } else {
-        if(isIos) {
+        if(isIos()) {
             $('#ios').show();
         } else {
             $('#android').show();
         }
-
     }
     //
   }
 
+
+
+//pwa 설치 안내 팝업
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    //
+    $('.pwaBanner').show();
+    if(!isMobile()) {
+        $('#desktop').show();
+    } else {
+        if(isIos()) {
+            $('#ios').show();
+        } else {
+            $('#android').show();
+        }
+    }
+    //
+  });
