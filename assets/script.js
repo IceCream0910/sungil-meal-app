@@ -162,11 +162,25 @@ function shareMeal() {
     }
 }
 
+
+
 //pwa 설치 안내 팝업
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    alert('none pwa');
+    //
+    $('.pwaBanner').show();
+    if(!isMobile) {
+        $('#desktop').show();
+    } else {
+        if(isIos) {
+            $('#ios').show();
+        } else {
+            $('#android').show();
+        }
+
+    }
+    //
   });
 
 // Detects if device is on iOS 
@@ -180,5 +194,7 @@ const isIos = () => {
   // Checks if should display install popup notification:
   if (isIos() && !isInStandaloneMode()) {
     // offer app installation here
-    alert('none pwa');
+    $('.pwaBanner').show();
   }
+  $('.pwaBanner').show();
+

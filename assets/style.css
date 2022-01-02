@@ -1188,3 +1188,23 @@ html .ui-button.ui-state-disabled:active {
     left: 0;
     z-index: 9999;
 }
+
+.pwaBanner {
+    position: fixed;
+    width: 100vw;
+    bottom: 0;
+    left: 0;
+    padding: 15px;
+    z-index: 99999;
+    background-color: #fff;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -2px 40px -5px #000;
+}
+
+.close-modal {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
