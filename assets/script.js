@@ -103,6 +103,8 @@ function updateInfo() {
         
             if(!grade || !classNum) {
                 $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
+                document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+
             } else {
                 //시간표
                 $.ajax({
@@ -120,12 +122,12 @@ function updateInfo() {
                                 timetable_result+=(i+1)+'교시 : '+result2.hisTimetable[1].row[i].ITRT_CNTNT+'<br>';
                             }
                             $('#timetable').html(timetable_result);
-            
+                            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+
                         }
                     }
             });
             }
-            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
 
         }
 });
