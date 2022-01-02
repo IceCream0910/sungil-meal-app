@@ -36,7 +36,7 @@ body {
 
 #main {
     width: 100%;
-    height: 150vh;
+    height: 100vh;
 }
 
 .today {
@@ -980,4 +980,21 @@ input:focus~.highlight {
 .lead {
     font-size: 16px;
     font-family: 'S-CoreDream-3Light';
+}
+
+#date {
+    font-size: 17px;
+    color: white;
+}
+
+header {
+    position: fixed;
+    width: 100vw;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    z-index: 9999999;
+    background-color: #5264AE;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -2px 20px -5px #5e73c8;
 }

@@ -15,7 +15,6 @@ Draggable.create($("<div>"), {
     }
   },
   onDragStart: function() {    
-    
     startTime = +Date.now() / 1000;
     lastTime = vx = vy = 0;
   },
@@ -35,6 +34,8 @@ Draggable.create($("<div>"), {
     var dy = this.y - this.startY;
     var x  = Math.abs(dx);
     var y  = Math.abs(dy);
+
+    
     
     if (x > y && x > minDistance && Math.abs(vx) > minVelocity) {
       dx > 0 ? backDate() : forwardDate();

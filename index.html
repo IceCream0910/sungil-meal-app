@@ -9,6 +9,9 @@
 
     <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
+    <link rel="shortcut icon" href="assets/icons/icon-192x192.png">
+    <link rel="icon" href="assets/icons/icon-192x192.png">
+
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="white" />
     <meta name="apple-mobile-web-app-title" content="급식충" />
@@ -42,6 +45,27 @@
 
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<header>
+    <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-right:20px;color:#6200ee;width:30px;height:30px;" onclick="backDate();">
+                <div class="mdc-fab__ripple"></div>
+                <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
+                <div class="mdc-fab__touch"></div>
+              </button>
+        <h4 id="date" style="margin-top:10px;"></h4>
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-left:20px;color:#6200ee;width:30px;height:30px;" onclick="forwardDate();">
+                <div class="mdc-fab__ripple"></div>
+                <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_forward_ios</span>
+                <div class="mdc-fab__touch"></div>
+              </button>
+        <button style="float:right;position:absolute;right:0px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='settings.html';">
+                <span class="mdc-button__ripple"></span>
+                <i class="material-icons mdc-button__icon" style="color:#fff;" aria-hidden="true"
+                  >settings</i >
+              </button>
+    </div>
+</header>
 </head>
 
 <body>
@@ -49,33 +73,9 @@
         <div class="donut"></div>
     </div>
 
-
-    <div id="main">
-        <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-            <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-right:20px;color:#6200ee;" onclick="backDate();">
-                <div class="mdc-fab__ripple"></div>
-                <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
-                <div class="mdc-fab__touch"></div>
-              </button>
-            <h3 id="date" style="margin-top:10px;"></h3>
-            <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-left:20px;color:#6200ee;" onclick="forwardDate();">
-                <div class="mdc-fab__ripple"></div>
-                <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_forward_ios</span>
-                <div class="mdc-fab__touch"></div>
-              </button>
-            <button style="float:right;position:absolute;right:10px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='settings.html';">
-                <span class="mdc-button__ripple"></span>
-                <i class="material-icons mdc-button__icon" aria-hidden="true"
-                  >settings</i >
-              </button>
-        </div>
-
-        <br>
-        <Br>
-
-        <div class="d-flex flex-row">
-            <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
-            <button id="shareBtn" style="float:right;position:absolute;right:10px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:shareMeal();">
+    <div class="d-flex flex-row">
+        <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
+        <button id="shareBtn" style="float:right;position:absolute;right:10px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:shareMeal();">
                     <span class="mdc-button__ripple"></span>
                     <span class="mdc-button__label" id="copied"></span>
 
@@ -83,53 +83,50 @@
                       >share</i
                     >
                   </button>
-        </div>
+    </div>
 
-        <div id="no-meal">
-            <img style="width: 50%;" src="assets/Ice-cream.png">
-            <br><span>급식 정보가 없어요</span>
-        </div>
-        <div id="exist-meal">
-            <div class="card">
-                <div class="card__primary__title">
-                    <small class="card__primary__title__subtext" id="kcal"></small>
-                </div>
-                <p class="card__supporting__text" id="meal-menus">
-                </p>
+    <div id="no-meal">
+        <img style="width: 50%;" src="assets/Ice-cream.png">
+        <br><span>급식 정보가 없어요</span>
+    </div>
+    <div id="exist-meal">
+        <div class="card">
+            <div class="card__primary__title">
+                <small class="card__primary__title__subtext" id="kcal"></small>
             </div>
+            <p class="card__supporting__text" id="meal-menus">
+            </p>
         </div>
+    </div>
 
-        <br>
-        <Br>
-        <div class="d-flex flex-row">
-            <h3 style="float:left" class="card__primary__title__text">시간표</h3>
-            <button style="float:right;position:absolute;right:30px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='init.html';">
+    <br>
+    <Br>
+    <div class="d-flex flex-row">
+        <h3 style="float:left" class="card__primary__title__text">시간표</h3>
+        <button style="float:right;position:absolute;right:30px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='init.html';">
                 <span class="mdc-button__ripple"></span>
                 <i class="material-icons mdc-button__icon" aria-hidden="true"
                   >settings</i
                 >
                 <span class="mdc-button__label">설정</span>
               </button>
-        </div>
-
-        <div class="card">
-            <p class="card__supporting__text" id="timetable"></p>
-        </div>
-
-        <br>
-        <Br>
-        <h3 class="card__primary__title__text">학사일정</h3>
-        <div class="card">
-            <p class="card__supporting__text" id="schedule-content"></p>
-        </div>
-        <br>
-        <Br>
-
     </div>
+
+    <div class="card">
+        <p class="card__supporting__text" id="timetable"></p>
+    </div>
+
+    <br>
+    <Br>
+    <h3 class="card__primary__title__text">학사일정</h3>
+    <div class="card">
+        <p class="card__supporting__text" id="schedule-content"></p>
+    </div>
+    <br>
+    <Br>
 </body>
 
 <script src="assets/script.js"></script>
-<script src="assets/swipe.js"></script>
 
 <link href="assets/style.css" rel="stylesheet">
 
