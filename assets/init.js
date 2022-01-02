@@ -13,9 +13,18 @@ $("#classNum").on("propertychange change keyup paste input", function(){
 
 });
 
+const isIos = () => {
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test( userAgent );
+  }
+
 function complete() {
     if($('#grade').val()!='' && $('#classNum').val()!='') {
-        history.back()
+        if(isIos()) {
+            location.href='index.html'
+        } else {
+            history.back();
+        }
     } else {
         $('#error').fadeIn();
         setTimeout(function() {
