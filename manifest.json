@@ -1,6 +1,7 @@
 {
     "name": "급식충",
     "short_name": "급식충",
+    "description": "성일고 급식, 시간표, 학사일정을 한 번에",
     "icons": [{
             "src": "assets/icons/icon-192x192.png",
             "sizes": "192x192",
