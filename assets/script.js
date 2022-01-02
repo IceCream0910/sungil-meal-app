@@ -5,9 +5,11 @@ $('#date').addClass('today');
 
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
+/*
 if(!grade || !classNum) {
    location.href="init.html"
 }
+*/
 
 updateInfo();
 

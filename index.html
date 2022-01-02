@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>급식충 - 성일고 급식, 시간표, 학사일정을 한 번에</title>
 
-    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -16,6 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <meta name="description" content="성일고 급식, 시간표, 학사일정을 한 번에" />
     <meta name="theme-color" content="#5264AE" />
+
+    <link rel="manifest" href="manifest.json">
 
     <script>
         if ("serviceWorker" in navigator) {
@@ -101,7 +102,7 @@
         <br>
         <Br>
         <div class="d-flex flex-row">
-            <h3 style="float:left" class="card__primary__title__text">시간표 ⌚</h3>
+            <h3 style="float:left" class="card__primary__title__text">시간표</h3>
             <button style="float:right;position:absolute;right:30px;" class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='init.html';">
                 <span class="mdc-button__ripple"></span>
                 <i class="material-icons mdc-button__icon" aria-hidden="true"
@@ -117,7 +118,7 @@
 
         <br>
         <Br>
-        <h3 class="card__primary__title__text">학사일정 📅</h3>
+        <h3 class="card__primary__title__text">학사일정</h3>
         <div class="card">
             <p class="card__supporting__text" id="schedule-content"></p>
         </div>

@@ -15,7 +15,7 @@ $("#classNum").on("propertychange change keyup paste input", function(){
 
 function complete() {
     if($('#grade').val()!='' && $('#classNum').val()!='') {
-        location.href='index.html'
+        history.back()
     } else {
         $('#error').fadeIn();
         setTimeout(function() {
