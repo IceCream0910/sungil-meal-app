@@ -22,13 +22,13 @@
 </head>
 
 <body>
-    <div class="loading-overlay">
-        <div class="donut"></div>
-    </div>
-
     <div id="settings">
+        <div class="loading-overlay">
+            <div class="donut"></div>
+        </div>
+
         <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-            <button class="mdc-fab mdc-fab--mini mdc-fab--touch" style="background-color: #eee;margin-right:20px;color:#6200ee;" onclick="javascript:history.back()">
+            <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="javascript:history.back()">
                 <div class="mdc-fab__ripple"></div>
                 <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
                 <div class="mdc-fab__touch"></div>
@@ -57,9 +57,45 @@
             </div>
         </div>
 
-        <br>
-        <Br>
+        <h3 class="card__primary__title__text">테마 설정</h3>
 
+        <div class="mdc-form-field">
+            <div class="mdc-radio">
+                <input class="mdc-radio__native-control" type="radio" id="radio-1" name="radios" checked>
+                <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                </div>
+                <div class="mdc-radio__ripple"></div>
+            </div>
+            <label for="radio-1">시스템 설정 따르기</label>
+        </div>
+        <br>
+        <div class="mdc-form-field">
+            <div class="mdc-radio">
+                <input class="mdc-radio__native-control" type="radio" id="radio-2" name="radios">
+                <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                </div>
+                <div class="mdc-radio__ripple"></div>
+            </div>
+            <label for="radio-1">라이트 테마</label>
+        </div><br>
+        <div class="mdc-form-field">
+            <div class="mdc-radio">
+                <input class="mdc-radio__native-control" type="radio" id="radio-3" name="radios">
+                <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                </div>
+                <div class="mdc-radio__ripple"></div>
+            </div>
+            <label for="radio-1">다크 테마</label>
+        </div>
+        <br><br>
+        <hr>
+        <br>
         <h3 class="card__primary__title__text">앱 정보</h3>
         <p class="lead">버전 1.0.0(Build 22010201)</p>
 
@@ -67,16 +103,16 @@
 
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
-                <span class="mdc-button__label" style="font-size: 16px;color:#000;font-family: 'S-CoreDream-3Light';">개발자에게 문의하기</span>
+                <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">개발자에게 문의하기</span>
             </button>
         </a>
 
         <br>
 
-        <a style="text-decoration: none;" href="privacy.html">
+        <a style="text-decoration: none;" href="license.html">
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
-                <span class="mdc-button__label" style="font-size: 16px;color:#000;font-family: 'S-CoreDream-3Light';">오픈소스 라이선스</span>
+                <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">오픈소스 라이선스</span>
             </button>
         </a>
         <br>
