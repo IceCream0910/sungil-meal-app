@@ -1,5 +1,18 @@
 const storedTheme = localStorage.getItem("darkTheme");
 
+const mql = window.matchMedia("(prefers-color-scheme: dark)");
+
+mql.addEventListener("change", () => {
+    if(storedTheme == "system" || !storedTheme) {
+        if(mql.matches) {
+            onDark();
+        } else {
+            offDark();
+        }
+    }
+});
+
+
 if (storedTheme !== null) {
     if (storedTheme === "true") {
         onDark();

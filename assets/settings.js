@@ -58,6 +58,18 @@ $("input[id='radio-3']:radio").change(function () {
 });
 
 
+const mql = window.matchMedia("(prefers-color-scheme: dark)");
+mql.addEventListener("change", () => {
+    var darkTheme = localStorage.getItem("darkTheme");
+    if(darkTheme == 'system' || !darkTheme) {
+        if(mql.matches) {
+            onDark();
+        } else {
+            offDark();
+        }
+    }
+});
+
 function onDark() {
     $('html').addClass("dark");
     $('body').addClass("dark");

@@ -5,11 +5,11 @@ $('#date').addClass('today');
 
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
-/*
-if(!grade || !classNum) {
-   location.href="init.html"
+
+
+if(grade && classNum) {
+   $('#gradeClassLabel').html(grade+'학년 '+classNum+'반');
 }
-*/
 
 $.datepicker.setDefaults({
     dateFormat: 'yy-mm-dd',
@@ -165,6 +165,7 @@ function shareMeal() {
           }, 3000);
     }
 }
+
 
 const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
 
