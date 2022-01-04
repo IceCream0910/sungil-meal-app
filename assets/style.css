@@ -38,6 +38,17 @@ body {
     display: none;
 }
 
+#meal-menus a {
+    text-decoration: none;
+    color: inherit;
+    font-family: 'S-CoreDream-3Light';
+}
+
+#meal-menus a:hover {
+    font-family: 'S-CoreDream-5Medium';
+    color: inherit;
+}
+
 #main {
     width: 100%;
     height: 100vh;
@@ -1256,6 +1267,39 @@ html .ui-button.ui-state-disabled:active {
     color: #eee;
 }
 
+.menuBanner {
+    position: fixed;
+    width: 100vw;
+    bottom: 0;
+    left: 0;
+    padding: 15px;
+    z-index: 99999;
+    background-color: #fff;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -2px 40px -5px #000;
+}
+
+.menuBanner.dark {
+    background-color: #303030;
+    color: #eee;
+}
+
+#menu-name {
+    font-size: 17px;
+}
+
+#allergy-info {
+    font-size: 14px;
+    font-family: 'S-CoreDream-3Light';
+}
+
+.menu-image {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+
 .close-modal {
     width: 30px;
     height: 30px;
@@ -1347,4 +1391,84 @@ body.dark {
 
 :root.dark {
     --mdc-theme-secondary: #8798db;
+}
+
+.help-tip {
+    position: absolute;
+    top: -.2em;
+    right: 1.1em;
+}
+
+.help-tip::before {
+    /*question sign*/
+    content: "?";
+    position: absolute;
+    top: 20px;
+    right: 0;
+    font-size: 11px;
+    padding: .1em .6em;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: help;
+    border: 1px solid #aaaaaa;
+    color: #aaaaaa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.help-tip__content {
+    position: absolute;
+    top: 2.75em;
+    right: -.2em;
+    min-width: 15em;
+    padding: .5em 1em;
+    background: rgba(31, 35, 39, 0.9);
+    color: #f9f9f9;
+    border-radius: .2em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+    z-index: 2;
+    transform-origin: 95% -1%;
+    transform: scale(0);
+    transition: transform .2s ease;
+}
+
+.help-tip__content::before {
+    /*pointer of the help-tip*/
+    content: "";
+    position: absolute;
+    top: -1.35em;
+    right: .6em;
+    border: .7em solid transparent;
+    border-bottom-color: rgba(31, 35, 39, 0.9);
+}
+
+.help-tip__content::after {
+    /*prevents help-tip from being hidden when mouse moves from the question sign down to the content*/
+    content: "";
+    position: absolute;
+    width: 60%;
+    min-height: 2em;
+    top: -2em;
+    right: 0;
+}
+
+.help-tip:hover .help-tip__content,
+.help-tip:focus .help-tip__content {
+    transform: scale(1);
+}
+
+@supports(filter: drop-shadow(0 0 0 #ccc)) {
+    /*for browsers that support filter: drop-shadow, we add it and remove box-shadow*/
+    .help-tip__content {
+        box-shadow: none;
+        filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, .5));
+    }
+}
+
+@supports(display: flex) {
+    /*for browsers that support display: flex*/
+    .help-tip__content {
+        display: flex;
+        flex-flow: column;
+        flex-wrap: wrap;
+    }
 }

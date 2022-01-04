@@ -5,7 +5,7 @@ $('#date').addClass('today');
 
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
-
+var currentMenuRaw = '';
 
 if(grade && classNum) {
    $('#gradeClassLabel').html(grade+'학년 '+classNum+'반');
@@ -71,6 +71,11 @@ function forwardDate() {
       updateInfo();
     }
 
+    String.prototype.insertAt = function(index,str){
+        return this.slice(0,index) + str + this.slice(index)
+      }
+
+      
 function updateInfo() {
     document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
     $.ajax({
@@ -85,8 +90,23 @@ function updateInfo() {
                 $('#no-meal').hide();
                 $('#exist-meal').fadeIn();
                 $('#kcal').html(data.meal.CAL_INFO);
-                var menu = data.meal.DDISH_NM.toString().replaceAll('`', '').replaceAll(/[0-9]/g, "").replaceAll('.', '');
-                $('#meal-menus').html(menu);
+                currentMenuRaw = data.meal.DDISH_NM.toString();
+                var menuArr = currentMenuRaw.replaceAll('`', '').split('<br/>');
+                var menuInfoTag = '';
+
+                for(var i=0; i<menuArr.length; i++) {
+                    if(menuArr[i].match(/\d+/)) {
+                        var allegyIndex = menuArr[i].match(/\d+/).index;
+                        var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+                    } else {
+                        var alle = 'none';
+                    }
+                    var menuName = menuArr[i].substring(0, allegyIndex);
+                        menuInfoTag += '<a href="javascript:openMenuBanner(\''+menuName+'\', \''+alle+'\')">'+menuName+'</a><br>';
+                }
+                $('#meal-menus').html(menuInfoTag);
+
+
             } else {
                 $('#no-meal').fadeIn();
                 $('#exist-meal').hide();
@@ -98,7 +118,7 @@ function updateInfo() {
             if(data.schedule) {
                 $('#schedule-content').html(data.schedule.EVENT_NM);
             } else {
-                $('#schedule-content').html('학사 일정이 없어요');
+                $('#schedule-content').html('특별한 일정이 없어요');
             }
         
             if(!grade || !classNum) {
@@ -213,5 +233,61 @@ window.addEventListener('beforeinstallprompt', (e) => {
             $('#android').show();
         }
     }
-    //
   });
+
+
+
+  //kakao image search api
+  function search(query) {
+    $.ajax({
+        type: "GET",
+        url:  'https://dapi.kakao.com/v2/search/image?query='+query, 
+        headers: {
+            'Authorization': 'KakaoAK a1cb5ad868a6adb4d8d59d2454d4b2bc'
+        },
+        success: function(result) {
+            var data = result;
+            i=0;
+            var image_result='<img class="menu-image" src="'+data.documents[i].thumbnail_url+'" class="img-thumbnail" onclick="selectImage(\''+data.documents[i].image_url+'\')">';
+
+            $('#image_result').html(image_result);
+        }
+    });
+}
+
+
+
+function openMenuBanner(name, allegy) {
+    if(allegy == 'none') {
+        $('#allergy-info').html('알레르기 정보 없음');
+    } else {
+        var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우').replaceAll('.', ', ');
+        console.log(allegyString, allegyString.length-2)
+        $('#allergy-info').html(allegyString.substring(0, allegyString.length-2));
+    }
+    
+    search(name);
+    $('#menu-name').html(name);
+    $('.menuBanner').show("slide", { direction: "down" }, 100);;
+
+}
+
+//메뉴 상세정보 팝업 이외 클릭 시 닫기
+document.addEventListener('click',function(e){
+    if($('.menuBanner').is(':visible')) { 
+        if(!$(e.target).hasClass("menuBanner")) {
+            $('.menuBanner').hide("slide", { direction: "down" }, 100);;
+        }
+
+    }
+});
+
+//pwa 팝업 이외 클릭 시 닫기
+document.addEventListener('click',function(e){
+    if($('.pwaBanner').is(':visible')) { 
+        if(!$(e.target).hasClass("pwaBanner")) {
+            $('.pwaBanner').hide("slide", { direction: "down" }, 100);;
+        }
+
+    }
+});
