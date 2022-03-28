@@ -77,6 +77,18 @@ function forwardDate() {
 
       
 function updateInfo() {
+    var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
+var counter = 0;
+var elem = $("#loading-text");
+setInterval(change, 1000);
+function change() {
+    elem.fadeOut(function(){
+        elem.html(text[counter]);
+        counter++;
+        if(counter >= text.length) { counter = 0; }
+        elem.fadeIn();
+    });
+}
     document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
     $.ajax({
         type: "GET",
@@ -105,7 +117,6 @@ function updateInfo() {
                         menuInfoTag += '<a href="javascript:openMenuBanner(\''+menuName+'\', \''+alle+'\')">'+menuName+'</a><br>';
                 }
                 $('#meal-menus').html(menuInfoTag);
-
 
             } else {
                 $('#no-meal').fadeIn();

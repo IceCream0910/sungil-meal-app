@@ -815,6 +815,9 @@ body {
     z-index: 9999;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    line-height: -10px;
+    color: #797979;
 }
 
 .loading-overlay.dark {
@@ -1071,8 +1074,8 @@ html .ui-button.ui-state-disabled:active {
 
 .ui-datepicker {
     display: none;
-    background-color: #fff;
     background: none;
+    background-color: #fff;
     border-radius: 10px;
     margin-top: 10px;
     margin-left: 0px;

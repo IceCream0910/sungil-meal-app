@@ -35,6 +35,7 @@ function onDark() {
     $('.menuBanner').addClass("dark");
     $('.inp').addClass("dark");
     $('.ui-datepicker').addClass("dark");
+    $('.ui-datepicker-title').css({'color': '#fff'});
     $('.loading-overlay').addClass("dark");
     $('.ui-widget-header').addClass("dark");
     $('.ui-state-default').addClass("dark");
@@ -55,6 +56,7 @@ function offDark() {
     $('.menuBanner').removeClass("dark");
     $('.inp').removeClass("dark");
     $('.ui-datepicker').removeClass("dark");
+    $('.ui-datepicker-title').css({'color': '#fff'});
     $('.loading-overlay').removeClass("dark");
     $('.ui-widget-header').removeClass("dark");
     $('.ui-state-default').removeClass("dark");
