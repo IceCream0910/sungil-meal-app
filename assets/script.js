@@ -123,13 +123,13 @@ function updateInfo() {
             });
         }
 
-        document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+        document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
         $('#schedule-content').html('');
 
         if(cachedData && cachedData_date == requestDate) {
             displayMeal(cachedData);
             displaySchedule(cachedData);
-            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
         } else {
           $.ajax({
             type: "GET",
@@ -141,7 +141,7 @@ function updateInfo() {
 
                   //급식
                   displayMeal(data);
-                  document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+                  document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
 
                   //학사일정
                   if(data.schedule) {
@@ -171,7 +171,7 @@ function updateInfo() {
             displayTimetable(cachedTimeData);
         } else {
             if(!$('.loading-overlay').hasClass('is-active')) {
-                document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+                document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
             }
 
             $.ajax({
@@ -185,7 +185,7 @@ function updateInfo() {
     
                     displayTimetable(data);
                     if($('.loading-overlay').hasClass('is-active')) {
-                        document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+                        document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
                     }
                 }
             });
