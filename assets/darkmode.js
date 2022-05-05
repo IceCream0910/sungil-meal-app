@@ -2,6 +2,7 @@ const storedTheme = localStorage.getItem("darkTheme");
 
 const mql = window.matchMedia("(prefers-color-scheme: dark)");
 
+
 mql.addEventListener("change", () => {
     if(storedTheme == "system" || !storedTheme) {
         if(mql.matches) {
@@ -34,14 +35,15 @@ function onDark() {
     $('.pwaBanner').addClass("dark");
     $('.menuBanner').addClass("dark");
     $('.inp').addClass("dark");
-    $('.ui-datepicker').addClass("dark");
-    $('.ui-datepicker-title').css({'color': '#fff'});
     $('.loading-overlay').addClass("dark");
-    $('.ui-widget-header').addClass("dark");
-    $('.ui-state-default').addClass("dark");
-    $('.ui-state-highlight').addClass("dark");
     $('#close-path').css({ fill: '#eee' });
     $('#close-path-2').css({ fill: '#eee' });
+    $('.sheet-modal').addClass("dark");
+    $('.swipe-handler').addClass("dark");
+    $('th').each(function(){
+        $(this).addClass("dark");
+    });
+    
 }
 
 function offDark() {
@@ -55,12 +57,13 @@ function offDark() {
     $('.pwaBanner').removeClass("dark");
     $('.menuBanner').removeClass("dark");
     $('.inp').removeClass("dark");
-    $('.ui-datepicker').removeClass("dark");
-    $('.ui-datepicker-title').css({'color': '#fff'});
     $('.loading-overlay').removeClass("dark");
-    $('.ui-widget-header').removeClass("dark");
-    $('.ui-state-default').removeClass("dark");
-    $('.ui-state-highlight').removeClass("dark");
     $('#close-path').css({ fill: '#000' });
     $('#close-path-2').css({ fill: '#000' });
+    $('.sheet-modal').removeClass("dark");
+    $('.swipe-handler').removeClass("dark");
+    $('th').each(function(){
+        $(this).removeClass("dark");
+    });
+
 }

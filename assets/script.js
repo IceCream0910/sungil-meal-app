@@ -6,10 +6,26 @@ $('#date').addClass('today');
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
+var isTest = false;
 
 if(grade && classNum) {
    $('#gradeClassLabel').html(grade+'학년 '+classNum+'반');
 }
+
+
+  $("#datepicker").datepicker({
+	onSelect: function (dataTExt) {
+        selectedDate = moment(dataTExt).format('YYYYMMDD');
+        $('#date').html(moment(selectedDate).format('M월 D일'));
+        if ($("#datepickerholder").is(':visible') == false) {
+            $("#datepickerholder").show();
+        } else {
+            $("#datepickerholder").hide();
+        }
+        updateInfo();
+    }
+});
+
 
 $.datepicker.setDefaults({
     dateFormat: 'yy-mm-dd',
@@ -23,27 +39,39 @@ $.datepicker.setDefaults({
     showMonthAfterYear: true,
     yearSuffix: '년'
   });
-  
-  $(function () {
-    $('.datepicker').datepicker();
-  });
 
 
-  $( "#datepicker" ).datepicker({
-	onSelect: function (dataTExt, inst) {
-    selectedDate = moment(dataTExt).format('YYYYMMDD');
-    $('#date').html(moment(selectedDate).format('M월 D일'));
-    if ($("#datepickerholder").is(':visible') == false) {
-        $("#datepickerholder").show();
-    } else {
-        $("#datepickerholder").hide();
-    }
-    updateInfo();
-}
+$(document).ready(function(){
+	updateInfo();
+
+    //가정통신문
+    $.ajax({
+        type: "GET",
+        url:  "https://sungil-school-api.vercel.app/notices",
+        success: function(result) {
+            var articles = JSON.parse(result);
+            for(var i=0; i<5; i++) {
+                var title = articles.items[i].title;
+                var createdAt = moment(new Date(articles.items[i].published)).format('YYYY-MM-DD');
+                var link = 'https://sungil-h.goesn.kr/'+articles.items[i].link;
+                $('#notices-content').append(`<div class="card notice-card" onclick="window.open('`+link+`', '_blank')">
+            <h4>`+title+`</h4>
+            <p>`+createdAt+`</p>
+        </div>`);
+            }
+
+            if(storedTheme=='true' || (storedTheme=='system'&&mql.matches)) {
+                var notice_items = document.getElementsByClassName('notice-card');
+            
+                for(var i=0; i< notice_items.length; i++){
+                   notice_items[i].classList.add("dark");
+                }
+            }
+            
+        }
+     });
 });
 
-
-updateInfo();
 
 function backDate() {
 let yesterday = moment(selectedDate).add(-1, 'days');
@@ -75,100 +103,209 @@ function forwardDate() {
         return this.slice(0,index) + str + this.slice(index)
       }
 
-      
+      var data;
 function updateInfo() {
-    var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
-var counter = 0;
-var elem = $("#loading-text");
-setInterval(change, 1000);
-function change() {
-    elem.fadeOut(function(){
-        elem.html(text[counter]);
-        counter++;
-        if(counter >= text.length) { counter = 0; }
-        elem.fadeIn();
-    });
-}
-    document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
-    $.ajax({
-        type: "GET",
-        url:  "https://sungil-school-api.vercel.app/api/"+selectedDate,
-        success: function(result) {
-            var data = JSON.parse(result);
-            console.log(data.meal, data.schedule);
+    var cachedData = JSON.parse(localStorage.getItem("sungil_api_cache")) || null;
+    var cachedData_date = localStorage.getItem("sungil_api_cache_date") || null;
+    var requestDate = selectedDate.substring(0, 4)+'-'+selectedDate.substring(4, 6).replace(/(^0+)/, "");
 
-            //급식
-            if(data.meal) {
-                $('#no-meal').hide();
-                $('#exist-meal').fadeIn();
-                $('#kcal').html(data.meal.CAL_INFO);
-                currentMenuRaw = data.meal.DDISH_NM.toString();
-                var menuArr = currentMenuRaw.replaceAll('`', '').split('<br/>');
-                var menuInfoTag = '';
-
-                for(var i=0; i<menuArr.length; i++) {
-                    if(menuArr[i].match(/\d+/)) {
-                        var allegyIndex = menuArr[i].match(/\d+/).index;
-                        var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
-                    } else {
-                        var alle = 'none';
-                    }
-                    var menuName = menuArr[i].substring(0, allegyIndex);
-                        menuInfoTag += '<a href="javascript:openMenuBanner(\''+menuName+'\', \''+alle+'\')">'+menuName+'</a><br>';
-                }
-                $('#meal-menus').html(menuInfoTag);
-
-            } else {
-                $('#no-meal').fadeIn();
-                $('#exist-meal').hide();
-                $('#kcal').html('');
-                $('#meal-menus').html('');
-            }
-
-            //학사일정
-            if(data.schedule) {
-                $('#schedule-content').html(data.schedule.EVENT_NM);
-            } else {
-                $('#schedule-content').html('특별한 일정이 없어요');
-            }
-        
-            if(!grade || !classNum) {
-                $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
-                document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
-
-            } else {
-                //시간표
-                $.ajax({
-                    type: "GET",
-                    url:  'https://sungil-school-api.vercel.app/timetable?date='+selectedDate+'&grade='+grade+'&classNum='+classNum, 
-                    success: function(result2) {
-                        console.log(result2)
-            
-                        if(JSON.stringify(result2).indexOf('해당하는 데이터가 없습니다.') > -1) {
-                            $('#timetable').html('수업이 없어요😃');
-                            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
-
-                        } else {
-                            var length = result2.hisTimetable[0].head[0].list_total_count;
-                            var timetable_result = '';
-                            for(var i=0; i<length; i++) {
-                                timetable_result+=(i+1)+'교시 : '+result2.hisTimetable[1].row[i].ITRT_CNTNT+'<br>';
-                            }
-                            $('#timetable').html(timetable_result);
-                            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
-
-                        }
-                    }
+    if(!isTest) {
+        var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
+        var counter = 0;
+        var elem = $("#loading-text");
+        setInterval(change, 1000);
+        function change() {
+            elem.fadeOut(function(){
+                elem.html(text[counter]);
+                counter++;
+                if(counter >= text.length) { counter = 0; }
+                elem.fadeIn();
             });
+        }
+
+        document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+        $('#schedule-content').html('');
+
+        if(cachedData && cachedData_date == requestDate) {
+            displayMeal(cachedData);
+            displaySchedule(cachedData);
+            document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+        } else {
+          $.ajax({
+            type: "GET",
+            url:  "https://sungil-school-api.vercel.app/api/"+selectedDate,
+            success: function(result) {
+                data = JSON.parse(result);
+                localStorage.setItem("sungil_api_cache", JSON.stringify(data));
+                localStorage.setItem("sungil_api_cache_date", selectedDate.substring(0, 4)+'-'+selectedDate.substring(4, 6).replace(/(^0+)/, ""));
+
+                  //급식
+                  displayMeal(data);
+                  document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+
+                  //학사일정
+                  if(data.schedule) {
+                    displaySchedule(data);
+                      //$('#schedule-content').html(data.schedule.EVENT_NM);
+                  }
+          }
+         });
+        }   
+    }
+
+    //시간표
+    if(!grade || !classNum) {
+        $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
+        $('.timetable-wrap').hide();
+        $('#nosetting-timetable').show();
+
+      } else {
+        $('.timetable-wrap').show();
+        $('#nosetting-timetable').hide();
+
+        var cachedTimeData = JSON.parse(localStorage.getItem("sungil_timeapi_cache")) || null;
+        var cachedTimeData_date = localStorage.getItem("sungil_timeapi_cache_date") || null;
+        var requestTimeDate =selectedDate.substring(0, 4)+'-'+selectedDate.substring(4, 6).replace(/(^0+)/, "")+'--'+getWeekNo(moment(selectedDate).format('YYYY-MM-DD'));
+
+        if(cachedTimeData && cachedTimeData_date == requestTimeDate) {
+            displayTimetable(cachedTimeData);
+        } else {
+            if(!$('.loading-overlay').hasClass('is-active')) {
+                document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
             }
 
-        }
-});
+            $.ajax({
+                type: "GET",
+                url:  'https://sungil-school-api.vercel.app/timetable?date='+selectedDate+'&grade='+grade+'&classNum='+classNum, 
+                success: function(result_time) {
+                    var data = JSON.parse(result_time);
     
-
-        
+                    localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                    localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4)+'-'+selectedDate.substring(4, 6).replace(/(^0+)/, "")+'--'+getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+    
+                    displayTimetable(data);
+                    if($('.loading-overlay').hasClass('is-active')) {
+                        document.getElementsByClassName('loading-overlay')[0].classList.toggle('is-active');
+                    }
+                }
+            });
+        }
+      }
+      //시간표 끝
 }
 
+
+function displayMeal(data) {
+    //급식
+    var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
+    
+    if(data.meal[day]) {
+        $('#no-meal').hide();
+        $('#exist-meal').fadeIn();
+        currentMenuRaw = data.meal[day].toString();
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
+
+        for(var i=0; i<menuArr.length; i++) {
+            if(menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+                menuInfoTag += '<a href="javascript:openMenuBanner(\''+menuName+'\', \''+alle+'\')">'+menuName+'</a><br>';
+        }
+        $('#meal-menus').html(menuInfoTag);
+
+    } else {
+        $('#no-meal').fadeIn();
+        $('#exist-meal').hide();
+        $('#kcal').html('');
+        $('#meal-menus').html('');
+    }
+}
+
+function displaySchedule(data) {
+    var schedules = data.schedule;
+    var length = Object.keys(schedules).length-2; //year, month 제외 해당 월 일 수 산출
+    for(var i=1; i<=length; i++) {
+        if(schedules[i] != '') {
+            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">'+i+'</span><h3 class="schedule-name">'+schedules[i]+'</h3></div>');
+        }
+    }
+
+}
+
+function displayTimetable(data) {
+    var day = moment(selectedDate).day();
+    switch(day) {
+        case 1:
+            $('#m1').addClass('active');
+            $('#m2').addClass('active');
+            $('#m3').addClass('active');
+            $('#m4').addClass('active');
+            $('#m5').addClass('active');
+            $('#m6').addClass('active');
+            $('#m7').addClass('active');
+            break;
+        case 2:
+            $('#tu1').addClass('active');
+            $('#tu2').addClass('active');
+            $('#tu3').addClass('active');
+            $('#tu4').addClass('active');
+            $('#tu5').addClass('active');
+            $('#tu6').addClass('active');
+            $('#tu7').addClass('active');
+            break;
+        case 3:
+            $('#w1').addClass('active');
+            $('#w2').addClass('active');
+            $('#w3').addClass('active');
+            $('#w4').addClass('active');
+            $('#w5').addClass('active');
+            $('#w6').addClass('active');
+            $('#w7').addClass('active');
+            break;
+        case 4:
+            $('#th1').addClass('active');
+            $('#th2').addClass('active');
+            $('#th3').addClass('active');
+            $('#th4').addClass('active');
+            $('#th5').addClass('active');
+            $('#th6').addClass('active');
+            $('#th7').addClass('active');
+            break;
+        case 5:
+            $('#f1').addClass('active');
+            $('#f2').addClass('active');
+            $('#f3').addClass('active');
+            $('#f4').addClass('active');
+            $('#f5').addClass('active');
+            $('#f6').addClass('active');
+            $('#f7').addClass('active');
+            break;
+        default:
+            break;
+
+    }
+
+    for(var i=0; i<data.mon.length; i++) {
+        $('#m'+((i+1).toString())).html(data.mon[i].ITRT_CNTNT);
+    }
+    for(var i=0; i<data.tue.length; i++) {
+        $('#tu'+((i+1).toString())).html(data.tue[i].ITRT_CNTNT);
+    }
+    for(var i=0; i<data.wed.length; i++) {
+        $('#w'+((i+1).toString())).html(data.wed[i].ITRT_CNTNT);
+    }
+    for(var i=0; i<data.thu.length; i++) {
+        $('#th'+((i+1).toString())).html(data.thu[i].ITRT_CNTNT);
+    }
+    for(var i=0; i<data.fri.length; i++) {
+        $('#f'+((i+1).toString())).html(data.fri[i].ITRT_CNTNT);
+    }
+}
 
 function shareMeal() {
     if($('#meal-menus').html() != '') { //메뉴 있을때
@@ -246,7 +383,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
     }
   });
 
-
+  function getWeekNo(v_date_str) {
+    var date = new Date();
+    if(v_date_str){
+     date = new Date(v_date_str);
+    }
+    return Math.ceil(date.getDate() / 7);
+   }
 
   //kakao image search api
   function search(query) {
@@ -273,7 +416,6 @@ function openMenuBanner(name, allegy) {
         $('#allergy-info').html('알레르기 정보 없음');
     } else {
         var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우').replaceAll('.', ', ');
-        console.log(allegyString, allegyString.length-2)
         $('#allergy-info').html(allegyString.substring(0, allegyString.length-2));
     }
     
@@ -301,4 +443,43 @@ document.addEventListener('click',function(e){
         }
 
     }
+});
+
+/* bottom sheet */
+$('.idcard-btn').on('click', function() {
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function() {
+        $('.modal-in').css('bottom', '55px');
+    }, 100);
+  $('.sheet-backdrop').addClass('backdrop-in');
+});
+
+$('.sheet-backdrop').on('click', function() {
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function() {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    $('.sheet-backdrop').removeClass('backdrop-in');
+  });
+
+///custom modal sheet///
+$('.c-modal').each(function() {
+  var mc = new Hammer(this);
+
+  mc.get('swipe').set({
+    direction: Hammer.DIRECTION_ALL
+  });
+
+  mc.on("swipedown", function(ev) {
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function() {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    
+    $('.sheet-backdrop').removeClass('backdrop-in');
+  });
 });
