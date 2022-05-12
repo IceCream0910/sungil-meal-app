@@ -4,8 +4,8 @@ const mql = window.matchMedia("(prefers-color-scheme: dark)");
 
 
 mql.addEventListener("change", () => {
-    if(storedTheme == "system" || !storedTheme) {
-        if(mql.matches) {
+    if (storedTheme == "system" || !storedTheme) {
+        if (mql.matches) {
             onDark();
         } else {
             offDark();
@@ -17,7 +17,7 @@ mql.addEventListener("change", () => {
 if (storedTheme !== null) {
     if (storedTheme === "true") {
         onDark();
-     } else if(storedTheme === "system") {
+    } else if (storedTheme === "system") {
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
             onDark();
         }
@@ -40,10 +40,10 @@ function onDark() {
     $('#close-path-2').css({ fill: '#eee' });
     $('.sheet-modal').addClass("dark");
     $('.swipe-handler').addClass("dark");
-    $('th').each(function(){
+    $('th').each(function () {
         $(this).addClass("dark");
     });
-    
+
 }
 
 function offDark() {
@@ -62,7 +62,7 @@ function offDark() {
     $('#close-path-2').css({ fill: '#000' });
     $('.sheet-modal').removeClass("dark");
     $('.swipe-handler').removeClass("dark");
-    $('th').each(function(){
+    $('th').each(function () {
         $(this).removeClass("dark");
     });
 
