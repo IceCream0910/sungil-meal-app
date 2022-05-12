@@ -109,6 +109,7 @@ String.prototype.insertAt = function (index, str) {
 }
 
 var data;
+var newData;
 function updateInfo() {
     var cachedData = JSON.parse(localStorage.getItem("sungil_api_cache")) || null;
     var cachedData_date = localStorage.getItem("sungil_api_cache_date") || null;
@@ -174,6 +175,21 @@ function updateInfo() {
 
         if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
             displayTimetable(cachedTimeData);
+            //변경 사항 체크
+            $.ajax({
+                type: "GET",
+                url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
+                success: function (result_time) {
+                    var data = JSON.parse(result_time);
+                    if (JSON.stringify(cachedTimeData) != JSON.stringify(data)) {
+                        console.log('시간표 변동 사항 발견!', cachedTimeData, data);
+                        localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                        localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+                        displayTimetable(data);
+                    } else { console.log('시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지'); }
+                }
+            });
+
         } else {
             if (!$('.loading-overlay').hasClass('is-active')) {
                 document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
@@ -197,6 +213,12 @@ function updateInfo() {
         }
     }
     //시간표 끝
+}
+
+function refreshNewData() {
+    console.log(newData)
+    displayTimetable(newData);
+    $('.snackbar').fadeOut(250);
 }
 
 
@@ -483,3 +505,4 @@ $('.c-modal').each(function () {
         $('.sheet-backdrop').removeClass('backdrop-in');
     });
 });
+

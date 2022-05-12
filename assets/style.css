@@ -1893,3 +1893,38 @@ thead th.dark {
 .kakao_ad_area iframe {
     border-radius: 20px;
 }
+
+.snackbar {
+    float: left;
+    box-sizing: border-box;
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    margin: 20px;
+    padding: 10px 20px;
+    width: 90%;
+    background-color: #2f2f2f;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+}
+
+
+.snackbar .snackbar_text {
+    width: 100%;
+}
+
+.snackbar .snackbar_action {
+    border: none;
+    background: none;
+    color: #00BFA5;
+    float: right;
+    font-size: 20px;
+}
