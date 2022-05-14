@@ -3,6 +3,49 @@ moment.lang('ko', {
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
 });
 
+var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.');
+
+
+//tts
+function tts() {
+    ttsAudio.pause();
+    if (currentMenuRaw) {
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
+
+        for (var i = 0; i < menuArr.length; i++) {
+            if (menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+            menuInfoTag += menuName + ', ';
+        }
+
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 급식 메뉴는 ' + menuInfoTag + '입니다.';
+    } else {
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '은 급식 정보가 없네요.';
+    }
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=dinna&volume=1');
+    console.log(text);
+    ttsAudio.play();
+}
+
+function playPause() {
+    if (track.paused) {
+        track.play();
+        //controlBtn.textContent = "Pause";
+        controlBtn.className = "pause";
+    } else {
+        track.pause();
+        //controlBtn.textContent = "Play";
+        controlBtn.className = "play";
+    }
+}
+
+
 var today = moment(new Date()).format('YYYYMMDD');
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
@@ -344,7 +387,21 @@ Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
 
 //kakao 공유
 function shareMeal() {
-    var content = '<' + moment(selectedDate).format('M월 D일') + ' 성일고 급식>\n' + currentMenuRaw.replaceAll('[중식]', '');
+    var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+    var menuInfoTag = '';
+
+    for (var i = 0; i < menuArr.length; i++) {
+        if (menuArr[i].match(/\d+/)) {
+            var allegyIndex = menuArr[i].match(/\d+/).index;
+            var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+        } else {
+            var alle = 'none';
+        }
+        var menuName = menuArr[i].substring(0, allegyIndex);
+        menuInfoTag += menuName + '\n';
+    }
+
+    var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
     Kakao.Link.sendDefault({
         objectType: 'text',
         text:

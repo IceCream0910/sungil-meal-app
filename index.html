@@ -233,6 +233,15 @@
 
     <div class="d-flex flex-row">
         <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
+
+        <button id="shareBtn" style="float:right;position:absolute;right:60px;"
+            class="mdc-button mdc-button--icon-leading" onclick="tts();">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label" id="copied"></span>
+
+            <i class="material-icons mdc-button__icon" aria-hidden="true">record_voice_over</i>
+        </button>
+
         <button id="shareBtn" style="float:right;position:absolute;right:10px;"
             class="mdc-button mdc-button--icon-leading" onclick="javascript:shareMeal();">
             <span class="mdc-button__ripple"></span>
