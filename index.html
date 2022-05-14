@@ -167,7 +167,7 @@
 
 <body oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
 
-    <!-- bottom sheet 
+    <!-- bottom sheet -->
     <div class="sheet-backdrop"></div>
     <div class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
         style="position: fixed;">
@@ -175,28 +175,25 @@
             <div class="swipe-handler"></div>
             <div class="page-content">
                 <div class="d-flex flex-row">
-                    <h3 style="float:left" class="card__primary__title__text">학생증</h3>
-                    <button style="float:right;position:absolute;right:0px;" class="mdc-button mdc-button--icon-leading"
-                        onclick="javascript:window.location.href='init_card.html';">
-                        <span class="mdc-button__ripple"></span>
-                        <i class="material-icons mdc-button__icon" aria-hidden="true">settings</i>
-                        <span class="mdc-button__label">설정</span>
-                    </button>
+                    <h3 style="float:left" class="card__primary__title__text" id="modal-title">날짜 선택</h3>
                 </div>
                 <br>
-
-                <img id="barcode" style="width:100%;">
-
-
+                <div id="datepicker"></div>
+                <div id="whatsnew">
+                    <h5>22-05-14</h5>
+                    <p>1. 음성안내 기능 추가<br>
+                        &nbsp;&nbsp;- 접근성 개선을 위해 급식과 시간표를 음성으로 읽어줍니다.<br>
+                        2. 날짜 선택 UI 개선<br></p>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="idcard-btn-wrap">
-        <button class="idcard-btn">
-            <ion-icon name="chevron-up-outline"></ion-icon>학생증
+        <button class="whatsnew-btn">
+            <ion-icon name="chevron-up-outline"></ion-icon>업데이트 내역
         </button>
-    </div> -->
+    </div> <!-- -->
 
     <div class="loading-overlay">
         <div class="donut"></div>
@@ -269,8 +266,30 @@
                     </div>
                 </div>
             </div>
-            <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
+            <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;margin-bottom:45px;">
             </p>
+            <div class="reaction-btn-wrap" style="background:none;position:absolute;bottom:15px;right:15px;">
+                <button class="mdc-button mdc-button--icon-leading" style="color:rgb(90, 170, 255)" onclick="like();">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">mood</i>
+                    <span class="mdc-button__label">0</span>
+                </button>
+
+                <button class="mdc-button mdc-button--icon-leading" onclick="soso();">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">sentiment_neutral</i>
+                    <span class="mdc-button__label">0</span>
+                </button>
+
+                <button class="mdc-button mdc-button--icon-leading" style="color:rgb(255, 107, 90)"
+                    onclick="dislike();">
+                    <span class="mdc-button__ripple"></span>
+                    <i class="material-icons mdc-button__icon" aria-hidden="true">mood_bad</i>
+                    <span class="mdc-button__label">0</span>
+                </button>
+
+            </div>
+
         </div>
     </div>
 

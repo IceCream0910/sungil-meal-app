@@ -72,6 +72,8 @@ function playPause() {
 
 
 var today = moment(new Date()).format('YYYYMMDD');
+//var today = moment('20220513').format('YYYYMMDD');
+
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
 $('#date').addClass('today');
@@ -86,21 +88,6 @@ if (grade && classNum) {
     $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
 }
 
-
-$("#datepicker").datepicker({
-    onSelect: function (dataTExt) {
-        selectedDate = moment(dataTExt).format('YYYYMMDD');
-        $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
-        if ($("#datepickerholder").is(':visible') == false) {
-            $("#datepickerholder").show();
-        } else {
-            $("#datepickerholder").hide();
-        }
-        updateInfo();
-    }
-});
-
-
 $.datepicker.setDefaults({
     dateFormat: 'yy-mm-dd',
     prevText: '이전 달',
@@ -113,6 +100,23 @@ $.datepicker.setDefaults({
     showMonthAfterYear: true,
     yearSuffix: '년'
 });
+
+$("#datepicker").datepicker({
+    onSelect: function (dataTExt) {
+        selectedDate = moment(dataTExt).format('YYYYMMDD');
+        $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
+        $('body').css('overflow', 'auto');
+        $('.modal-in').css('bottom', '-1850px');
+        setTimeout(function () {
+            $('.modal-in').css('display', 'none');
+        }, 100);
+        $('.sheet-backdrop').removeClass('backdrop-in');
+        updateInfo();
+    }
+});
+
+
+
 
 
 $(document).ready(function () {
@@ -561,14 +565,20 @@ document.addEventListener('click', function (e) {
 });
 
 /* bottom sheet */
-$('.idcard-btn').on('click', function () {
+$('.pop').on('click', function () {
+    $('#modal-title').text('날짜 선택');
+    $('#datepicker').show();
+    $('#whatsnew').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
     setTimeout(function () {
-        $('.modal-in').css('bottom', '55px');
+        $('.modal-in').css('bottom', '0px');
     }, 100);
     $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#datepicker').height() + 130 + 'px');
+    }, 100);
 });
 
 $('.sheet-backdrop').on('click', function () {
@@ -578,6 +588,24 @@ $('.sheet-backdrop').on('click', function () {
         $('.modal-in').css('display', 'none');
     }, 100);
     $('.sheet-backdrop').removeClass('backdrop-in');
+});
+
+/* bottom sheet */
+$('.whatsnew-btn').on('click', function () {
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').text('새로운 기능');
+    $('#datepicker').hide();
+    $('#whatsnew').show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#whatsnew').height() + 130 + 'px');
+    }, 100);
 });
 
 ///custom modal sheet///
