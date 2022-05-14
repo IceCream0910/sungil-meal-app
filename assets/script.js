@@ -11,6 +11,8 @@ var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?
 
 
 //tts
+const voiceType = localStorage.getItem("sungil_ttsVoice") || 'dinna';
+
 function mealTts() {
     ttsAudio.pause();
     if (currentMenuRaw) {
@@ -32,7 +34,7 @@ function mealTts() {
     } else {
         var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '은 급식 정보가 없네요.';
     }
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=dinna&volume=1');
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
     console.log(text);
     ttsAudio.play();
 }
@@ -51,7 +53,7 @@ function timetableTts() {
         var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 시간표를 알려드릴게요. ' + listedClass + '입니다';
     }
     console.log(text);
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=dinna&volume=1');
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
     ttsAudio.play();
 
 }

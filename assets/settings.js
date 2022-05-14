@@ -4,33 +4,36 @@ var classNum = localStorage.getItem("sungil_classNum");
 $('#grade').val(grade);
 $('#classNum').val(classNum);
 
-$("#grade").on("propertychange change keyup paste input", function(){
+$("#grade").on("propertychange change keyup paste input", function () {
     localStorage.setItem("sungil_grade", $(this).val())
 });
 
-$("#classNum").on("propertychange change keyup paste input", function(){
+$("#classNum").on("propertychange change keyup paste input", function () {
     localStorage.setItem("sungil_classNum", $(this).val())
 
 });
 
+
+const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
+
 const storedTheme = localStorage.getItem("darkTheme");
-if (storedTheme !== null) {
+if (storedTheme != null) {
     if (storedTheme === "true") {
         onDark();
         $("input[id='radio-1']:radio").prop('checked', false);
-        $("input[id='radio-2']:radio").prop('checked', false); 
-        $("input[id='radio-3']:radio").prop('checked', true); 
+        $("input[id='radio-2']:radio").prop('checked', false);
+        $("input[id='radio-3']:radio").prop('checked', true);
 
-     } else if(storedTheme === "system") {
+    } else if (storedTheme === "system") {
         $("input[id='radio-1']:radio").prop('checked', true);
-        $("input[id='radio-2']:radio").prop('checked', false); 
+        $("input[id='radio-2']:radio").prop('checked', false);
         $("input[id='radio-3']:radio").prop('checked', false);
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
             onDark();
         }
     } else {
         $("input[id='radio-1']:radio").prop('checked', false);
-        $("input[id='radio-2']:radio").prop('checked', true); 
+        $("input[id='radio-2']:radio").prop('checked', true);
         $("input[id='radio-3']:radio").prop('checked', false);
     }
 }
@@ -46,14 +49,14 @@ $("input[id='radio-1']:radio").change(function () {
 
 $("input[id='radio-2']:radio").change(function () {
     localStorage.setItem("darkTheme", "false");
-    console.log('light');   
+    console.log('light');
     offDark();
 });
 
 
 $("input[id='radio-3']:radio").change(function () {
     localStorage.setItem("darkTheme", "true");
-    console.log('dark');   
+    console.log('dark');
     onDark();
 });
 
@@ -61,8 +64,8 @@ $("input[id='radio-3']:radio").change(function () {
 const mql = window.matchMedia("(prefers-color-scheme: dark)");
 mql.addEventListener("change", () => {
     var darkTheme = localStorage.getItem("darkTheme");
-    if(darkTheme == 'system' || !darkTheme) {
-        if(mql.matches) {
+    if (darkTheme == 'system' || !darkTheme) {
+        if (mql.matches) {
             onDark();
         } else {
             offDark();
@@ -81,10 +84,10 @@ function onDark() {
     var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
         border-color: rgba(255, 255, 255, 0.54);
     }`
-	var styleSheet = document.createElement("style")
-	styleSheet.type = "text/css"
-	styleSheet.innerText = styles
-	document.head.appendChild(styleSheet)
+    var styleSheet = document.createElement("style")
+    styleSheet.type = "text/css"
+    styleSheet.innerText = styles
+    document.head.appendChild(styleSheet)
 }
 
 function offDark() {
@@ -99,8 +102,53 @@ function offDark() {
     var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
         border-color: rgba(0,0,0, 0.54);
     }`
-	var styleSheet = document.createElement("style")
-	styleSheet.type = "text/css"
-	styleSheet.innerText = styles
-	document.head.appendChild(styleSheet)
+    var styleSheet = document.createElement("style")
+    styleSheet.type = "text/css"
+    styleSheet.innerText = styles
+    document.head.appendChild(styleSheet)
 }
+
+
+
+
+/* tts voice */
+if (storedVoice != null) {
+    if (storedVoice === "dinna") {
+        $("input[id='tts_radio-1']:radio").prop('checked', true);
+        $("input[id='tts_radio-2']:radio").prop('checked', false);
+        $("input[id='tts_radio-3']:radio").prop('checked', false);
+    } else if (storedVoice === "hana") {
+        $("input[id='tts_radio-1']:radio").prop('checked', false);
+        $("input[id='tts_radio-2']:radio").prop('checked', true);
+        $("input[id='tts_radio-3']:radio").prop('checked', false);
+    } else {
+        $("input[id='tts_radio-1']:radio").prop('checked', false);
+        $("input[id='tts_radio-2']:radio").prop('checked', false);
+        $("input[id='tts_radio-3']:radio").prop('checked', true);
+    }
+}
+
+var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.')
+
+$("input[id='tts_radio-1']:radio").change(function () {
+    console.log('dinna');
+    localStorage.setItem("sungil_ttsVoice", "dinna");
+    ttsAudio.pause();
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요.' + '&speed=0&pitch=0&speaker=dinna&volume=1');
+    ttsAudio.play();
+});
+
+$("input[id='tts_radio-2']:radio").change(function () {
+    localStorage.setItem("sungil_ttsVoice", "hana");
+    ttsAudio.pause();
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요!' + '&speed=0&pitch=0&speaker=hana&volume=1');
+    ttsAudio.play();
+});
+
+
+$("input[id='tts_radio-3']:radio").change(function () {
+    localStorage.setItem("sungil_ttsVoice", "jinho");
+    ttsAudio.pause();
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요!' + '&speed=0&pitch=0&speaker=jinho&volume=1');
+    ttsAudio.play();
+});
