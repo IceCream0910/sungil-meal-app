@@ -234,11 +234,10 @@
     <div class="d-flex flex-row">
         <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
 
-        <button id="shareBtn" style="float:right;position:absolute;right:60px;"
-            class="mdc-button mdc-button--icon-leading" onclick="tts();">
+        <button style="float:right;position:absolute;right:60px;" class="mdc-button mdc-button--icon-leading"
+            onclick="mealTts();">
             <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__label" id="copied"></span>
-
+            <span class="mdc-button__label"></span>
             <i class="material-icons mdc-button__icon" aria-hidden="true">record_voice_over</i>
         </button>
 
@@ -249,6 +248,9 @@
 
             <i class="material-icons mdc-button__icon" aria-hidden="true">share</i>
         </button>
+
+
+
     </div>
 
     <div id="no-meal">
@@ -280,6 +282,13 @@
             <span class="mdc-button__ripple"></span>
             <i class="material-icons mdc-button__icon" aria-hidden="true">settings</i>
             <span class="mdc-button__label" id="gradeClassLabel">설정</span>
+        </button>
+
+        <button class="mdc-button mdc-button--icon-leading" onclick="timetableTts();">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label"></span>
+
+            <i class="material-icons mdc-button__icon" aria-hidden="true">record_voice_over</i>
         </button>
     </div>
 

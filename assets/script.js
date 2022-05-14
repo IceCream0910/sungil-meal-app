@@ -2,12 +2,16 @@ moment.lang('ko', {
     weekdays: ["일", "월", "화", "수", "목", "금", "토"],
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
 });
+moment.lang('en', {
+    weekdays: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+    weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+});
 
 var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.');
 
 
 //tts
-function tts() {
+function mealTts() {
     ttsAudio.pause();
     if (currentMenuRaw) {
         var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
@@ -33,6 +37,25 @@ function tts() {
     ttsAudio.play();
 }
 
+function timetableTts() {
+    ttsAudio.pause();
+    var selectedDay = moment(selectedDate).lang("en").format('dddd');
+    if (selectedDay == 'sat' || selectedDay == 'sun') {
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '에는 수업이 없어요.';
+    } else {
+        var timeDataForTts = timetableRaw[selectedDay];
+        var listedClass = '';
+        for (var i = 0; i < timeDataForTts.length; i++) {
+            listedClass += (i + 1) + '교시 ' + timeDataForTts[i].ITRT_CNTNT + ', ';
+        }
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 시간표를 알려드릴게요. ' + listedClass + '입니다';
+    }
+    console.log(text);
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=dinna&volume=1');
+    ttsAudio.play();
+
+}
+
 function playPause() {
     if (track.paused) {
         track.play();
@@ -54,6 +77,7 @@ $('#date').addClass('today');
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
+var timetableRaw = '';
 var isTest = false;
 
 if (grade && classNum) {
@@ -289,6 +313,7 @@ function displayMeal(data) {
         $('#meal-menus').html(menuInfoTag);
 
     } else {
+        currentMenuRaw = '';
         $('#no-meal').fadeIn();
         $('#exist-meal').hide();
         $('#kcal').html('');
@@ -366,6 +391,7 @@ function displayTimetable(data) {
 
     }
 
+    timetableRaw = data;
     for (var i = 0; i < data.mon.length; i++) {
         $('#m' + ((i + 1).toString())).html(data.mon[i].ITRT_CNTNT);
     }
@@ -387,30 +413,38 @@ Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
 
 //kakao 공유
 function shareMeal() {
-    var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
-    var menuInfoTag = '';
+    if (currentMenuRaw) {
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
 
-    for (var i = 0; i < menuArr.length; i++) {
-        if (menuArr[i].match(/\d+/)) {
-            var allegyIndex = menuArr[i].match(/\d+/).index;
-            var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
-        } else {
-            var alle = 'none';
+        for (var i = 0; i < menuArr.length; i++) {
+            if (menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+            menuInfoTag += menuName + '\n';
         }
-        var menuName = menuArr[i].substring(0, allegyIndex);
-        menuInfoTag += menuName + '\n';
+
+        var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
+        Kakao.Link.sendDefault({
+            objectType: 'text',
+            text:
+                content,
+            link: {
+                mobileWebUrl: 'https://sungil.vercel.app',
+                webUrl: 'https://sungil.vercel.app',
+            },
+        })
+    } else {
+        $('#copied').text('내용 없음');
+        setTimeout(function () {
+            $('#copied').text('');
+        }, 1000);
     }
 
-    var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
-    Kakao.Link.sendDefault({
-        objectType: 'text',
-        text:
-            content,
-        link: {
-            mobileWebUrl: 'https://sungil.vercel.app',
-            webUrl: 'https://sungil.vercel.app',
-        },
-    })
 }
 
 
