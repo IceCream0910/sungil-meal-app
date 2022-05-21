@@ -1,3 +1,155 @@
+// Implemetion reference: https://juejin.im/post/5aeef41cf265da0ba0630de0
+// Background image from free image website: https://pixabay.com/
+
+const helper = {
+    getDelta(event) {
+        if (event.wheelDelta) {
+            return event.wheelDelta;
+        } else {
+            return -event.detail;
+        }
+    },
+    throttle(method, delay, context) {
+        let inThrottle = false;
+        return function () {
+            if (!inThrottle) {
+                inThrottle = true;
+                method.apply(context, arguments);
+                setTimeout(() => {
+                    inThrottle = false;
+                }, delay);
+            }
+        }
+    },
+    debounce(method, delay, context) {
+        let inDebounce;
+        return function () {
+            clearTimeout(method.inDebounce);
+            inDebounce = setTimeout(() => {
+                method.apply(context, arguments);
+            }, delay);
+        }
+    }
+}
+class ScrollPages {
+    constructor(currentPageNumber, totalPageNumber, pages) {
+        this.currentPageNumber = currentPageNumber;
+        this.totalPageNumber = totalPageNumber;
+        this.pages = pages;
+        this.viewHeight = document.documentElement.clientHeight;
+    }
+    mouseScroll(event) {
+        let delta = helper.getDelta(event);
+        if (delta < 0) {
+            this.scrollDown();
+        } else {
+            this.scrollUp();
+        }
+    }
+    scrollDown() {
+        if (this.currentPageNumber !== this.totalPageNumber) {
+            this.pages.style.top = (-this.viewHeight * this.currentPageNumber) + 'px';
+            this.currentPageNumber++;
+            this.updateNav();
+            this.textFadeInOut();
+        }
+    }
+    scrollUp() {
+        if (this.currentPageNumber !== 1) {
+            this.pages.style.top = (-this.viewHeight * (this.currentPageNumber - 2)) + 'px';
+            this.currentPageNumber--;
+            this.updateNav();
+            this.textFadeInOut();
+        }
+    }
+    scrollTo(targetPageNumber) {
+        while (this.currentPageNumber !== targetPageNumber) {
+            if (this.currentPageNumber > targetPageNumber) {
+                this.scrollUp();
+            } else {
+                this.scrollDown();
+            }
+        }
+    }
+    createNav() {
+        const pageNav = document.createElement('div');
+        pageNav.className = 'nav-dot-container';
+        this.pages.appendChild(pageNav);
+        for (let i = 0; i < this.totalPageNumber; i++) {
+            pageNav.innerHTML += '<p class="nav-dot"><span></span></p>';
+        }
+        const navDots = document.getElementsByClassName('nav-dot');
+        this.navDots = Array.prototype.slice.call(navDots);
+        this.navDots[0].classList.add('dot-active');
+        this.navDots.forEach((e, index) => {
+            e.addEventListener('click', event => {
+                this.scrollTo(index + 1);
+                this.navDots.forEach(e => {
+                    e.classList.remove('dot-active');
+                });
+                e.classList.add('dot-active');
+            });
+        });
+    }
+    updateNav() {
+        this.navDots.forEach(e => {
+            e.classList.remove('dot-active');
+        });
+        this.navDots[this.currentPageNumber - 1].classList.add('dot-active');
+    }
+    resize() {
+        this.viewHeight = document.documentElement.clientHeight;
+        this.pages.style.height = this.viewHeight + 'px';
+        this.pages.style.top = -this.viewHeight * (this.currentPageNumber - 1) + 'px';
+    }
+    textFadeInOut() {
+        const containersDom = document.getElementsByClassName('text-container');
+        let textContainers = Array.prototype.slice.call(containersDom);
+        textContainers.forEach((e) => {
+            e.classList.remove('in-sight');
+        });
+        let textContainerInSight = textContainers[this.currentPageNumber - 1];
+        textContainerInSight.classList.add('in-sight')
+    }
+    init() {
+        let handleMouseWheel = helper.throttle(this.mouseScroll, 500, this);
+        let handleResize = helper.debounce(this.resize, 500, this);
+        this.pages.style.height = this.viewHeight + 'px';
+        this.createNav();
+        this.textFadeInOut();
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+            document.addEventListener('wheel', handleMouseWheel);
+        } else {
+            document.addEventListener('DOMMouseScroll', handleMouseWheel);
+        }
+        document.addEventListener('touchstart', (event) => {
+            this.startY = event.touches[0].pageY;
+        });
+        document.addEventListener('touchend', (event) => {
+            let endY = event.changedTouches[0].pageY;
+            if (this.startY - endY < -50) {
+                this.scrollUp();
+            }
+            if (this.startY - endY > 50) {
+                this.scrollDown();
+            }
+        });
+        document.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+        });
+        window.addEventListener('resize', handleResize);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var s = new ScrollPages(1, 3, document.getElementById('all-pages'));
+    s.init();
+})
+
+
+
+
+/* main */
 moment.lang('ko', {
     weekdays: ["일", "월", "화", "수", "목", "금", "토"],
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
@@ -300,8 +452,8 @@ function displayMeal(data) {
     var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
 
     if (data.meal[day]) {
-        $('#no-meal').hide();
-        $('#exist-meal').fadeIn();
+        $('#meal-text').html('');
+
         currentMenuRaw = data.meal[day].toString();
         var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
         var menuInfoTag = '';
@@ -316,23 +468,21 @@ function displayMeal(data) {
             var menuName = menuArr[i].substring(0, allegyIndex);
             menuInfoTag += '<a href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
         }
-        $('#meal-menus').html(menuInfoTag);
+        $('#meal-text').html(menuInfoTag);
 
     } else {
         currentMenuRaw = '';
-        $('#no-meal').fadeIn();
-        $('#exist-meal').hide();
-        $('#kcal').html('');
-        $('#meal-menus').html('');
+        $('#meal-text').html('오늘은 급식이 없어요.');
     }
 }
 
 function displaySchedule(data) {
+    $('.mandatory').html('');
     var schedules = data.schedule;
     var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
     for (var i = 1; i <= length; i++) {
         if (schedules[i] != '') {
-            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i] + '</h3></div>');
+            $('.mandatory').append('<div class="card"> <div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i] + '</h3> </div></div>');
         }
     }
 
@@ -340,289 +490,55 @@ function displaySchedule(data) {
 
 function displayTimetable(data) {
     var day = moment(selectedDate).day();
-    var sections = document.querySelectorAll("th");
-    for (var i = 0; i < sections.length; i++) {
-        var item = sections.item(i);
-        $(item).removeClass('active');
-    }
-
+    timetableRaw = data;
+    $('#timetable-text').html('');
     switch (day) {
         case 1:
-            $('#m1').addClass('active');
-            $('#m2').addClass('active');
-            $('#m3').addClass('active');
-            $('#m4').addClass('active');
-            $('#m5').addClass('active');
-            $('#m6').addClass('active');
-            $('#m7').addClass('active');
+            for (var i = 0; i < data.mon.length; i++) {
+                $('#timetable-text').append((i + 1) + '교시 : ' + data.mon[i].ITRT_CNTNT + '<br>');
+            }
             break;
         case 2:
-            $('#tu1').addClass('active');
-            $('#tu2').addClass('active');
-            $('#tu3').addClass('active');
-            $('#tu4').addClass('active');
-            $('#tu5').addClass('active');
-            $('#tu6').addClass('active');
-            $('#tu7').addClass('active');
+            for (var i = 0; i < data.tue.length; i++) {
+                $('#timetable-text').append((i + 1) + '교시 : ' + data.tue[i].ITRT_CNTNT + '<br>');
+            }
             break;
         case 3:
-            $('#w1').addClass('active');
-            $('#w2').addClass('active');
-            $('#w3').addClass('active');
-            $('#w4').addClass('active');
-            $('#w5').addClass('active');
-            $('#w6').addClass('active');
-            $('#w7').addClass('active');
+            for (var i = 0; i < data.wed.length; i++) {
+                $('#timetable-text').append((i + 1) + '교시 : ' + data.wed[i].ITRT_CNTNT + '<br>');
+            }
             break;
         case 4:
-            $('#th1').addClass('active');
-            $('#th2').addClass('active');
-            $('#th3').addClass('active');
-            $('#th4').addClass('active');
-            $('#th5').addClass('active');
-            $('#th6').addClass('active');
-            $('#th7').addClass('active');
+            for (var i = 0; i < data.thu.length; i++) {
+                $('#timetable-text').append((i + 1) + '교시 : ' + data.thu[i].ITRT_CNTNT + '<br>');
+            }
             break;
         case 5:
-            $('#f1').addClass('active');
-            $('#f2').addClass('active');
-            $('#f3').addClass('active');
-            $('#f4').addClass('active');
-            $('#f5').addClass('active');
-            $('#f6').addClass('active');
-            $('#f7').addClass('active');
+            for (var i = 0; i < data.fri.length; i++) {
+                $('#timetable-text').append((i + 1) + '교시 : ' + data.fri[i].ITRT_CNTNT + '<br>');
+            }
             break;
         default:
+            $('#timetable-text').html('오늘은 수업이 없어요.');
             break;
 
     }
 
-    timetableRaw = data;
-    for (var i = 0; i < data.mon.length; i++) {
-        $('#m' + ((i + 1).toString())).html(data.mon[i].ITRT_CNTNT);
-    }
-    for (var i = 0; i < data.tue.length; i++) {
-        $('#tu' + ((i + 1).toString())).html(data.tue[i].ITRT_CNTNT);
-    }
-    for (var i = 0; i < data.wed.length; i++) {
-        $('#w' + ((i + 1).toString())).html(data.wed[i].ITRT_CNTNT);
-    }
-    for (var i = 0; i < data.thu.length; i++) {
-        $('#th' + ((i + 1).toString())).html(data.thu[i].ITRT_CNTNT);
-    }
-    for (var i = 0; i < data.fri.length; i++) {
-        $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
-    }
-}
 
-Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
-
-//kakao 공유
-function shareMeal() {
-    if (currentMenuRaw) {
-        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
-        var menuInfoTag = '';
-
-        for (var i = 0; i < menuArr.length; i++) {
-            if (menuArr[i].match(/\d+/)) {
-                var allegyIndex = menuArr[i].match(/\d+/).index;
-                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
-            } else {
-                var alle = 'none';
-            }
-            var menuName = menuArr[i].substring(0, allegyIndex);
-            menuInfoTag += menuName + '\n';
-        }
-
-        var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
-        Kakao.Link.sendDefault({
-            objectType: 'text',
-            text:
-                content,
-            link: {
-                mobileWebUrl: 'https://sungil.vercel.app',
-                webUrl: 'https://sungil.vercel.app',
-            },
-        })
-    } else {
-        $('#copied').text('내용 없음');
-        setTimeout(function () {
-            $('#copied').text('');
-        }, 1000);
-    }
 
 }
 
 
-const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
 
-
-// Detects if device is on iOS 
-const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-}
-
-// Detects if device is in standalone mode
-const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
-
-// Checks if should display install popup notification:
-if (isIos() && !isInStandaloneMode()) {
-    // offer app installation here
-    //
-    $('.pwaBanner').show();
-    if (!isMobile()) {
-        $('#desktop').show();
-    } else {
-        if (isIos()) {
-            $('#ios').show();
-        } else {
-            $('#android').show();
-        }
-    }
-    //
-}
-
-
-
-//pwa 설치 안내 팝업
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    //
-    $('.pwaBanner').show();
-    if (!isMobile()) {
-        $('#desktop').show();
-    } else {
-        if (isIos()) {
-            $('#ios').show();
-        } else {
-            $('#android').show();
-        }
-    }
-});
 
 function getWeekNo(v_date_str) {
-    var date = new Date();
+    var date = new Date()
     if (v_date_str) {
         date = new Date(v_date_str);
     }
     return Math.ceil(date.getDate() / 7);
 }
 
-//kakao image search api
-function search(query) {
-    $.ajax({
-        type: "GET",
-        url: 'https://dapi.kakao.com/v2/search/image?query=' + query,
-        headers: {
-            'Authorization': 'KakaoAK a1cb5ad868a6adb4d8d59d2454d4b2bc'
-        },
-        success: function (result) {
-            var data = result;
-            i = 0;
-            var image_result = '<img class="menu-image" src="' + data.documents[i].thumbnail_url + '" class="img-thumbnail" onclick="selectImage(\'' + data.documents[i].image_url + '\')">';
-
-            $('#image_result').html(image_result);
-        }
-    });
-}
-
-
-
 function openMenuBanner(name, allegy) {
-    if (allegy == 'none') {
-        $('#allergy-info').html('알레르기 정보 없음');
-    } else {
-        var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우').replaceAll('.', ', ');
-        $('#allergy-info').html(allegyString.substring(0, allegyString.length - 2));
-    }
-
-    search(name);
-    $('#menu-name').html(name);
-    $('.menuBanner').show("slide", { direction: "down" }, 100);;
-
+    return false;
 }
-
-//메뉴 상세정보 팝업 이외 클릭 시 닫기
-document.addEventListener('click', function (e) {
-    if ($('.menuBanner').is(':visible')) {
-        if (!$(e.target).hasClass("menuBanner")) {
-            $('.menuBanner').hide("slide", { direction: "down" }, 100);;
-        }
-
-    }
-});
-
-//pwa 팝업 이외 클릭 시 닫기
-document.addEventListener('click', function (e) {
-    if ($('.pwaBanner').is(':visible')) {
-        if (!$(e.target).hasClass("pwaBanner")) {
-            $('.pwaBanner').hide("slide", { direction: "down" }, 100);;
-        }
-
-    }
-});
-
-/* bottom sheet */
-$('.pop').on('click', function () {
-    $('#modal-title').text('날짜 선택');
-    $('#datepicker').show();
-    $('#whatsnew').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#datepicker').height() + 130 + 'px');
-    }, 100);
-});
-
-$('.sheet-backdrop').on('click', function () {
-    $('body').css('overflow', 'auto');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('display', 'none');
-    }, 100);
-    $('.sheet-backdrop').removeClass('backdrop-in');
-});
-
-/* bottom sheet */
-$('.whatsnew-btn').on('click', function () {
-    $('.sheet-modal').css('height', '30%');
-    $('#modal-title').text('새로운 기능');
-    $('#datepicker').hide();
-    $('#whatsnew').show();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#whatsnew').height() + 130 + 'px');
-    }, 100);
-});
-
-///custom modal sheet///
-$('.c-modal').each(function () {
-    var mc = new Hammer(this);
-
-    mc.get('swipe').set({
-        direction: Hammer.DIRECTION_ALL
-    });
-
-    mc.on("swipedown", function (ev) {
-        $('body').css('overflow', 'auto');
-        $('.modal-in').css('bottom', '-1850px');
-        setTimeout(function () {
-            $('.modal-in').css('display', 'none');
-        }, 100);
-
-        $('.sheet-backdrop').removeClass('backdrop-in');
-    });
-});
