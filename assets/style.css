@@ -1922,8 +1922,12 @@ thead th.dark {
 
 
 /* Apple Watch */
-@media (max-device-width: 42mm) and (min-device-width: 38mm) {
+@media (max-width: 400px) and (max-height: 500px) {
     html {
+        background-color: #000;
+    }
+
+    body {
         display: none;
     }
 }
