@@ -1919,3 +1919,11 @@ thead th.dark {
         width: 40%;
     }
 }
+
+
+/* Apple Watch */
+@media (max-device-width: 42mm) and (min-device-width: 38mm) {
+    html {
+        display: none;
+    }
+}

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id='update' type="button" value="Update">
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>property</th>
+                <th>size</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>screen.width</td>
+                <td><span id="screen_width"></span>px</td>
+            </tr>
+            <tr>
+                <td>screen.availWidth</td>
+                <td><span id="screen_availWidth"></span>px</td>
+            </tr>
+            <tr>
+                <td>window.outerWidth</td>
+                <td><span id="window_outerWidth"></span>px</td>
+            </tr>
+            <tr>
+                <td>window.innerWidth</td>
+                <td><span id="window_innerWidth"></span>px</td>
+            </tr>
+            <tr>
+                <td>document.body.clientWidth</td>
+                <td><span id="document_body_clientWidth"></span>px</td>
+            </tr>
+            <tr>
+                <td>document.documentElement.clientWidth</td>
+                <td><span id="document_documentElement_clientWidth"></span>px</td>
+            </tr>
+
+            <tr>
+                <td>screen.height</td>
+                <td><span id="screen_height"></span>px</td>
+            </tr>
+            <tr>
+                <td>screen.availHeight</td>
+                <td><span id="screen_availHeight"></span>px</td>
+            </tr>
+            <tr>
+                <td>window.outerHeight</td>
+                <td><span id="window_outerHeight"></span>px</td>
+            </tr>
+            <tr>
+                <td>window.innerHeight</td>
+                <td><span id="window_innerHeight"></span>px</td>
+            </tr>
+            <tr>
+                <td>document.body.clientHeight</td>
+                <td><span id="document_body_clientHeight"></span>px</td>
+            </tr>
+            <tr>
+                <td>document.documentElement.clientHeight</td>
+                <td><span id="document_documentElement_clientHeight"></span>px</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
+
+<style>
+    table {
+        margin-top: 16px;
+        border-collapse: collapse;
+    }
+
+    table th,
+    table td {
+        border: solid 1px #ccc;
+        padding: 4px;
+    }
+</style>
+
+<script>
+    update = () => {
+        document.getElementById('screen_width').textContent = screen.width
+        document.getElementById('screen_availWidth').textContent = screen.availWidth
+        document.getElementById('window_outerWidth').textContent = window.outerWidth
+        document.getElementById('window_innerWidth').textContent = window.innerWidth
+        document.getElementById('document_body_clientWidth').textContent = document.body.clientWidth
+        document.getElementById('document_documentElement_clientWidth').textContent = document.documentElement.clientWidth
+
+        document.getElementById('screen_height').textContent = screen.height
+        document.getElementById('screen_availHeight').textContent = screen.availHeight
+        document.getElementById('window_outerHeight').textContent = window.outerHeight
+        document.getElementById('window_innerHeight').textContent = window.innerHeight
+        document.getElementById('document_body_clientHeight').textContent = document.body.clientHeight
+        document.getElementById('document_documentElement_clientHeight').textContent = document.documentElement.clientHeight
+    }
+
+    btn = document.getElementById('update')
+    btn.addEventListener(
+        'click',
+        e => update(),
+        false
+    )
+
+    update()
+</script>
