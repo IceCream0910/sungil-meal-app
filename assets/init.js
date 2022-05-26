@@ -1,35 +1,36 @@
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
+var isComplete = false;
 
-$('#grade').val(grade);
-$('#classNum').val(classNum);
-
-$("#grade").on("propertychange change keyup paste input", function(){
-    localStorage.setItem("sungil_grade", $(this).val())
+$("#grade-list li").on("click", function () {
+    grade = $(this).data('grade');
+    $("#button-text").text('저는 ' + grade + '학년이고요');
+    $('#grade-list').hide();
+    $('#class-list').fadeIn();
 });
 
-$("#classNum").on("propertychange change keyup paste input", function(){
-    localStorage.setItem("sungil_classNum", $(this).val())
-
+$("#class-list li").on("click", function () {
+    classNum = $(this).data('class');
+    $("#button-text").text('저는 ' + grade + '학년 ' + classNum + '반이에요');
+    $('#save-btn').css('background-color', '#634acf');
+    isComplete = true;
 });
 
 const isIos = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test( userAgent );
-  }
+    return /iphone|ipad|ipod/.test(userAgent);
+}
 
 function complete() {
-    if($('#grade').val()!='' && $('#classNum').val()!='') {
-        if(isIos()) {
-            location.href='index.html'
+    if (isComplete) {
+        localStorage.setItem("sungil_grade", grade);
+        localStorage.setItem("sungil_classNum", classNum);
+
+        if (isIos()) {
+            location.href = 'index.html'
         } else {
             history.back();
         }
-    } else {
-        $('#error').fadeIn();
-        setTimeout(function() {
-            $('#error').fadeOut();
-          }, 3000);
     }
 }
 
@@ -39,8 +40,8 @@ const storedTheme = localStorage.getItem("darkTheme");
 const mql = window.matchMedia("(prefers-color-scheme: dark)");
 
 mql.addEventListener("change", () => {
-    if(storedTheme == "system" || !storedTheme) {
-        if(mql.matches) {
+    if (storedTheme == "system" || !storedTheme) {
+        if (mql.matches) {
             onDark();
         } else {
             offDark();
@@ -52,7 +53,7 @@ mql.addEventListener("change", () => {
 if (storedTheme !== null) {
     if (storedTheme === "true") {
         onDark();
-     } else if(storedTheme === "system") {
+    } else if (storedTheme === "system") {
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
             onDark();
         }

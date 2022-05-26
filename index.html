@@ -35,15 +35,14 @@
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <link rel="manifest" href="manifest.json">
-    <script>var mql = window.matchMedia("(max-width: 400px) and (max-height: 500px)");
-        if (mql.matches) {
+    <script>var mql_watch = window.matchMedia("(max-width: 400px) and (max-height: 500px)");
+        if (mql_watch.matches) {
             console.log("애플워치");
             location.href = 'index_watch.html'
         }
@@ -80,7 +79,8 @@
         </div>
     </div>
 </div>
-<div class="pwaBanner" style="display:none;"> <a class="close-modal" href="javascript:$('.pwaBanner').fadeOut();"
+<div class="pwaBanner" style="display:none;"> <a class="close-modal"
+        href="javascript:$('.pwaBanner').fadeOut();localStorage.setItem('isWebappDismiss', true);"
         aria-label="웹 앱 설치 안내 팝업 닫기"> <svg viewBox="0 0 20 20">
             <path id="close-path-2"
                 d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z">
@@ -127,12 +127,15 @@
                 </div><br>
                 <div id="datepicker"></div>
                 <div id="whatsnew">
+                    <h5>22-05-27</h5>
+                    <p style="font-size:14px;">1. 다크모드 미적용 오류 수정<br>
+                        2. 대화면 환경에서 학년/반 정보 미설정 시 레이아웃 깨짐 수정<br>
+                        3. 학년/반 설정 방식 개편<br>
+                        4. Apple Watch 화면 대응
+                    </p>
+                    <br>
                     <h5>22-05-16</h5>
                     <p style="font-size:14px;">1. 대화면 기기 레이아웃 최적화</p>
-                    <br>
-                    <h5>22-05-14</h5>
-                    <p style="font-size:14px;">1. 음성안내 기능 추가<br>&nbsp;&nbsp;- 접근성 개선) 급식과 시간표를 음성으로 읽어줍니다.<br>2. 날짜 선택
-                        UI 개선<br></p>
                 </div>
             </div>
         </div>
@@ -166,7 +169,7 @@
                         class="material-icons mdc-button__icon" aria-hidden="true">record_voice_over</i> </button>
             </div>
         </div>
-        <div id="no-meal"> <img class="no-meal-img" src="assets/Ice-cream.png" alt="급식 정보 없음 일러스트"> <br><span>급식 정보가
+        <div id="no-meal"> <img class="no-meal-img" src="assets/icons/Failure.png" alt="급식 정보 없음 일러스트"> <br><span>급식 정보가
                 없어요</span> </div>
         <div id="exist-meal">
             <div class="card">
@@ -198,8 +201,13 @@
                         class="material-icons mdc-button__icon" aria-hidden="true">record_voice_over</i> </button>
             </div>
         </div>
-        <div class="card" id="nosetting-timetable">
-            <p class="card__supporting__text"> 학년/반을 먼저 설정해주세요. </p>
+        <div class="card" id="nosetting-timetable"
+            style="height: 420px;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
+            <p class="card__supporting__text"
+                style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
+                <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트"> <br><span>학년/반을 먼저
+                    설정하고<br>시간표를 확인해보세요.</span>
+            </p>
         </div>
         <div class="timetable-wrap" style="display:none;">
             <table>

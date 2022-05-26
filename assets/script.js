@@ -463,6 +463,8 @@ const isIos = () => {
     return /iphone|ipad|ipod/.test(userAgent);
 }
 
+//localstorage
+var isWebappDismiss = localStorage.getItem('isWebappDismiss') || false;
 // Detects if device is in standalone mode
 const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
@@ -470,17 +472,19 @@ const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.n
 if (isIos() && !isInStandaloneMode()) {
     // offer app installation here
     //
-    $('.pwaBanner').show();
-    if (!isMobile()) {
-        $('#desktop').show();
-    } else {
-        if (isIos()) {
-            $('#ios').show();
+    if (isWebappDismiss === false) {
+        $('.pwaBanner').show();
+        if (!isMobile()) {
+            $('#desktop').show();
         } else {
-            $('#android').show();
+            if (isIos()) {
+                $('#ios').show();
+            } else {
+                $('#android').show();
+            }
         }
+        //
     }
-    //
 }
 
 

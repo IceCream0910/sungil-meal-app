@@ -29,39 +29,80 @@
     </div>
 
     <div id="settings">
-        <h3 class="card__primary__title__text">학년/반 설정</h3>
-        <Br>
-        <Br>
-        <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-            <div class="group">
-                <input id="grade" type="number" value=1 min=0 autocomplete="off" required>
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>학년</label>
-            </div>
+        <h3 class="card__primary__title__text" style="position:fixed;top:40px;">학년/반 설정</h3>
+        <Br><br>
+        <ul class="mdc-list" id="grade-list">
+            <li class="mdc-list-item" id="grade" data-grade="1">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">1학년</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-grade="2">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">2학년</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-grade="3">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">3학년</span>
+            </li>
+        </ul>
 
-            <div class="group">
-                <input id="classNum" type="number" value=1 autocomplete="off" required>
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>반</label>
-            </div>
-        </div>
-        <span class="lead" id="error" style="font-size:13px;color:red;display:none;">모든 항목을 올바르게 입력해주세요.</span>
-        <br>
-        <span class="lead" style="font-size:13px;">학년/반 정보는 설정에서 언제든지 바꿀 수 있습니다.</span>
+        <ul class="mdc-list" id="class-list" style="display: none;">
+            <li class="mdc-list-item" id="grade" data-class="1">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">1반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="2">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">2반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="3">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">3반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="4">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">4반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="5">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">5반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="6">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">6반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="7">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">7반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="8">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">8반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="9">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">9반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="10">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">10반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="11">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">11반</span>
+            </li>
+        </ul>
 
-        <button onclick="complete();" class="mdc-button mdc-button--raised" style="position: fixed; bottom:20px;left:20px;width:90%;padding:30px;font-size:18px;background-color: #634acf;border-radius: 10px;">
-            <span class="mdc-button__label">확인</span>
-          </button>
+        <button id="save-btn" onclick="complete();" class="mdc-button mdc-button--raised"
+            style="position: fixed; bottom:20px;left:20px;width:90%;padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
+            <span class="mdc-button__label" id="button-text">확인</span>
+        </button>
 </body>
 
 <script src="assets/init.js"></script>
 <style>
-    html,
-    head,
-    body {
-        overflow: hidden;
+    #save-btn {
+        background-color: #877faa;
     }
 </style>
 <link href="assets/style.css" rel="stylesheet">

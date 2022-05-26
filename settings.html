@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>성일고</title>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
@@ -18,7 +19,8 @@
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
 
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="assets/style.css" rel="stylesheet">
+
 </head>
 
 <body oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
@@ -35,28 +37,13 @@
             </button>
             <h3 style="margin-top:10px;">설정</h3>
         </div>
-
         <br>
         <Br>
-        <h3 class="card__primary__title__text">학년/반 설정</h3>
-        <Br>
-        <Br>
-        <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-            <div class="group">
-                <input id="grade" type="number" value=1 min=0 required>
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>학년</label>
-            </div>
-
-            <div class="group">
-                <input id="classNum" type="number" value=1 required>
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>반</label>
-            </div>
-        </div>
-
+        <h3 class="card__primary__title__text" id="profile-text"></h3>
+        <button class="mdc-button mdc-button--icon-leading" onclick="location.href='init.html'" aria-label="학년/반 정보 수정">
+            <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon"
+                aria-hidden="true">settings</i> <span class="mdc-button__label">학년/반 정보 수정</span> </button>
+        <br> <br>
         <h3 class="card__primary__title__text">테마</h3>
 
         <div class="mdc-form-field">
@@ -165,15 +152,18 @@
         <br>
         <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx" data-ad-width="320"
             data-ad-height="100"></ins>
-        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+        <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
         <Br> <Br> <Br>
     </div>
     </div>
+
+
+    <script src="assets/settings.js"></script>
 </body>
 
-<script src="assets/settings.js"></script>
 
-<link href="assets/style.css" rel="stylesheet">
+
+
 
 </html>

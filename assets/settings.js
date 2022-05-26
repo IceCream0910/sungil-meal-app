@@ -1,17 +1,11 @@
 var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 
-$('#grade').val(grade);
-$('#classNum').val(classNum);
-
-$("#grade").on("propertychange change keyup paste input", function () {
-    localStorage.setItem("sungil_grade", $(this).val())
-});
-
-$("#classNum").on("propertychange change keyup paste input", function () {
-    localStorage.setItem("sungil_classNum", $(this).val())
-
-});
+if (grade !== null && classNum !== null) {
+    $('#profile-text').html('성일고&nbsp;<span style="color:#634acf">' + grade + '</span>학년&nbsp; <span style="color:#634acf">' + classNum + '</span>반');
+} else {
+    $('#profile-text').html('학년과 반을 알려주세요.');
+}
 
 
 const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
