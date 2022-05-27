@@ -1962,3 +1962,13 @@ thead th.dark {
     padding-bottom: 20px;
     border-bottom: #94a8ff51 0.1px solid;
 }
+
+.file-box {
+    background: transparent;
+    border: #4c63bb 1px solid;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

@@ -82,7 +82,7 @@ var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
 var timetableRaw = '';
-var isTest = false;
+var isTest = true;
 
 if (grade && classNum) {
     $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
@@ -121,33 +121,36 @@ $("#datepicker").datepicker({
 
 $(document).ready(function () {
     updateInfo();
-
     //가정통신문
     $.ajax({
         type: "GET",
-        url: "https://school.iamservice.net/api/article/organization/18835/group/2084469?next_token=0",
+        url: "https://sungil-school-api.vercel.app/notices",
         success: function (result) {
             console.log(result);
-            /*
-            var articles = JSON.parse(result);
+            var data = JSON.parse(result);
             for (var i = 0; i < 5; i++) {
-                var title = articles.items[i].title;
-                var createdAt = moment(new Date(articles.items[i].published)).format('YYYY-MM-DD');
-                var link = 'https://sungil-h.goesn.kr/' + articles.items[i].link;
+                var title = data.articles[i].title;
+                var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
+                var link = data.articles[i].view_link;
+                if (data.articles[i].files) {
+                    var fileUrl = data.articles[i].files[1].url;
+                    var fileName = data.articles[i].files[1].title;
+                }
+
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4>`+ title + `</h4>
+            <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
+            `+ fileName + `
+            </div>
             <p>`+ createdAt + `</p>
         </div>`);
             }
-
             if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
                 var notice_items = document.getElementsByClassName('notice-card');
-
                 for (var i = 0; i < notice_items.length; i++) {
                     notice_items[i].classList.add("dark");
                 }
             }
-*/
         }
     });
 });
@@ -232,62 +235,63 @@ function updateInfo() {
                 }
             });
         }
-    }
 
-    //시간표
-    if (!grade || !classNum) {
-        $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
-        $('.timetable-wrap').hide();
-        $('#nosetting-timetable').show();
 
-    } else {
-        $('.timetable-wrap').show();
-        $('#nosetting-timetable').hide();
-
-        var cachedTimeData = JSON.parse(localStorage.getItem("sungil_timeapi_cache")) || null;
-        var cachedTimeData_date = localStorage.getItem("sungil_timeapi_cache_date") || null;
-        var requestTimeDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD'));
-
-        if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
-            displayTimetable(cachedTimeData);
-            //변경 사항 체크
-            $.ajax({
-                type: "GET",
-                url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
-                success: function (result_time) {
-                    var data = JSON.parse(result_time);
-                    if (JSON.stringify(cachedTimeData) != JSON.stringify(data)) {
-                        console.log('시간표 변동 사항 발견!', cachedTimeData, data);
-                        localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
-                        localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
-                        displayTimetable(data);
-                    } else { console.log('시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지'); }
-                }
-            });
+        //시간표
+        if (!grade || !classNum) {
+            $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
+            $('.timetable-wrap').hide();
+            $('#nosetting-timetable').show();
 
         } else {
-            if (!$('.loading-overlay').hasClass('is-active')) {
-                document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
-            }
+            $('.timetable-wrap').show();
+            $('#nosetting-timetable').hide();
 
-            $.ajax({
-                type: "GET",
-                url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
-                success: function (result_time) {
-                    var data = JSON.parse(result_time);
+            var cachedTimeData = JSON.parse(localStorage.getItem("sungil_timeapi_cache")) || null;
+            var cachedTimeData_date = localStorage.getItem("sungil_timeapi_cache_date") || null;
+            var requestTimeDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD'));
 
-                    localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
-                    localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
-
-                    displayTimetable(data);
-                    if ($('.loading-overlay').hasClass('is-active')) {
-                        document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
+            if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
+                displayTimetable(cachedTimeData);
+                //변경 사항 체크
+                $.ajax({
+                    type: "GET",
+                    url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
+                    success: function (result_time) {
+                        var data = JSON.parse(result_time);
+                        if (JSON.stringify(cachedTimeData) != JSON.stringify(data)) {
+                            console.log('시간표 변동 사항 발견!', cachedTimeData, data);
+                            localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                            localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+                            displayTimetable(data);
+                        } else { console.log('시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지'); }
                     }
+                });
+
+            } else {
+                if (!$('.loading-overlay').hasClass('is-active')) {
+                    document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
                 }
-            });
+
+                $.ajax({
+                    type: "GET",
+                    url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
+                    success: function (result_time) {
+                        var data = JSON.parse(result_time);
+
+                        localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                        localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+
+                        displayTimetable(data);
+                        if ($('.loading-overlay').hasClass('is-active')) {
+                            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
+                        }
+                    }
+                });
+            }
         }
+        //시간표 끝
     }
-    //시간표 끝
 }
 
 function refreshNewData() {
