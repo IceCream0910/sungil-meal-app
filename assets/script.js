@@ -82,7 +82,7 @@ var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
 var timetableRaw = '';
-var isTest = true;
+var isTest = false;
 
 if (grade && classNum) {
     $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
