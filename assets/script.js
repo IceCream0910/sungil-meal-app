@@ -125,8 +125,10 @@ $(document).ready(function () {
     //가정통신문
     $.ajax({
         type: "GET",
-        url: "https://sungil-school-api.vercel.app/notices",
+        url: "https://school.iamservice.net/api/article/organization/18835/group/2084469?next_token=0",
         success: function (result) {
+            console.log(result);
+            /*
             var articles = JSON.parse(result);
             for (var i = 0; i < 5; i++) {
                 var title = articles.items[i].title;
@@ -145,7 +147,7 @@ $(document).ready(function () {
                     notice_items[i].classList.add("dark");
                 }
             }
-
+*/
         }
     });
 });

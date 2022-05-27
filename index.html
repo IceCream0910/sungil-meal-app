@@ -41,7 +41,11 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <link rel="manifest" href="manifest.json">
-    <script>var mql_watch = window.matchMedia("(max-width: 400px) and (max-height: 500px)");
+    <script>
+        //점검 중
+        location.href = 'maintenance.html'
+
+        var mql_watch = window.matchMedia("(max-width: 400px) and (max-height: 500px)");
         if (mql_watch.matches) {
             console.log("애플워치");
             location.href = 'index_watch.html'
