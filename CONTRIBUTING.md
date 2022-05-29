@@ -5,9 +5,6 @@
 
 * [Commit](#commit)
 * [Issues](#issues)
-* [Branch](#branch)
-* [Pull Requests](#pull-requests)
-* [Code Check](#code-Check)
 * [Developer's Certificate of Origin 1.1](#developers-certificate-of-origin)
 
 ## 기여 방법
