@@ -1,6 +1,8 @@
 # 급식충
 ## 성일고 급식, 시간표, 학사일정, 가정통신문을 한번에
 
+![이미지](https://i.imgur.com/EDOdvEO.png)
+
 ## Index
   - [Overview](#overview) 
   - [Author](#author)
