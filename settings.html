@@ -41,10 +41,31 @@
         <Br>
         <h3 class="card__primary__title__text" id="profile-text"></h3>
         <button class="mdc-button mdc-button--icon-leading" onclick="location.href='init.html'" aria-label="학년/반 정보 수정">
-            <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon"
+            <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon" style="color:#7768ff"
                 aria-hidden="true">settings</i> <span class="mdc-button__label">학년/반 정보 수정</span> </button>
+
+        <div style="display:none;" id="hybridAppSettingsBtn">
+            <br> <br><button class="mdc-button mdc-button--icon-leading" onclick="Android.openSettings();"
+                aria-label="푸시 알림 설정">
+                <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon" style="color:#7768ff"
+                    aria-hidden="true">notifications</i> <span class="mdc-button__label">푸시 알림 설정</span> </button>
+        </div>
         <br> <br>
+
+
+        <script>
+            var ua = navigator.userAgent;
+            if (ua.indexOf('hybridApp') > -1) {
+                $('#hybridAppSettingsBtn').show();
+            } else {
+                $('#hybridAppSettingsBtn').hide();
+            }
+
+
+        </script>
+
         <h3 class="card__primary__title__text">테마</h3>
+
 
         <div class="mdc-form-field">
             <div class="mdc-radio">
@@ -132,6 +153,7 @@
 
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
+                <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">terminal</i>
                 <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">
 
                     프로젝트 소스코드</span>
@@ -144,6 +166,8 @@
 
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
+
+                <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">mail</i>
                 <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">개발자에게
                     문의하기</span>
             </button>
@@ -154,8 +178,20 @@
         <a style="text-decoration: none;" href="license.html">
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
+
+                <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">key</i>
                 <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">오픈소스
                     라이선스</span>
+            </button>
+        </a>
+        <br>
+        <a style="text-decoration: none;" href="https://icecream0910.github.io/sungil-meal-app/PRIVACY" target="_blank">
+            <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
+                <span class="mdc-button__ripple"></span>
+
+                <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">policy</i>
+                <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">개인정보
+                    처리방침</span>
             </button>
         </a>
         <br>

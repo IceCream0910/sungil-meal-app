@@ -1380,11 +1380,11 @@ body.dark {
 }
 
 #settings.mdc-button__label {
-    color: #000
+    color: #7768ff
 }
 
 .mdc-button__label.dark {
-    color: #eee
+    color: #b0a7ff
 }
 
 .mdc-fab--mini {
