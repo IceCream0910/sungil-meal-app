@@ -44,7 +44,10 @@ function onDark() {
         $(this).addClass("dark");
     });
     $('.whatsnew-btn').addClass("dark");
-
+    $('.skeleton').addClass("dark");
+    $('.mealItem').each(function () {
+        $(this).addClass("dark");
+    });
 }
 
 function offDark() {
@@ -67,5 +70,8 @@ function offDark() {
         $(this).removeClass("dark");
     });
     $('.whatsnew-btn').removeClass("dark");
-
+    $('.skeleton').removeClass("dark");
+    $('.mealItem').each(function () {
+        $(this).removeClass("dark");
+    });
 }

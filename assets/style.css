@@ -74,13 +74,31 @@ ion-icon {
 
 #meal-menus a {
     text-decoration: none;
-    color: inherit;
     font-family: S-CoreDream-3Light
+}
+
+#meal-menus .mealItem {
+    color: #000;
+}
+
+#meal-menus .mealItem.dangerMeal {
+    color: rgb(255, 64, 64);
+}
+
+#meal-menus .mealItem.dark {
+    color: #bbb;
+}
+
+#meal-menus .mealItem.dark.dangerMeal {
+    color: rgb(255, 131, 131);
 }
 
 #meal-menus a:hover {
     font-family: S-CoreDream-5Medium;
-    color: inherit
+}
+
+#meal-menus .favMenu {
+    text-decoration: underline dotted
 }
 
 #main {
@@ -1271,9 +1289,9 @@ header {
     bottom: 0;
     left: 0;
     padding: 15px;
-    z-index: 99999;
+    z-index: 999991;
     background-color: #fff;
-    border-radius: 10px 10px 0 0;
+    border-radius: 20px 20px 0 0;
     box-shadow: 0 -2px 40px -5px #000
 }
 
@@ -1288,9 +1306,9 @@ header {
     bottom: 0;
     left: 0;
     padding: 15px;
-    z-index: 99999;
+    z-index: 999991;
     background-color: #fff;
-    border-radius: 10px 10px 0 0;
+    border-radius: 20px 20px 0 0;
     box-shadow: 0 -2px 40px -5px #000
 }
 
@@ -1305,14 +1323,18 @@ header {
 
 #allergy-info {
     font-size: 14px;
-    font-family: S-CoreDream-3Light
+    font-family: S-CoreDream-3Light;
+}
+
+#allergy-info #dangerAllegy {
+    color: rgb(255, 70, 70);
 }
 
 .menu-image {
     width: 60px;
     height: 60px;
     margin-right: 20px;
-    border-radius: 10px
+    border-radius: 20px
 }
 
 .close-modal {
@@ -1798,11 +1820,13 @@ body.dark {
 }
 
 table {
-    width: 100%;
+    width: 106%;
     border: none;
     border-collapse: separate;
     border-spacing: 5px;
-    text-align: center
+    text-align: center;
+    margin: -10px;
+    box-sizing: border-box;
 }
 
 th {
@@ -1955,6 +1979,20 @@ thead th.dark {
     }
 }
 
+/* init */
+.init_header {
+    position: fixed;
+    top: 0;
+    padding-top: 40px;
+    width: 100%;
+    background: #eee;
+    z-index: 999999;
+}
+
+.init_header.dark {
+    background: #121212;
+}
+
 .mdc-list-item {
     padding-left: 0;
     padding-right: 0;
@@ -1971,4 +2009,211 @@ thead th.dark {
     font-size: 13px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+/* loader skeleton*/
+.card-title {
+    font-size: 1.25rem;
+    line-height: 1.33;
+    font-weight: 700;
+}
+
+.card-title.skeleton {
+    min-height: 28px;
+    border-radius: 4px;
+}
+
+.card-intro {
+    margin-top: 0.75rem;
+    line-height: 1.5;
+}
+
+.card-intro.skeleton {
+    min-height: 72px;
+    border-radius: 4px;
+}
+
+.skeleton {
+    background-color: #e2e5e7;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    background-size: 40px 100%;
+    background-repeat: no-repeat;
+    background-position: left -40px top 0;
+    -webkit-animation: shine 1s ease infinite;
+    animation: shine 1s ease infinite;
+}
+
+.skeleton.dark {
+    background-color: #313131;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    background-size: 40px 100%;
+    background-repeat: no-repeat;
+    background-position: left -40px top 0;
+    -webkit-animation: shine 1s ease infinite;
+    animation: shine 1s ease infinite;
+}
+
+@-webkit-keyframes shine {
+    to {
+        background-position: right -40px top 0;
+    }
+}
+
+@keyframes shine {
+    to {
+        background-position: right -40px top 0;
+    }
+}
+
+.checkbox {
+    display: inline-block;
+    background-color: rgb(233, 233, 233);
+    border: rgb(75, 75, 75) 1px solid;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+    margin: 0 5px 10px 0;
+    color: #121212;
+}
+
+.checkbox.checked {
+    background-color: #4c63bb;
+    color: white;
+    border: rgb(75, 75, 75) 1px solid;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.checkbox.dark {
+    background-color: rgb(48, 48, 48);
+    border: rgb(75, 75, 75) 1px solid;
+    color: #eee;
+}
+
+.checkbox.dark.checked {
+    background-color: #4c63bb;
+    border: rgb(75, 75, 75) 1px solid;
+}
+
+#alleSetting {
+    height: 100%;
+    overflow: scroll;
+}
+
+#alleSetting #alle-save-btn {
+    background-color: #4c63bb;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 30px;
+    font-size: 16px;
+    letter-spacing: normal;
+    color: #fff;
+}
+
+#alleSetting #alle-save-btn .mdc-button__label {
+    color: #fff;
+}
+
+#dangerMeal {
+    color: rgb(255, 70, 70);
+}
+
+
+.tag-area {
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    padding: 10px 10px 5px 10px;
+    float: left;
+}
+
+.tag {
+    position: relative;
+    width: auto;
+    height: 30px;
+    padding: 0 10px;
+    line-height: 32px;
+    background: #4c63bb;
+    float: left;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #eee;
+    margin: 0 5px 10px 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tag span {
+    position: absolute;
+    top: 0;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    background: #2d4abe;
+    transition: right ease 200ms;
+}
+
+.tag:hover {
+    cursor: pointer;
+}
+
+.tag:hover span {
+    right: 0;
+}
+
+.fav-tag-area {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
+
+.tag-input-container {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+#favorSetting #fav-add-btn {
+    position: relative;
+    bottom: 50px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #4c63bb;
+    color: #eee;
+}
+
+.tagResetBtn {
+    border: none;
+    background: transparent;
+    color: #2d4abe;
+    font-size: 16px;
+    margin-left: 10px;
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.tagResetBtn.dark {
+    border: none;
+    background: transparent;
+    color: #a8b9ff;
 }

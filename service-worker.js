@@ -3,7 +3,10 @@ const CACHE_NAME = "cache-v1";
 
 // 캐싱할 파일
 const FILES_TO_CACHE = [
-    "offline.html"
+    "offline.html",
+    "index_watch.html",
+    "assets/style_watch.css",
+    "assets/script_watch.js"
 ];
 
 // 상술한 파일 캐싱

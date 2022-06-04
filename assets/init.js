@@ -67,6 +67,7 @@ function onDark() {
     $('.mdc-form-field').addClass("dark");
     $('input').addClass("dark");
     $('.mdc-button__label').addClass("dark");
+    $('.init_header').addClass("dark");
 }
 
 function offDark() {
@@ -76,4 +77,5 @@ function offDark() {
     $('.mdc-form-field').removeClass("dark");
     $('input').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
+    $('.init_header').removeClass("dark");
 }

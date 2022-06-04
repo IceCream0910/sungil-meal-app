@@ -32,13 +32,12 @@
         type="text/css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link href="assets/material/material-components-web.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="assets/material/material-component-web.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <link rel="manifest" href="manifest.json">
     <script>
@@ -128,6 +127,14 @@
                 </div><br>
                 <div id="datepicker"></div>
                 <div id="whatsnew">
+                    <h5>22-06-04</h5>
+                    <p style="font-size:14px;">1. 급식 메뉴 표시 개선<br>
+                        - 미리 설정된 키워드를 통해 맛있는 메뉴를 강조해줍니다. 설정에서 직접 키워드를 편집할 수 있어요.<br>
+                        - 알레르기 성분을 등록해두면 해당 성분이 함유된 메뉴는 빨간색으로 표시해줍니다.<br>
+                        2. 오프라인 실행 지원<br>
+                        3. UI 개선
+                    </p>
+                    <br>
                     <h5>22-05-27</h5>
                     <p style="font-size:14px;">1. 다크모드 미적용 오류 수정<br>
                         2. 대화면 환경에서 학년/반 정보 미설정 시 레이아웃 깨짐 수정<br>
@@ -135,9 +142,6 @@
                         4. Apple Watch 화면 대응<br>
                         5. 가정통신문 첨부파일 다운로드 기능 추가
                     </p>
-                    <br>
-                    <h5>22-05-16</h5>
-                    <p style="font-size:14px;">1. 대화면 기기 레이아웃 최적화</p>
                 </div>
             </div>
         </div>
@@ -179,13 +183,21 @@
                     <div class="help-tip" role="tooltip" id="name-tooltip"
                         aria-label="각 메뉴를 클릭하면 알레르기 정보 등 상세 정보 확인 가능">
                         <div class="help-tip__content">
-                            <p class="help-tip__text" style="margin-bottom:0px;font-size:12px;">각 메뉴를 클릭하면 알레르기 정보 등 상세
-                                정보를
-                                확인할 수 있어요.</p>
+                            <p class="help-tip__text" style="margin-bottom:0px;font-size:12px;">설정한 알레르기 성분이 함유된 메뉴는
+                                빨간색으로 표시됩니다.<br>맛있는 메뉴 키워드가 포함된 메뉴는 밑줄과 별표가 표시됩니다.<br>각 메뉴를 클릭하면 알레르기 정보와 이미지 검색 결과를 확인할
+                                수 있어요.</p>
                         </div>
                     </div>
                 </div>
-                <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;"> </p>
+
+                <div class="card-body" id="meal-loader" style="background:transparent;">
+                    <h2 class="card-title skeleton">
+                    </h2>
+                    <h2 class="card-title skeleton">
+                    </h2>
+                </div>
+                <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
+                </p>
             </div>
         </div>
     </div>
@@ -284,7 +296,45 @@
             data-ad-height="100"></ins>
     </div><br><br><br>
     <h3 class="card__primary__title__text">가정통신문</h3>
-    <div id="notices-content" style="margin-top:15px;"> </div><button class="more-btn"
+    <div id="notices-content" style="margin-top:15px;">
+        <div class="card-body">
+            <h2 class="card-title skeleton">
+                <!-- wating for title to load from javascript -->
+            </h2>
+            <p class="card-intro skeleton">
+                <!-- waiting for intro to load from Javascript -->
+            </p>
+        </div>
+
+        <div class="card-body">
+            <h2 class="card-title skeleton">
+                <!-- wating for title to load from javascript -->
+            </h2>
+            <p class="card-intro skeleton">
+                <!-- waiting for intro to load from Javascript -->
+            </p>
+        </div>
+
+        <div class="card-body">
+            <h2 class="card-title skeleton">
+                <!-- wating for title to load from javascript -->
+            </h2>
+            <p class="card-intro skeleton">
+                <!-- waiting for intro to load from Javascript -->
+            </p>
+        </div>
+
+        <div class="card-body">
+            <h2 class="card-title skeleton">
+                <!-- wating for title to load from javascript -->
+            </h2>
+            <p class="card-intro skeleton">
+                <!-- waiting for intro to load from Javascript -->
+            </p>
+        </div>
+    </div>
+
+    <button class="more-btn"
         onclick="window.open('https://sungil-h.goesn.kr/sungil-h/na/ntt/selectNttList.do?mi=19914&bbsId=15524', '_blank');">
         <ion-icon name="add-outline"></ion-icon>더보기
     </button>

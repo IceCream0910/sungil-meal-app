@@ -30,7 +30,7 @@ function mealTts() {
             menuInfoTag += menuName + ', ';
         }
 
-        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 급식 메뉴는 ' + menuInfoTag + '입니다.';
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 급식 메뉴는 ' + menuInfoTag.replaceAll('&', ', ') + '입니다.';
     } else {
         var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '은 급식 정보가 없네요.';
     }
@@ -72,7 +72,7 @@ function playPause() {
 
 
 var today = moment(new Date()).format('YYYYMMDD');
-//var today = moment('20220513').format('YYYYMMDD');
+//var today = moment('20220607').format('YYYYMMDD');
 
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
@@ -83,6 +83,24 @@ var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
 var timetableRaw = '';
 var isTest = false;
+
+var alleList;
+
+if (localStorage.getItem("sungil_alleList")) {
+    alleList = localStorage.getItem("sungil_alleList").split(',');
+    alleList = alleList.map(function (val) { return ++val; });
+    alleList = alleList.join(',').toString();
+} else {
+    alleList = '';
+}
+
+var favTagsList;
+if (localStorage.getItem("sungil_favTagsList")) {
+    favTagsList = localStorage.getItem("sungil_favTagsList").split(',');
+} else {
+    favTagsList = '';
+}
+
 
 if (grade && classNum) {
     $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
@@ -126,8 +144,8 @@ $(document).ready(function () {
         type: "GET",
         url: "https://sungil-school-api.vercel.app/notices",
         success: function (result) {
-            console.log(result);
             var data = JSON.parse(result);
+            $('#notices-content').html('');
             for (var i = 0; i < 5; i++) {
                 var title = data.articles[i].title;
                 var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
@@ -136,7 +154,6 @@ $(document).ready(function () {
                     var fileUrl = data.articles[i].files[1].url;
                     var fileName = data.articles[i].files[1].title;
                 }
-
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4>`+ title + `</h4>
             <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
@@ -192,7 +209,8 @@ function updateInfo() {
     var cachedData = JSON.parse(localStorage.getItem("sungil_api_cache")) || null;
     var cachedData_date = localStorage.getItem("sungil_api_cache_date") || null;
     var requestDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "");
-
+    $('#meal-loader').show();
+    $('#meal-menus').empty();
     if (!isTest) {
         var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
         var counter = 0;
@@ -308,7 +326,7 @@ function displayMeal(data) {
     if (data.meal[day]) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
-        currentMenuRaw = data.meal[day].toString();
+        currentMenuRaw = data.meal[day].toString().replace(':', '');
         var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
         var menuInfoTag = '';
 
@@ -318,19 +336,82 @@ function displayMeal(data) {
                 var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
             } else {
                 var alle = 'none';
+                var allegyIndex = menuArr[i].length;
             }
             var menuName = menuArr[i].substring(0, allegyIndex);
-            menuInfoTag += '<a href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+
+
+            if (alleList != '') {
+                var isDanger = false;
+                var tempAlleList = alle.split('.');
+                $.each(tempAlleList, function (index, element) {
+                    if (alleList.split(',').includes(element)) {
+                        isDanger = true;
+                        return true;
+                    }
+                });
+
+
+                if (isDanger) {
+                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                } else {
+                    var isFavorite = false;
+                    $.each(favTagsList, function (index, element) {
+                        console.log(element, menuName, element.indexOf(menuName) !== -1)
+                        if ((menuName).includes(element)) {
+                            isFavorite = true;
+                            return true;
+                        }
+                    });
+
+                    if (isFavorite) {
+                        menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                    } else {
+                        menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                    }
+                }
+            } else {
+                var isFavorite = false;
+                $.each(favTagsList, function (index, element) {
+                    if ((menuName).includes(element)) {
+                        isFavorite = true;
+                        return true;
+                    }
+                });
+
+                if (isFavorite) {
+                    menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                } else {
+                    menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                }
+            }
+
+
+
         }
+
+
         $('#meal-menus').html(menuInfoTag);
+        $('#meal-loader').hide();
+
+
+        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+            var items = document.getElementsByClassName('mealItem');
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.add("dark");
+            }
+        }
 
     } else {
         currentMenuRaw = '';
+        $('#meal-loader').hide();
         $('#no-meal').fadeIn();
         $('#exist-meal').hide();
         $('#kcal').html('');
         $('#meal-menus').html('');
     }
+
+
 }
 
 function displaySchedule(data) {
@@ -338,7 +419,7 @@ function displaySchedule(data) {
     var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
     for (var i = 1; i <= length; i++) {
         if (schedules[i] != '') {
-            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i] + '</h3></div>');
+            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
         }
     }
 
@@ -500,7 +581,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     //
-    $('.pwaBanner').show();
+    //$('.pwaBanner').show();
     if (!isMobile()) {
         $('#desktop').show();
     } else {
@@ -519,6 +600,8 @@ function getWeekNo(v_date_str) {
     }
     return Math.ceil(date.getDate() / 7);
 }
+
+
 
 //kakao image search api
 function search(query) {
@@ -544,11 +627,22 @@ function openMenuBanner(name, allegy) {
     if (allegy == 'none') {
         $('#allergy-info').html('알레르기 정보 없음');
     } else {
-        var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우').replaceAll('.', ', ');
+
+        var tempAlleList = allegy.split('.');
+        $.each(tempAlleList, function (index, element) {
+            if (alleList.split(',').includes(element)) {
+                tempAlleList[index] = '?' + element + '!'
+            } else { tempAlleList[index] = element }
+        });
+        allegy = tempAlleList.join(".");
+
+        var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replaceAll('.', ', ').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우')
+            .replaceAll('?', '<span id="dangerAllegy">').replaceAll('!', '</span>');
         $('#allergy-info').html(allegyString.substring(0, allegyString.length - 2));
     }
 
     search(name);
+    $('.sheet-backdrop').addClass('backdrop-in');
     $('#menu-name').html(name);
     $('.menuBanner').show("slide", { direction: "down" }, 100);;
 
@@ -558,6 +652,7 @@ function openMenuBanner(name, allegy) {
 document.addEventListener('click', function (e) {
     if ($('.menuBanner').is(':visible')) {
         if (!$(e.target).hasClass("menuBanner")) {
+            $('.sheet-backdrop').removeClass('backdrop-in');
             $('.menuBanner').hide("slide", { direction: "down" }, 100);;
         }
 
@@ -627,6 +722,26 @@ $('.c-modal').each(function () {
     });
 
     mc.on("swipedown", function (ev) {
+        console.log(ev)
+        $('body').css('overflow', 'auto');
+        $('.modal-in').css('bottom', '-1850px');
+        setTimeout(function () {
+            $('.modal-in').css('display', 'none');
+        }, 100);
+
+        $('.sheet-backdrop').removeClass('backdrop-in');
+    });
+});
+
+$('.page-content').each(function () {
+    var mc = new Hammer(this);
+
+    mc.get('swipe').set({
+        direction: Hammer.DIRECTION_ALL
+    });
+
+    mc.on("swipedown", function (ev) {
+        console.log(ev)
         $('body').css('overflow', 'auto');
         $('.modal-in').css('bottom', '-1850px');
         setTimeout(function () {

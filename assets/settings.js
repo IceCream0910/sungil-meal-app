@@ -8,6 +8,7 @@ if (grade !== null && classNum !== null) {
 }
 
 
+
 const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
 
 const storedTheme = localStorage.getItem("darkTheme");
@@ -81,7 +82,11 @@ function onDark() {
     var styleSheet = document.createElement("style")
     styleSheet.type = "text/css"
     styleSheet.innerText = styles
-    document.head.appendChild(styleSheet)
+    document.head.appendChild(styleSheet);
+    $('.sheet-modal').addClass("dark");
+    $('.swipe-handler').addClass("dark");
+    $('.checkbox').addClass("dark");
+    $('.tagResetBtn').addClass("dark");
 }
 
 function offDark() {
@@ -99,7 +104,11 @@ function offDark() {
     var styleSheet = document.createElement("style")
     styleSheet.type = "text/css"
     styleSheet.innerText = styles
-    document.head.appendChild(styleSheet)
+    document.head.appendChild(styleSheet);
+    $('.sheet-modal').removeClass("dark");
+    $('.swipe-handler').removeClass("dark");
+    $('.checkbox').removeClass("dark");
+    $('.tagResetBtn').removeClass("dark");
 }
 
 
@@ -146,3 +155,179 @@ $("input[id='tts_radio-3']:radio").change(function () {
     ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요!' + '&speed=0&pitch=0&speaker=jinho&volume=1');
     ttsAudio.play();
 });
+
+//알레르기
+if (localStorage.getItem("sungil_alleList")) {
+    checkedIndex = localStorage.getItem("sungil_alleList").split(',');
+} else {
+    checkedIndex = []
+}
+
+
+
+for (var i = 0; i < checkedIndex.length; i++) {
+    var checkbox = document.getElementById('alleSetting').getElementsByTagName('div')[checkedIndex[i]];
+    $(checkbox).addClass('checked')
+}
+
+
+$('#alleSetting .checkbox').click(function () {
+    if ($(this).hasClass('checked')) {
+        $(this).removeClass('checked');
+    } else {
+        $(this).addClass('checked');
+    }
+    getCheckedIndex();
+});
+
+function getCheckedIndex() {
+    checkedIndex = [];
+    $('#alleSetting .checkbox').each(function (index) {
+        if ($(this).hasClass('checked')) {
+            checkedIndex.push(index);
+        }
+    });
+    if (checkedIndex.length == 0) {
+        localStorage.setItem("sungil_alleList", '');
+    } else {
+        localStorage.setItem("sungil_alleList", checkedIndex.toString());
+    }
+}
+
+
+/* bottom sheet */
+$('#alleSettingBtn').on('click', function () {
+    $('#modal-title').text('알레르기 정보 등록');
+    $('#alleSetting').show();
+    $('#favorSetting').hide();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#alleSetting').height() + 130 + 'px');
+    }, 100);
+});
+
+$('.sheet-backdrop').on('click', function () {
+    modalClose();
+});
+
+
+///custom modal sheet///
+$('.c-modal').each(function () {
+    var mc = new Hammer(this);
+
+    mc.get('swipe').set({
+        direction: Hammer.DIRECTION_ALL
+    });
+
+    mc.on("swipedown", function (ev) {
+        modalClose()
+    });
+});
+
+
+//맛있는 메뉴
+/* bottom sheet */
+$('#favorSettingBtn').on('click', function () {
+    var isDark = storedTheme == 'true' || (storedTheme == 'system' && mql.matches)
+
+    $('#modal-title').html(`맛있는 메뉴 키워드 <button class=" mdc-button--icon-leading tagResetBtn ` + (isDark ? 'dark' : '') + `" onclick="resetTags();"
+    aria-label="초기화">
+    <span class="mdc-button__ripple"></span><i
+        class="material-icons mdc-button__icon" aria-hidden="true">restart_alt</i> <span class="mdc-button__label">초기화</span>  </button>
+`);
+    initTags();
+    $('#alleSetting').hide();
+    $('#favorSetting').show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    $('.sheet-modal').css('height', '60vh');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#favorSetting').height() + 160 + 'px');
+    }, 100);
+});
+
+$('.sheet-backdrop').on('click', function () {
+    modalClose();
+});
+
+function modalClose() {
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    $('.sheet-backdrop').removeClass('backdrop-in');
+}
+
+
+var defaultfavTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"]
+var favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"]
+
+
+function resetTags() {
+    $(".fav-tag-area").empty();
+    favTagsList = defaultfavTagsList;
+    for (var i = 0; i < favTagsList.length; i++) {
+        $(".fav-tag-area").append('<div class="tag">' + favTagsList[i] + '<span>×</span></div>');
+    }
+    $('.sheet-modal').css('height', $('#favorSetting').height() + 170 + 'px');
+    localStorage.setItem("sungil_favTagsList", favTagsList.toString());
+}
+
+function initTags() {
+    if (localStorage.getItem("sungil_favTagsList")) {
+        favTagsList = localStorage.getItem("sungil_favTagsList").split(',');
+    } else {
+        favTagsList = defaultfavTagsList;
+    }
+    $(".fav-tag-area").empty();
+    for (var i = 0; i < favTagsList.length; i++) {
+        $(".fav-tag-area").append('<div class="tag">' + favTagsList[i] + '<span>×</span></div>');
+    }
+    $('.sheet-modal').css('height', $('#favorSetting').height() + 170 + 'px');
+}
+
+// Add Tags
+function addFavItem(value) {
+    if (favTagsList.indexOf(value) > -1) {
+        alert("이미 추가된 키워드 입니다.");
+    } else {
+        favTagsList.push(value);
+        $(".fav-tag-area").prepend('<div class="tag">' + value + '<span>×</span></div>');
+        $('.fav-tag-area').scrollTop(0);
+        $('.sheet-modal').css('height', $('#favorSetting').height() + 170 + 'px');
+        localStorage.setItem("sungil_favTagsList", favTagsList.toString());
+    }
+
+}
+
+// Remove Tags
+$(".fav-tag-area").on("click", ".tag > span", function () {
+    var deletedText = $(this).parent()[0].innerText.replace("×", "").replaceAll(" ", "").replaceAll(/\s*/g, "").toString();
+    console.log(deletedText)
+    $(this).parent().remove();
+    favTagsList = favTagsList.filter((element) => element !== deletedText);
+    $('.sheet-modal').css('height', $('#favorSetting').height() + 160 + 'px');
+    localStorage.setItem("sungil_favTagsList", favTagsList.toString());
+});
+
+function submitKeyword() {
+    var value = $("#fav-input").val();
+    if (value != "" && value != " ") {
+        addFavItem(value);
+        $("#fav-input").val('');
+    } else {
+        alert("키워드를 입력해주세요.");
+    }
+}
