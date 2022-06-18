@@ -131,7 +131,7 @@
                     <p style="font-size:14px;">1. 급식 메뉴 표시 개선<br>
                         - 미리 설정된 키워드를 통해 맛있는 메뉴를 강조해줍니다. 설정에서 직접 키워드를 편집할 수 있어요.<br>
                         - 알레르기 성분을 등록해두면 해당 성분이 함유된 메뉴는 빨간색으로 표시해줍니다.<br>
-                        2. 오프라인 실행 지원<br>
+                        2. 오프라인 실행 지원(캐시 삭제 및 )<br>
                         3. UI 개선
                     </p>
                     <br>
@@ -162,6 +162,7 @@
             <ion-icon name="refresh-outline"></ion-icon>
         </button>
     </div>
+
     <div class="meal-wrap">
         <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
             <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
@@ -202,7 +203,12 @@
         </div>
     </div>
     <br><Br>
+
     <div class="siganpyo-wrap">
+
+        <h3 class="card__primary__title__text">기말고사</h3>
+        <h3> <span id="dday" style="color:#8798db;margin-top:-5px;"></span></h3>
+        <br>
         <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
             <h3 style="float:left" class="card__primary__title__text">시간표</h3>
             <div> <button class="mdc-button mdc-button--icon-leading"
@@ -295,6 +301,7 @@
         <br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx" data-ad-width="320"
             data-ad-height="100"></ins>
     </div><br><br><br>
+    <div id="notice-wrap-gap"><br><br><br></div>
     <h3 class="card__primary__title__text">가정통신문</h3>
     <div id="notices-content" style="margin-top:15px;">
         <div class="card-body">

@@ -74,6 +74,20 @@ function playPause() {
 var today = moment(new Date()).format('YYYYMMDD');
 //var today = moment('20220607').format('YYYYMMDD');
 
+//d day
+var todayForDday = new Date();
+var ddayDate = new Date(2022, 05, 30);
+var gap = ddayDate.getTime() - todayForDday.getTime();
+var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+if (ddayResult < 0) {
+    $('#dday').html((-ddayResult + 1) + '일차');
+} else if (ddayResult == 0) {
+    $('#dday').html('1일차');
+} else {
+    $('#dday').html('D-' + ddayResult);
+}
+
+
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
 $('#date').addClass('today');

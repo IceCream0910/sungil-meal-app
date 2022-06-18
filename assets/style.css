@@ -1906,6 +1906,10 @@ thead th.dark {
     font-size: 20px
 }
 
+#notice-wrap-gap {
+    display: none;
+}
+
 /* 대화면 기기 대응 */
 @media screen and (min-width: 769px) {
     header {
@@ -1916,6 +1920,10 @@ thead th.dark {
         z-index: 99999;
         border-radius: 20px;
         box-shadow: 0 -2px 20px -5px #283a81;
+    }
+
+    #notice-wrap-gap {
+        display: block;
     }
 
     .idcard-btn-wrap {
