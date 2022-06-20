@@ -688,6 +688,7 @@ $('.pop').on('click', function () {
     $('#modal-title').text('날짜 선택');
     $('#datepicker').show();
     $('#whatsnew').hide();
+    $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -715,6 +716,7 @@ $('.whatsnew-btn').on('click', function () {
     $('#modal-title').text('새로운 기능');
     $('#datepicker').hide();
     $('#whatsnew').show();
+    $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -726,6 +728,45 @@ $('.whatsnew-btn').on('click', function () {
         $('.sheet-modal').css('height', $('#whatsnew').height() + 130 + 'px');
     }, 100);
 });
+
+
+$('#examSchedule').on('click', function () {
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').text('1학기 2차 지필평가 일정');
+    $('#datepicker').hide();
+    $('#whatsnew').hide();
+    $('#exam').show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    if (grade == '1') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(0)').addClass('active');
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(1)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    } else {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(2)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').hide();
+        $('.exam3').show();
+    }
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#tbody-timetable').height() + 230 + 'px');
+    }, 100);
+});
+
 
 ///custom modal sheet///
 $('.c-modal').each(function () {
@@ -764,4 +805,24 @@ $('.page-content').each(function () {
 
         $('.sheet-backdrop').removeClass('backdrop-in');
     });
+});
+
+$('.grade_btn').on('click', function () {
+    $('.grade_btn').removeClass('active');
+    $(this).addClass('active');
+    var grade = $(this).attr('data-grade');
+
+    if (grade == '1') {
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    } else {
+        $('.exam1').hide();
+        $('.exam2').hide();
+        $('.exam3').show();
+    }
 });
