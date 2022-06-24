@@ -16,7 +16,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <meta name="description" content="성일고 급식, 시간표, 학사일정을 한 번에" />
     <meta name="naver-site-verification" content="fa35f8ef36dddfd6a7d8ca7db25136469aadf0c8" />
-
+    <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+    <script>Sentry.init({
+            dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806",
+            integrations: [new Sentry.Integrations.BrowserTracing()],
+            tracesSampleRate: 1.0,
+        });</script>
     <meta name="theme-color" content="#5264AE" />
     <meta property="og:url" content="https://sungil.vercel.app">
     <meta property="og:title" content="급식충">
@@ -291,7 +297,8 @@
         <br>
         <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
             <h3 style="float:left" class="card__primary__title__text">시간표</h3>
-            <div> <button class="mdc-button mdc-button--icon-leading" onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
+            <div> <button class="mdc-button mdc-button--icon-leading"
+                    onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
                         class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
                         aria-hidden="true">settings</i> <span class="mdc-button__label" id="gradeClassLabel">설정</span>
                 </button>
