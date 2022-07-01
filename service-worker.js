@@ -5,8 +5,8 @@ const CACHE_NAME = "cache-v1";
 const FILES_TO_CACHE = [
     "offline.html",
     "index_watch.html",
-    "assets/style_watch.css",
-    "assets/script_watch.js"
+    "assets/css/style_watch.css",
+    "assets/js/script_watch.js"
 ];
 
 // 상술한 파일 캐싱

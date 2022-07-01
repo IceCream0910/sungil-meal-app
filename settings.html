@@ -21,7 +21,7 @@
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
 
-    <link href="assets/style.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
 
 </head>
 
@@ -81,7 +81,7 @@
             <span class="mdc-button__ripple"></span>
             <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">lunch_dining</i>
             <span class="mdc-button__label">
-                맛있는 음식 키워드 설정</span>
+                맛있는 음식 키워드 설정 <span class="badge">beta</span>
         </button>
         <br><br>
 
@@ -168,6 +168,16 @@
         <br>
         <h3 class="card__primary__title__text">앱 정보</h3>
         <p class="lead">버전 2.1.0(Build 22060421)</p>
+        <a style="text-decoration: none;" href="https://sungilapp.notion.site/7c7dfc54b14c4805a0e0e0309bc2942d"
+            target="_blank">
+            <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
+                <span class="mdc-button__ripple"></span>
+
+                <i class="material-icons mdc-button__icon" style="color:#7768ff" aria-hidden="true">tips_and_updates</i>
+                <span class="mdc-button__label" style="font-size: 16px;font-family: 'S-CoreDream-3Light';">업데이트
+                    내역</span>
+            </button>
+        </a><br>
         <a style="text-decoration: none;" href="https://stats.uptimerobot.com/WpQZ7fj2k5" target="_blank">
             <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;">
                 <span class="mdc-button__ripple"></span>
@@ -230,11 +240,6 @@
 
 
         <p class="lead" style="text-align: center;"><span class="small">Copyright 2022 Taein Yun(@Ice Cream)</span></p>
-        <p class="lead" style="text-align: center;opacity:0.5"><span class="small">POWERED BY <a
-                    style="color:inherit;text-decoration: none;" href="https://vercel.com" target="_blank"><i
-                        class="material-icons mdc-button__icon" aria-hidden="true"
-                        style="position:relative;top:5px;">change_history</i>
-                    Vercel</span></a></p>
         <p style="text-align: center;opacity:0.5">
             <a style="color:inherit;text-decoration: none;" href="https://sungil-h.goesn.kr/" target="_blank">
                 <img src="assets/icons/sungil_logo.svg" height="50px"> 성일고등학교 </a>
@@ -311,9 +316,13 @@
         </div>
     </div>
 
-    <script src="assets/settings.js"></script>
+    <script src="assets/js/settings.js"></script>
 </body>
-
+<style>
+    .sheet-backdrop {
+        height: 150vh;
+    }
+</style>
 
 
 

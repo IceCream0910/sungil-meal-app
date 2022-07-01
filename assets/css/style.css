@@ -1023,8 +1023,11 @@ header {
     left: 0;
     padding: 10px;
     z-index: 99999;
-    background-color: #5264ae;
-    border-radius: 10px 10px 0 0
+    border-radius: 10px 10px 0 0;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background-color: rgba(82, 100, 174, 0.86);
+
 }
 
 .idcard-btn-wrap {
@@ -1569,8 +1572,6 @@ body.dark {
 
 .page-content {
     will-change: scroll-position;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
     height: 100%;
     position: relative;
@@ -1610,7 +1611,8 @@ body.dark {
 
 .sheet-backdrop.backdrop-in {
     visibility: visible;
-    opacity: 1
+    opacity: 1;
+    backdrop-filter: blur(2px);
 }
 
 
@@ -1969,9 +1971,15 @@ thead th.dark {
     }
 
     .schedule-wrap {
-        margin-top: -250px;
+        margin-top: -300px;
         float: right;
         width: 40%;
+
+    }
+
+    #schedule-content {
+        max-height: 250px;
+        overflow: scroll;
     }
 }
 
@@ -2148,16 +2156,16 @@ thead th.dark {
     height: 30px;
     padding: 0 10px;
     line-height: 32px;
-    background: #4c63bb;
+    border: #4c63bb solid 1px;
     float: left;
     text-transform: uppercase;
-    letter-spacing: 1px;
     font-size: 14px;
-    font-weight: 600;
     color: #eee;
-    margin: 0 5px 10px 0;
+    margin: 1px 10px 10px 0;
+    margin-left: 3px;
     border-radius: 10px;
     overflow: hidden;
+    font-weight: 200;
 }
 
 .tag span {
@@ -2168,6 +2176,16 @@ thead th.dark {
     height: 30px;
     text-align: center;
     background: #2d4abe;
+    transition: right ease 200ms;
+}
+
+.badge {
+    border-radius: 20px;
+    padding: 5px 10px;
+    text-align: center;
+    background: #556bc1;
+    color: #fff;
+    font-weight: 200;
     transition: right ease 200ms;
 }
 
@@ -2252,6 +2270,6 @@ thead th.dark {
     justify-content: center;
 }
 
-.grade_btn.active::after {
+.grade_btn.active::before {
     content: '✔️'
 }

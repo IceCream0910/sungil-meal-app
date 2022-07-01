@@ -17,6 +17,7 @@
 
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
 
+    <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
@@ -30,7 +31,16 @@
 
     <div id="settings">
         <div class="init_header">
-            <h3 class="card__primary__title__text">학년/반 설정</h3>
+            <div class="d-flex flex-row"
+                style="width:100%;align-items: center;align-content: center;text-align: center;">
+                <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="javascript:location.href='index.html'">
+                    <div class="mdc-fab__ripple"></div>
+                    <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
+                    <div class="mdc-fab__touch"></div>
+                </button>
+                <h3 style="margin-top:10px;">학년/반 설정</h3>
+            </div>
+
 
         </div>
         <Br><br>
@@ -97,18 +107,56 @@
             <br> <br><br> <br><br> <br>
         </ul>
 
-        <button id="save-btn" onclick="complete();" class="mdc-button mdc-button--raised"
-            style="position: fixed; bottom:20px;left:20px;width:90%;padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
-            <span class="mdc-button__label" id="button-text">확인</span>
-        </button>
+        <div class="button-wrap">
+            <button id="back-btn" onclick="back();" class="mdc-button mdc-button--raised"
+                style="padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
+                <span class="mdc-button__label">뒤로</span>
+            </button>
+            <button id="save-btn" onclick="complete();" class="mdc-button mdc-button--raised"
+                style="padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
+                <span class="mdc-button__label" id="button-text">다음</span>
+            </button>
+        </div>
+
 </body>
 
-<script src="assets/init.js"></script>
+<script src="assets/js/init.js"></script>
 <style>
+    .button-wrap {
+        margin: 0;
+        padding: 0;
+        width: 85%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        align-items: center;
+        position: fixed;
+        bottom: 20px;
+    }
+
+
+    #back-btn {
+        width: 47%;
+        background-color: #959595;
+    }
+
     #save-btn {
+        width: 47%;
         background-color: #877faa;
     }
+
+    .mdc-button__label.dark {
+        color: #fff;
+    }
+
+    @media (min-width: 768px) {
+        .button-wrap {
+            width: 95%;
+        }
+    }
 </style>
-<link href="assets/style.css" rel="stylesheet">
 
 </html>

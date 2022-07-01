@@ -4,17 +4,27 @@ var isComplete = false;
 
 $("#grade-list li").on("click", function () {
     grade = $(this).data('grade');
-    $("#button-text").text('저는 ' + grade + '학년이고요');
+    $("#button-text").text(grade + '학년');
+    $('#back-btn').css('background-color', '#877faa');
     $('#grade-list').hide();
     $('#class-list').fadeIn();
 });
 
 $("#class-list li").on("click", function () {
     classNum = $(this).data('class');
-    $("#button-text").text('저는 ' + grade + '학년 ' + classNum + '반이에요');
+    $("#button-text").text(grade + '학년 ' + classNum + '반');
     $('#save-btn').css('background-color', '#634acf');
     isComplete = true;
 });
+
+function back() {
+    $("#button-text").text('다음');
+    $('#grade-list').fadeIn();
+    $('#class-list').hide();
+    $('#back-btn').css('background-color', '#959595');
+    $('#save-btn').css('background-color', '#877faa');
+    isComplete = false;
+}
 
 const isIos = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -35,7 +45,7 @@ function complete() {
 }
 
 //darkmode
-const storedTheme = localStorage.getItem("darkTheme");
+const storedTheme = localStorage.getItem("darkTheme") || "system";
 
 const mql = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -65,6 +75,7 @@ function onDark() {
     $('body').addClass("dark");
     $('.mdc-button').addClass("dark");
     $('.mdc-form-field').addClass("dark");
+    $('.mdc-fab--mini').addClass("dark");
     $('input').addClass("dark");
     $('.mdc-button__label').addClass("dark");
     $('.init_header').addClass("dark");
@@ -75,6 +86,7 @@ function offDark() {
     $('body').removeClass("dark");
     $('.mdc-button').removeClass("dark");
     $('.mdc-form-field').removeClass("dark");
+    $('.mdc-fab--mini').removeClass("dark");
     $('input').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
     $('.init_header').removeClass("dark");

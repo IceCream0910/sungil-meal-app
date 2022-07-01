@@ -11,7 +11,7 @@ if (grade !== null && classNum !== null) {
 
 const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
 
-const storedTheme = localStorage.getItem("darkTheme");
+const storedTheme = localStorage.getItem("darkTheme") || "system";
 if (storedTheme != null) {
     if (storedTheme === "true") {
         onDark();

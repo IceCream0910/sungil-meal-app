@@ -1,4 +1,4 @@
-const storedTheme = localStorage.getItem("darkTheme");
+const storedTheme = localStorage.getItem("darkTheme") || "system";
 
 const mql = window.matchMedia("(prefers-color-scheme: dark)");
 

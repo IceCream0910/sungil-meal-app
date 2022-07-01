@@ -79,12 +79,22 @@ var todayForDday = new Date();
 var ddayDate = new Date(2022, 05, 30);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-if (ddayResult < 0) {
-    $('#dday').html((-ddayResult + 1) + '일차');
+if (ddayResult > 0) {
+    $('#dday').html('D-' + ddayResult);
 } else if (ddayResult == 0) {
     $('#dday').html('1일차');
+} else if (ddayResult == -1) {
+    $('#dday').html('2일차');
+} else if (ddayResult == -2) {
+    $('#dday').html('남은 과목도 응원할게요');
+} else if (ddayResult == -3) {
+    $('#dday').html('남은 과목도 응원할게요');
+} else if (ddayResult == -4) {
+    $('#dday').html('3일차');
+} else if (ddayResult == -5) {
+    $('#dday').html('4일차');
 } else {
-    $('#dday').html('D-' + ddayResult);
+    $('#dday').html('시험 끝!');
 }
 
 
@@ -159,7 +169,7 @@ $(document).ready(function () {
         url: "https://sungil-school-api.vercel.app/notices",
         success: function (result) {
             var data = JSON.parse(result);
-            $('#notices-content').html('');
+            $('#notices-content').html('<h3 class="card__primary__title__text">가정통신문</h3><br>');
             for (var i = 0; i < 5; i++) {
                 var title = data.articles[i].title;
                 var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
@@ -558,55 +568,6 @@ function shareMeal() {
 const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
 
 
-// Detects if device is on iOS 
-const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
-}
-
-//localstorage
-var isWebappDismiss = localStorage.getItem('isWebappDismiss') || false;
-// Detects if device is in standalone mode
-const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
-
-// Checks if should display install popup notification:
-if (isIos() && !isInStandaloneMode()) {
-    // offer app installation here
-    //
-    if (isWebappDismiss === false) {
-        $('.pwaBanner').show();
-        if (!isMobile()) {
-            $('#desktop').show();
-        } else {
-            if (isIos()) {
-                $('#ios').show();
-            } else {
-                $('#android').show();
-            }
-        }
-        //
-    }
-}
-
-
-
-//pwa 설치 안내 팝업
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    //
-    //$('.pwaBanner').show();
-    if (!isMobile()) {
-        $('#desktop').show();
-    } else {
-        if (isIos()) {
-            $('#ios').show();
-        } else {
-            $('#android').show();
-        }
-    }
-});
-
 function getWeekNo(v_date_str) {
     var date = new Date();
     if (v_date_str) {
@@ -673,21 +634,12 @@ document.addEventListener('click', function (e) {
     }
 });
 
-//pwa 팝업 이외 클릭 시 닫기
-document.addEventListener('click', function (e) {
-    if ($('.pwaBanner').is(':visible')) {
-        if (!$(e.target).hasClass("pwaBanner")) {
-            $('.pwaBanner').hide("slide", { direction: "down" }, 100);;
-        }
-
-    }
-});
 
 /* bottom sheet */
 $('.pop').on('click', function () {
     $('#modal-title').text('날짜 선택');
     $('#datepicker').show();
-    $('#whatsnew').hide();
+    $('#assessment').hide();
     $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
@@ -713,9 +665,9 @@ $('.sheet-backdrop').on('click', function () {
 /* bottom sheet */
 $('.whatsnew-btn').on('click', function () {
     $('.sheet-modal').css('height', '30%');
-    $('#modal-title').text('새로운 기능');
+    $('#modal-title').text('수행평가');
     $('#datepicker').hide();
-    $('#whatsnew').show();
+    $('#assessment').show();
     $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
@@ -725,7 +677,7 @@ $('.whatsnew-btn').on('click', function () {
     }, 100);
     $('.sheet-backdrop').addClass('backdrop-in');
     setTimeout(function () {
-        $('.sheet-modal').css('height', $('#whatsnew').height() + 130 + 'px');
+        $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
     }, 100);
 });
 
@@ -734,7 +686,7 @@ $('#examSchedule').on('click', function () {
     $('.sheet-modal').css('height', '30%');
     $('#modal-title').text('1학기 2차 지필평가 일정');
     $('#datepicker').hide();
-    $('#whatsnew').hide();
+    $('#assessment').hide();
     $('#exam').show();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
