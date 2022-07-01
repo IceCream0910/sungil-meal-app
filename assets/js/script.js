@@ -582,15 +582,9 @@ function getWeekNo(v_date_str) {
 function search(query) {
     $.ajax({
         type: "GET",
-        url: 'https://dapi.kakao.com/v2/search/image?query=' + query,
-        headers: {
-            'Authorization': 'KakaoAK a1cb5ad868a6adb4d8d59d2454d4b2bc'
-        },
+        url: 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q=' + query,
         success: function (result) {
-            var data = result;
-            i = 0;
-            var image_result = '<img class="menu-image" src="' + data.documents[i].thumbnail_url + '" class="img-thumbnail" onclick="selectImage(\'' + data.documents[i].image_url + '\')">';
-
+            var image_result = '<img class="menu-image" src="' + result.items[0].image.thumbnailLink + '" class="img-thumbnail">';
             $('#image_result').html(image_result);
         }
     });
