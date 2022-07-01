@@ -1,8 +1,9 @@
 {
-    "name": "급식충",
-    "short_name": "급식충",
-    "description": "성일고 급식, 시간표, 학사일정을 한 번에",
-    "icons": [{
+    "name": "쏙",
+    "short_name": "쏙",
+    "description": "성일고 급식, 시간표, 학사일정을 한 눈에",
+    "icons": [
+        {
             "src": "assets/icons/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
@@ -16,6 +17,6 @@
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#eee",
-    "theme_color": "#eee",
-    "start_url": "/"
+    "theme_color": "#5271FF",
+    "start_url": "/index.html"
 }
