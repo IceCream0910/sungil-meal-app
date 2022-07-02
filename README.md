@@ -1,7 +1,14 @@
-# 급식충
-## 성일고 급식, 시간표, 학사일정, 가정통신문을 한번에
 
-![이미지](https://i.imgur.com/EDOdvEO.png)
+<img src="https://i.imgur.com/sttjObT.png" width="100px">
+
+# 쏙 - 성일고 급식, 시간표, 학사일정을 한 눈에
+
+
+[웹으로 열기](https://sungil.me)
+
+<a href='https://play.google.com/store/apps/details?id=com.icecream.sungilmeal&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img salt='다운로드하기 Google Play' src='https://play.google.com/intl/ko_KR/badges/static/images/badges/ko_badge_web_generic.png' width="200px"/></a>
+
+![이미지](https://i.imgur.com/8Bnxkxr.png)
 
 ## Index
   - [Overview](#overview) 
