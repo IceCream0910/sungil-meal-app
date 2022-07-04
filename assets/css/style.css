@@ -1747,15 +1747,28 @@ body.dark {
     width: 50%
 }
 
+
+.custom_ad {
+    width: 100%;
+}
+
 @media (min-width:992px) and (max-width:1199px) {
     .no-meal-img {
-        width: 30%
+        width: 25%
+    }
+
+    .custom_ad {
+        width: 30%;
     }
 }
 
 @media (min-width:1200px) {
     .no-meal-img {
         width: 30%
+    }
+
+    .custom_ad {
+        width: 25%;
     }
 }
 
