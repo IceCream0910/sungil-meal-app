@@ -283,7 +283,7 @@ function post(target) {
         db.collection('board').add(data).then((result) => {
             closeModal();
             $(target).text('등록');
-            window.open('board.html?id=' + result._key.path.segments[1]);
+            openPost('board.html?id=' + result._key.path.segments[1]);
         }).catch((err) => {
             console.log(err);
         });
@@ -310,7 +310,7 @@ function loadPostList() {
                     console.log("render", data);
                     $('.post-listview').prepend(
                         `
-                        <div class="post-item" onclick="window.open('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                        <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                         <div class="post-header">
                             <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                 <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
@@ -359,12 +359,6 @@ function loadPostList() {
 
 }
 
-/* TODO:
-- 추가 로딩 게시물 중에서 게시물 수정됐을 때 대응
-- 웹 앱 설치 안내 가이드 제공
-- 카테고리 기능 추가
-*/
-
 //firebase infinite scroll
 function loadMore() {
     if (lastVisible) {
@@ -380,7 +374,7 @@ function loadMore() {
                         console.log("render", data);
                         $('.post-listview').prepend(
                             `
-                            <div class="post-item" onclick="window.open('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                            <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                             <div class="post-header">
                                 <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                     <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
@@ -448,6 +442,14 @@ const io = new IntersectionObserver((entries, observer) => {
 }, options)
 
 io.observe(Element)
+
+function openPost(url) {
+    if(isApp()) {
+        location.href = url;
+    } else {
+        window.open(url, '_blank');
+    }
+}
 
 // 날짜 -> {n일/분/시간 전}  형식으로 변환
 function timeForToday(value) {

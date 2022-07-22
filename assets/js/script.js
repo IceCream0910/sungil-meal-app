@@ -870,5 +870,3 @@ PullToRefresh.init({
         loadPostList();
     }
 });
-
-TouchEmulator();

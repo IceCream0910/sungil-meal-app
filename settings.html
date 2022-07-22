@@ -62,8 +62,10 @@
             var ua = navigator.userAgent;
             if (ua.indexOf('hybridApp') > -1) {
                 $('#hybridAppSettingsBtn').show();
+                $('#installWebApp').hide();
             } else {
                 $('#hybridAppSettingsBtn').hide();
+                $('#installWebApp').show();
             }
 
 

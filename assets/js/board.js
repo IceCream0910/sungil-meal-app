@@ -230,7 +230,7 @@ function submit_comment() {
             if (user.fcmToken) { //token 존재
                 $.ajax({
                     type: "GET",
-                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 댓글이 달렸습니다.&desc=${content}&token=${user.fcmToken}`,
+                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 새로운 댓글이 달렸습니다.&desc=${$('#post-title').text() + '에 달린 댓글 : ' + content}&token=${user.fcmToken}`,
                     success: function (result) {
                         console.log(result);
                     }
