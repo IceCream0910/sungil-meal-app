@@ -2919,6 +2919,8 @@ thead th.dark {
 .confirm>div:last-of-type div:first-of-type {
     min-width: 150px;
     padding: 10px;
+    font-size: 20px;
+    padding-top: 20px;
 }
 
 .confirm>div:last-of-type div:last-of-type {

@@ -315,9 +315,12 @@ function assignEditMode() {
 }
 
 function assignDelete() {
-    if (!confirm("정말 삭제하시겠습니까?")) {
-        return true;
-    } else {
+    confirmDeleteAssignment();
+}
+
+async function confirmDeleteAssignment() {
+    const confirm = await ui.confirm('정말 삭제하시겠습니까?');
+    if (confirm) {
         //삭제
         var data = JSON.parse(localStorage.getItem('assignments'));
         var targetIndex = data.findIndex(item => item.id == selectedAssignId);
@@ -326,9 +329,7 @@ function assignDelete() {
         localStorage.setItem('assignments', JSON.stringify(data));
         closeModal();
         updateAssignList();
-
     }
-
 }
 
 function writeUserData(idx, title, date, period, subject) {
