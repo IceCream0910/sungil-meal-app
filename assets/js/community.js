@@ -22,6 +22,8 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 function openLogin() {
     if(isApp()) {
+        location.href = 'https://ssoak-72f93.firebaseapp.com/';
+    } else {
         loginGoogle().then(function (result) {
             console.log('구글 로그인 완료', result);
         })
@@ -105,6 +107,50 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
     firebase.auth().signInWithCredential(credential).catch((error) => {
         // Handle Errors here.
         console.log(error);
+        if (error.additionalUserInfo.isNewUser) {
+            /** @type {firebase.auth.OAuthCredential} */
+            //회원가입 성공 => DB에 사용자 정보 저장
+            tempData = [];
+            tempData[0] = error.user.uid;
+            tempData[1] = error.user.email;
+            tempData[2] = error.user.displayName;
+            var data = {
+                uid: tempData[0],
+                email: tempData[1],
+                nickname: error.user.displayName,
+                admin: false,
+            }
+
+            db.collection('users').doc(tempData[0]).set(data).then((result) => {
+                console.log('계정정보 1차 저장 완료')
+            }).catch((err) => {
+                console.log(err);
+            })
+
+
+            $('#login-username').val(error.user.displayName);
+
+            //open bottom sheet
+            $('.sheet-modal').css('height', '30%');
+            $('#modal-title').html('시작하기');
+            $('.content-wrap').hide();
+            $('#loginForm').show();
+            $('#exam').hide();
+            $('#assign-add-save-btn').hide();
+            $('#assign-edit-save-btn').hide();
+            $('body').css('overflow', 'hidden');
+            $('.modal-in').css('display', 'block');
+            $('.modal-in').css('bottom', '-1850px');
+            setTimeout(function () {
+                $('.modal-in').css('bottom', '0px');
+            }, 100);
+            $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+            $('.sheet-backdrop').removeClass('backdrop-in');
+            setTimeout(function () {
+                $('.sheet-modal').css('height', $('#loginForm').height() + 130 + 'px');
+            }, 100);
+        }
+
         const errorCode = error.code;
         const errorMessage = error.message;
 
