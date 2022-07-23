@@ -1,4 +1,4 @@
-//수행평가
+
 const firebaseConfig = {
     apiKey: "AIzaSyDsE3S6NdSB_BO03pHBA3VVkCo6RWn-3Tw",
     authDomain: "ssoak-72f93.firebaseapp.com",
@@ -76,7 +76,7 @@ articleRef.then(function (doc) {
             viewer = new toastui.Editor.factory({
                 el: document.querySelector('#viewer'),
                 viewer: true,
-                initialValue: doc.data().content,
+                initialValue: doc.data().content.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>'),
             });
             //게시글 삭제 이벤트 등록
             $('#delete-btn').click(function () {
@@ -155,12 +155,16 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                 var data = doc.data();
                 db.collection('users').doc(data.userId).get().then((doc_user) => {
                     var user = doc_user.data();
+                    var regURL = new RegExp('(^|[^"])(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)', 'gi');
+                    var regURL2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+                    var contentHTML = data.content.replace(regURL, '$1<a href="$2://$3" target="_blank">$2://$3</a>').replace(regURL2, '$1<a href="http://$2" target="_blank">$2</a>');
+                    
                     if (firebase.auth().currentUser.uid == data.userId) { //댓글 작성자이면
                         $('#comment-list').append(`
                         <div class="comment-item"  data-createdt="`+ data.createdAt.toDate().getTime() + `">
                          <div class="comment-item-card">
                         <span class="comment-item-name">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `</span>
-                        <p class="comment-item-text">`+ data.content.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>") + `</p>
+                        <p class="comment-item-text">`+ contentHTML + `</p>
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
@@ -178,7 +182,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         <div class="comment-item" data-createdt="`+ data.createdAt.toDate().getTime() + `">
                          <div class="comment-item-card">
                         <span class="comment-item-name">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `</span>
-                        <p class="comment-item-text">`+ data.content.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>") + `</p>
+                        <p class="comment-item-text">`+ contentHTML + `</p>
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
@@ -234,7 +238,7 @@ function submit_comment() {
             if (user.fcmToken) { //token 존재
                 $.ajax({
                     type: "GET",
-                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 새로운 댓글이 달렸습니다.&desc=${$('#post-title').text() + '에 달린 댓글 : ' + content}&token=${user.fcmToken}`,
+                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 새로운 댓글이 달렸습니다.&desc=${($('#post-title').text()) ? $('#post-title').text()+'에 달린 댓글 : ' : ''  + content}&token=${user.fcmToken}`,
                     success: function (result) {
                         console.log(result);
                     }
@@ -490,4 +494,21 @@ function toast(msg) {
             boxShadow: "none"
         }
     }).showToast();
+}
+
+
+setTimeout(function () {
+        var cssRule= "font-size:25px;color:#ff4043;";
+        var cssRule2= "font-size:15px;";
+        console.clear();
+        console.log("%c경고!", cssRule);
+        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.",cssRule2);
+}, 5000);
+
+//prevent f12
+document.onkeydown = function (e) {
+    if (e.keyCode == 123) {
+        toast('보안 상의 이유로 금지된 동작입니다.')
+        return false;
+    }
 }

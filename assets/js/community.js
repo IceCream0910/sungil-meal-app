@@ -85,7 +85,6 @@ const loginGoogle = () => {
 };
 
 function finishGoogleLogin(res) {
-    console.log(res);
     if (res.uid) {
         $('#community #account-btn').show();
     } else {
@@ -100,24 +99,20 @@ function finishGoogleLogin(res) {
 
 //android webview google login
 function pushWebviewGoogleLoginToken(idTokenFromApp) {
-    $('.no-login').hide();
-    console.log('pushWebviewGoogleLoginToken', idTokenFromApp);
     const credential = firebase.auth.GoogleAuthProvider.credential(idTokenFromApp);
     // Sign in with credential from the Google user.
-    firebase.auth().signInWithCredential(credential).catch((error) => {
-        // Handle Errors here.
-        console.log(error);
-        if (error.additionalUserInfo.isNewUser) {
+    firebase.auth().signInWithCredential(credential).then((result) => {
+        if (result.additionalUserInfo.isNewUser) {
             /** @type {firebase.auth.OAuthCredential} */
             //회원가입 성공 => DB에 사용자 정보 저장
             tempData = [];
-            tempData[0] = error.user.uid;
-            tempData[1] = error.user.email;
-            tempData[2] = error.user.displayName;
+            tempData[0] = result.user.uid;
+            tempData[1] = result.user.email;
+            tempData[2] = result.user.displayName;
             var data = {
                 uid: tempData[0],
                 email: tempData[1],
-                nickname: error.user.displayName,
+                nickname: result.user.displayName,
                 admin: false,
             }
 
@@ -128,7 +123,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             })
 
 
-            $('#login-username').val(error.user.displayName);
+            $('#login-username').val(result.user.displayName);
 
             //open bottom sheet
             $('.sheet-modal').css('height', '30%');
@@ -150,12 +145,11 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
                 $('.sheet-modal').css('height', $('#loginForm').height() + 130 + 'px');
             }, 100);
         }
-
+    }).catch((error) => {
+        console.log(error);
         const errorCode = error.code;
         const errorMessage = error.message;
-
         logError(`Error logging in: ${errorCode} ${errorMessage} token: ${idTokenFromApp}`, error);
-        Android.sendUserIdForFCM(firebase.auth().currentUser.uid);
     });
 }
 
@@ -337,6 +331,7 @@ function post(target) {
             console.log(err);
         });
         $('.snackbar').hide();
+        loadPostList();
     } else {
         toast('게시글 내용을 작성해주세요.')
     }
@@ -352,14 +347,12 @@ function loadPostList() {
             $('.post-listview').html('');
             querySnapshot.forEach((doc) => {
                 var data = doc.data();
-                console.log(data);
                 lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length - 1)];
                 db.collection('users').doc(data.userId).get().then((doc_user) => {
                     var user = doc_user.data();
-                    console.log("render", data);
                     $('.post-listview').prepend(
                         `
-                        <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                        <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                         <div class="post-header">
                             <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                 <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
@@ -383,7 +376,7 @@ function loadPostList() {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content,
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
                             theme: 'dark'
                         });
                         $('.post-item').addClass("dark");
@@ -391,7 +384,7 @@ function loadPostList() {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content,
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
                             theme: 'default'
                         });
                     }
@@ -403,7 +396,6 @@ function loadPostList() {
                 });
                 isFirstLoad = false;
             });
-
         });
 
 }
@@ -416,14 +408,12 @@ function loadMore() {
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     var data = doc.data();
-                    console.log(data);
                     lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length = 1)];
                     db.collection('users').doc(data.userId).get().then((doc_user) => {
                         var user = doc_user.data();
-                        console.log("render", data);
                         $('.post-listview').prepend(
                             `
-                            <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `');" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                            <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                             <div class="post-header">
                                 <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                     <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
@@ -447,7 +437,7 @@ function loadMore() {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content,
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
                                 theme: 'dark'
                             });
                             $('.post-item').addClass("dark");
@@ -455,7 +445,7 @@ function loadMore() {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content,
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
                                 theme: 'default'
                             });
                         }
@@ -470,7 +460,6 @@ function loadMore() {
 
         $('.bottom_postList').html('')
     } else { //마지막 페이지
-        console.log('마지막 페이지');
         $('.bottom_postList').html('마지막 글입니다.')
     }
 
@@ -492,7 +481,7 @@ const io = new IntersectionObserver((entries, observer) => {
 
 io.observe(Element)
 
-function openPost(url) {
+function openPost(url, target) {
     if(isApp()) {
         location.href = url;
     } else {

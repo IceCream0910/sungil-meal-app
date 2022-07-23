@@ -1,3 +1,4 @@
+
 moment.lang('ko', {
     weekdays: ["일", "월", "화", "수", "목", "금", "토"],
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
@@ -870,3 +871,21 @@ PullToRefresh.init({
         loadPostList();
     }
 });
+
+setTimeout(function () {
+    if(!isTest) {
+        var cssRule= "font-size:25px;color:#ff4043;";
+        var cssRule2= "font-size:15px;";
+        console.clear();
+        console.log("%c경고!", cssRule);
+        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.",cssRule2);
+    }
+}, 5000);
+
+//prevent f12
+document.onkeydown = function (e) {
+    if (e.keyCode == 123) {
+        toast('보안 상의 이유로 금지된 동작입니다.')
+        return false;
+    }
+}
