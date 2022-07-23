@@ -151,7 +151,8 @@ async function confirmLogout() {
             $('#community #account-btn').hide();
             $('#community .no-login').show();
             closeModal();
-            toast('로그아웃 되었습니다.')
+            toast('로그아웃 되었습니다.');
+            Android.logoutAndroidApp();
         });
     }
 }

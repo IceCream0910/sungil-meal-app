@@ -89,7 +89,9 @@ articleRef.then(function (doc) {
 
     } else {
         toast('존재하지 않는 글입니다.');
-        window.close();
+        setTimeout(() => {
+            window.close();
+        },1500);
     }
 });
 
@@ -141,6 +143,8 @@ function timeForToday(value) {
 
 
 //댓글
+var regURL =new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)","gi");
+var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)","gi");
 db.collection("board").doc(getParam('id')).collection('comments').orderBy("createdAt")
     .onSnapshot((querySnapshot) => {
         var commentCount = querySnapshot.size;
@@ -156,7 +160,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         <div class="comment-item"  data-createdt="`+ data.createdAt.toDate().getTime() + `">
                          <div class="comment-item-card">
                         <span class="comment-item-name">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `</span>
-                        <p class="comment-item-text">`+ data.content + `</p>
+                        <p class="comment-item-text">`+ data.content.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>") + `</p>
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
@@ -174,7 +178,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         <div class="comment-item" data-createdt="`+ data.createdAt.toDate().getTime() + `">
                          <div class="comment-item-card">
                         <span class="comment-item-name">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `</span>
-                        <p class="comment-item-text">`+ data.content + `</p>
+                        <p class="comment-item-text">`+ data.content.replace(regURL,"<a href='$1://$2' target='_blank'>$1://$2</a>").replace(regEmail,"<a href='mailto:$1'>$1</a>") + `</p>
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
