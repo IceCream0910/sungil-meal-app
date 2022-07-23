@@ -102,7 +102,7 @@ var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
 var timetableRaw = '';
-var isTest = true;
+var isTest = false;
 
 var alleList;
 
