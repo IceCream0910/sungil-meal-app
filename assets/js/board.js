@@ -73,10 +73,11 @@ articleRef.then(function (doc) {
             $('#createdAt').html(timeForToday(doc.data().createdAt.toDate()));
             $('#post-title').html(doc.data().title);
             content = doc.data().content;
+
             viewer = new toastui.Editor.factory({
                 el: document.querySelector('#viewer'),
                 viewer: true,
-                initialValue: doc.data().content.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>'),
+                initialValue: doc.data().content,
             });
             //게시글 삭제 이벤트 등록
             $('#delete-btn').click(function () {
