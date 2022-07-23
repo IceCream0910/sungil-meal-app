@@ -21,9 +21,11 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 
 function openLogin() {
-    loginGoogle().then(function (result) {
-        console.log('구글 로그인 완료', result);
-    })
+    if(isApp()) {
+        loginGoogle().then(function (result) {
+            console.log('구글 로그인 완료', result);
+        })
+    }
 }
 
 //Google 로그인
