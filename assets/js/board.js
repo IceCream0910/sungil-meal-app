@@ -64,7 +64,7 @@ var authorId;
 articleRef.then(function (doc) {
     if (doc.data()) {
         if (firebase.auth().currentUser.uid == doc.data().userId) {
-            $('#postpage-toolbar').show();
+            $('#author-toolbar').show();
         }
         authorId = doc.data().userId;
         db.collection('users').doc(doc.data().userId).get().then((doc_user) => {
@@ -169,6 +169,9 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
+                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                            <ion-icon name="alert-circle-outline"></ion-icon>
+                        </a>
                         <a href="javascript:openEditComment('`+ doc.id + `', '` + data.content + `', '` + data.userId + `');">
                             <ion-icon name="create-outline"></ion-icon>
                         </a>
@@ -187,6 +190,9 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
+                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                            <ion-icon name="alert-circle-outline"></ion-icon>
+                        </a>
                        </div>
                         </div>
                       `);
@@ -305,22 +311,38 @@ function editComment() {
 var editor;
 function openEditPost() {
     $('.sheet-modal').css('height', '30%');
+    $('#modal-title').text('게시물 수정');
     $('.content-wrap').hide();
     $('#writePost').show();
-    $('#exam').hide();
+    $('#report').hide();
+    $('#reportComment').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
     $('#post-title-edit').val($('#post-title').text());
-    editor = new toastui.Editor.factory({
-        el: document.querySelector('#editor'),
-        viewer: false,
-        initialValue: content,
-        initialEditType: 'wysiwyg',
-        height: '40vh'
-    });
+    
+    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+        editor = new toastui.Editor.factory({
+            el: document.querySelector('#editor'),
+            initialEditType: 'wysiwyg',
+            height: '40vh',
+            initialValue: content,
+            language: 'ko_KR',
+            theme: 'dark',
+            autofocus: false,
+        });
+    } else {
+        editor = new toastui.Editor.factory({
+            el: document.querySelector('#editor'),
+            initialEditType: 'wysiwyg',
+            initialValue: content,
+            height: '40vh',
+            language: 'ko_KR',
+            autofocus: false,
+        });
+    }
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
     }, 100);
@@ -353,6 +375,183 @@ function post() {
     }
 }
 
+
+//신고
+function openReportModal() {
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').text('게시물 신고');
+    $('.content-wrap').hide();
+    $('#writePost').hide();
+    $('#report').show();
+    $('#reportComment').hide();
+    $('#assign-add-save-btn').hide();
+    $('#assign-edit-save-btn').hide();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#report').height() + 150 + 'px');
+    }, 100);
+}
+
+function reportViolation() {
+    //get all of checked values in 'report-checklist' id
+    var checkedValues = $('#report #report-checklist input:checked').map(function () {
+        return this.value;
+    }).get();
+    if(checkedValues.length == 0) {
+        toast('신고 사유를 한 개 이상 선택해주세요')
+    } else {
+        var payload = JSON.stringify({ "fallback": "새로운 신고가 접수되었습니다.",
+  
+        "text": "커뮤니티 글에 대한 새로운 신고가 접수되었습니다.",
+        "color": "danger",
+        "fields": [
+          {
+              "title": "신고한 사용자 :",
+              "value": firebase.auth().currentUser.uid,
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+          {
+              "title": "신고 사유 :",
+              "value": checkedValues.toString(),
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+          {
+              "title": "신고 내용 :",
+              "value": $('#report-content').val() || '별도 내용 없음',
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+            {
+                "title": "게시글 작성자 :",
+                "value": authorId,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            },
+            {
+                "title": "게시글 내용 :",
+                "value": content,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            },
+            {
+                "title": "게시글 링크:",
+                "value": window.location.href,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            }
+        ] });
+      var url = 'https://hooks.slack.com/services/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';
+      
+      $.post( url, payload ).done(function( data ) { 
+        console.log("신고 등록됨"); 
+        toast('신고가 등록되었습니다.')
+        $('#report-content').val("");
+        $('body').css('overflow', 'auto');
+              $('.modal-in').css('bottom', '-1850px');
+              setTimeout(function () {
+                  $('.modal-in').css('display', 'none');
+              }, 100);
+  
+              $('.sheet-backdrop').removeClass('backdrop-in');
+      })
+    }
+   
+}
+
+//댓글 신고
+function reportComment(content, userId, createdAt) {
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').text('댓글 신고');
+    $('.content-wrap').hide();
+    $('#writePost').hide();
+    $('#report').hide();
+    $('#reportComment').show();
+    $('#assign-add-save-btn').hide();
+    $('#assign-edit-save-btn').hide();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#reportComment').height() + 150 + 'px');
+    }, 100);
+
+    $('#report-comment-btn').click(function () {
+        reportViolationComment(content, userId, createdAt);
+    });
+}
+    
+function reportViolationComment(content, userId, createdAt) {
+    //get all of checked values in 'report-checklist' id
+    var checkedValues = $('#reportComment #report-checklist input:checked').map(function () {
+        return this.value;
+    }).get();
+    if(checkedValues.length == 0) {
+        toast('신고 사유를 한 개 이상 선택해주세요')
+    } else {
+        var payload = JSON.stringify({ "fallback": "새로운 신고가 접수되었습니다.",
+  
+        "text": "커뮤니티 댓글에 대한 새로운 신고가 접수되었습니다.",
+        "color": "danger",
+        "fields": [
+          {
+              "title": "신고한 사용자 :",
+              "value": firebase.auth().currentUser.uid,
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+          {
+              "title": "신고 사유 :",
+              "value": checkedValues.toString(),
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+          {
+              "title": "신고 내용 :",
+              "value": $('#report-comment-content').val() || '별도 내용 없음',
+              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+          },
+            {
+                "title": "댓글 작성자 :",
+                "value": userId,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            },
+            {
+                "title": "댓글 내용 :",
+                "value": content,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            },
+            {
+                "title": "댓글 작성일자 :",
+                "value": createdAt,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            },
+            {
+                "title": "댓글이 달린 게시글 링크:",
+                "value": window.location.href,
+                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+            }
+        ] });
+      var url = 'https://hooks.slack.com/services/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';
+      
+      $.post( url, payload ).done(function( data ) { 
+        console.log("신고 등록됨"); 
+        toast('신고가 등록되었습니다.')
+        $('#report-content').val("");
+        $('body').css('overflow', 'auto');
+              $('.modal-in').css('bottom', '-1850px');
+              setTimeout(function () {
+                  $('.modal-in').css('display', 'none');
+              }, 100);
+  
+              $('.sheet-backdrop').removeClass('backdrop-in');
+      })
+    }
+   
+}
 
 
 //bottom sheet
@@ -464,18 +663,33 @@ function onDark() {
     $('.postpage-header').addClass("dark");
     $('.comment-input-wrap').addClass("dark");
     $('#main-confirm').addClass("dark");
-
+    $('.content-wrap input').each(function () {
+        $(this).addClass("dark");
+    });
 }
 
 function offDark() {
     $('html').removeClass("dark");
     $('body').removeClass("dark");
+    $('.sheet-modal').removeClass("dark");
+    $('.swipe-handler').removeClass("dark");
+    $('.skeleton').removeClass("dark");
+    $('.comment-input-wrap input').each(function () {
+        $(this).removeClass("dark");
+    });
+    $('.custom-btn').removeClass("dark");
     viewer = new toastui.Editor.factory({
         el: document.querySelector('#viewer'),
         viewer: true,
         theme: 'default',
     });
+
+    $('.postpage-header').removeClass("dark");
+    $('.comment-input-wrap').removeClass("dark");
     $('#main-confirm').removeClass("dark");
+    $('.content-wrap input').each(function () {
+        $(this).removeClass("dark");
+    });
 }
 //toast
 function toast(msg) {
