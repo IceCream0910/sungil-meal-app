@@ -442,7 +442,7 @@ function reportViolation() {
                 "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
             }
         ] });
-      var url = 'https://hooks.slack.com/services/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';
+      var url = 'https://hooks.slack.com/services/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';
       
       $.post( url, payload ).done(function( data ) { 
         console.log("신고 등록됨"); 
@@ -535,7 +535,7 @@ function reportViolationComment(content, userId, createdAt) {
                 "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
             }
         ] });
-      var url = 'https://hooks.slack.com/services/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';
+      var url = 'https://hooks.slack.com/services/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';
       
       $.post( url, payload ).done(function( data ) { 
         console.log("신고 등록됨"); 
