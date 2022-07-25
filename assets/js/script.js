@@ -797,7 +797,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
             $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
-            (adsbygoogle = window.adsbygoogle || []).push({});
+            //(adsbygoogle = window.adsbygoogle || []).push({});
             break;
         case 'assignment':
             $('.main-nav').hide();
