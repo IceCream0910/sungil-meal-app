@@ -60,6 +60,10 @@ ion-icon {
     display: none
 }
 
+.toastui-editor-contents p {
+    font-size: 16px;
+  }
+
 #meal-menus a {
     text-decoration: none;
 }
@@ -3011,4 +3015,9 @@ input[type=checkbox] label {
     font-size:15px;
     position: relative;
     top: 5px;
+}
+
+.checkbox-item label a {
+    color: inherit;
+    margin-left: 15px;
 }

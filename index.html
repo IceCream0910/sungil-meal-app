@@ -183,7 +183,30 @@
                 <div class="content-wrap" id="loginForm">
 
                     <input id="login-username" type="text" placeholder="닉네임" required>
-
+<div class="checkbox-wrap" id="signup-checklist">
+    <div class="checkbox-item">
+        <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1"/>
+        <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank" style="
+            color: inherit;
+            margin-left: 15px;
+        ">내용 보기 &gt;</a></label>
+    </div>
+    <div class="checkbox-item">
+        <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2"/>
+        <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank" style="
+            color: inherit;
+            margin-left: 15px;
+        ">내용 보기 &gt;</a></label>
+    </div>
+    <div class="checkbox-item">
+        <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3" />
+        <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank" style="
+            color: inherit;
+            margin-left: 15px;
+        ">내용 보기 &gt;</a></label>
+    </div>
+</div>
+<br><br>
                     <button class="custom-btn" onclick="saveAccountDb()">완료
                     </button>
 

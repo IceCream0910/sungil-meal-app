@@ -199,7 +199,6 @@ async function confirmLogout() {
 
 function edit_saveAccountDb() {
     var nickname = $('#account-username').val();
-    //nickname is empty or blank or space
     if (nickname == '' || nickname == ' ' || nickname == null || nickname == undefined || nickname == '  ') {
         toast('닉네임을 입력해주세요.')
     } else {
@@ -226,9 +225,14 @@ function edit_saveAccountDb() {
 
 function saveAccountDb() {
     var nickname = $('#login-username').val();
+    var checkedValues = $('#signup-checklist input:checked').map(function () {
+        return this.value;
+    }).get();
     //nickname is empty or blank or space
     if (nickname == '' || nickname == ' ' || nickname == null || nickname == undefined || nickname == '  ') {
         toast('닉네임을 입력해주세요.')
+    } else if(checkedValues.length != 3) {
+        toast('모든 항목에 동의해주세요.')
     } else {
         $('body').css('overflow', 'auto');
         $('.modal-in').css('bottom', '-1850px');
