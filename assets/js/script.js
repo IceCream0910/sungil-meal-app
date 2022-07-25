@@ -102,7 +102,7 @@ var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 var currentMenuRaw = '';
 var timetableRaw = '';
-var isTest = false;
+var isTest = true;
 
 var alleList;
 
@@ -797,6 +797,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
             $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
+            (adsbygoogle = window.adsbygoogle || []).push({});
             break;
         case 'assignment':
             $('.main-nav').hide();
@@ -889,3 +890,20 @@ document.onkeydown = function (e) {
         return false;
     }
 }
+
+
+window.addEventListener('load', () => {
+    let matches = document.querySelectorAll("ins.ADSENSE");
+   
+           Array.from(matches).forEach((element) => {
+               let parentElement = element.parentElement;
+               if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none")  { 
+                   element.remove(); 
+               } else {
+               element.classList.remove("ADSENSE");
+               element.classList.add("adsbygoogle");
+                   (adsbygoogle = window.adsbygoogle || []).push({}); 
+               }
+           });
+   
+   });
