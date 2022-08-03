@@ -322,6 +322,8 @@ function openEditPost() {
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
     $('#post-title-edit').val($('#post-title').text());
+    $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
+    $('.sheet-modal').removeClass('full-modal');
     
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         editor = new toastui.Editor.factory({
@@ -358,7 +360,7 @@ function post() {
     var content = editor.getMarkdown();
     var uid = firebase.auth().currentUser.uid;
     if (content) {
-        $(this).text('업로드 중...');
+        $('#edit-post-btn').text('업로드 중...');
         var data = {
             title: title,
             userId: uid,
@@ -727,3 +729,31 @@ document.onkeydown = function (e) {
         return false;
     }
 }
+
+//모바일 키보드 높이 대응
+var originalSize = jQuery(window).width() + jQuery(window).height();
+
+// resize #sheet-modal on resize window
+$(window).resize(function () {
+    if($(window).width() + $(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
+        $('.sheet-modal').addClass('full-modal')
+        $('.sheet-modal').css('height', '100vh')
+    } else {
+        $('.sheet-modal').removeClass('full-modal');
+        setTimeout(function () {
+            $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
+            $('.sheet-modal').removeClass('full-modal');
+        }, 100);
+    }
+});
+
+$(document).on('focusout', 'input, #editor', function () { //키보드 닫힐 때
+    if($('#writePost').is(':visible')) {
+        $('.sheet-modal').removeClass('full-modal');
+        setTimeout(function () {
+            $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
+            $('.sheet-modal').removeClass('full-modal');
+        }, 100);
+    }
+    
+});

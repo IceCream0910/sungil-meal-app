@@ -792,7 +792,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').fadeIn(500);
             $('#assignment').hide();
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '10px 10px 0 0');
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
@@ -804,7 +804,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').hide();
             $('#assignment').fadeIn(500);
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '10px 10px 0 0');
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full');

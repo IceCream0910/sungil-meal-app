@@ -23,7 +23,11 @@ firebase.auth().onAuthStateChanged(function (user) {
 function openLogin() {
     if(isApp()) {
         location.href = 'https://ssoak-72f93.firebaseapp.com/';
+        $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+        $('#login-loader').show();
     } else {
+        $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+        $('#login-loader').show();
         loginGoogle().then(function (result) {
             console.log('구글 로그인 완료', result);
         })
@@ -36,6 +40,9 @@ const provider = new firebase.auth.GoogleAuthProvider();
 const loginGoogle = () => {
     return firebase.auth().signInWithPopup(provider)
         .then((result) => {
+            $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+            $('#login-loader').hide(); 
+            
             if (result.additionalUserInfo.isNewUser) {
                 /** @type {firebase.auth.OAuthCredential} */
                 //회원가입 성공 => DB에 사용자 정보 저장
@@ -80,7 +87,16 @@ const loginGoogle = () => {
                 }, 100);
             }
         }).catch((error) => {
-            console.log(error);
+            $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+            $('#login-loader').hide(); 
+            console.log(error.message);
+            if(error.message == "The popup has been closed by the user before finalizing the operation.") {
+                toast('로그인이 취소되었습니다.');
+            } else if(error.message == "The user has cancelled authentication.") {
+                toast('로그인이 취소되었습니다.');
+            } else {
+                toast('로그인 에러 : '+error.message);
+            }
         });
 };
 
@@ -307,7 +323,7 @@ $('.writePost-btn').on('click', function () {
     }, 100);
     $('.sheet-backdrop').addClass('backdrop-in');
     setTimeout(function () {
-        $('.sheet-modal').css('height', $('#writePost').height() + 170 + 'px');
+        $('.sheet-modal').css('height', $('#writePost').height() + 200 + 'px');
     }, 100);
 
 });
@@ -522,3 +538,20 @@ function timeForToday(value) {
 
     return `${Math.floor(betweenTimeDay / 365)}년 전`;
 }
+
+
+//모바일 키보드 높이 대응
+var originalSize = jQuery(window).width() + jQuery(window).height();
+
+// resize #sheet-modal on resize window
+$(window).resize(function () {
+    if(jQuery(window).width() + jQuery(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
+        $('.sheet-modal').addClass('full-modal')
+    } else {
+        $('.sheet-modal').removeClass('full-modal')
+    }
+});
+
+$(document).on('focusout', 'input', function () { //키보드 닫힐 때
+        $('.sheet-modal').removeClass('full-modal')
+});

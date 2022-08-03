@@ -62,6 +62,7 @@ function onDark() {
     $('.ui-widget-header').addClass("dark");
     $('.ui-state-default').addClass("dark");
     $('#main-confirm').addClass("dark");
+    $('.mdc-button__label').addClass("dark");
 }
 
 function offDark() {
@@ -100,4 +101,5 @@ function offDark() {
     $('.ui-widget-header').removeClass("dark");
     $('.ui-state-default').removeClass("dark");
     $('#main-confirm').removeClass("dark");
+    $('.mdc-button__label').removeClass("dark");
 }

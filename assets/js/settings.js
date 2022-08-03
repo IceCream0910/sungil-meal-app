@@ -2,7 +2,7 @@ var grade = localStorage.getItem("sungil_grade");
 var classNum = localStorage.getItem("sungil_classNum");
 
 if (grade !== null && classNum !== null) {
-    $('#profile-text').html('성일고&nbsp;<span style="color:#7768ff">' + grade + '</span>학년&nbsp; <span style="color:#7768ff">' + classNum + '</span>반');
+    $('#profile-text').html('성일고&nbsp;<span style="color:#5272ff">' + grade + '</span>학년&nbsp; <span style="color:#5272ff">' + classNum + '</span>반');
 } else {
     $('#profile-text').html('학년과 반을 알려주세요.');
 }

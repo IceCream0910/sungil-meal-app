@@ -71,18 +71,18 @@ crossorigin="anonymous"></script>
 </head>
 <header class="main-nav">
     <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="backDate();" aria-label="날짜 1일 전으로 이동 버튼">
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="backDate();" aria-label="날짜 1일 전으로 이동">
             <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon"
                 style="font-size:15px;">arrow_back_ios_new</span>
             <div class="mdc-fab__touch"></div>
         </button>
         <h4 id="date" class="pop" style="margin-top:10px;"></h4> <button class="mdc-fab mdc-fab--mini mdc-fab--touch"
-            style="margin-left:20px;" onclick="forwardDate();" aria-label="날짜 1일 후로 이동 버튼">
+            style="margin-left:20px;" onclick="forwardDate();" aria-label="날짜 1일 후로 이동">
             <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon"
                 style="font-size:15px;">arrow_forward_ios</span>
             <div class="mdc-fab__touch"></div>
         </button> <button style="float:right;position:absolute;right:0px;" class="mdc-button mdc-button--icon-leading"
-            onclick="javascript:window.location.href='settings.html';" aria-label="설정 버튼"> <span
+            onclick="javascript:window.location.href='settings.html';" aria-label="설정"> <span
                 class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon" style="color:#fff;"
                 aria-hidden="true">settings</i> </button>
     </div>
@@ -103,13 +103,13 @@ crossorigin="anonymous"></script>
 </div>
 
 <!-- confirm dialog -->
-<div class="confirm">
+<div class="confirm" role="dialog">
     <div></div>
     <div id="main-confirm">
         <div id="confirmMessage"></div>
         <div>
-            <input id="confirmYes" type="button" value="확인" />
-            <input id="confirmNo" type="button" value="취소" />
+            <input id="confirmYes" type="button" aria-label="삭제 확인" value="확인" />
+            <input id="confirmNo" type="button" aria-label="삭제 취소"  value="취소" />
         </div>
     </div>
 </div>
@@ -132,9 +132,10 @@ crossorigin="anonymous"></script>
 </head>
 
 <body oncontextmenu='return false' ondragstart='return false'>
+    <span id="login-loader">로그인 요청중이에요...<br><a href="javascript:$('.sheet-backdrop-nocancel').removeClass('backdrop-in');$('#login-loader').hide();" style="text-decoration: none;color: #5272ff;">취소</a></span>
     <div class="sheet-backdrop-nocancel"></div>
     <div class="sheet-backdrop"></div>
-    <div class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
+    <div role="dialog" class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
         style="position: fixed;">
         <div class="sheet-modal-inner">
             <div class="swipe-handler"></div>
@@ -162,12 +163,11 @@ crossorigin="anonymous"></script>
                     <div class="timetable_selector">
                     </div>
                     <br>
-
-                    <button class="sheet-bottom-btn" id="assign-add-save-btn" onclick="addAssignment();"
+                    <button class="custom-btn modal-btn" id="assign-add-save-btn" aria-label="수행평가 저장" onclick="addAssignment();"
                         style="display:none;" class="mdc-button mdc-button--raised">
                         <span class="mdc-button__label">저장</span>
                     </button>
-                    <button class="sheet-bottom-btn" id="assign-edit-save-btn" onclick="editAssignment();"
+                    <button class="custom-btn modal-btn" id="assign-edit-save-btn" aria-label="수행평가 수정"  onclick="editAssignment();"
                         style="display:none;" class="mdc-button mdc-button--raised">
                         <span class="mdc-button__label">수정</span>
                     </button>
@@ -186,21 +186,21 @@ crossorigin="anonymous"></script>
                     <input id="login-username" type="text" placeholder="닉네임" required>
 <div class="checkbox-wrap" id="signup-checklist">
     <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1"/>
+        <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1" aria-checked="false"/>
         <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
         ">내용 보기 &gt;</a></label>
     </div>
     <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2"/>
+        <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2"  aria-checked="false"/>
         <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
         ">내용 보기 &gt;</a></label>
     </div>
     <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3" />
+        <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3"  aria-checked="false" />
         <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
@@ -208,7 +208,7 @@ crossorigin="anonymous"></script>
     </div>
 </div>
 <br><br>
-                    <button class="custom-btn" onclick="saveAccountDb()">완료
+                    <button class="custom-btn modal-btn" onclick="saveAccountDb()">완료
                     </button>
 
                 </div>
@@ -216,10 +216,10 @@ crossorigin="anonymous"></script>
 
                     <input id="account-username" type="text" placeholder="닉네임" required>
 
-                    <button class="custom-btn" onclick="edit_saveAccountDb()">완료
+                    <button class="custom-btn modal-btn" onclick="edit_saveAccountDb()">완료
                     </button>
                     <br><br>
-                    <button class="custom-btn logout" id="logout-btn">로그아웃
+                    <button class="custom-btn sub-btn logout" id="logout-btn">로그아웃
                     </button>
                 </div>
                 <div class="content-wrap" id="writePost">
@@ -229,7 +229,7 @@ crossorigin="anonymous"></script>
                         <div id="editor" style="height:40vh"></div>
                     </div>
 
-                    <button class="custom-btn" style="float:right;margin-top:10px;" onclick="post(this)">등록
+                    <button class="custom-btn modal-btn" style="float:right;margin-top:10px;" onclick="post(this)">등록
                     </button>
                 </div>
             </div>
@@ -459,7 +459,7 @@ crossorigin="anonymous"></script>
             </div>
         </div>
 
-        <button class="more-btn"
+        <button class="more-btn" aria-label="가정통신문 더보기"
             onclick="window.open('https://sungil-h.goesn.kr/sungil-h/na/ntt/selectNttList.do?mi=19914&bbsId=15524', '_blank');">
             <ion-icon name="add-outline"></ion-icon>더보기
         </button>
