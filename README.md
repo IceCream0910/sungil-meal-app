@@ -8,7 +8,7 @@
 
 <a href='https://play.google.com/store/apps/details?id=com.icecream.sungilmeal&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img salt='다운로드하기 Google Play' src='https://play.google.com/intl/ko_KR/badges/static/images/badges/ko_badge_web_generic.png' width="200px"/></a>
 
-![이미지](https://i.imgur.com/8Bnxkxr.png)
+![이미지](https://i.imgur.com/5LqdyDL.png)
 
 ## Index
   - [Overview](#overview) 
@@ -23,6 +23,10 @@
 <!-- Write Overview about this project -->
 경기 성남 소재 성일고등학교의 급식 메뉴와 실시간 시간표, 학사일정, 가정통신문 등을 빠르게 확인할 수 있는 서비스입니다.
 웹 앱(PWA) 형태로 개발되어 모바일 및 데스크톱에서 앱 형태로 설치하여 더욱 빠르게 이용하실 수 있습니다.
+
+## Docs
+**쏙** 개발 과정에서 사용한 기술이나 문제 해결 과정 등을 기술합니다.
+[쏙 개발 문서](https://ssoak-docs.vercel.app)
 
 ## Contributing
 <!-- Write the way to contribute -->
@@ -41,7 +45,7 @@
 ```
 MIT License
 
-Copyright (c) 2020 always0ne
+Copyright (c) 2022 Ice Cream
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
