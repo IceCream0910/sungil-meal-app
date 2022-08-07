@@ -29,6 +29,8 @@ if (storedTheme !== null) {
 function onDark() {
     $('html').addClass("dark");
     $('body').addClass("dark");
+    $('.bottom-nav').addClass("dark");
+    $('.main-nav').addClass("dark");
     $('.card').addClass("dark");
     $('.card__primary__title').addClass("dark");
     $('.card__supporting__text').addClass("dark");
@@ -63,11 +65,14 @@ function onDark() {
     $('.ui-state-default').addClass("dark");
     $('#main-confirm').addClass("dark");
     $('.mdc-button__label').addClass("dark");
+    loadPostList()
 }
 
 function offDark() {
     $('html').removeClass("dark");
     $('body').removeClass("dark");
+    $('.bottom-nav').removeClass("dark");
+    $('.main-nav').removeClass("dark");
     $('.card').removeClass("dark");
     $('.card__primary__title').removeClass("dark");
     $('.card__supporting__text').removeClass("dark");
@@ -102,4 +107,5 @@ function offDark() {
     $('.ui-state-default').removeClass("dark");
     $('#main-confirm').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
+    loadPostList()
 }

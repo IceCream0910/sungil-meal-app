@@ -774,14 +774,19 @@ $('.bottom-nav a').on('click', function () {
     $('.bottom-nav a').removeClass('bounce');
     $(this).addClass('active');
     $(this).addClass('bounce');
+    $('html, body').animate({
+        scrollTop: 0
+    }, 'fast');
 
     var tab = $(this).attr('data-tab');
+    $('.bottom-nav').removeClass("non-border");
     switch (tab) {
         case 'home':
             $('.main-nav').show();
             $('#home').fadeIn();
             $('#community').hide();
             $('#assignment').hide();
+            $('.bottom-nav').addClass("non-border");
             isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
             $('#tab1').attr('name', 'planet');
             $('#tab2').attr('name', 'chatbubbles-outline');
@@ -797,7 +802,6 @@ $('.bottom-nav a').on('click', function () {
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
             $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
-            //(adsbygoogle = window.adsbygoogle || []).push({});
             break;
         case 'assignment':
             $('.main-nav').hide();

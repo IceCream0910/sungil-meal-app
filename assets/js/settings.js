@@ -87,6 +87,8 @@ function onDark() {
     $('.swipe-handler').addClass("dark");
     $('.checkbox').addClass("dark");
     $('.tagResetBtn').addClass("dark");
+    $('.custom-btn').addClass("dark");
+
 }
 
 function offDark() {
@@ -109,6 +111,7 @@ function offDark() {
     $('.swipe-handler').removeClass("dark");
     $('.checkbox').removeClass("dark");
     $('.tagResetBtn').removeClass("dark");
+    $('.custom-btn').removeClass("dark");
 }
 
 

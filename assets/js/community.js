@@ -137,7 +137,8 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             }).catch((err) => {
                 console.log(err);
             })
-
+            $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+            $('#login-loader').hide(); 
 
             $('#login-username').val(result.user.displayName);
 
