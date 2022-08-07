@@ -8,10 +8,14 @@ moment.lang('en', {
     weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
 });
 
-var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.');
+//공지 표시
+setTimeout(function () {
+    $('.home-header #service-noti').css('background', 'transparent');
+    $('.home-header #service-noti').css('opacity', '0.4');
+    $('.home-header #service-noti').css('gap', '0');
+    $('#noti-preview').text('');
+}, 8000);
 
-//tts
-const voiceType = localStorage.getItem("sungil_ttsVoice") || 'dinna';
 
 function isApp() {
     var ua = navigator.userAgent;
@@ -549,13 +553,22 @@ function shareMeal() {
         }
 
         var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
+
+        var tempElem = document.createElement('textarea');
+        tempElem.value = content;  
+        document.body.appendChild(tempElem);
+        tempElem.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempElem);
+        toast('급식 메뉴를 클립보드에도 복사했어요');
+
         Kakao.Link.sendDefault({
             objectType: 'text',
             text:
                 content,
             link: {
-                mobileWebUrl: 'https://sungil.vercel.app',
-                webUrl: 'https://sungil.vercel.app',
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
             },
         })
     } else {
@@ -911,3 +924,35 @@ window.addEventListener('load', () => {
            });
    
    });
+
+   
+function shareApp() {
+    const content = `성일고를 위한 모든 정보, 한 번에 쏙\n\n급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!\n\nhttps://sungil.me`
+    var tempElem = document.createElement('textarea');
+    tempElem.value = content;  
+    document.body.appendChild(tempElem);
+    tempElem.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempElem);
+    toast('공유 메시지를 클립보드에도 복사했어요');
+
+    Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+            title: '성일고를 위한 모든 정보, 한 번에 쏙',
+            description: '급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!',
+            imageUrl: "https://i.imgur.com/5LqdyDL.png",
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        },
+        buttons: [{
+            title: '지금 바로 써보기',
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        }, ],
+    })
+}

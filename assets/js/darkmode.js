@@ -65,7 +65,8 @@ function onDark() {
     $('.ui-state-default').addClass("dark");
     $('#main-confirm').addClass("dark");
     $('.mdc-button__label').addClass("dark");
-    loadPostList()
+    $('.home-header').addClass("dark");
+    loadPostList();
 }
 
 function offDark() {
@@ -107,5 +108,6 @@ function offDark() {
     $('.ui-state-default').removeClass("dark");
     $('#main-confirm').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
+    $('.home-header').removeClass("dark");
     loadPostList()
 }
