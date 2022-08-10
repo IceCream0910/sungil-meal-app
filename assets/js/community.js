@@ -30,6 +30,8 @@ function openLogin() {
         $('#login-loader').show();
         loginGoogle().then(function (result) {
             console.log('구글 로그인 완료', result);
+            $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+            $('#login-loader').hide(); 
         })
     }
 }
@@ -118,6 +120,8 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
     const credential = firebase.auth.GoogleAuthProvider.credential(idTokenFromApp);
     // Sign in with credential from the Google user.
     firebase.auth().signInWithCredential(credential).then((result) => {
+        $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+        $('#login-loader').hide(); 
         if (result.additionalUserInfo.isNewUser) {
             /** @type {firebase.auth.OAuthCredential} */
             //회원가입 성공 => DB에 사용자 정보 저장
@@ -137,8 +141,6 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             }).catch((err) => {
                 console.log(err);
             })
-            $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
-            $('#login-loader').hide(); 
 
             $('#login-username').val(result.user.displayName);
 

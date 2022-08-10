@@ -9,12 +9,22 @@ moment.lang('en', {
 });
 
 //공지 표시
-setTimeout(function () {
+var previousNoti = localStorage.getItem('ssoak-notice-content') || '';
+if(previousNoti != $('#noti-preview').text()) {
+    localStorage.setItem('ssoak-notice-content', $('#noti-preview').text());
+    setTimeout(function () {
+        $('.home-header #service-noti').css('background', 'transparent');
+        $('.home-header #service-noti').css('opacity', '0.4');
+        $('.home-header #service-noti').css('gap', '0');
+        $('#noti-preview').text('');
+    }, 8000);
+} else {
     $('.home-header #service-noti').css('background', 'transparent');
     $('.home-header #service-noti').css('opacity', '0.4');
     $('.home-header #service-noti').css('gap', '0');
     $('#noti-preview').text('');
-}, 8000);
+}
+
 
 
 function isApp() {
@@ -181,6 +191,7 @@ $(document).ready(function () {
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4>`+ title + `</h4>
             <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
+            <ion-icon name="document-text-outline"></ion-icon>
             `+ fileName + `
             </div>
             <p>`+ createdAt + `</p>

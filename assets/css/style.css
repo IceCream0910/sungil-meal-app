@@ -245,8 +245,7 @@ ion-icon {
     width: 100%;
     z-index: 1;
     position: relative;
-    border-radius: 15px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    border-radius: 20px;
     transition: box-shadow .35s cubic-bezier(.4, 0, 1, 1)
 }
 
@@ -1880,7 +1879,11 @@ body.dark {
 }
 
 .notice-card.dark {
-    background-color: #272727;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgb(47 47 47 / 75%);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
     color: #eee
 }
 
@@ -1898,9 +1901,17 @@ body.dark {
 }
 
 .notice-card .file-box {
-    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-
+    background: transparent;   
+    font-size: 13px;
+    color: #5271ff;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
+
+.notice-card.dark .file-box {
+    color: #b4c1ff;
+}
+
 
 .more-btn {
     border: none;
@@ -2107,16 +2118,6 @@ thead th.dark {
     padding-top: 20px;
     padding-bottom: 20px;
     border-bottom: #94a8ff51 0.1px solid;
-}
-
-.file-box {
-    background: transparent;
-    border: #4c63bb 1px solid;
-    border-radius: 10px;
-    padding: 10px 15px;
-    font-size: 13px;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 /* loader skeleton*/
@@ -3220,3 +3221,8 @@ transform: scale(0.95);
     background: #1f1f1f;
 }
 
+
+
+.home-header.dark #service-noti #noti-preview {
+    font-size:13px;
+}
