@@ -5,7 +5,7 @@ var isComplete = false;
 $("#grade-list li").on("click", function () {
     grade = $(this).data('grade');
     $("#button-text").text(grade + '학년');
-    $('#back-btn').css('background-color', '#877faa');
+    $('#back-btn').css('opacity', '1');
     $('#grade-list').hide();
     $('#class-list').fadeIn();
 });
@@ -13,7 +13,7 @@ $("#grade-list li").on("click", function () {
 $("#class-list li").on("click", function () {
     classNum = $(this).data('class');
     $("#button-text").text(grade + '학년 ' + classNum + '반');
-    $('#save-btn').css('background-color', '#634acf');
+    $('#save-btn').css('opacity', '1');
     isComplete = true;
 });
 
@@ -21,8 +21,8 @@ function back() {
     $("#button-text").text('다음');
     $('#grade-list').fadeIn();
     $('#class-list').hide();
-    $('#back-btn').css('background-color', '#959595');
-    $('#save-btn').css('background-color', '#877faa');
+    $('#back-btn').css('opacity', '0.5');
+    $('#save-btn').css('opacity', '0.5');
     isComplete = false;
 }
 
@@ -79,6 +79,8 @@ function onDark() {
     $('input').addClass("dark");
     $('.mdc-button__label').addClass("dark");
     $('.init_header').addClass("dark");
+    $('.custom-btn').addClass("dark");
+    $('.button-wrap').addClass("dark");
 }
 
 function offDark() {
@@ -90,4 +92,6 @@ function offDark() {
     $('input').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
     $('.init_header').removeClass("dark");
+    $('.custom-btn').removeClass("dark");
+    $('.button-wrap').removeClass("dark");
 }

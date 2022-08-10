@@ -108,13 +108,13 @@
         </ul>
 
         <div class="button-wrap">
-            <button id="back-btn" onclick="back();" class="mdc-button mdc-button--raised"
-                style="padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
+            <button id="back-btn" onclick="back();" class="custom-btn modal-btn"
+                style="width:50%;opacity:0.5">
                 <span class="mdc-button__label">뒤로</span>
             </button>
-            <button id="save-btn" onclick="complete();" class="mdc-button mdc-button--raised"
-                style="padding:30px;letter-spacing:normal;font-size:16px;border-radius: 10px;">
-                <span class="mdc-button__label" id="button-text">다음</span>
+            <button id="save-btn" onclick="complete();" class="custom-btn modal-btn"
+            style="width:50%;opacity:0.5">
+                <span class="mdc-button__label" id="button-text">완료</span>
             </button>
         </div>
 
@@ -135,28 +135,13 @@
         align-items: center;
         position: fixed;
         bottom: 20px;
+        gap:20px;
+        background:#eeeeee;
     }
 
-
-    #back-btn {
-        width: 47%;
-        background-color: #959595;
-    }
-
-    #save-btn {
-        width: 47%;
-        background-color: #877faa;
-    }
-
-    .mdc-button__label.dark {
-        color: #fff;
-    }
-
-    @media (min-width: 768px) {
-        .button-wrap {
-            width: 95%;
-        }
-    }
+    .button-wrap.dark {
+        background:#121212;
+    }    
 </style>
 
 </html>

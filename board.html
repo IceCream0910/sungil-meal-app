@@ -1,0 +1,262 @@
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>쏙 - 커뮤니티</title>
+
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
+    <link rel="shortcut icon" href="assets/icons/icon-192x192.png">
+    <link rel="icon" href="assets/icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+    <meta name="apple-mobile-web-app-title" content="쏙" />
+    <meta name="description" content="성일고 급식, 시간표, 학사일정을 한 눈에" />
+    <meta name="naver-site-verification" content="fa35f8ef36dddfd6a7d8ca7db25136469aadf0c8" />
+    <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+    <script>Sentry.init({
+            dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806",
+            integrations: [new Sentry.Integrations.BrowserTracing()],
+            tracesSampleRate: 1.0,
+        });</script>
+        <style>
+            a {
+                color:inherit;
+            }
+        </style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
+crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+    <!-- 토스트 UI 에디터, 자바스크립트 코어 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+    <!-- 코드 미러 라이브러리 추가, 토스트 UI 에디터에서 사용됨 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+
+    <!-- 토스트 UI 에디터, CSS 코어 -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+    <style>
+        html,
+        body {
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- confirm dialog -->
+    <div class="confirm">
+        <div></div>
+        <div id="main-confirm">
+            <div id="confirmMessage"></div>
+            <div>
+                <input id="confirmYes" type="button" value="확인" />
+                <input id="confirmNo" type="button" value="취소" />
+            </div>
+        </div>
+    </div>
+    <!-- confirm dialog -->
+
+    <div class="sheet-backdrop"></div>
+    <div class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
+        style="position: fixed;">
+        <div class="sheet-modal-inner">
+            <div class="swipe-handler"></div>
+            <div class="page-content">
+                <div class="d-flex flex-row">
+                    <h3 style="float:left" class="card__primary__title__text" id="modal-title">게시글 수정</h3>
+                </div><br>
+                <div class="content-wrap" id="writePost">
+
+                    <input id="post-title-edit" type="text" placeholder="제목(선택)">
+                    <div style="border-radius:10px; position: relative;" data-validate="글 내용 작성">
+                        <div id="editor"></div>
+                    </div>
+
+                    <button class="custom-btn modal-btn" id="edit-post-btn" style="float:right;margin-top:10px;" onclick="post(this)">저장
+                    </button>
+                </div>
+                <div class="content-wrap" id="report">
+                    <div class="checkbox-wrap" id="report-checklist">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-1" name="checkbox-1" value="욕설, 비방, 차별/갈등 조장, 과격한 언행" />
+                            <label for="checkbox-1">욕설, 비방, 차별/갈등 조장, 과격한 언행</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-2" name="checkbox-2" value="음란, 불건전, 유해물" />
+                            <label for="checkbox-2">음란, 불건전, 유해물</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-3" name="checkbox-3" value="개인 특정 가능한 정보 포함" />
+                            <label for="checkbox-3">개인 특정 가능한 정보 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-4" name="checkbox-4" value="도배, 서비스 악용, 사기, 사칭" />
+                            <label for="checkbox-4">도배, 서비스 악용, 사기, 사칭</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-5" name="checkbox-5" value="불법, 초상권/저작권 침해" />
+                            <label for="checkbox-4">불법, 초상권/저작권 침해</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-6" name="checkbox-6" value="기타(아래에 추가 작성)" />
+                            <label for="checkbox-4">기타(아래에 추가 작성)</label>
+                        </div>
+                    </div>
+                    <br><br>
+
+                    <input id="report-content" type="text" placeholder="덧붙일 신고 내용이 있다면 입력해주세요(선택)">
+                    <button class="custom-btn modal-btn logout" style="float:right;margin-top:10px;" onclick="reportViolation()">신고
+                    </button>
+                </div>
+                <div class="content-wrap" id="reportComment">
+                    <div class="checkbox-wrap" id="report-checklist">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-1" name="checkbox-1" value="욕설, 비방, 차별/갈등 조장, 과격한 언행" />
+                            <label for="checkbox-1">욕설, 비방, 차별/갈등 조장, 과격한 언행</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-2" name="checkbox-2" value="음란, 불건전, 유해물" />
+                            <label for="checkbox-2">음란, 불건전, 유해물</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-3" name="checkbox-3" value="개인 특정 가능한 정보 포함" />
+                            <label for="checkbox-3">개인 특정 가능한 정보 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-4" name="checkbox-4" value="도배, 서비스 악용, 사기, 사칭" />
+                            <label for="checkbox-4">도배, 서비스 악용, 사기, 사칭</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-5" name="checkbox-5" value="불법, 초상권/저작권 침해" />
+                            <label for="checkbox-5">불법, 초상권/저작권 침해</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-6" name="checkbox-6" value="기타(아래에 추가 작성)" />
+                            <label for="checkbox-6">기타(아래에 추가 작성)</label>
+                        </div>
+                    </div>
+                    <br><br>
+
+                    <input id="report-comment-content" type="text" placeholder="덧붙일 신고 내용이 있다면 입력해주세요(선택)">
+                    <button class="custom-btn modal-btn logout" id="report-comment-btn" style="float:right;margin-top:10px;">신고
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="postpage-header">
+        <a href="javascript:window.close();">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+
+        <div id="postpage-toolbar" style="display: flex;gap:20px;">
+            <a id="report-btn" href="javascript:openReportModal();">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+            </a>
+            <div id="author-toolbar" style="display:none;">
+                <a href="javascript:openEditPost();"
+                style="margin-right:10px;">
+                <ion-icon name="create-outline"></ion-icon>
+            </a>
+            <a id="delete-btn">
+                <ion-icon name="trash-outline"></ion-icon>
+            </a>
+            </div>
+           
+        </div>
+
+    </div>
+
+    <div class="postpage-content-wrap">
+
+        <div class="post-header">
+            <span style="font-size:15px;" id="uname"></span><br>
+            <span style="font-size:13px;opacity:0.6" id="createdAt"></span>
+        </div>
+
+        <h2 id="post-title"></h2>
+
+        <p id="post-content">
+        <div id="viewer">
+            <div class="card-body">
+                <h2 class="card-intro skeleton">
+                </h2>
+                <p class="card-title skeleton">
+                </p>
+                <p class="card-title skeleton">
+                </p>
+                <p class="card-title skeleton">
+                </p>
+            </div>
+        </div>
+        </p>
+
+        <br>
+        <hr><br>
+        <div class="post-footer">
+            <h3 id="comment-cnt">댓글</h3>
+            <div id="comment-list">
+                <div class="card-body">
+                    <h2 class="card-title skeleton">
+                        <!-- wating for title to load from javascript -->
+                    </h2>
+                    <p class="card-intro skeleton">
+                        <!-- waiting for intro to load from Javascript -->
+                    </p>
+                </div>
+            </div>
+            <br> <br>
+            <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx"
+            data-ad-width="300" data-ad-height="250"></ins>
+        </div>
+    </div>
+
+    <div class="comment-input-wrap">
+        <input type="text" id="comment-input" placeholder="댓글을 입력하세요"
+            onkeyup="if(window.event.keyCode==13){submit_comment()}">
+        <button id="comment-btn" onclick="submit_comment();">
+            <ion-icon name="arrow-up-outline"></ion-icon>
+        </button>
+    </div>
+
+    <div class="comment-input-wrap" id="comment-editor">
+        <span class="badge">댓글 수정 중</span>
+        <input type="text" id="comment-edit-input" placeholder="댓글을 입력하세요"
+            onkeyup="if(window.event.keyCode==13){editComment()}">
+        <button id="comment-btn" onclick="editComment();">
+            <ion-icon name="arrow-up-outline"></ion-icon>
+        </button>
+    </div>
+
+
+</body>
+<script src="assets/js/board.js"></script>
+<script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
+
+
+</html>

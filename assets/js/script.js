@@ -1,3 +1,4 @@
+
 moment.lang('ko', {
     weekdays: ["일", "월", "화", "수", "목", "금", "토"],
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
@@ -7,11 +8,33 @@ moment.lang('en', {
     weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
 });
 
-var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.');
+//공지 표시
+var previousNoti = localStorage.getItem('ssoak-notice-content') || '';
+if(previousNoti != $('#noti-preview').text()) {
+    localStorage.setItem('ssoak-notice-content', $('#noti-preview').text());
+    setTimeout(function () {
+        $('.home-header #service-noti').css('background', 'transparent');
+        $('.home-header #service-noti').css('opacity', '0.4');
+        $('.home-header #service-noti').css('gap', '0');
+        $('#noti-preview').text('');
+    }, 8000);
+} else {
+    $('.home-header #service-noti').css('background', 'transparent');
+    $('.home-header #service-noti').css('opacity', '0.4');
+    $('.home-header #service-noti').css('gap', '0');
+    $('#noti-preview').text('');
+}
 
 
-//tts
-const voiceType = localStorage.getItem("sungil_ttsVoice") || 'dinna';
+
+function isApp() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf('hybridApp') > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function mealTts() {
     ttsAudio.pause();
@@ -72,30 +95,17 @@ function playPause() {
 
 
 var today = moment(new Date()).format('YYYYMMDD');
-//var today = moment('20220607').format('YYYYMMDD');
 
-//d day
 var todayForDday = new Date();
-var ddayDate = new Date(2022, 05, 30);
+var ddayDate = new Date(2022, 07, 22);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult > 0) {
     $('#dday').html('D-' + ddayResult);
-} else if (ddayResult == 0) {
-    $('#dday').html('1일차');
-} else if (ddayResult == -1) {
-    $('#dday').html('2일차');
-} else if (ddayResult == -2) {
-    $('#dday').html('남은 과목도 응원할게요');
-} else if (ddayResult == -3) {
-    $('#dday').html('남은 과목도 응원할게요');
-} else if (ddayResult == -4) {
-    $('#dday').html('3일차');
-} else if (ddayResult == -5) {
-    $('#dday').html('4일차');
 } else {
-    $('#dday').html('시험 끝!');
+    $('#dday').html('D-DAY');
 }
+
 
 
 var selectedDate = today;
@@ -175,12 +185,13 @@ $(document).ready(function () {
                 var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
                 var link = data.articles[i].view_link;
                 if (data.articles[i].files) {
-                    var fileUrl = data.articles[i].files[1].url;
-                    var fileName = data.articles[i].files[1].title;
+                    var fileUrl = data.articles[i].files[0].url;
+                    var fileName = data.articles[i].files[0].title;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4>`+ title + `</h4>
             <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
+            <ion-icon name="document-text-outline"></ion-icon>
             `+ fileName + `
             </div>
             <p>`+ createdAt + `</p>
@@ -286,6 +297,10 @@ function updateInfo() {
             $('#nosetting-timetable').show();
 
         } else {
+            $('.timetable-wrap').hide();
+            $('#nosetting-timetable').hide();
+            $('#vacation-timetable').show();
+            /* 여름방학 기간 동안에는 시간표 로딩 안함
             $('.timetable-wrap').show();
             $('#nosetting-timetable').hide();
 
@@ -330,8 +345,9 @@ function updateInfo() {
                         }
                     }
                 });
-            }
+            }*/
         }
+
         //시간표 끝
     }
 }
@@ -450,11 +466,13 @@ function displaySchedule(data) {
 }
 
 function displayTimetable(data) {
+    $('#tbody-timetable tr').eq(0).empty();
     var day = moment(selectedDate).day();
     var sections = document.querySelectorAll("th");
     for (var i = 0; i < sections.length; i++) {
         var item = sections.item(i);
         $(item).removeClass('active');
+        $(item).html('');
     }
 
     switch (day) {
@@ -546,13 +564,22 @@ function shareMeal() {
         }
 
         var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
+
+        var tempElem = document.createElement('textarea');
+        tempElem.value = content;  
+        document.body.appendChild(tempElem);
+        tempElem.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempElem);
+        toast('급식 메뉴를 클립보드에도 복사했어요');
+
         Kakao.Link.sendDefault({
             objectType: 'text',
             text:
                 content,
             link: {
-                mobileWebUrl: 'https://sungil.vercel.app',
-                webUrl: 'https://sungil.vercel.app',
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
             },
         })
     } else {
@@ -631,9 +658,9 @@ document.addEventListener('click', function (e) {
 
 /* bottom sheet */
 $('.pop').on('click', function () {
-    $('#modal-title').text('날짜 선택');
+    $('#modal-title').html('날짜 선택');
+    $('.content-wrap').hide();
     $('#datepicker').show();
-    $('#assessment').hide();
     $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
@@ -657,15 +684,21 @@ $('.sheet-backdrop').on('click', function () {
 });
 
 /* bottom sheet */
-$('.whatsnew-btn').on('click', function () {
+// 수행평가 추가 모달 띄우기
+$('.addAssignment-btn').on('click', function () {
     $('.sheet-modal').css('height', '30%');
-    $('#modal-title').text('수행평가');
-    $('#datepicker').hide();
+    $('#modal-title').html('수행평가 추가');
+    $('.content-wrap').hide();
     $('#assessment').show();
     $('#exam').hide();
+    $('#assign-add-save-btn').show();
+    $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
+    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
+    $('#title').val('');
+    $('.timetable_selector').html('');
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
     }, 100);
@@ -676,46 +709,9 @@ $('.whatsnew-btn').on('click', function () {
 });
 
 
-$('#examSchedule').on('click', function () {
-    $('.sheet-modal').css('height', '30%');
-    $('#modal-title').text('1학기 2차 지필평가 일정');
-    $('#datepicker').hide();
-    $('#assessment').hide();
-    $('#exam').show();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    if (grade == '1') {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(0)').addClass('active');
-        $('.exam1').show();
-        $('.exam2').hide();
-        $('.exam3').hide();
-    } else if (grade == '2') {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(1)').addClass('active');
-        $('.exam1').hide();
-        $('.exam2').show();
-        $('.exam3').hide();
-    } else {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(2)').addClass('active');
-        $('.exam1').hide();
-        $('.exam2').hide();
-        $('.exam3').show();
-    }
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#tbody-timetable').height() + 230 + 'px');
-    }, 100);
-});
-
-
 ///custom modal sheet///
 $('.c-modal').each(function () {
+
     var mc = new Hammer(this);
 
     mc.get('swipe').set({
@@ -723,34 +719,42 @@ $('.c-modal').each(function () {
     });
 
     mc.on("swipedown", function (ev) {
-        console.log(ev)
-        $('body').css('overflow', 'auto');
-        $('.modal-in').css('bottom', '-1850px');
-        setTimeout(function () {
-            $('.modal-in').css('display', 'none');
-        }, 100);
+        if (!$('#loginForm').is(':visible')) {
+            console.log(ev)
+            $('body').css('overflow', 'auto');
+            $('.modal-in').css('bottom', '-1850px');
+            setTimeout(function () {
+                $('.modal-in').css('display', 'none');
+            }, 100);
 
-        $('.sheet-backdrop').removeClass('backdrop-in');
+            $('.sheet-backdrop').removeClass('backdrop-in');
+        }
     });
+
+
 });
 
 $('.page-content').each(function () {
-    var mc = new Hammer(this);
+    if (!$('#loginForm').is(':visible')) {
+        var mc = new Hammer(this);
 
-    mc.get('swipe').set({
-        direction: Hammer.DIRECTION_ALL
-    });
+        mc.get('swipe').set({
+            direction: Hammer.DIRECTION_ALL
+        });
 
-    mc.on("swipedown", function (ev) {
-        console.log(ev)
-        $('body').css('overflow', 'auto');
-        $('.modal-in').css('bottom', '-1850px');
-        setTimeout(function () {
-            $('.modal-in').css('display', 'none');
-        }, 100);
+        mc.on("swipedown", function (ev) {
+            if (!$('#loginForm').is(':visible') && !$('#assessment').is(':visible') && !$('#myClassAssign').is(':visible') && !$('#account').is(':visible') && !$('#writePost').is(':visible')) {
+                console.log(ev)
+                $('body').css('overflow', 'auto');
+                $('.modal-in').css('bottom', '-1850px');
+                setTimeout(function () {
+                    $('.modal-in').css('display', 'none');
+                }, 100);
 
-        $('.sheet-backdrop').removeClass('backdrop-in');
-    });
+                $('.sheet-backdrop').removeClass('backdrop-in');
+            }
+        });
+    }
 });
 
 $('.grade_btn').on('click', function () {
@@ -772,3 +776,194 @@ $('.grade_btn').on('click', function () {
         $('.exam3').show();
     }
 });
+
+
+/*
+$('.main-nav').hide();
+$('#home').hide();
+$('#community').fadeIn();
+$('#assignment').hide();
+*/
+
+
+$('.main-nav').show();
+$('#home').fadeIn();
+$('#community').hide();
+$('#assignment').hide();
+
+
+
+$('.bottom-nav a').on('click', function () {
+    $('.bottom-nav a').removeClass('active');
+    $('.bottom-nav a').removeClass('bounce');
+    $(this).addClass('active');
+    $(this).addClass('bounce');
+    $('html, body').animate({
+        scrollTop: 0
+    }, 'fast');
+
+    var tab = $(this).attr('data-tab');
+    $('.bottom-nav').removeClass("non-border");
+    switch (tab) {
+        case 'home':
+            $('.main-nav').show();
+            $('#home').fadeIn();
+            $('#community').hide();
+            $('#assignment').hide();
+            $('.bottom-nav').addClass("non-border");
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
+            $('#tab1').attr('name', 'planet');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            break;
+        case 'community':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').fadeIn(500);
+            $('#assignment').hide();
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
+            break;
+        case 'assignment':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').hide();
+            $('#assignment').fadeIn(500);
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full');
+            break;
+    }
+
+});
+
+
+function isBigScreen() {
+    if (window.matchMedia('(min-width: 769px)').matches) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+//toast
+function toast(msg) {
+    Toastify({
+        text: msg,
+        duration: 2200,
+        newWindow: true,
+        close: false,
+        gravity: "bottom", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "#000",
+            color: "#fff",
+            border: "none",
+            borderRadius: "10px",
+            boxShadow: "none"
+        }
+    }).showToast();
+}
+
+
+
+//confirm
+const ui = {
+    confirm: async (message) => createConfirm(message)
+}
+
+const createConfirm = (message) => {
+    return new Promise((complete, failed) => {
+        $('#confirmMessage').text(message)
+
+        $('#confirmYes').off('click');
+        $('#confirmNo').off('click');
+
+        $('#confirmYes').on('click', () => { $('.confirm').hide(); complete(true); });
+        $('#confirmNo').on('click', () => { $('.confirm').hide(); complete(false); });
+
+        $('.confirm').show();
+    });
+}
+
+//PullToRefresh
+PullToRefresh.init({
+    mainElement: 'main',
+    onRefresh: function () {
+        loadPostList();
+    }
+});
+
+setTimeout(function () {
+    if(!isTest) {
+        var cssRule= "font-size:25px;color:#ff4043;";
+        var cssRule2= "font-size:15px;";
+        console.clear();
+        console.log("%c경고!", cssRule);
+        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.",cssRule2);
+    }
+}, 5000);
+
+//prevent f12
+document.onkeydown = function (e) {
+    if (e.keyCode == 123) {
+        toast('보안 상의 이유로 금지된 동작입니다.')
+        return false;
+    }
+}
+
+
+window.addEventListener('load', () => {
+    let matches = document.querySelectorAll("ins.ADSENSE");
+   
+           Array.from(matches).forEach((element) => {
+               let parentElement = element.parentElement;
+               if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none")  { 
+                   element.remove(); 
+               } else {
+               element.classList.remove("ADSENSE");
+               element.classList.add("adsbygoogle");
+                   (adsbygoogle = window.adsbygoogle || []).push({}); 
+               }
+           });
+   
+   });
+
+   
+function shareApp() {
+    const content = `성일고를 위한 모든 정보, 한 번에 쏙\n\n급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!\n\nhttps://sungil.me`
+    var tempElem = document.createElement('textarea');
+    tempElem.value = content;  
+    document.body.appendChild(tempElem);
+    tempElem.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempElem);
+    toast('공유 메시지를 클립보드에도 복사했어요');
+
+    Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+            title: '성일고를 위한 모든 정보, 한 번에 쏙',
+            description: '급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!',
+            imageUrl: "https://i.imgur.com/5LqdyDL.png",
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        },
+        buttons: [{
+            title: '지금 바로 써보기',
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        }, ],
+    })
+}
