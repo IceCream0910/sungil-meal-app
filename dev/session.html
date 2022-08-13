@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" referrerPolicy="no-referrer-when-downgrade" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>쏙 - 개발 세션</title>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-47NPRZ3ZEE"></script>
+    <meta charSet="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+
+    <!-- 토스트 UI 에디터, 자바스크립트 코어 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+    <!-- 코드 미러 라이브러리 추가, 토스트 UI 에디터에서 사용됨 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
+
+    <!-- 토스트 UI 에디터, CSS 코어 -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+</head>
+
+<body>
+    <div id="__next">
+        <style data-emotion="css-global fky1rh">
+            body {
+                --adaptiveGrey50: #f9fafb;
+                --adaptiveGrey100: #f2f4f6;
+                --adaptiveGrey200: #e5e8eb;
+                --adaptiveGrey300: #d1d6db;
+                --adaptiveGrey400: #b0b8c1;
+                --adaptiveGrey500: #8b95a1;
+                --adaptiveGrey600: #6b7684;
+                --adaptiveGrey700: #4e5968;
+                --adaptiveGrey800: #333d4b;
+                --adaptiveGrey900: #191f28;
+                --adaptiveOpacity50: rgba(0, 23, 51, 0.02);
+                --adaptiveOpacity100: rgba(2, 32, 71, 0.05);
+                --adaptiveOpacity200: rgba(0, 27, 55, 0.1);
+                --adaptiveOpacity300: rgba(0, 29, 58, 0.18);
+                --adaptiveOpacity400: rgba(0, 29, 54, 0.31);
+                --adaptiveOpacity500: rgba(3, 24, 50, 0.46);
+                --adaptiveOpacity600: rgba(0, 19, 43, 0.58);
+                --adaptiveOpacity700: rgba(3, 18, 40, 0.7);
+                --adaptiveOpacity800: rgba(0, 12, 30, 0.8);
+                --adaptiveOpacity900: rgba(2, 9, 19, 0.91);
+                --adaptiveBackground: #ffffff;
+                --adaptiveGreyBackground: #f2f4f6;
+                --adaptiveLayeredBackground: #ffffff;
+                --adaptiveFloatBackground: #ffffff;
+                --adaptiveDisabledBlue500: #c9e2ff;
+                --tHairlineBackground: repeat-x url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'><rect fill='rgba(0, 29, 58, 0.18)' x='0' y='0' width='1' height='0.5'/></svg>");
+                --tGradientToTop: linear-gradient(to top, #ffffff, rgba(255, 255, 255, 0));
+                --tGradientToBottom: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0));
+                --tGradientToRight: linear-gradient(to right, #ffffff, rgba(255, 255, 255, 0));
+                --tGradientToLeft: linear-gradient(to left, #ffffff, rgba(255, 255, 255, 0));
+                --tLayeredGradientToTop: linear-gradient(to top, #ffffff, rgba(255, 255, 255, 0));
+                --tLayeredGradientToBottom: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0));
+                --tRadioIndicatorBackgroundColor: rgb(255, 255, 255);
+                --tToastBackground: rgba(25, 31, 40, 0.54);
+                --tDarkFillButtonBackground: #4e5968;
+                --tPrimaryWeakButtonBackground: #e8f3ff;
+                --tDangerWeakButtonBackground: #ffeeee;
+                --tDarkWeakButtonBackground: #f2f4f6;
+                --tLightWeakButtonBackground: rgba(222, 222, 255, 0.19);
+                --tButtonPressedAfterBackground: transparent;
+                --tPrimaryWeakButtonPressedBackground: rgba(49, 130, 246, 0.26);
+                --tDangerWeakButtonPressedBackground: rgba(244, 67, 54, 0.26);
+                --tDarkWeakButtonPressedBackground: rgba(78, 89, 104, 0.26);
+                --tLightWeakButtonPressedBackground: rgba(255, 255, 255, 0.26);
+                --tBlueBadgeColor: #1b64da;
+                --tBlueBadgeBackground: rgba(49, 130, 246, 0.16);
+                --tTealBadgeColor: #0c8585;
+                --tTealBadgeBackground: rgba(0, 129, 138, 0.16);
+                --tGreenBadgeColor: #029359;
+                --tGreenBadgeBackground: rgba(2, 162, 98, 0.16);
+                --tRedBadgeColor: #d22030;
+                --tRedBadgeBackground: rgba(244, 67, 54, 0.16);
+                --tYellowBadgeColor: #dd7d02;
+                --tYellowBadgeBackground: rgba(255, 179, 49, 0.16);
+                --tElephantBadgeColor: #4e5968;
+                --tElephantBadgeBackground: rgba(78, 89, 104, 0.16);
+                --tSwiperBulletBackground: rgba(232, 232, 253, 0.36);
+                --tListRowDisabledBackground: rgba(253, 253, 255, 0.75);
+            }
+        </style>
+        <style data-emotion="css-global 0"></style>
+        <style data-emotion="css isgwpy">
+            .css-isgwpy {
+                height: var(--toss-safe-area-top, 0px);
+                display: var(--toss-safe-area-top-display, initial);
+                background-color: transparent;
+            }
+        </style>
+        <div class="css-isgwpy"></div>
+        <style data-emotion="css-global oe7g19">
+            html {
+                line-height: 1.15;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            main {
+                display: block;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin: 0.67em 0;
+            }
+
+            hr {
+                box-sizing: content-box;
+                height: 0;
+                overflow: visible;
+            }
+
+            pre {
+                font-family: monospace, monospace;
+                font-size: 1em;
+            }
+
+            a {
+                background-color: transparent;
+            }
+
+            abbr[title] {
+                border-bottom: none;
+                -webkit-text-decoration: underline;
+                text-decoration: underline;
+                -webkit-text-decoration: underline dotted;
+                text-decoration: underline dotted;
+            }
+
+            b,
+            strong {
+                font-weight: bolder;
+            }
+
+            code,
+            kbd,
+            samp {
+                font-family: monospace, monospace;
+                font-size: 1em;
+            }
+
+            small {
+                font-size: 80%;
+            }
+
+            sub,
+            sup {
+                font-size: 75%;
+                line-height: 0;
+                position: relative;
+                vertical-align: baseline;
+            }
+
+            sub {
+                bottom: -0.25em;
+            }
+
+            sup {
+                top: -0.5em;
+            }
+
+            img {
+                border-style: none;
+            }
+
+            button,
+            input,
+            optgroup,
+            select,
+            textarea {
+                font-family: inherit;
+                font-size: 100%;
+                line-height: 1.15;
+                margin: 0;
+            }
+
+            button,
+            input {
+                overflow: visible;
+            }
+
+            button,
+            select {
+                text-transform: none;
+            }
+
+            button,
+            [type="button"],
+            [type="reset"],
+            [type="submit"] {
+                -webkit-appearance: button;
+            }
+
+            button::-moz-focus-inner,
+            [type="button"]::-moz-focus-inner,
+            [type="reset"]::-moz-focus-inner,
+            [type="submit"]::-moz-focus-inner {
+                border-style: none;
+                padding: 0;
+            }
+
+            button:-moz-focusring,
+            [type="button"]:-moz-focusring,
+            [type="reset"]:-moz-focusring,
+            [type="submit"]:-moz-focusring {
+                outline: 1px dotted ButtonText;
+            }
+
+            fieldset {
+                padding: 0.35em 0.75em 0.625em;
+            }
+
+            legend {
+                box-sizing: border-box;
+                color: inherit;
+                display: table;
+                max-width: 100%;
+                padding: 0;
+                white-space: normal;
+            }
+
+            progress {
+                vertical-align: baseline;
+            }
+
+            textarea {
+                overflow: auto;
+            }
+
+            [type="checkbox"],
+            [type="radio"] {
+                box-sizing: border-box;
+                padding: 0;
+            }
+
+            [type="number"]::-webkit-inner-spin-button,
+            [type="number"]::-webkit-outer-spin-button {
+                height: auto;
+            }
+
+            [type="search"] {
+                -webkit-appearance: textfield;
+                outline-offset: -2px;
+            }
+
+            [type="search"]::-webkit-search-decoration {
+                -webkit-appearance: none;
+            }
+
+            ::-webkit-file-upload-button {
+                -webkit-appearance: button;
+                font: inherit;
+            }
+
+            details {
+                display: block;
+            }
+
+            summary {
+                display: -webkit-box;
+                display: -webkit-list-item;
+                display: -ms-list-itembox;
+                display: list-item;
+            }
+
+            template {
+                display: none;
+            }
+
+            [hidden] {
+                display: none;
+            }
+        </style>
+        <style data-emotion="css-global okdki2">
+            *:not(input):not(textarea) {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-touch-callout: none;
+            }
+        </style>
+        <style data-emotion="css-global 1dsg521">
+            body {
+                background-color: var(--adaptiveBackground);
+            }
+        </style>
+        <style data-emotion="css-global 5i7s6p">
+            :root {
+                --vh: 1vh;
+            }
+
+            body {
+                background-color: #000;
+            }
+        </style>
+        <style data-emotion="css 96dtrc">
+            .css-96dtrc .p-navbar__logo-container {
+                margin-left: 12px;
+            }
+
+            @media screen and (max-width: 1024px) {
+                .css-96dtrc .p-navbar__logo-container {
+                    margin-left: 0px;
+                }
+            }
+
+            .css-96dtrc .p-navbar__item>a:last-child {
+                padding-right: 4px;
+            }
+
+            .css-96dtrc .p-navbar--bottom-border {
+                background-color: rgba(0, 0, 0, 0.2);
+                border: 0;
+            }
+
+            .css-96dtrc .p-navbar__item,
+            .css-96dtrc .p-navbar__item a:hover {
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .css-96dtrc .p-navbar__button-item .p-button {
+                width: 80px;
+                height: 28px;
+                background-color: #fff;
+                color: #3d74ff;
+                border-radius: 30px;
+            }
+
+            .css-96dtrc .p-navbar__logo-icon path {
+                fill: #fff;
+            }
+
+            @media screen and (max-width: 1024px) {
+                .css-96dtrc .p-navbar:not(.p-navbar--bg-transparent) {
+                    background-color: rgba(0, 0, 0, 0.65);
+                }
+            }
+
+            .css-96dtrc .p-navbar__content {
+                background-color: transparent;
+            }
+
+            .css-96dtrc .p-navbar__dropdown-toggler {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                padding-left: 12px;
+            }
+
+            .css-96dtrc .p-icon {
+                color: #fff !important;
+            }
+
+            @media screen and (max-width: 1024px) {
+                .css-96dtrc .p-navbar__content .p-navbar__item>a {
+                    padding: 15px 25px;
+                }
+            }
+
+            @media screen and (max-width: 1024px) {
+                .css-96dtrc .p-navbar__menu {
+                    padding-bottom: 15px;
+                }
+            }
+        </style>
+        <style data-emotion="css bjn8wh">
+            .css-bjn8wh {
+                position: relative;
+            }
+        </style>
+        <style data-emotion="css v2kok6">
+            .css-v2kok6 {
+                -webkit-align-items: flex-start;
+                -webkit-box-align: flex-start;
+                -ms-flex-align: flex-start;
+                align-items: flex-start;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-box-pack: start;
+                -ms-flex-pack: start;
+                -webkit-justify-content: flex-start;
+                justify-content: flex-start;
+                position: relative;
+            }
+        </style>
+        <div class="css-v2kok6">
+            <style data-emotion="css 1lvz33w">
+                @media screen and (max-width: 1024px) {
+                    .css-1lvz33w {
+                        display: none;
+                    }
+                }
+            </style>
+            <style data-emotion="css 1yq91lr">
+                .css-1yq91lr {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-1yq91lr {
+                        display: none;
+                    }
+                }
+            </style>
+            <div class="el6wcsu0 css-1yq91lr eqzyb7w4">
+                <style data-emotion="css t7ussh">
+                    .css-t7ussh {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 400px;
+                        -webkit-transform: rotate(180deg);
+                        -moz-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        z-index: -999;
+                        top: 0;
+                        -webkit-transform: rotate(0deg);
+                        -moz-transform: rotate(0deg);
+                        -ms-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        .css-t7ussh {
+                            height: 280px;
+                        }
+                    }
+                </style>
+                <div class="css-t7ussh eqzyb7w1"></div>
+                <style data-emotion="css 1tjmorr">
+                    .css-1tjmorr {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 200px;
+                        -webkit-transform: rotate(180deg);
+                        -moz-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        z-index: -999;
+                        top: 0;
+                        -webkit-transform: rotate(0deg);
+                        -moz-transform: rotate(0deg);
+                        -ms-transform: rotate(0deg);
+                        transform: rotate(0deg);
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        .css-1tjmorr {
+                            height: 140px;
+                        }
+                    }
+                </style>
+                <div class="css-1tjmorr eqzyb7w0"></div>
+            </div>
+            <style data-emotion="css vrc4f2">
+                .css-vrc4f2 {
+                    padding-top: 120px;
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-vrc4f2 {
+                        padding-top: 60px;
+                    }
+                }
+            </style>
+            <style data-emotion="css krm7na">
+                .css-krm7na {
+                    width: 100%;
+                    padding-top: 192px;
+                    padding-top: 120px;
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-krm7na {
+                        padding-top: 120px;
+                    }
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-krm7na {
+                        padding-top: 60px;
+                    }
+                }
+            </style>
+            <section class="css-krm7na ekoidvd1">
+                <div class="p-container p-container--default">
+                    <div class="p-container__inner">
+                        <style data-emotion="css 1h2s3zl">
+                            .css-1h2s3zl {
+                                -webkit-align-items: flex-start;
+                                -webkit-box-align: flex-start;
+                                -ms-flex-align: flex-start;
+                                align-items: flex-start;
+                                display: -webkit-box;
+                                display: -webkit-flex;
+                                display: -ms-flexbox;
+                                display: flex;
+                                -webkit-flex-direction: column;
+                                -ms-flex-direction: column;
+                                flex-direction: column;
+                                -webkit-box-pack: start;
+                                -ms-flex-pack: start;
+                                -webkit-justify-content: flex-start;
+                                justify-content: flex-start;
+                                width: 100%;
+                                max-width: 960px;
+                                padding-bottom: 120px;
+                                margin: 0 auto;
+                            }
+
+                            @media screen and (max-width: 1024px) {
+                                .css-1h2s3zl {
+                                    padding-bottom: 80px;
+                                }
+                            }
+                        </style>
+                        <div class="css-1h2s3zl e1iy5mui8">
+                            <style data-emotion="css 1cyqgoz">
+                                .css-1cyqgoz {
+                                    position: relative;
+                                    width: 100%;
+                                    margin-bottom: 40px;
+                                }
+                            </style>
+                            <div class="css-1cyqgoz e1iy5mui7">
+                                <style data-emotion="css nnqji0">
+                                    .css-nnqji0 {
+                                        width: 100%;
+                                        object-fit: cover;
+                                    }
+
+                                    .custom-title {
+                                        display: none;
+                                    }
+
+                                    @media screen and (max-width: 1024px) {
+                                        .css-nnqji0 {
+                                            display: none;
+                                        }
+
+                                        .custom-title {
+                                            display: block;
+                                        }
+                                    }
+
+                                    @media screen and (min-width: 1025px) {
+                                        .css-nnqji0 {
+                                            border-radius: 20px;
+                                        }
+                                    }
+                                </style>
+
+                                <!-- 썸네일 이미지 수정 -->
+                                <img src="https://i.imgur.com/InxdsRa.png" class="css-nnqji0 e1iy5mui6" />
+                            </div>
+                            <style data-emotion="css 1t56uem">
+                                .css-1t56uem {
+                                    font-size: 28px;
+                                    font-weight: 800;
+                                    line-height: 1.4;
+                                    color: #fff;
+                                    margin-bottom: 20px;
+                                }
+
+                                @media screen and (max-width: 1024px) {
+                                    .css-1t56uem {
+                                        font-size: 30px;
+                                        margin-bottom: 14px;
+                                    }
+
+                                }
+                            </style>
+                            <!-- 여기서 제목 수정 -->
+                            <h1 class="css-1t56uem e1iy5mui4 custom-title">
+                                쏙이 사용자의 개인정보를<br>안전하게 보호하는 방법
+                            </h1>
+                            <p class="css-6soll6 e1iy5mui3">사용자의 개인정보는 소중하니까. 쏙이 개인정보를 보호하기 위해 적용하고 있는 보안 기술들을 소개합니다.
+                            </p>
+                            <style data-emotion="css 6soll6">
+                                .css-6soll6 {
+                                    font-size: 18px;
+                                    font-weight: 600;
+                                    line-height: 1.6;
+                                    color: rgba(255, 255, 255, 0.6);
+                                    margin-bottom: 48px;
+                                }
+
+                                @media screen and (max-width: 1024px) {
+                                    .css-6soll6 {
+                                        font-size: 16px;
+                                        margin-bottom: 27px;
+                                    }
+                                }
+                            </style>
+
+                            <!-- 본문 토스트 에디터 -->
+                            <div id="editor"></div>
+                            <script>
+                                const content = `안녕하세요. 쏙을 개발하고 있는 개발자, 윤태인입니다.
+쏙에는 커뮤니티 기능이 있습니다. 여기에 글을 남기고 댓글을 달며 우리 학교 학생들끼리 자유롭게 소통할 수 있죠.
+
+커뮤니티 기능을 개발할 때 중요하게 고려해야 하는 점 중 하나는 바로 <b>보안</b>입니다.
+
+커뮤니티 기능을 사용할 때 어떤 정보들이 서버를 오고가는지 살펴보며, 쏙이 사용자의 개인정보를 보호하기 위한 방법이 무엇인지 알아볼까요?
+
+<br>
+
+# 로그인
+우선 커뮤니티를 사용하려면 로그인을 해야합니다. 쏙의 커뮤니티에서는 구글 로그인 방식을 제공하고 있습니다. 
+
+![로그인 화면](https://i.imgur.com/wVvli2Q.png)
+
+자체 회원가입 없이 구글 계정으로만 로그인을 지원하는 이유는 무엇일까요?
+
+## oAuth 2.0
+OAuth 2.0을 사용한다면 대부분의 로그인, 개인정보 관리 책임을 타사(구글)에게 위임할 수 있게 됩니다. 쉽게 말하면 회원 기능의 관리를 구글에게 맡기는 거죠.
+
+이렇게 되면 우선 회원가입 절차가 간편해집니다. 따로 아이디와 비밀번호를 입력해서 가입하지 않아도 기존에 가입해둔 구글 계정으로 바로 가입하고 로그인할 수 있습니다.
+
+무엇보다 쏙처럼 소규모 프로젝트에서 자체 인증 서버를 구축하여 로그인 기능을 구현할 경우 보안이 상대적으로 취약할 수 밖에 없습니다. 구글과 같은 대기업에게 로그인 기능을 대신 맡기게 되면 비교적 높은 수준의 보안을 적용받을 수 있습니다.
+
+oAuth의 구성요소는 다음과 같이 나눌 수 있습니다 (~~관심 없으면 지나가세요~~)
+
+- Client : OAuth 2.0을 사용해 서드파티 로그인 기능을 구현할 자사 또는 개인 애플리케이션 서버(쏙 서비스)
+
+- Recource Owner : 서드파티 애플리케이션(구글 등)에 이미 개인정보를 저장하고 있으며 Client가 제공하는 서비스를 이용하려는 사용자
+
+- Resource Server : 사용자의 개인정보를 가지고있는 애플리케이션 (Google, Facebook, Kakao 등) 서버다.  Client는 Token을 이 서버로 넘겨 개인정보를 응답 받을 수 있다.
+
+- Authorization Server : 권한을 부여해주는 서버, 사용자는 이 서버로 ID, PW를 넘겨 Authorization Code를 발급 받을 수 있다. Client는 이 서버로 Authorization Code을 넘겨 Token을 발급 받을 수 있다.
+
+
+---
+
+
+# 회원정보 저장
+
+이제 로그인된 사용자의 구글 계정에서 회원정보를 가져오게 됩니다. 신규 사용자인지 여부를 확인하고, 만약 신규 사용자라면 데이터베이스에 사용자의 회원정보를 저장하는 과정이 진행됩니다.
+
+이러한 정보 유출을 방지 하기 위해서 로그인이 진행될 때, 사전에 승인된 도메인(사이트 주소)에서만 정상 진행되도록 설정되어 있습니다. 만약 공격자가 악성 코드가 포함된 타 도메인에서 로그인 작업을 요청할 경우 아예 사용자의 정보가 전송되지 않습니다.
+
+또한, 다른 사람이 내 회원 정보를 마음대로 수정하는 것을 방어하기 위해 데이터베이스에 쓰기 요청이 들어오면 현재 로그인된 사용자와 정보를 수정하려는 대상 사용자가 일치할 경우에만 요청을 승인합니다.
+
+~~~js
+match /users/{userId}/{documents=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId
+}
+~~~
+
+
+---
+
+# 게시글 관리 권한
+
+이제 로그인을 마쳤으니 커뮤니티에 게시글을 올려볼까요?
+
+게시글 페이지에서는 글 작성자와 현재 사용자가 일치할 경우 상단에 삭제와 수정이 가능한 툴바가 표시되는데요.
+
+
+
+공격자는 자신이 쓴 글이 아니지만 페이지의 HTML 소스코드를 임의로 편집해 아래와 같이 *display:none*으로 숨겨진 툴바를 *display:block* 등으로 바꾸어 보이게 할 수 있습니다.
+
+~~~html
+<div id="author-toolbar" style="display:none;">
+...
+</div>
+~~~
+
+이러한 방식으로 만약 자신이 쓴 글을 다른 사람이 마음대로 수정하거나 삭제할 수 있다면 다양한 문제가 발생할 수 있습니다.
+
+이를 방지하기 위해 쏙은 데이터베이스 접근 권한을 제한하고 있습니다.
+수정하거나 삭제하려는 대상 글의 작성자와 현재 로그인된 사용자가 일치하는지를 확인해 일치하지 않을 경우 모든 요청을 거부하도록 되어 있습니다.
+
+~~~js
+match /board/{docID}/{documents=**} {
+      allow read, write: if request.auth != null  && request.auth.uid == get(/databases/$(database)/documents/board/$(docID)).data.userId;
+}
+~~~
+
+만약 공격자가 이러한 방식으로 공격을 시도할 경우 *FirebaseError: Missing or insufficient permissions.* 오류가 개발자 콘솔에 표시되고 수정이나 삭제 작업은 진행되지 않고 *업로드 중...*에서 멈추게 됩니다.
+
+---
+
+앞으로도 쏙은 다양한 보안 기술 적용과 함께 지속적인 보안 취약점 업데이트를 진행하여 사용자의 개인정보를 안전하게 보호해나가겠습니다.
+
+
+
+
+
+
+                                `
+
+                                const editor = new toastui.Editor.factory({
+                                    el: document.querySelector('#editor'),
+                                    initialEditType: 'wysiwyg',
+                                    initialValue: content,
+                                    language: 'ko_KR',
+                                    theme: 'dark',
+                                    autofocus: false,
+                                    viewer: true,
+                                });
+                            </script>
+
+                            <style data-emotion="css 1fogbj">
+                                @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+                                * {
+                                    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+                                    box-sizing: border-box;
+                                }
+
+                                .toastui-editor-contents {
+                                    font-size: 16px;
+                                }
+
+                                .css-1fogbj {
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-box-flex-wrap: wrap;
+                                    -webkit-flex-wrap: wrap;
+                                    -ms-flex-wrap: wrap;
+                                    flex-wrap: wrap;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+
+                            <style data-emotion="css jq16h3">
+                                .css-jq16h3 {
+                                    width: 100%;
+                                    height: 0px;
+                                    margin: 40px 0 40px 0;
+                                    border-top: 1px solid #191f28;
+                                }
+                            </style>
+                            <div class="css-jq16h3 e1iy5mui0"></div>
+                            <style data-emotion="css 1n36q3w">
+                                .css-1n36q3w {
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-flex-direction: row;
+                                    -ms-flex-direction: row;
+                                    flex-direction: row;
+                                }
+
+                                @media screen and (max-width: 1024px) {
+                                    .css-1n36q3w {
+                                        -webkit-flex-direction: column;
+                                        -ms-flex-direction: column;
+                                        flex-direction: column;
+                                    }
+                                }
+                            </style>
+                            <style data-emotion="css rgl5lu">
+                                .css-rgl5lu {
+                                    -webkit-align-items: flex-start;
+                                    -webkit-box-align: flex-start;
+                                    -ms-flex-align: flex-start;
+                                    align-items: flex-start;
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-flex-direction: row;
+                                    -ms-flex-direction: row;
+                                    flex-direction: row;
+                                    -webkit-box-pack: start;
+                                    -ms-flex-pack: start;
+                                    -webkit-justify-content: flex-start;
+                                    justify-content: flex-start;
+                                    display: -webkit-box;
+                                    display: -webkit-flex;
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -webkit-flex-direction: row;
+                                    -ms-flex-direction: row;
+                                    flex-direction: row;
+                                }
+
+                                @media screen and (max-width: 1024px) {
+                                    .css-rgl5lu {
+                                        -webkit-flex-direction: column;
+                                        -ms-flex-direction: column;
+                                        flex-direction: column;
+                                    }
+                                }
+                            </style>
+                            <div class="css-rgl5lu">
+                                <style data-emotion="css n6356k">
+                                    .css-n6356k {
+                                        -webkit-align-items: center;
+                                        -webkit-box-align: center;
+                                        -ms-flex-align: center;
+                                        align-items: center;
+                                        display: -webkit-box;
+                                        display: -webkit-flex;
+                                        display: -ms-flexbox;
+                                        display: flex;
+                                        -webkit-flex-direction: row;
+                                        -ms-flex-direction: row;
+                                        flex-direction: row;
+                                        -webkit-box-pack: start;
+                                        -ms-flex-pack: start;
+                                        -webkit-justify-content: flex-start;
+                                        justify-content: flex-start;
+                                    }
+
+                                    .css-n6356k~.css-n6356k {
+                                        margin-left: 40px;
+                                    }
+
+                                    @media screen and (max-width: 1024px) {
+                                        .css-n6356k~.css-n6356k {
+                                            margin-top: 24px;
+                                            margin-left: 0;
+                                        }
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <style data-emotion="css 1krc5a">
+                .css-1krc5a {
+                    width: 100%;
+                    padding-top: 192px;
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-1krc5a {
+                        padding-top: 120px;
+                    }
+                }
+            </style>
+            <div style="flex:none;height:300px" class="css-1lvz33w"></div>
+            <style data-emotion="css akd1nl">
+                .css-akd1nl {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+
+                @media screen and (max-width: 1024px) {
+                    .css-akd1nl {
+                        display: none;
+                    }
+                }
+            </style>
+            <div class="el6wcsu0 css-akd1nl eqzyb7w4">
+                <style data-emotion="css t61wdg">
+                    .css-t61wdg {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 400px;
+                        -webkit-transform: rotate(180deg);
+                        -moz-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        z-index: -999;
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        .css-t61wdg {
+                            height: 280px;
+                        }
+                    }
+                </style>
+                <div class="css-t61wdg eqzyb7w3"></div>
+                <style data-emotion="css vmip81">
+                    .css-vmip81 {
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 200px;
+                        -webkit-transform: rotate(180deg);
+                        -moz-transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        transform: rotate(180deg);
+                        z-index: -999;
+                    }
+
+                    @media screen and (max-width: 1024px) {
+                        .css-vmip81 {
+                            height: 140px;
+                        }
+                    }
+                </style>
+                <div class="css-vmip81 eqzyb7w2"></div>
+            </div>
+        </div>
+        <div id="tds-pc__portal-container"></div>
+        <div id="portal-container"></div>
+    </div>
+</body>
+
+</html>

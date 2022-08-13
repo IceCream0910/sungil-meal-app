@@ -71,6 +71,9 @@ mql.addEventListener("change", () => {
 function onDark() {
     $('html').addClass("dark");
     $('body').addClass("dark");
+    $('.card').addClass("dark");
+    $('.card__primary__title').addClass("dark");
+    $('.card__supporting__text').addClass("dark");
     $('.mdc-form-field').addClass("dark");
     $('input').addClass("dark");
     $('.mdc-button__label').addClass("dark");
@@ -95,6 +98,9 @@ function offDark() {
     $('html').removeClass("dark");
     $('body').removeClass("dark");
     $('.mdc-form-field').removeClass("dark");
+    $('.card').removeClass("dark");
+    $('.card__primary__title').removeClass("dark");
+    $('.card__supporting__text').removeClass("dark");
     $('input').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
     $('.mdc-fab--mini').removeClass("dark");
