@@ -22,8 +22,8 @@
             integrations: [new Sentry.Integrations.BrowserTracing()],
             tracesSampleRate: 1.0,
         });</script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
+        crossorigin="anonymous"></script>
     <meta name="theme-color" content="#5264AE" />
     <meta property="og:url" content="https://sungil.vercel.app">
     <meta property="og:title" content="쏙">
@@ -55,7 +55,7 @@ crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script type="text/javascript"  src="assets/js/pullToRefresh.js"></script>
+    <script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
     <script type="text/javascript" src="https://unpkg.com/hammer-touchemulator@0.0.2/touch-emulator.js"></script>
 
 
@@ -108,7 +108,7 @@ crossorigin="anonymous"></script>
         <div id="confirmMessage"></div>
         <div>
             <input id="confirmYes" type="button" aria-label="삭제 확인" value="확인" />
-            <input id="confirmNo" type="button" aria-label="삭제 취소"  value="취소" />
+            <input id="confirmNo" type="button" aria-label="삭제 취소" value="취소" />
         </div>
     </div>
 </div>
@@ -131,7 +131,10 @@ crossorigin="anonymous"></script>
 </head>
 
 <body oncontextmenu='return false' ondragstart='return false'>
-    <span id="login-loader">로그인 요청중이에요...<br><a href="javascript:$('.sheet-backdrop-nocancel').removeClass('backdrop-in');$('#login-loader').hide();" style="text-decoration: none;color: #5272ff;">취소</a></span>
+    <span id="login-loader">로그인 요청중이에요...<br><a
+            href="javascript:$('.sheet-backdrop-nocancel').removeClass('backdrop-in');$('#login-loader').hide();"
+            style="text-decoration: none;color: #5272ff;">취소</a></span>
+    <div class="sheet-backdrop-nocancel2"></div>
     <div class="sheet-backdrop-nocancel"></div>
     <div class="sheet-backdrop"></div>
     <div role="dialog" class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
@@ -162,12 +165,12 @@ crossorigin="anonymous"></script>
                     <div class="timetable_selector">
                     </div>
                     <br>
-                    <button class="custom-btn modal-btn" id="assign-add-save-btn" aria-label="수행평가 저장" onclick="addAssignment();"
-                        style="display:none;" class="mdc-button mdc-button--raised">
+                    <button class="custom-btn modal-btn" id="assign-add-save-btn" aria-label="수행평가 저장"
+                        onclick="addAssignment();" style="display:none;" class="mdc-button mdc-button--raised">
                         <span class="mdc-button__label">저장</span>
                     </button>
-                    <button class="custom-btn modal-btn" id="assign-edit-save-btn" aria-label="수행평가 수정"  onclick="editAssignment();"
-                        style="display:none;" class="mdc-button mdc-button--raised">
+                    <button class="custom-btn modal-btn" id="assign-edit-save-btn" aria-label="수행평가 수정"
+                        onclick="editAssignment();" style="display:none;" class="mdc-button mdc-button--raised">
                         <span class="mdc-button__label">수정</span>
                     </button>
                 </div>
@@ -183,30 +186,34 @@ crossorigin="anonymous"></script>
                 <div class="content-wrap" id="loginForm">
 
                     <input id="login-username" type="text" placeholder="닉네임" required>
-<div class="checkbox-wrap" id="signup-checklist">
-    <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1" aria-checked="false"/>
-        <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank" style="
+                    <button class="custom-btn input-btn" onclick="getRandomNickname()">
+                        <ion-icon name="shuffle-outline"></ion-icon>
+                    </button>
+
+                    <div class="checkbox-wrap" id="signup-checklist">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1" aria-checked="false" />
+                            <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
         ">내용 보기 &gt;</a></label>
-    </div>
-    <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2"  aria-checked="false"/>
-        <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank" style="
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2" aria-checked="false" />
+                            <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
         ">내용 보기 &gt;</a></label>
-    </div>
-    <div class="checkbox-item">
-        <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3"  aria-checked="false" />
-        <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank" style="
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3" aria-checked="false" />
+                            <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank" style="
             color: inherit;
             margin-left: 15px;
         ">내용 보기 &gt;</a></label>
-    </div>
-</div>
-<br><br>
+                        </div>
+                    </div>
+                    <br><br>
                     <button class="custom-btn modal-btn" onclick="saveAccountDb()">완료
                     </button>
 
@@ -214,6 +221,9 @@ crossorigin="anonymous"></script>
                 <div class="content-wrap" id="account">
 
                     <input id="account-username" type="text" placeholder="닉네임" required>
+                    <button class="custom-btn input-btn" onclick="getRandomNickname()">
+                        <ion-icon name="shuffle-outline"></ion-icon>
+                    </button>
 
                     <button class="custom-btn modal-btn" onclick="edit_saveAccountDb()">완료
                     </button>
@@ -258,20 +268,22 @@ crossorigin="anonymous"></script>
         <div class="home-header">
             <img src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
             <div style="display:flex;flex-direction:row;justify-content: center;align-items: center;">
-            <a href="javascript:shareApp()" style="font-size:35px;position:relative;top:3px;opacity:0.6;" aria-label="웰컴 페이지 열기">
-                <ion-icon name="happy"></ion-icon>
-            </a>
+                <a href="javascript:shareApp()" style="font-size:35px;position:relative;top:3px;opacity:0.6;"
+                    aria-label="웰컴 페이지 열기">
+                    <ion-icon name="happy"></ion-icon>
+                </a>
 
-            <a id="service-noti" href="https://sungilapp.notion.site/7c7dfc54b14c4805a0e0e0309bc2942d"
-            target="_blank"  aria-label="업데이트 내역 열기">
-            
-            <span id="noti-preview">08-07 업데이트 내역</span>
-            <div class="icon-bubble">
-                <ion-icon name="notifications"></ion-icon>
-            </div></a>
+                <a id="service-noti" href="https://sungilapp.notion.site/7c7dfc54b14c4805a0e0e0309bc2942d"
+                    target="_blank" aria-label="업데이트 내역 열기">
+
+                    <span id="noti-preview">08-07 업데이트 내역</span>
+                    <div class="icon-bubble">
+                        <ion-icon name="notifications"></ion-icon>
+                    </div>
+                </a>
+            </div>
         </div>
-        </div>
-        
+
         <div class="meal-wrap">
             <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                 <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
@@ -343,14 +355,25 @@ crossorigin="anonymous"></script>
                     </button>
                 </p>
             </div>
+
             <div class="card dark" id="vacation-timetable"
                 style="margin:-15px;background:none;box-shadow: none;border:none;">
                 <p class="card__supporting__text"
                     style="height:100%;display:flex;flex-direction: column;background:none;">
-                    <br><span style="font-size:20px;margin-bottom:15px;opacity:0.8;">개학 <span id="dday"
-                            style="color:#8798db;">D-31</span><br>
-                    </span><span style="opacity:0.8">여름방학 기간에는<br>시간표 정보가 제공되지 않아요<br>
-                    </span>
+                    <br>
+                    <span class="chat-bubble-text" id="dday-chat"
+                    onclick="var randomText = [
+                    '내가 무서운 얘기 해줄까?',
+                    '근데 너 그거 알아?',
+                    '방학 잘 보내고 있어? 근데',
+                    '🚨긴급 속보!!',
+                    '아니 왜 벌써'];
+                var randomTextIndex = Math.floor(Math.random() * randomText.length);
+                var randomTextResult = randomText[randomTextIndex];
+                $('#dday-chat').html(randomTextResult);"></span>
+                    <span class="chat-bubble-text" id="dday"></span>
+                    <br>
+                <span style="font-size: 14px;opacity: 0.5;">아직 새 학기 시간표가 등록되지 않았어요.</span>
                 </p>
             </div>
             <div class="timetable-wrap" style="display:none;">
@@ -505,7 +528,11 @@ crossorigin="anonymous"></script>
             opacity: 0.5;
             width: 70%;
             margin-top: 20px;
-        "><ion-icon name="alert-circle" role="img" class="md hydrated" aria-label="alert circle"></ion-icon>&nbsp;안드로이드 앱인 경우 최신 버전으로<br>업데이트해야 이용이 가능합니다.</span>        </div>
+        ">
+                <ion-icon name="alert-circle" role="img" class="md hydrated" aria-label="alert circle"></ion-icon>
+                &nbsp;안드로이드 앱인 경우 최신 버전으로<br>업데이트해야 이용이 가능합니다.
+            </span>
+        </div>
 
         <div class="main-community" style="display:none;">
             <div class="notice-item" style="margin-top: 0;" onclick="openPost('/board.html?id=RGpIuB3N90kepjixtEpF');">
@@ -560,16 +587,17 @@ crossorigin="anonymous"></script>
 
             </div>
             <br>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-     crossorigin="anonymous"></script>
-<!-- 배너광고1
+            <script async
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
+                crossorigin="anonymous"></script>
+            <!-- 배너광고1
 <ins class="adsbygoogle"
      style="display:block;width:100%;"
      data-ad-client="ca-pub-3961376550354587"
      data-ad-slot="9623797201"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins> -->
-        <br><Br>
+            <br><Br>
 
             <div class="floating-btn writePost-btn">
                 <ion-icon name="pencil-outline" style="font-size:20px;"></ion-icon>
@@ -619,6 +647,7 @@ crossorigin="anonymous"></script>
 <script src="assets/js/community.js?v=220710"></script>
 <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
-<script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async" type="text/javascript"></script>
+<script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async"
+    type="text/javascript"></script>
 
 </html>

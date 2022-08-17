@@ -100,11 +100,21 @@ var todayForDday = new Date();
 var ddayDate = new Date(2022, 07, 22);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+var randomText = [
+    '내가 무서운 얘기 해줄까?',
+    '근데 너 그거 알아?',
+    '방학 잘 보내고 있어? 근데',
+    '🚨긴급 속보!!',
+    '아니 왜 벌써'];
+var randomTextIndex = Math.floor(Math.random() * randomText.length);
+var randomTextResult = randomText[randomTextIndex];
+$('#dday-chat').html(randomTextResult);
 if (ddayResult > 0) {
-    $('#dday').html('D-' + ddayResult);
+    $('#dday').html('개학 '+ddayResult+'일 남음');
 } else {
-    $('#dday').html('D-DAY');
+    $('#dday').html('오늘 개학임');
 }
+
 
 
 

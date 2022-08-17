@@ -1670,6 +1670,14 @@ body.dark {
     backdrop-filter: blur(2px);
 }
 
+.sheet-backdrop-nocancel2.backdrop-in {
+    visibility: visible;
+    opacity: 1;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+
 
 .actions-backdrop,
 .custom-modal-backdrop,
@@ -1678,7 +1686,8 @@ body.dark {
 .popup-backdrop,
 .preloader-backdrop,
 .sheet-backdrop,
-.sheet-backdrop-nocancel {
+.sheet-backdrop-nocancel,
+.sheet-backdrop-nocancel2 {
     position: fixed;
     left: 0;
     top: 0;
@@ -3225,4 +3234,22 @@ transform: scale(0.95);
 
 .home-header.dark #service-noti #noti-preview {
     font-size:13px;
+}
+
+.input-btn {
+    position: absolute;
+    top: 85px;
+    right: 5px;
+    font-size: 25px;
+    padding: 0;
+    padding-left: 10px;
+}
+
+.chat-bubble-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    background: #9dafff61;
+    padding: 10px 15px;
+    border-radius: 0 15px 15px 15px;
+    width: fit-content;
 }
