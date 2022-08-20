@@ -62,7 +62,7 @@ ion-icon {
 
 .toastui-editor-contents p {
     font-size: 16px;
-  }
+}
 
 #meal-menus a {
     text-decoration: none;
@@ -879,21 +879,6 @@ ion-icon {
     margin-bottom: 45px
 }
 
-input {
-    background-color: rgba(253, 253, 253, 0);
-    font-size: 18px;
-    padding: 10px 10px 10px 5px;
-    display: block;
-    width: 70%;
-    border: none;
-    border-bottom: 1px solid #757575
-}
-
-input.dark {
-    background-color: rgba(253, 253, 253, 0);
-    border-bottom: 1px solid #757575;
-    color: #eee
-}
 
 input:focus {
     outline: 0
@@ -927,7 +912,7 @@ input:valid~label {
 
 #date {
     font-size: 17px;
-    color:inherit;
+    color: inherit;
 }
 
 section {
@@ -950,7 +935,7 @@ header {
 }
 
 header button {
-    color:#5272ff;
+    color: #5272ff;
 }
 
 .main-nav.dark {
@@ -979,6 +964,7 @@ header button {
     text-align: center;
 }
 
+
 .bottom-nav.dark {
     backdrop-filter: blur(15px) saturate(200%);
     -webkit-backdrop-filter: blur(15px) saturate(200%);
@@ -987,7 +973,12 @@ header button {
 }
 
 .bottom-nav.non-border {
-    border:none;
+    border: none;
+}
+
+.bottom-nav ion-icon {
+    margin: 0;
+    margin-bottom: 5px;
 }
 
 .bottom-nav a {
@@ -997,6 +988,18 @@ header button {
     cursor: pointer;
     width: 30%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-nav a:active {
+    text-decoration: none;
+    -webkit-animation-duration: 0.6s;
+    animation-duration: 0.6s;
+    -webkit-animation-name: bounce-in;
+    animation-name: bounce-in;
 }
 
 .bottom-nav a.active {
@@ -1013,54 +1016,48 @@ header button {
     text-decoration: none;
 }
 
-
-@-webkit-keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        -webkit-transform: translateY(0);
-    }
-
-    40% {
-        -webkit-transform: translateY(-7px)
-    }
-
-    60% {
-        -webkit-transform: translateY(-3px);
-    }
+.bottom-nav.dark a:active {
+    text-decoration: none;
 }
 
-@keyframes bounce {
 
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
+.bottom-nav span {
+    font-size: 12px;
+}
+
+@keyframes bounce-in {
+
+    0% {
         transform: translateY(0);
         transform: scale(1);
     }
 
-    40% {
-        transform: translateY(-7px);
-        transform: scale(1.2);
+    100% {
+        transform: translateY(-3px);
+        transform: scale(1.1);
+    }
+}
+
+
+@keyframes bounce-out {
+
+    0% {
+        transform: translateY(-3px);
+        transform: scale(1.1);
     }
 
-    60% {
-        transform: translateY(-3px);
-        transform: scale(1.07);
+    100% {
+        transform: translateY(0);
+        transform: scale(1.0);
     }
 }
 
 
 .bounce {
-    -webkit-animation-duration: 0.6s;
-    animation-duration: 0.6s;
-    -webkit-animation-name: bounce;
-    animation-name: bounce;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-name: bounce-out;
+    animation-name: bounce-out;
 }
 
 
@@ -1592,7 +1589,7 @@ body.dark {
 }
 
 .sheet-modal.full-modal {
-    top:0;
+    top: 0;
     height: 100vh;
 }
 
@@ -1882,7 +1879,7 @@ body.dark {
 .notice-card:active {
     transform: scale(0.95);
     -webkit-transform: scale(0.95);
-    -moz-transform : scale(0.95);
+    -moz-transform: scale(0.95);
     -ms-transform: scale(0.95);
     -o-transform: scale(0.95);
 }
@@ -1896,11 +1893,13 @@ body.dark {
     color: #eee
 }
 
-.notice-card h4, h2, h3 {
+.notice-card h4,
+h2,
+h3 {
     background: 0 0;
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     font-size: 17px;
-    font-weight: 300
+    font-weight: 500
 }
 
 .notice-card p {
@@ -1910,7 +1909,7 @@ body.dark {
 }
 
 .notice-card .file-box {
-    background: transparent;   
+    background: transparent;
     font-size: 13px;
     color: #5271ff;
     margin-top: 10px;
@@ -2046,6 +2045,7 @@ thead th.dark {
         z-index: 99999;
         border-radius: 0 0 20px 20px;
     }
+
     #notice-wrap-gap {
         display: block;
     }
@@ -2385,7 +2385,7 @@ thead th.dark {
 .task-box:active {
     transform: scale(0.95);
     -webkit-transform: scale(0.95);
-    -moz-transform : scale(0.95);
+    -moz-transform: scale(0.95);
     -ms-transform: scale(0.95);
     -o-transform: scale(0.95);
 }
@@ -2644,12 +2644,12 @@ thead th.dark {
     color: #becfff;
     transform: scale(0.96);
     -webkit-transform: scale(0.96);
-    -moz-transform : scale(0.96);
+    -moz-transform: scale(0.96);
     -ms-transform: scale(0.96);
     -o-transform: scale(0.96);
 }
 
-.content-wrap input {
+input {
     width: 100%;
     padding: 0;
     padding-left: 20px;
@@ -2668,7 +2668,7 @@ thead th.dark {
     margin-bottom: 10px;
 }
 
-.content-wrap input.dark {
+input.dark {
     background-color: #414141;
     color: #b1b1b1;
     border: none;
@@ -2697,7 +2697,8 @@ thead th.dark {
     padding-bottom: 15px;
     padding-top: 15px;
     border-radius: 20px;
-    -webkit-animation-timing-function: linear; /* Chrome, Safari, Opera */
+    -webkit-animation-timing-function: linear;
+    /* Chrome, Safari, Opera */
     animation-timing-function: linear;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
@@ -2709,7 +2710,7 @@ thead th.dark {
 .commnity-notice:active {
     transform: scale(0.95);
     -webkit-transform: scale(0.95);
-    -moz-transform : scale(0.95);
+    -moz-transform: scale(0.95);
     -ms-transform: scale(0.95);
     -o-transform: scale(0.95);
 }
@@ -3099,14 +3100,16 @@ input[type=button]:hover {
 .notice-item {
     margin: -30px;
     padding: 0;
-    padding-bottom: 20px;padding-top: 7px;cursor: pointer;
+    padding-bottom: 20px;
+    padding-top: 7px;
+    cursor: pointer;
 }
 
 .commnity-notice {
-    width:100%;
+    width: 100%;
     flex-direction: revert;
     align-items: center;
-    border-radius:20px;
+    border-radius: 20px;
 }
 
 .checkbox-wrap {
@@ -3121,7 +3124,7 @@ input[type=button]:hover {
     flex-direction: row;
     width: 100%;
     margin-top: 10px;
-    gap:10px;
+    gap: 10px;
 }
 
 input[type=checkbox] {
@@ -3139,7 +3142,7 @@ input[type=checkbox]:checked {
 }
 
 input[type=checkbox] label {
-    font-size:15px;
+    font-size: 15px;
     position: relative;
     top: 5px;
 }
@@ -3156,7 +3159,7 @@ input[type=checkbox] label {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    z-index:999999;
+    z-index: 999999;
 }
 
 /*advertisement */
@@ -3174,15 +3177,15 @@ input[type=checkbox] label {
 }
 
 .home-header {
-    width:100%;
-    display:flex;
+    width: 100%;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom:30px;
+    margin-bottom: 30px;
 }
 
-.home-header .icon-bubble{
+.home-header .icon-bubble {
     text-decoration: none;
     background: #527dff;
     color: white;
@@ -3208,11 +3211,11 @@ input[type=checkbox] label {
 
 
 .home-header a:active {
-transform: scale(0.95);
--webkit-transform: scale(0.95);
--moz-transform : scale(0.95);
--ms-transform: scale(0.95);
--o-transform: scale(0.95);
+    transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    -moz-transform: scale(0.95);
+    -ms-transform: scale(0.95);
+    -o-transform: scale(0.95);
 }
 
 .home-header #service-noti {
@@ -3233,7 +3236,7 @@ transform: scale(0.95);
 
 
 .home-header.dark #service-noti #noti-preview {
-    font-size:13px;
+    font-size: 13px;
 }
 
 .input-btn {
@@ -3252,4 +3255,91 @@ transform: scale(0.95);
     padding: 10px 15px;
     border-radius: 0 15px 15px 15px;
     width: fit-content;
+}
+
+/* 성적 탭 */
+#report h3 {
+    font-size: 24px;
+    font-weight: 800
+}
+
+#report #totalGrade {
+    font-size: 26px;
+    color: #4c63bb;
+}
+
+/* horizontal scroll */
+.semester-tab-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    overflow-y: hidden;
+}
+
+.semester-tab-wrap .semester-tab {
+    flex: 0 0 auto;
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    width: fit-content;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.semester-tab-wrap .semester-tab.dark {
+    background-color: rgb(48, 48, 48);
+    border: rgb(75, 75, 75) 1px solid;
+    color: #eee;
+}
+
+.semester-tab-wrap .semester-tab.active {
+    background-color: #f8f8f8;
+    border: 1px solid #4c63bb;
+    color: #4c63bb;
+}
+
+.semester-tab-wrap .semester-tab.dark.active {
+    background-color: rgb(48, 48, 48);
+    border: #6a89ff 1px solid;
+    color: #6a89ff;
+}
+
+.floating-btn-with-label {
+    width: fit-content;
+    border-radius: 30px;
+    padding: 15px 15px 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.semester-subject {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.semester-subject #subjectName {
+    width: 60%;
+}
+
+.semester-subject #subjectUnit {
+    width: 20%;
+}
+
+.semester-subject #subjectGrade {
+    width: 20%;
+}
+
+.semester-subjectList {
+    display: none;
+}
+
+.semester-subjectList.active {
+    display: block;
 }

@@ -228,6 +228,7 @@ function openAssignDetails(id) {
     $('#modal-title').html(targetItem.title + '&nbsp;&nbsp;<a onclick="javascript:assignEditMode();"><ion-icon name="create-outline"></ion-icon></a>&nbsp;<a onclick="javascript:assignDelete();"><ion-icon name="trash-outline"></ion-icon></a>');
     $('.content-wrap').hide();
     $('#assignDetails').show();
+    $('#calculator').hide();
     $('#assignDate').html('<ion-icon name="time-outline"></ion-icon>' + moment(new Date(targetItem.date)).format('YYYY년 MM월 DD일'));
     $('#assignPeriod').text(targetItem.period + '교시 ' + targetItem.subject);
     $('body').css('overflow', 'hidden');
@@ -250,6 +251,7 @@ function assignEditMode() {
     $('#modal-title').html('수행평가 추가');
     $('.content-wrap').hide();
     $('#assessment').show();
+    $('#calculator').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').show();
     $('#title').val(targetItem.title);
@@ -349,6 +351,7 @@ function openClassAssign() {
     $('#modal-title').html('우리 반 수행평가');
     $('.content-wrap').hide();
     $('#myClassAssign').show();
+    $('#calculator').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').show();
     $('body').css('overflow', 'hidden');

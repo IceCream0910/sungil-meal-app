@@ -74,6 +74,7 @@ const loginGoogle = () => {
                 $('.content-wrap').hide();
                 $('#loginForm').show();
                 $('#exam').hide();
+                $('#calculator').hide();
                 $('#assign-add-save-btn').hide();
                 $('#assign-edit-save-btn').hide();
                 $('body').css('overflow', 'hidden');
@@ -150,6 +151,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             $('.content-wrap').hide();
             $('#loginForm').show();
             $('#exam').hide();
+            $('#calculator').hide();
             $('#assign-add-save-btn').hide();
             $('#assign-edit-save-btn').hide();
             $('body').css('overflow', 'hidden');
@@ -180,6 +182,7 @@ $('#community #account-btn').on('click', function () {
     $('.content-wrap').hide();
     $('#account').show();
     $('#exam').hide();
+    $('#calculator').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
@@ -257,6 +260,7 @@ $('.writePost-btn').on('click', function () {
     $('.content-wrap').hide();
     $('#writePost').show();
     $('#exam').hide();
+    $('#calculator').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
@@ -268,6 +272,10 @@ $('.writePost-btn').on('click', function () {
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         editor = new toastui.Editor.factory({
             el: document.querySelector('#editor'),
+            toolbarItems: [
+                ['bold', 'italic', 'strike'],
+                ['hr', 'quote', 'ul', 'task'],
+            ],
             initialEditType: 'wysiwyg',
             height: '40vh',
             initialValue: '',
@@ -278,6 +286,10 @@ $('.writePost-btn').on('click', function () {
     } else {
         editor = new toastui.Editor.factory({
             el: document.querySelector('#editor'),
+            toolbarItems: [
+                ['bold', 'italic', 'strike'],
+                ['hr', 'quote', 'ul', 'task'],
+            ],
             initialEditType: 'wysiwyg',
             initialValue: '',
             height: '40vh',

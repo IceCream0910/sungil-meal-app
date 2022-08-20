@@ -52,7 +52,7 @@ function onDark() {
     $('.mealItem').each(function () {
         $(this).addClass("dark");
     });
-    $('.content-wrap input').each(function () {
+    $('input').each(function () {
         $(this).addClass("dark");
     });
     $('#title').addClass("dark");
@@ -66,6 +66,7 @@ function onDark() {
     $('#main-confirm').addClass("dark");
     $('.mdc-button__label').addClass("dark");
     $('.home-header').addClass("dark");
+    $('.semester-tab').addClass("dark");
     loadPostList();
 }
 
@@ -95,7 +96,7 @@ function offDark() {
     $('.mealItem').each(function () {
         $(this).removeClass("dark");
     });
-    $('.content-wrap input').each(function () {
+    $('input').each(function () {
         $(this).removeClass("dark");
     });
     $('#title').removeClass("dark");
@@ -109,5 +110,6 @@ function offDark() {
     $('#main-confirm').removeClass("dark");
     $('.mdc-button__label').removeClass("dark");
     $('.home-header').removeClass("dark");
+    $('.semester-tab').removeClass("dark");
     loadPostList()
 }

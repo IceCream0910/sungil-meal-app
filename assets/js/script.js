@@ -10,7 +10,7 @@ moment.lang('en', {
 
 //공지 표시
 var previousNoti = localStorage.getItem('ssoak-notice-content') || '';
-if(previousNoti != $('#noti-preview').text()) {
+if (previousNoti != $('#noti-preview').text()) {
     localStorage.setItem('ssoak-notice-content', $('#noti-preview').text());
     setTimeout(function () {
         $('.home-header #service-noti').css('background', 'transparent');
@@ -100,23 +100,13 @@ var todayForDday = new Date();
 var ddayDate = new Date(2022, 07, 22);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-var randomText = [
-    '내가 무서운 얘기 해줄까?',
-    '근데 너 그거 알아?',
-    '방학 잘 보내고 있어? 근데',
-    '🚨긴급 속보!!',
-    '아니 왜 벌써'];
-var randomTextIndex = Math.floor(Math.random() * randomText.length);
-var randomTextResult = randomText[randomTextIndex];
-$('#dday-chat').html(randomTextResult);
 if (ddayResult > 0) {
-    $('#dday').html('개학 '+ddayResult+'일 남음');
+    $('#dday').html('개학까지 ' + ddayResult + '일 남았어요');
+} else if (ddayResult == 0) {
+    $('#dday').html('오늘 개학이에요');
 } else {
-    $('#dday').html('오늘 개학임');
+    $('#dday').html('등록되는대로 보여줄게요.');
 }
-
-
-
 
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
@@ -310,7 +300,6 @@ function updateInfo() {
             $('.timetable-wrap').hide();
             $('#nosetting-timetable').hide();
             $('#vacation-timetable').show();
-            /* 여름방학 기간 동안에는 시간표 로딩 안함
             $('.timetable-wrap').show();
             $('#nosetting-timetable').hide();
 
@@ -355,7 +344,7 @@ function updateInfo() {
                         }
                     }
                 });
-            }*/
+            }
         }
 
         //시간표 끝
@@ -476,6 +465,11 @@ function displaySchedule(data) {
 }
 
 function displayTimetable(data) {
+    if (data.mon.length == 0 || data.tue.length == 0 || data.wed.length == 0 || data.thu.length == 0 || data.fri.length == 0) {
+        $('#ready-vaction').show();
+    } else {
+        $('#ready-vaction').hide();
+    }
     $('#tbody-timetable tr').eq(0).empty();
     var day = moment(selectedDate).day();
     var sections = document.querySelectorAll("th");
@@ -576,7 +570,7 @@ function shareMeal() {
         var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
 
         var tempElem = document.createElement('textarea');
-        tempElem.value = content;  
+        tempElem.value = content;
         document.body.appendChild(tempElem);
         tempElem.select();
         document.execCommand("copy");
@@ -672,6 +666,7 @@ $('.pop').on('click', function () {
     $('.content-wrap').hide();
     $('#datepicker').show();
     $('#exam').hide();
+    $('#calculator').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -701,6 +696,7 @@ $('.addAssignment-btn').on('click', function () {
     $('.content-wrap').hide();
     $('#assessment').show();
     $('#exam').hide();
+    $('#calculator').hide();
     $('#assign-add-save-btn').show();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
@@ -791,16 +787,16 @@ $('.grade_btn').on('click', function () {
 /*
 $('.main-nav').hide();
 $('#home').hide();
-$('#community').fadeIn();
+$('#community').hide();
 $('#assignment').hide();
+$('#report').show();
 */
-
 
 $('.main-nav').show();
 $('#home').fadeIn();
 $('#community').hide();
 $('#assignment').hide();
-
+$('#report').hide();
 
 
 $('.bottom-nav a').on('click', function () {
@@ -820,6 +816,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').fadeIn();
             $('#community').hide();
             $('#assignment').hide();
+            $('#report').hide();
             $('.bottom-nav').addClass("non-border");
             isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
             $('#tab1').attr('name', 'planet');
@@ -831,6 +828,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').fadeIn(500);
             $('#assignment').hide();
+            $('#report').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles');
@@ -842,10 +840,23 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').hide();
             $('#assignment').fadeIn(500);
+            $('#report').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full');
+            break;
+        case 'report':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').hide();
+            $('#assignment').hide();
+            $('#report').fadeIn(500);
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#tab4').attr('name', 'stats-chart');
             break;
     }
 
@@ -912,12 +923,12 @@ PullToRefresh.init({
 });
 
 setTimeout(function () {
-    if(!isTest) {
-        var cssRule= "font-size:25px;color:#ff4043;";
-        var cssRule2= "font-size:15px;";
+    if (!isTest) {
+        var cssRule = "font-size:25px;color:#ff4043;";
+        var cssRule2 = "font-size:15px;";
         console.clear();
         console.log("%c경고!", cssRule);
-        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.",cssRule2);
+        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.", cssRule2);
     }
 }, 5000);
 
@@ -932,25 +943,25 @@ document.onkeydown = function (e) {
 
 window.addEventListener('load', () => {
     let matches = document.querySelectorAll("ins.ADSENSE");
-   
-           Array.from(matches).forEach((element) => {
-               let parentElement = element.parentElement;
-               if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none")  { 
-                   element.remove(); 
-               } else {
-               element.classList.remove("ADSENSE");
-               element.classList.add("adsbygoogle");
-                   (adsbygoogle = window.adsbygoogle || []).push({}); 
-               }
-           });
-   
-   });
 
-   
+    Array.from(matches).forEach((element) => {
+        let parentElement = element.parentElement;
+        if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none") {
+            element.remove();
+        } else {
+            element.classList.remove("ADSENSE");
+            element.classList.add("adsbygoogle");
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+    });
+
+});
+
+
 function shareApp() {
     const content = `성일고를 위한 모든 정보, 한 번에 쏙\n\n급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!\n\nhttps://sungil.me`
     var tempElem = document.createElement('textarea');
-    tempElem.value = content;  
+    tempElem.value = content;
     document.body.appendChild(tempElem);
     tempElem.select();
     document.execCommand("copy");
@@ -974,6 +985,6 @@ function shareApp() {
                 mobileWebUrl: 'https://sungil.me/welcome.html',
                 webUrl: 'https://sungil.me/welcome.html',
             },
-        }, ],
+        },],
     })
 }

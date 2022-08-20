@@ -57,7 +57,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
     <script type="text/javascript" src="https://unpkg.com/hammer-touchemulator@0.0.2/touch-emulator.js"></script>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
     <link rel="manifest" href="manifest.json">
     <script>
@@ -89,14 +89,22 @@
 <div class="bottom-nav non-border">
     <a class="active" data-tab="home">
         <ion-icon id="tab1" name="planet"></ion-icon>
+        <span>홈</span>
     </a>
 
     <a data-tab="community">
         <ion-icon id="tab2" name="chatbubbles-outline"></ion-icon>
+        <span>커뮤니티</span>
     </a>
 
     <a data-tab="assignment">
         <ion-icon id="tab3" name="file-tray-full-outline"></ion-icon>
+        <span>수행</span>
+    </a>
+
+    <a data-tab="report">
+        <ion-icon id="tab4" name="stats-chart-outline"></ion-icon>
+        <span>성적</span>
     </a>
 
 </div>
@@ -241,6 +249,19 @@
                     <button class="custom-btn modal-btn" style="float:right;margin-top:10px;" onclick="post(this)">등록
                     </button>
                 </div>
+                <div class="content-wrap" id="calculator">
+                    <span style="font-size: 14px;opacity: 0.5;">계산방법에 따라 다를 수 있으니 참고용으로만
+                        사용하세요<br><br></span>
+
+                    <input id="grade-rank" type="number" placeholder="내 석차" required>
+                    <input id="grade-total" type="number" placeholder="이수자" required>
+
+                    <h3 id="calculator-result" style="margin-top:20px;margin-bottom:20px;font-size:24px;">계산 결과 <span
+                            id="resultGrade" style="color: #6a89ff;"></span>등급이에요</h3>
+
+                    <button class="custom-btn modal-btn" onclick="calculateGrade()">계산하기
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -273,10 +294,9 @@
                     <ion-icon name="happy"></ion-icon>
                 </a>
 
-                <a id="service-noti" href="https://sungilapp.notion.site/7c7dfc54b14c4805a0e0e0309bc2942d"
-                    target="_blank" aria-label="업데이트 내역 열기">
+                <a id="service-noti" href="https://ssoak.notion.site" target="_blank" aria-label="업데이트 내역 열기">
 
-                    <span id="noti-preview">08-07 업데이트 내역</span>
+                    <span id="noti-preview">08-20 업데이트 내역</span>
                     <div class="icon-bubble">
                         <ion-icon name="notifications"></ion-icon>
                     </div>
@@ -356,27 +376,12 @@
                 </p>
             </div>
 
-            <div class="card dark" id="vacation-timetable"
-                style="margin:-15px;background:none;box-shadow: none;border:none;">
-                <p class="card__supporting__text"
-                    style="height:100%;display:flex;flex-direction: column;background:none;">
-                    <br>
-                    <span class="chat-bubble-text" id="dday-chat"
-                    onclick="var randomText = [
-                    '내가 무서운 얘기 해줄까?',
-                    '근데 너 그거 알아?',
-                    '방학 잘 보내고 있어? 근데',
-                    '🚨긴급 속보!!',
-                    '아니 왜 벌써'];
-                var randomTextIndex = Math.floor(Math.random() * randomText.length);
-                var randomTextResult = randomText[randomTextIndex];
-                $('#dday-chat').html(randomTextResult);"></span>
+            <div class="timetable-wrap">
+                <p class="card__supporting__text" id="ready-vacation"
+                    style="display:flex;flex-direction:column;background:none;margin:0;padding:0;"><br>
+                    <span class="chat-bubble-text" id="dday-chat">아직 새 학기 시간표가 등록되지 않았어요</span>
                     <span class="chat-bubble-text" id="dday"></span>
-                    <br>
-                <span style="font-size: 14px;opacity: 0.5;">아직 새 학기 시간표가 등록되지 않았어요.</span>
                 </p>
-            </div>
-            <div class="timetable-wrap" style="display:none;">
                 <table>
                     <thead>
                         <tr>
@@ -640,11 +645,126 @@
             <ion-icon name="add-outline"></ion-icon>
         </div>
     </section>
+
+
+
+    <section id="report">
+        <br>
+        <h3>나의 종합 등급은 <br><span id="totalGrade">계산중</span>등급</h3>
+        <canvas id="myChart" height="200"></canvas>
+
+        <br><br>
+        <h3>학기별 성적</h3>
+        <div class="semester-tab-wrap">
+            <div class="semester-tab active" onclick="openSemester(0, this);">
+                <span>1학년 1학기</span>
+            </div>
+            <div class="semester-tab" onclick="openSemester(1, this);">
+                <span>1학년 2학기</span>
+            </div>
+            <div class="semester-tab" onclick="openSemester(2, this);">
+                <span>2학년 1학기</span>
+            </div>
+            <div class="semester-tab" onclick="openSemester(3, this);">
+                <span>2학년 2학기</span>
+            </div>
+            <div class="semester-tab" onclick="openSemester(4, this);">
+                <span>3학년 1학기</span>
+            </div>
+            <div class="semester-tab" onclick="openSemester(5, this);">
+                <span>3학년 2학기</span>
+            </div>
+        </div>
+
+        <div class="semester-subject" style="opacity:0.7;justify-content: none;">
+            <h6 style="width:40%;">과목명</h6>
+            <h6 style="width:20%;">단위수</h6>
+            <h6 style="width:20%;">등급</h6>
+        </div>
+
+        <div class="semester-subjectList active" data-semester="1_1">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <div class="semester-subjectList " data-semester="1_2">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <div class="semester-subjectList " data-semester="2_1">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <div class="semester-subjectList" data-semester="2_2">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <div class="semester-subjectList" data-semester="3_1">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <div class="semester-subjectList" data-semester="3_2">
+            <div class="semester-subject">
+                <input id="subjectName" type="text" placeholder="과목명" required>
+                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
+                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
+                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
+                </button>
+            </div>
+        </div>
+
+        <button class="custom-btn modal-btn sub-btn" style="margin-top:20px;" onclick="addSubject();">
+            <ion-icon style="font-size:25px;" name="add-circle-outline"></ion-icon>추가
+        </button>
+        <button class="custom-btn modal-btn" style="margin-top:20px;" onclick="saveSemester();">저장
+        </button>
+
+        <br><br><br><br><br>
+        <br><br><br><br><br>
+
+
+        <div class="floating-btn floating-btn-with-label" id="openCalculator-btn">
+            <span style="font-size:17px">등급 계산기</span>
+            <ion-icon name="calculator-outline"></ion-icon>
+        </div>
+    </section>
+
+
 </body>
 <script src="assets/js/script.js"></script>
 <script src="assets/js/darkmode.js"></script>
 <script src="assets/js/assignment.js"></script>
 <script src="assets/js/community.js?v=220710"></script>
+<script src="assets/js/report.js"></script>
 <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async"
