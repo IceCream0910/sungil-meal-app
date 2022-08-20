@@ -202,6 +202,32 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         $('.comment-item').addClass("dark");
                         $('.comment-item-card').addClass("dark");
                     }
+                }).catch((error) => {
+                    console.log("Error getting document:", error);
+                    // 탈퇴한 게정에서 작성한 댓글
+                    var regURL = new RegExp('(^|[^"])(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)', 'gi');
+                    var regURL2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+                    var contentHTML = data.content.replace(regURL, '$1<a href="$2://$3" target="_blank">$2://$3</a>').replace(regURL2, '$1<a href="http://$2" target="_blank">$2</a>');
+                    
+                    $('#comment-list').append(`
+                        <div class="comment-item" data-createdt="`+ data.createdAt.toDate().getTime() + `">
+                         <div class="comment-item-card">
+                        <span class="comment-item-name">`+ '(탈퇴한 계정)' + `</span>
+                        <p class="comment-item-text">`+ contentHTML + `</p>
+                        </div>
+                        <div class="comment-item-footer">
+                        <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
+                        <a href="javascript:reportComment('`+ data.content + `', '` + '탈퇴한 계정' + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                            <ion-icon name="alert-circle-outline"></ion-icon>
+                        </a>
+                       </div>
+                        </div>
+                      `);
+                      //다크테마 적용
+                    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                        $('.comment-item').addClass("dark");
+                        $('.comment-item-card').addClass("dark");
+                    }
                 });
             });
 
