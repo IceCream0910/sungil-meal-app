@@ -465,14 +465,9 @@ function displaySchedule(data) {
 }
 
 function displayTimetable(data) {
-    if (data.mon.length == 0 || data.tue.length == 0 || data.wed.length == 0 || data.thu.length == 0 || data.fri.length == 0) {
-        $('#ready-vaction').show();
-    } else {
-        $('#ready-vaction').hide();
-    }
-    $('#tbody-timetable tr').eq(0).empty();
+    //$('#tbody-timetable tr').eq(0).empty();
     var day = moment(selectedDate).day();
-    var sections = document.querySelectorAll("th");
+    var sections = document.querySelectorAll("tbody th");
     for (var i = 0; i < sections.length; i++) {
         var item = sections.item(i);
         $(item).removeClass('active');
