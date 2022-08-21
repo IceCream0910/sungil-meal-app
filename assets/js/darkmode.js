@@ -67,7 +67,8 @@ function onDark() {
     $('.mdc-button__label').addClass("dark");
     $('.home-header').addClass("dark");
     $('.semester-tab').addClass("dark");
-    loadPostList();
+    $('.community-tab').addClass("dark");
+    loadPostList(currentCategory);
 }
 
 function offDark() {
@@ -111,5 +112,6 @@ function offDark() {
     $('.mdc-button__label').removeClass("dark");
     $('.home-header').removeClass("dark");
     $('.semester-tab').removeClass("dark");
-    loadPostList()
+    $('.community-tab').removeClass("dark");
+    loadPostList(currentCategory);
 }

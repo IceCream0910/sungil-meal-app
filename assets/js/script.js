@@ -465,7 +465,6 @@ function displaySchedule(data) {
 }
 
 function displayTimetable(data) {
-    //$('#tbody-timetable tr').eq(0).empty();
     var day = moment(selectedDate).day();
     var sections = document.querySelectorAll("tbody th");
     for (var i = 0; i < sections.length; i++) {
@@ -913,7 +912,7 @@ const createConfirm = (message) => {
 PullToRefresh.init({
     mainElement: 'main',
     onRefresh: function () {
-        loadPostList();
+        loadPostList(currentCategory);
     }
 });
 

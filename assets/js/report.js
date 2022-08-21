@@ -230,8 +230,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['1_1']) {
         for (var i = 0; i < currentData['1_1'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['1_1'].subjectUnits[i] * currentData['1_1'].subjectGrades[i]);
-            unitSum += parseInt(currentData['1_1'].subjectUnits[i]);
+            if (currentData['1_1'].subjectUnits[i] != '') {
+                tempSum += parseInt(currentData['1_1'].subjectUnits[i] * currentData['1_1'].subjectGrades[i]);
+                unitSum += parseInt(currentData['1_1'].subjectUnits[i]);
+            }
         }
         totalGrade[0] = tempSum / unitSum;
     }
@@ -241,8 +243,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['1_2']) {
         for (var i = 0; i < currentData['1_2'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['1_2'].subjectUnits[i] * currentData['1_2'].subjectGrades[i]);
-            unitSum += parseInt(currentData['1_2'].subjectUnits[i]);
+            if (currentData['1_2'].subjectUnits[i] != '') {
+                tempSum += parseInt(currentData['1_2'].subjectUnits[i] * currentData['1_2'].subjectGrades[i]);
+                unitSum += parseInt(currentData['1_2'].subjectUnits[i]);
+            }
         }
         totalGrade[1] = tempSum / unitSum;
     }
@@ -252,8 +256,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['2_1']) {
         for (var i = 0; i < currentData['2_1'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['2_1'].subjectUnits[i] * currentData['2_1'].subjectGrades[i]);
-            unitSum += parseInt(currentData['2_1'].subjectUnits[i]);
+            if (currentData['2_1'].subjectUnits[i] != '') {
+                tempSum += parseInt(currentData['2_1'].subjectUnits[i] * currentData['2_1'].subjectGrades[i]);
+                unitSum += parseInt(currentData['2_1'].subjectUnits[i]);
+            }
         }
         totalGrade[2] = tempSum / unitSum;
     }
@@ -263,8 +269,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['2_2']) {
         for (var i = 0; i < currentData['2_2'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['2_2'].subjectUnits[i] * currentData['2_2'].subjectGrades[i]);
-            unitSum += parseInt(currentData['2_2'].subjectUnits[i]);
+            if (currentData['2_2'].subjectUnits[i] != '') {
+                tempSum += parseInt(currentData['2_2'].subjectUnits[i] * currentData['2_2'].subjectGrades[i]);
+                unitSum += parseInt(currentData['2_2'].subjectUnits[i]);
+            }
         }
         totalGrade[3] = tempSum / unitSum;
     }
@@ -274,8 +282,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['3_1']) {
         for (var i = 0; i < currentData['3_1'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['3_1'].subjectUnits[i] * currentData['3_1'].subjectGrades[i]);
-            unitSum += parseInt(currentData['3_1'].subjectUnits[i]);
+            if (currentData['3_1'].subjectUnits[i] != '') {
+                tempSum += parseInt(currentData['3_1'].subjectUnits[i] * currentData['3_1'].subjectGrades[i]);
+                unitSum += parseInt(currentData['3_1'].subjectUnits[i]);
+            }
         }
         totalGrade[4] = tempSum / unitSum;
     }
@@ -285,8 +295,10 @@ function calculateTotalGrade() {
     var unitSum = 0;
     if (currentData['3_2']) {
         for (var i = 0; i < currentData['3_2'].subjectNames.length; i++) {
-            tempSum += parseInt(currentData['3_2'].subjectUnits[i] * currentData['3_2'].subjectGrades[i]);
-            unitSum += parseInt(currentData['3_2'].subjectUnits[i]);
+            if (currentData['3_2'].subjectGrades[i] != '') {
+                tempSum += parseInt(currentData['3_2'].subjectUnits[i] * currentData['3_2'].subjectGrades[i]);
+                unitSum += parseInt(currentData['3_2'].subjectUnits[i]);
+            }
         }
         totalGrade[5] = tempSum / unitSum;
     }
@@ -297,7 +309,7 @@ function calculateTotalGrade() {
     var totalGradeExceptZero = []; //0 제외
     var totalSumExceptZero = 0;
     for (var i = 0; i < totalGrade.length; i++) {
-        if (totalGrade[i] != 0) {
+        if (totalGrade[i] != 0 && totalGrade[i] != undefined && totalGrade[i] != '' && totalGrade[i] != null && isNaN(totalGrade[i]) == false) {
             totalGradeExceptZero.push(totalGrade[i]);
             totalSumExceptZero = totalSumExceptZero + totalGrade[i];
         }

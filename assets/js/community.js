@@ -2,14 +2,25 @@
 const auth = firebase.auth();
 var db = firebase.firestore();
 
+var currentCategory = 'all';
+
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
-        loadPostList();
+        loadPostList('all');
         $('#community .no-login').hide();
         $('#community .main-community').show();
         $('#community #account-btn').show();
         $('#community .header').show();
+        db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
+            var user = doc_user.data();
+            $('#header-username').text(user.nickname);
+            if (user.profileImg) {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${user.profileImg + 1}.png`);
+            } else {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
+            }
+        });
         Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
     } else {
         $('#community .no-login').show();
@@ -19,6 +30,10 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
+var isDismissCommunityCallout = localStorage.getItem("dismiss_community_callout") || false
+if (isDismissCommunityCallout == true) {
+    $('.callout').hide();
+}
 
 function openLogin() {
     if (isApp()) {
@@ -56,6 +71,7 @@ const loginGoogle = () => {
                     uid: tempData[0],
                     email: tempData[1],
                     nickname: result.user.displayName,
+                    profileImg: Math.floor(Math.random() * 5),
                     admin: false,
                 }
 
@@ -178,7 +194,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
 
 $('#community #account-btn').on('click', function () {
     $('.sheet-modal').css('height', '30%');
-    $('#modal-title').html('계정 설정');
+    $('#modal-title').html('내 프로필');
     $('.content-wrap').hide();
     $('#account').show();
     $('#exam').hide();
@@ -191,6 +207,10 @@ $('#community #account-btn').on('click', function () {
     db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
         var user = doc_user.data();
         $('#account-username').val(user.nickname);
+        $('#header-username').text(user.nickname);
+        var profileImg = user.profileImg;
+        $('.profile-image-btn').removeClass('active');
+        $(document.getElementsByClassName('profile-image-btn')[profileImg]).addClass('active');
     });
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
@@ -311,6 +331,7 @@ $('.writePost-btn').on('click', function () {
 
 function post(target) {
     var title = $('#post-title').val();
+    var category = $('#category-select').val();
     var content = editor.getMarkdown();
     var uid = firebase.auth().currentUser.uid;
     if (content) {
@@ -320,7 +341,7 @@ function post(target) {
             title: title,
             userId: uid,
             content: content,
-            category: '자유',
+            category: category || '자유',
             createdAt: timestamp,
         }
         db.collection('board').add(data).then((result) => {
@@ -331,18 +352,22 @@ function post(target) {
             console.log(err);
         });
         $('.snackbar').hide();
-        loadPostList();
+        loadPostList('all');
     } else {
-        toast('게시글 내용을 작성해주세요.')
+        toast('글 내용을 작성해주세요.')
     }
 }
 
 var lastVisible;
 var isFirstLoad = true;
 //게시물 로딩
-function loadPostList() {
-    db.collection('board').orderBy("createdAt").limitToLast(4)
-        .get()
+function loadPostList(category) {
+    if (category == 'all') {
+        var database = db.collection('board').orderBy("createdAt").limitToLast(4);
+    } else {
+        var database = db.collection('board').where('category', '==', category).orderBy("createdAt").limitToLast(4);
+    }
+    database.get()
         .then((querySnapshot) => {
             $('.post-listview').html('');
             querySnapshot.forEach((doc) => {
@@ -354,6 +379,7 @@ function loadPostList() {
                         `
                         <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                         <div class="post-header">
+                        <img src="assets/icons/profileImg/letter`+ ((user.profileImg) ? user.profileImg + 1 : 1) + `.png" class="profile-img" />
                             <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                 <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
                             </span>
@@ -397,24 +423,29 @@ function loadPostList() {
                 isFirstLoad = false;
             });
         });
-
 }
 
 //firebase infinite scroll
-function loadMore() {
+function loadMore(category) {
     if (lastVisible) {
-        var nextVisible = db.collection('board').orderBy("createdAt").limitToLast(4).endBefore(lastVisible);
+        if (category == 'all') {
+            var nextVisible = db.collection('board').orderBy("createdAt").limitToLast(4).endBefore(lastVisible);
+        } else {
+            var nextVisible = db.collection('board').where('category', '==', category).orderBy("createdAt").limitToLast(4).endBefore(lastVisible);
+        }
         nextVisible.get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     var data = doc.data();
-                    lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length = 1)];
+                    lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length - 1)];
+                    console.log(lastVisible, querySnapshot.docs.length);
                     db.collection('users').doc(data.userId).get().then((doc_user) => {
                         var user = doc_user.data();
                         $('.post-listview').prepend(
                             `
                             <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
                             <div class="post-header">
+                            <img src="assets/icons/profileImg/letter`+ ((user.profileImg) ? user.profileImg + 1 : 1) + `.png" class="profile-img" />
                                 <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
                                     <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
                                 </span>
@@ -472,10 +503,8 @@ const options = {}
 // observer: IntersectionObserver instance
 const io = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
-
-
         if (entry.isIntersecting && $('.post-listview').html().length > 5) {
-            loadMore();
+            loadMore(currentCategory || 'all');
         }
     })
 }, options)
@@ -824,15 +853,25 @@ function checkNicknameDuplicate(nickname) {
                 $('.sheet-backdrop').removeClass('backdrop-in');
 
                 var data = {
-                    nickname: $('#login-username').val(),
+                    nickname: nickname,
                 }
 
                 db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
                     $('#community #account-btn').show();
+                    $('#header-username').text(nickname);
                 }).catch((err) => {
                     toast(err)
                     console.log(err);
                 })
+            } else if ($('#header-username').text() == nickname) { //변경 사항 없으면 닫기
+                $('body').css('overflow', 'auto');
+                $('.modal-in').css('bottom', '-1850px');
+                setTimeout(function () {
+                    $('.modal-in').css('display', 'none');
+                }, 100);
+
+                $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+                $('.sheet-backdrop').removeClass('backdrop-in');
             } else {
                 toast('이미 사용중인 닉네임입니다.')
             }
@@ -841,4 +880,28 @@ function checkNicknameDuplicate(nickname) {
             console.log('Error getting documents', err);
             toast(err)
         });
+}
+
+//프로필 사진 변경
+function changeProfileImg(imgNum) {
+    var data = {
+        profileImg: imgNum,
+    }
+
+    db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
+        $('.profile-image-btn').removeClass('active');
+        $(document.getElementsByClassName('profile-image-btn')[imgNum]).addClass('active');
+        $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${imgNum + 1}.png`);
+    }).catch((err) => {
+        toast(err)
+        console.log(err);
+    })
+}
+
+//커뮤니티 카테고리 탭
+function changeCommunityCategory(category, btn) {
+    currentCategory = category;;
+    $('.community-tab').removeClass('active');
+    $(btn).addClass('active');
+    loadPostList(category);
 }

@@ -61,11 +61,6 @@
 
     <link rel="manifest" href="manifest.json">
     <script>
-        var mql_watch = window.matchMedia("(max-width: 400px) and (max-height: 500px)");
-        if (mql_watch.matches) {
-            console.log("애플워치");
-            location.href = 'index_watch.html'
-        }
         if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("service-worker.js"); }); } jQuery.browser = {}; (function () { jQuery.browser.msie = false; jQuery.browser.version = 0; if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) { jQuery.browser.msie = true; jQuery.browser.version = RegExp.$1; } })(); </script>
 </head>
 <header class="main-nav">
@@ -121,7 +116,6 @@
     </div>
 </div>
 <!-- confirm dialog -->
-
 
 <div class="menuBanner" style="display:none;"> <a class="close-modal" href="javascript:$('.menuBanner').fadeOut();">
         <svg viewBox="0 0 20 20">
@@ -233,6 +227,29 @@
                         <ion-icon name="shuffle-outline"></ion-icon>
                     </button>
 
+                    <div class="profile-image-list">
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter1.png)"" onclick="
+                            changeProfileImg(0)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter2.png)"" onclick="
+                            changeProfileImg(1)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter3.png)"" onclick="
+                            changeProfileImg(2)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter4.png)"" onclick="
+                            changeProfileImg(3)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter5.png)"" onclick="
+                            changeProfileImg(4)">
+                        </button>
+                    </div>
+
                     <button class="custom-btn modal-btn" onclick="edit_saveAccountDb()">완료
                     </button>
                     <br><br>
@@ -240,8 +257,12 @@
                     </button>
                 </div>
                 <div class="content-wrap" id="writePost">
-
                     <input id="post-title" type="text" placeholder="제목(선택)" style="font-size:16px;">
+                    <select id="category-select" name="category-select">
+                        <option value="자유">자유</option>
+                        <option value="질문">질문/고민</option>
+                        <option value="개발">개발자 나와라</option>
+                    </select>
                     <div style="border-radius:10px; position: relative;" data-validate="글 내용 작성">
                         <div id="editor" style="height:40vh"></div>
                     </div>
@@ -256,8 +277,9 @@
                     <input id="grade-rank" type="number" placeholder="내 석차" required>
                     <input id="grade-total" type="number" placeholder="이수자" required>
 
-                    <h3 id="calculator-result" style="margin-top:20px;margin-bottom:20px;font-size:24px;">계산 결과 <span
-                            id="resultGrade" style="color: #6a89ff;"></span>등급이에요</h3>
+                    <h3 id="calculator-result" style="margin-top:20px;margin-bottom:20px;font-size:24px;">계산 결과
+                        <span id="resultGrade" style="color: #6a89ff;"></span>등급이에요
+                    </h3>
 
                     <button class="custom-btn modal-btn" onclick="calculateGrade()">계산하기
                     </button>
@@ -289,9 +311,9 @@
         <div class="home-header">
             <img src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
             <div style="display:flex;flex-direction:row;justify-content: center;align-items: center;">
-                <a href="javascript:shareApp()" style="font-size:35px;position:relative;top:3px;opacity:0.6;"
-                    aria-label="웰컴 페이지 열기">
-                    <ion-icon name="happy"></ion-icon>
+                <a href="javascript:shareApp()" style="font-size:30px;position:relative;top:3px;opacity:0.6;"
+                    aria-label="앱 공유">
+                    <ion-icon name="share"></ion-icon>
                 </a>
 
                 <a id="service-noti" href="https://ssoak.notion.site" target="_blank" aria-label="업데이트 내역 열기">
@@ -377,11 +399,6 @@
             </div>
 
             <div class="timetable-wrap">
-                <p class="card__supporting__text" id="ready-vacation"
-                    style="display:flex;flex-direction:column;background:none;margin:0;padding:0;"><br>
-                    <span class="chat-bubble-text" id="dday-chat">아직 새 학기 시간표가 등록되지 않았어요</span>
-                    <span class="chat-bubble-text" id="dday"></span>
-                </p>
                 <table>
                     <thead>
                         <tr>
@@ -515,12 +532,9 @@
 
 
     <section id="community">
-        <div class="header">
-            <img src="assets/icons/community.png" height="55px" style="margin:-5px;margin-top:-7px;">
-            <button class="custom-btn" id="account-btn" style="float:right;display:none;">
-                <ion-icon name="person-circle-outline" style="margin: 0;
-                font-size: 25px;"></ion-icon>
-            </button>
+        <div class="header" id="account-btn">
+            <img class="profile-img" id="header-profile-img" src="assets/icons/profileImg/letter1.png">
+            <h3 class="card__primary__title__text" id="header-username" style="padding-top: 5px;"></h3>
         </div>
 
         <div class="no-login" style="display:none;">
@@ -540,73 +554,85 @@
         </div>
 
         <div class="main-community" style="display:none;">
-            <div class="notice-item" style="margin-top: 0;" onclick="openPost('/board.html?id=RGpIuB3N90kepjixtEpF');">
-                <div class="commnity-notice">
-                    <ion-icon name="notifications"></ion-icon>
-                    <span>환경 별 커뮤니티 지원 기능 안내</span>
-                </div>
+            <div class="callout custom-btn sub-btn" style="height:fit-content;margin:-20px;width:95vw;">
+                <span onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');">우리 모두를 위해 커뮤니티 이용가이드를 준수해주세요</span>
+                <ion-icon name="close" style="font-size:20px;"
+                    onclick="$('.callout').hide();localStorage.setItem('dismiss_community_callout', true)"></ion-icon>
             </div>
 
-            <div class="notice-item" onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');">
-                <div class="commnity-notice">
-                    <ion-icon name="notifications"></ion-icon>
-                    <span>커뮤니티 이용가이드</span>
+            <div class="community-tab-wrap">
+                <div class="community-tab active" onclick="changeCommunityCategory('all', this);">
+                    <span>전체</span>
+                </div>
+                <div class="community-tab" onclick="changeCommunityCategory('자유', this);">
+                    <span>자유</span>
+                </div>
+                <div class="community-tab" onclick="changeCommunityCategory('공지', this);">
+                    <span>공지</span>
+                </div>
+                <div class="community-tab" onclick="changeCommunityCategory('질문', this);">
+                    <span>질문/고민</span>
+                </div>
+                <div class="community-tab" onclick="changeCommunityCategory('개발', this);">
+                    <span>개발자 나와라</span>
                 </div>
             </div>
-            <main>
-                <div class="post-listview">
-                    <div class="card-body">
-                        <h2 class="card-intro skeleton">
-                        </h2>
-                        <p class="card-title skeleton">
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-intro skeleton">
-                        </h2>
-                        <p class="card-title skeleton">
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-intro skeleton">
-                        </h2>
-                        <p class="card-title skeleton">
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-intro skeleton">
-                        </h2>
-                        <p class="card-title skeleton">
-                        </p>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="card-intro skeleton">
-                        </h2>
-                        <p class="card-title skeleton">
-                        </p>
-                    </div>
+        </div>
+
+        <main>
+            <div class="post-listview">
+                <div class="card-body">
+                    <h2 class="card-intro skeleton">
+                    </h2>
+                    <p class="card-title skeleton">
+                    </p>
                 </div>
-            </main>
-
-            <div class="bottom_postList">
-
+                <div class="card-body">
+                    <h2 class="card-intro skeleton">
+                    </h2>
+                    <p class="card-title skeleton">
+                    </p>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-intro skeleton">
+                    </h2>
+                    <p class="card-title skeleton">
+                    </p>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-intro skeleton">
+                    </h2>
+                    <p class="card-title skeleton">
+                    </p>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-intro skeleton">
+                    </h2>
+                    <p class="card-title skeleton">
+                    </p>
+                </div>
             </div>
-            <br>
-            <script async
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-                crossorigin="anonymous"></script>
-            <!-- 배너광고1
+        </main>
+
+        <div class="bottom_postList">
+
+        </div>
+        <br>
+        <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
+            crossorigin="anonymous"></script>
+        <!-- 배너광고1
 <ins class="adsbygoogle"
      style="display:block;width:100%;"
      data-ad-client="ca-pub-3961376550354587"
      data-ad-slot="9623797201"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins> -->
-            <br><Br>
+        <br><Br>
 
-            <div class="floating-btn writePost-btn">
-                <ion-icon name="pencil-outline" style="font-size:20px;"></ion-icon>
-            </div>
+        <div class="floating-btn writePost-btn">
+            <ion-icon name="pencil-outline" style="font-size:20px;"></ion-icon>
+        </div>
         </div>
 
     </section>
@@ -678,8 +704,8 @@
 
         <div class="semester-subject" style="opacity:0.7;justify-content: none;">
             <h6 style="width:40%;">과목명</h6>
-            <h6 style="width:20%;">단위수</h6>
-            <h6 style="width:20%;">등급</h6>
+            <h6 style="width:15%;">단위수</h6>
+            <h6 style="width:25%;">등급</h6>
         </div>
 
         <div class="semester-subjectList active" data-semester="1_1">
