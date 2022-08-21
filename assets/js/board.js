@@ -61,6 +61,8 @@ var articleRef = db.collection('board').doc(getParam('id')).get();
 var content;
 var viewer;
 var authorId;
+var category;
+
 articleRef.then(function (doc) {
     if (doc.data()) {
         if (firebase.auth().currentUser.uid == doc.data().userId) {
@@ -69,10 +71,16 @@ articleRef.then(function (doc) {
         authorId = doc.data().userId;
         db.collection('users').doc(doc.data().userId).get().then((doc_user) => {
             var user = doc_user.data();
+            if (user.profileImg) {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${user.profileImg + 1}.png`);
+            } else {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
+            }
             $('#uname').html(((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)));
             $('#createdAt').html(timeForToday(doc.data().createdAt.toDate()));
             $('#post-title').html(doc.data().title);
             content = doc.data().content;
+            category = doc.data().category;
 
             viewer = new toastui.Editor.factory({
                 el: document.querySelector('#viewer'),
@@ -92,7 +100,7 @@ articleRef.then(function (doc) {
         toast('존재하지 않는 글입니다.');
         setTimeout(() => {
             window.close();
-        },1500);
+        }, 1500);
     }
 });
 
@@ -144,8 +152,8 @@ function timeForToday(value) {
 
 
 //댓글
-var regURL =new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)","gi");
-var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)","gi");
+var regURL = new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)", "gi");
+var regEmail = new RegExp("([xA1-xFEa-z0-9_-]+@[xA1-xFEa-z0-9-]+\.[a-z0-9-]+)", "gi");
 db.collection("board").doc(getParam('id')).collection('comments').orderBy("createdAt")
     .onSnapshot((querySnapshot) => {
         var commentCount = querySnapshot.size;
@@ -159,7 +167,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                     var regURL = new RegExp('(^|[^"])(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)', 'gi');
                     var regURL2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
                     var contentHTML = data.content.replace(regURL, '$1<a href="$2://$3" target="_blank">$2://$3</a>').replace(regURL2, '$1<a href="http://$2" target="_blank">$2</a>');
-                    
+
                     if (firebase.auth().currentUser.uid == data.userId) { //댓글 작성자이면
                         $('#comment-list').append(`
                         <div class="comment-item"  data-createdt="`+ data.createdAt.toDate().getTime() + `">
@@ -169,7 +177,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
-                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '` + moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss") + `');">
                             <ion-icon name="alert-circle-outline"></ion-icon>
                         </a>
                         <a href="javascript:openEditComment('`+ doc.id + `', '` + data.content + `', '` + data.userId + `');">
@@ -190,7 +198,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
-                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                        <a href="javascript:reportComment('`+ data.content + `', '` + data.userId + `', '` + moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss") + `');">
                             <ion-icon name="alert-circle-outline"></ion-icon>
                         </a>
                        </div>
@@ -208,7 +216,7 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                     var regURL = new RegExp('(^|[^"])(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)', 'gi');
                     var regURL2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
                     var contentHTML = data.content.replace(regURL, '$1<a href="$2://$3" target="_blank">$2://$3</a>').replace(regURL2, '$1<a href="http://$2" target="_blank">$2</a>');
-                    
+
                     $('#comment-list').append(`
                         <div class="comment-item" data-createdt="`+ data.createdAt.toDate().getTime() + `">
                          <div class="comment-item-card">
@@ -217,13 +225,13 @@ db.collection("board").doc(getParam('id')).collection('comments').orderBy("creat
                         </div>
                         <div class="comment-item-footer">
                         <p class="comment-item-time">`+ timeForToday(data.createdAt.toDate()) + `</p>
-                        <a href="javascript:reportComment('`+ data.content + `', '` + '탈퇴한 계정' + `', '`+moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss")+`');">
+                        <a href="javascript:reportComment('`+ data.content + `', '` + '탈퇴한 계정' + `', '` + moment(data.createdAt.toDate()).format("YYYY-MM-DD HH:mm:ss") + `');">
                             <ion-icon name="alert-circle-outline"></ion-icon>
                         </a>
                        </div>
                         </div>
                       `);
-                      //다크테마 적용
+                    //다크테마 적용
                     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
                         $('.comment-item').addClass("dark");
                         $('.comment-item-card').addClass("dark");
@@ -260,7 +268,7 @@ function submit_comment() {
             content: content,
             createdAt: timestamp,
         })
-        
+
         $('html, body').animate({
             scrollTop: $("#comment-cnt").offset().top
         }, 500);
@@ -271,14 +279,14 @@ function submit_comment() {
             if (user.fcmToken) { //token 존재
                 $.ajax({
                     type: "GET",
-                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 새로운 댓글이 달렸습니다.&desc=${($('#post-title').text()) ? $('#post-title').text()+'에 달린 댓글 : ' : ''  + content}&token=${user.fcmToken}`,
+                    url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=내가 쓴 글에 새로운 댓글이 달렸습니다.&desc=${($('#post-title').text()) ? $('#post-title').text() + '에 달린 댓글 : ' : '' + content}&token=${user.fcmToken}`,
                     success: function (result) {
                         console.log(result);
                     }
                 });
             }
         });
-        
+
     }
 
 
@@ -348,9 +356,10 @@ function openEditPost() {
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
     $('#post-title-edit').val($('#post-title').text());
+    $('#category-select').val(category);
     $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
     $('.sheet-modal').removeClass('full-modal');
-    
+
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         editor = new toastui.Editor.factory({
             el: document.querySelector('#editor'),
@@ -384,6 +393,7 @@ function openEditPost() {
 function post() {
     var title = $('#post-title-edit').val();
     var content = editor.getMarkdown();
+    var category = $('#category-select').val();
     var uid = firebase.auth().currentUser.uid;
     if (content) {
         $('#edit-post-btn').text('업로드 중...');
@@ -391,7 +401,7 @@ function post() {
             title: title,
             userId: uid,
             content: content,
-            category: '자유',
+            category: category,
         }
         db.collection('board').doc(getParam('id')).update(data).then((result) => {
             location.reload();
@@ -431,61 +441,63 @@ function reportViolation() {
     var checkedValues = $('#report #report-checklist input:checked').map(function () {
         return this.value;
     }).get();
-    if(checkedValues.length == 0) {
+    if (checkedValues.length == 0) {
         toast('신고 사유를 한 개 이상 선택해주세요')
     } else {
-        var payload = JSON.stringify({ "fallback": "새로운 신고가 접수되었습니다.",
-  
-        "text": "커뮤니티 글에 대한 새로운 신고가 접수되었습니다.",
-        "color": "danger",
-        "fields": [
-          {
-              "title": "신고한 사용자 :",
-              "value": firebase.auth().currentUser.uid,
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-          {
-              "title": "신고 사유 :",
-              "value": checkedValues.toString(),
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-          {
-              "title": "신고 내용 :",
-              "value": $('#report-content').val() || '별도 내용 없음',
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-            {
-                "title": "게시글 작성자 :",
-                "value": authorId,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            },
-            {
-                "title": "게시글 내용 :",
-                "value": content,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            },
-            {
-                "title": "게시글 링크:",
-                "value": window.location.href,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            }
-        ] });
-        var url = 'https://hooks.slack.com/services/'+'T03QS4GLKMH/B03QUK87L2G/'+'IHooRkeix2CRC'+'aXmiswVgDBz';
-      
-      $.post( url, payload ).done(function( data ) { 
-        console.log("신고 등록됨"); 
-        toast('신고가 등록되었습니다.')
-        $('#report-content').val("");
-        $('body').css('overflow', 'auto');
-              $('.modal-in').css('bottom', '-1850px');
-              setTimeout(function () {
-                  $('.modal-in').css('display', 'none');
-              }, 100);
-  
-              $('.sheet-backdrop').removeClass('backdrop-in');
-      })
+        var payload = JSON.stringify({
+            "fallback": "새로운 신고가 접수되었습니다.",
+
+            "text": "커뮤니티 글에 대한 새로운 신고가 접수되었습니다.",
+            "color": "danger",
+            "fields": [
+                {
+                    "title": "신고한 사용자 :",
+                    "value": firebase.auth().currentUser.uid,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "신고 사유 :",
+                    "value": checkedValues.toString(),
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "신고 내용 :",
+                    "value": $('#report-content').val() || '별도 내용 없음',
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "게시글 작성자 :",
+                    "value": authorId,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "게시글 내용 :",
+                    "value": content,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "게시글 링크:",
+                    "value": window.location.href,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                }
+            ]
+        });
+        var url = 'https://hooks.slack.com/services/' + 'T03QS4GLKMH/B03QUK87L2G/' + 'IHooRkeix2CRC' + 'aXmiswVgDBz';
+
+        $.post(url, payload).done(function (data) {
+            console.log("신고 등록됨");
+            toast('신고가 등록되었습니다.')
+            $('#report-content').val("");
+            $('body').css('overflow', 'auto');
+            $('.modal-in').css('bottom', '-1850px');
+            setTimeout(function () {
+                $('.modal-in').css('display', 'none');
+            }, 100);
+
+            $('.sheet-backdrop').removeClass('backdrop-in');
+        })
     }
-   
+
 }
 
 //댓글 신고
@@ -513,72 +525,74 @@ function reportComment(content, userId, createdAt) {
         reportViolationComment(content, userId, createdAt);
     });
 }
-    
+
 function reportViolationComment(content, userId, createdAt) {
     //get all of checked values in 'report-checklist' id
     var checkedValues = $('#reportComment #report-checklist input:checked').map(function () {
         return this.value;
     }).get();
-    if(checkedValues.length == 0) {
+    if (checkedValues.length == 0) {
         toast('신고 사유를 한 개 이상 선택해주세요')
     } else {
-        var payload = JSON.stringify({ "fallback": "새로운 신고가 접수되었습니다.",
-  
-        "text": "커뮤니티 댓글에 대한 새로운 신고가 접수되었습니다.",
-        "color": "danger",
-        "fields": [
-          {
-              "title": "신고한 사용자 :",
-              "value": firebase.auth().currentUser.uid,
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-          {
-              "title": "신고 사유 :",
-              "value": checkedValues.toString(),
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-          {
-              "title": "신고 내용 :",
-              "value": $('#report-comment-content').val() || '별도 내용 없음',
-              "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-          },
-            {
-                "title": "댓글 작성자 :",
-                "value": userId,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            },
-            {
-                "title": "댓글 내용 :",
-                "value": content,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            },
-            {
-                "title": "댓글 작성일자 :",
-                "value": createdAt,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            },
-            {
-                "title": "댓글이 달린 게시글 링크:",
-                "value": window.location.href,
-                "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
-            }
-        ] });
-      var url = 'https://hooks.slack.com/services/'+'T03QS4GLKMH/B03QUK87L2G/'+'IHooRkeix2CRC'+'aXmiswVgDBz';
-      
-      $.post( url, payload ).done(function( data ) { 
-        console.log("신고 등록됨"); 
-        toast('신고가 등록되었습니다.')
-        $('#report-content').val("");
-        $('body').css('overflow', 'auto');
-              $('.modal-in').css('bottom', '-1850px');
-              setTimeout(function () {
-                  $('.modal-in').css('display', 'none');
-              }, 100);
-  
-              $('.sheet-backdrop').removeClass('backdrop-in');
-      })
+        var payload = JSON.stringify({
+            "fallback": "새로운 신고가 접수되었습니다.",
+
+            "text": "커뮤니티 댓글에 대한 새로운 신고가 접수되었습니다.",
+            "color": "danger",
+            "fields": [
+                {
+                    "title": "신고한 사용자 :",
+                    "value": firebase.auth().currentUser.uid,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "신고 사유 :",
+                    "value": checkedValues.toString(),
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "신고 내용 :",
+                    "value": $('#report-comment-content').val() || '별도 내용 없음',
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "댓글 작성자 :",
+                    "value": userId,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "댓글 내용 :",
+                    "value": content,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "댓글 작성일자 :",
+                    "value": createdAt,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                },
+                {
+                    "title": "댓글이 달린 게시글 링크:",
+                    "value": window.location.href,
+                    "short": false // `value`가 다른 값과 나란히 표시될 정도로 짧은지를 나타내는 옵션 플래그
+                }
+            ]
+        });
+        var url = 'https://hooks.slack.com/services/' + 'T03QS4GLKMH/B03QUK87L2G/' + 'IHooRkeix2CRC' + 'aXmiswVgDBz';
+
+        $.post(url, payload).done(function (data) {
+            console.log("신고 등록됨");
+            toast('신고가 등록되었습니다.')
+            $('#report-content').val("");
+            $('body').css('overflow', 'auto');
+            $('.modal-in').css('bottom', '-1850px');
+            setTimeout(function () {
+                $('.modal-in').css('display', 'none');
+            }, 100);
+
+            $('.sheet-backdrop').removeClass('backdrop-in');
+        })
     }
-   
+
 }
 
 
@@ -741,11 +755,11 @@ function toast(msg) {
 
 
 setTimeout(function () {
-        var cssRule= "font-size:25px;color:#ff4043;";
-        var cssRule2= "font-size:15px;";
-        console.clear();
-        console.log("%c경고!", cssRule);
-        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.",cssRule2);
+    var cssRule = "font-size:25px;color:#ff4043;";
+    var cssRule2 = "font-size:15px;";
+    console.clear();
+    console.log("%c경고!", cssRule);
+    console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.", cssRule2);
 }, 5000);
 
 //prevent f12
@@ -761,7 +775,7 @@ var originalSize = jQuery(window).width() + jQuery(window).height();
 
 // resize #sheet-modal on resize window
 $(window).resize(function () {
-    if($(window).width() + $(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
+    if ($(window).width() + $(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
         $('.sheet-modal').addClass('full-modal')
         $('.sheet-modal').css('height', '100vh')
     } else {
@@ -774,12 +788,12 @@ $(window).resize(function () {
 });
 
 $(document).on('focusout', 'input, #editor', function () { //키보드 닫힐 때
-    if($('#writePost').is(':visible')) {
+    if ($('#writePost').is(':visible')) {
         $('.sheet-modal').removeClass('full-modal');
         setTimeout(function () {
             $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
             $('.sheet-modal').removeClass('full-modal');
         }, 100);
     }
-    
+
 });
