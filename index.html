@@ -284,6 +284,15 @@
                     <button class="custom-btn modal-btn" onclick="calculateGrade()">계산하기
                     </button>
                 </div>
+
+                <div class="content-wrap" id="selfcheck">
+                    <input id="selfcheck-name" type="text" placeholder="이름" required>
+                    <input id="selfcheck-birth" type="text" placeholder="생년월일(6자리)" required>
+                    <input id="selfcheck-pwd" type="password" placeholder="자가진단 앱 비밀번호" required>
+
+                    <button class="custom-btn modal-btn" onclick="saveSelfcheckInfo()">저장하기
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -366,6 +375,23 @@
                     </div>
                     <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
                     </p>
+                </div>
+            </div>
+            <Br><Br>
+            <div class="card">
+                <div class="card__primary__title selfcheck-wrap">
+                    <div style="padding:0;line-height:1;">
+                        <span class="card__primary__title"
+                            style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
+                            <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
+                                href="javascript:openSelfcheckModal();">정보
+                                수정 ></a>
+                        </span>
+                        <span id="selfcheck-status">제출 여부 확인 중</span>
+                    </div>
+                    <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
+                        <ion-icon name="flash"></ion-icon>제출하기
+                    </button>
                 </div>
             </div>
         </div>

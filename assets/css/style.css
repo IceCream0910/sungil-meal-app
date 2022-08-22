@@ -2069,7 +2069,7 @@ thead th.dark {
     }
 
     .schedule-wrap {
-        margin-top: -200px;
+        margin-top: -100px;
         float: right;
         width: 40%;
 
@@ -3458,4 +3458,24 @@ input[type=checkbox] label {
     background-color: rgb(48, 48, 48);
     border: #6a89ff 1px solid;
     color: #6a89ff;
+}
+
+.selfcheck-wrap {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.selfcheck-wrap #selfcheck-status {
+    font-size: 15px;
+    opacity: 0.7;
+}
+
+.selfcheck-wrap .card__primary__title {
+    font-size: 18px;
+    padding: 0;
+}
+
+.selfcheck-wrap button {
+    margin-top: 10px;
 }

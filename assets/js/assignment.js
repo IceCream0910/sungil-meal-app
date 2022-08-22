@@ -229,6 +229,7 @@ function openAssignDetails(id) {
     $('.content-wrap').hide();
     $('#assignDetails').show();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assignDate').html('<ion-icon name="time-outline"></ion-icon>' + moment(new Date(targetItem.date)).format('YYYY년 MM월 DD일'));
     $('#assignPeriod').text(targetItem.period + '교시 ' + targetItem.subject);
     $('body').css('overflow', 'hidden');
@@ -252,6 +253,7 @@ function assignEditMode() {
     $('.content-wrap').hide();
     $('#assessment').show();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').show();
     $('#title').val(targetItem.title);
@@ -352,6 +354,7 @@ function openClassAssign() {
     $('.content-wrap').hide();
     $('#myClassAssign').show();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').show();
     $('body').css('overflow', 'hidden');

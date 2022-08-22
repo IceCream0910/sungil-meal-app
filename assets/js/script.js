@@ -661,6 +661,7 @@ $('.pop').on('click', function () {
     $('#datepicker').show();
     $('#exam').hide();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -691,6 +692,7 @@ $('.addAssignment-btn').on('click', function () {
     $('#assessment').show();
     $('#exam').hide();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assign-add-save-btn').show();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
@@ -981,4 +983,148 @@ function shareApp() {
             },
         },],
     })
+}
+
+getSelfCheckStatus()
+/* 자가진단 */
+function getSelfCheckStatus() {
+    const name = localStorage.getItem('selfcheck-name');
+    const birth = localStorage.getItem('selfcheck-birth');
+    const pwd = localStorage.getItem('selfcheck-pwd');
+
+    if (name == null || birth == null || pwd == null) {
+        $('#selfcheck-status').text('학생 정보를 입력해주세요');
+    } else {
+        $.ajax({
+            type: "GET",
+            url: `https://selfcheck-api.vercel.app/status?name=${name}&birth=${birth}&password=${pwd}`,
+            success: function (result) {
+                if (result) {
+                    if (result[0].registerRequired == true) { //안함
+                        $('#selfcheck-status').text('오늘 제출 안 함')
+                    } else {
+                        $('#selfcheck-status').text(`${moment(result[0].registeredAt).format('HH시 mm분')} ${(result[0].isHealthy) ? '정상으로' : '유증상으로'} 제출`)
+                    }
+
+                } else {
+                    $('#selfcheck-status').text('불러오기 실패')
+                }
+            },
+            error: function (request, status, error) {
+                $('#selfcheck-status').text('불러오기 실패');
+                toast('자가진단 정보를 불러오는 데 실패했어요. 정보를 모두 올바르게 입력했는지 확인해주세요.')
+            }
+        });
+    }
+
+}
+
+function openSelfcheckModal() {
+    $('#modal-title').html('자가진단 정보 수정');
+    $('.content-wrap').hide();
+    $('#datepicker').hide();
+    $('#exam').hide();
+    $('#calculator').hide();
+    $('#selfcheck').show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    const name = localStorage.getItem('selfcheck-name') || '';
+    const birth = localStorage.getItem('selfcheck-birth') || '';
+    const pwd = localStorage.getItem('selfcheck-pwd') || '';
+    $('#selfcheck-name').val(name)
+    $('#selfcheck-birth').val(birth)
+    $('#selfcheck-pwd').val(pwd)
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#selfcheck').height() + 130 + 'px');
+    }, 100);
+}
+
+function submitSelfCheck() {
+    const name = localStorage.getItem('selfcheck-name');
+    const birth = localStorage.getItem('selfcheck-birth');
+    const pwd = localStorage.getItem('selfcheck-pwd');
+
+    if (name == null || birth == null || pwd == null) {
+        toast('학생 정보를 먼저 등록해주세요');
+    } else {
+        const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
+        $('#selfcheck-btn').html('학교 가는 중');
+        var progressCnt = 1;
+        const progress = setInterval(function () {
+            $('#selfcheck-btn').html(progressText[progressCnt]);
+            if (progressCnt == 3) {
+                progressCnt = 0;
+            } else {
+                progressCnt++;
+            }
+        }, 3000);
+
+        //1초마다 ...개수 변경
+        var dotCnt = 0;
+        const dot = setInterval(function () {
+            if (dotCnt == 3) {
+                dotCnt = 0;
+            } else {
+                dotCnt++;
+            }
+            $('#selfcheck-btn').html(progressText[progressCnt] + '.'.repeat(dotCnt));
+        }, 500);
+
+        $.ajax({
+            type: "GET",
+            url: `https://selfcheck-api.vercel.app/api?name=${name}&birth=${birth}&password=${pwd}`,
+            success: function (result) {
+                clearInterval(progress);
+                clearInterval(dot);
+                if (result) {
+                    if (result.success == true) {
+                        toast('자가진단을 제출했어요')
+                        getSelfCheckStatus();
+                    } else {
+                        toast('자가진단 제출에 실패했어요.')
+                    }
+                } else {
+                    toast('자가진단 제출에 실패했어요.')
+                }
+                $('#selfcheck-btn').html(`<ion-icon name="checkmark-outline"></ion-icon>자가진단 완료`);
+
+                setTimeout(function () {
+                    $('#selfcheck-btn').html(`<ion-icon name="flash"></ion-icon>제출하기`);
+                }, 3000);
+
+            },
+            error: function (request, status, error) {
+                clearInterval(progress);
+                clearInterval(dot);
+                $('#selfcheck-btn').html(`<ion-icon name="warning"></ion-icon>자가진단 실패`);
+                setTimeout(function () {
+                    $('#selfcheck-btn').html(`<ion-icon name="flash"></ion-icon>제출하기`);
+                }, 3000);
+                toast('자가진단 제출에 실패했어요. 정보를 올바르게 입력했는지 확인해주세요.')
+            }
+        });
+    }
+}
+
+function saveSelfcheckInfo() {
+    const name = $('#selfcheck-name').val();
+    const birth = $('#selfcheck-birth').val();
+    const pwd = $('#selfcheck-pwd').val();
+
+    if (name == '' || birth == '' || pwd == '' || birth.length != 6) {
+        toast('모든 정보를 올바르게 입력해주세요')
+    } else {
+        localStorage.setItem('selfcheck-name', name);
+        localStorage.setItem('selfcheck-birth', birth);
+        localStorage.setItem('selfcheck-pwd', pwd);
+        toast('저장되었어요');
+        $('#selfcheck-status').text('불러오는 중');
+        getSelfCheckStatus();
+        closeModal();
+    }
 }

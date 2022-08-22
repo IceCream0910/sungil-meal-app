@@ -91,6 +91,7 @@ const loginGoogle = () => {
                 $('#loginForm').show();
                 $('#exam').hide();
                 $('#calculator').hide();
+                $('#selfcheck').hide();
                 $('#assign-add-save-btn').hide();
                 $('#assign-edit-save-btn').hide();
                 $('body').css('overflow', 'hidden');
@@ -168,6 +169,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             $('#loginForm').show();
             $('#exam').hide();
             $('#calculator').hide();
+            $('#selfcheck').hide();
             $('#assign-add-save-btn').hide();
             $('#assign-edit-save-btn').hide();
             $('body').css('overflow', 'hidden');
@@ -199,6 +201,7 @@ $('#community #account-btn').on('click', function () {
     $('#account').show();
     $('#exam').hide();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
@@ -281,6 +284,7 @@ $('.writePost-btn').on('click', function () {
     $('#writePost').show();
     $('#exam').hide();
     $('#calculator').hide();
+    $('#selfcheck').hide();
     $('#assign-add-save-btn').hide();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
