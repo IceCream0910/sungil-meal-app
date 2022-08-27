@@ -30,6 +30,7 @@ if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 =
     updateOrder();
 }
 
+
 function updateOrder() {
     const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
     for (var i = 0; i < 4; i++) {
