@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
@@ -23,8 +24,7 @@
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-    crossorigin="anonymous"></script>
-    <link href="assets/css/style.css" rel="stylesheet">
+        crossorigin="anonymous"></script>
     <link rel="manifest" href="manifest.json">
 
 </head>
@@ -51,6 +51,12 @@
             <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon" style="color:#5272ff"
                 aria-hidden="true">settings</i> <span class="mdc-button__label">학년/반 정보 수정</span> </button>
 
+        <br>
+        <button class="mdc-button mdc-button--icon-leading" style="padding-left:0;" onclick="location.href='menu.html'"
+            aria-label="홈 화면 순서 변경">
+            <span class="mdc-button__ripple"></span><i class="material-icons mdc-button__icon" style="color:#5272ff"
+                aria-hidden="true">low_priority</i> <span class="mdc-button__label">홈 화면 순서 변경</span> </button>
+
 
         <div style="display:none;" id="hybridAppSettingsBtn">
             <br><button class="mdc-button mdc-button--icon-leading" style="padding-left:0;"
@@ -59,20 +65,6 @@
                     aria-hidden="true">notifications</i> <span class="mdc-button__label">푸시 알림 설정</span> </button>
         </div>
         <br>
-
-
-        <script>
-            var ua = navigator.userAgent;
-            if (ua.indexOf('hybridApp') > -1) {
-                $('#hybridAppSettingsBtn').hide();
-                $('#installWebApp').hide();
-            } else {
-                $('#hybridAppSettingsBtn').hide();
-                $('#installWebApp').show();
-            }
-
-
-        </script>
 
         <br>
         <h3 class="card__primary__title__text">급식</h3>
@@ -135,19 +127,25 @@
         <br>
         <h3 class="card__primary__title__text">정보</h3>
         <p class="lead">버전 1.1.2(Build 220813_0001)</p>
-        
+
         <div style="display:flex;flex-direction:row;gap:20px;">
-            <div class="card notice-card dark" style="width:50%;max-width:220px" onclick="window.open('https://ssoak.notion.site')">
+            <div class="card notice-card dark" style="width:50%;max-width:220px"
+                onclick="window.open('https://ssoak.notion.site')">
                 <p>무엇이 달라졌는지<br>궁금하다면?</p>
                 <h4>업데이트 내역</h4>
-                <ion-icon name="bulb-outline" style="background: 0;position: absolute;top: 60%;right: -20px;font-size: 50px;opacity: 0.3; color: #819fff;"></ion-icon>
+                <ion-icon name="bulb-outline"
+                    style="background: 0;position: absolute;top: 60%;right: -20px;font-size: 50px;opacity: 0.3; color: #819fff;">
+                </ion-icon>
                 <br>
             </div>
 
-            <div class="card notice-card dark"  style="width:50%;max-width:220px" onclick="window.open('/dev', '_blank')">
+            <div class="card notice-card dark" style="width:50%;max-width:220px"
+                onclick="window.open('/dev', '_blank')">
                 <p>쏙의 개발 과정이<br>궁금하다면</p>
                 <h4>개발 세션</h4>
-                <ion-icon name="code-working-outline" style="background: 0;position: absolute;top: 60%;right: -20px;font-size: 50px;opacity: 0.3; color: #819fff;"></ion-icon>
+                <ion-icon name="code-working-outline"
+                    style="background: 0;position: absolute;top: 60%;right: -20px;font-size: 50px;opacity: 0.3; color: #819fff;">
+                </ion-icon>
                 <br>
             </div>
         </div>

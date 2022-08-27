@@ -2008,6 +2008,11 @@ thead th.dark {
     margin-top: 15px;
 }
 
+#order-item {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
 /* 대화면 기기 대응 */
 @media screen and (min-width: 769px) {
     header {
@@ -2055,28 +2060,36 @@ thead th.dark {
 
     .meal-wrap {
         float: right;
-        padding-top: 20px;
         width: 40%;
     }
 
     .siganpyo-wrap {
-        margin-top: -30px;
         width: 50%;
     }
 
-    #notices-content {
-        margin-top: 200px;
+    .selfcheck-wrap {
+        float: right;
+        width: 38%;
+        position: absolute;
+        top: 400px;
+        right: 30px;
     }
 
     .schedule-wrap {
-        margin-top: -100px;
+        margin-top: 20px;
         float: right;
         width: 40%;
+    }
 
+    .notice-wrap {
+        margin-top: 20px;
+        float: left;
+        width: 40%;
+        padding-bottom: 150px;
     }
 
     #schedule-content {
-        max-height: 250px;
+        max-height: 500px;
         overflow: scroll;
     }
 
@@ -3460,22 +3473,22 @@ input[type=checkbox] label {
     color: #6a89ff;
 }
 
-.selfcheck-wrap {
+.selfcheck-card {
     padding: 20px;
     display: flex;
     flex-direction: column;
 }
 
-.selfcheck-wrap #selfcheck-status {
+.selfcheck-card #selfcheck-status {
     font-size: 15px;
     opacity: 0.7;
 }
 
-.selfcheck-wrap .card__primary__title {
+.selfcheck-card .card__primary__title {
     font-size: 18px;
     padding: 0;
 }
 
-.selfcheck-wrap button {
+.selfcheck-card button {
     margin-top: 10px;
 }

@@ -7,8 +7,6 @@ if (grade !== null && classNum !== null) {
     $('#profile-text').html('학년과 반을 알려주세요.');
 }
 
-
-
 const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
 
 const storedTheme = localStorage.getItem("darkTheme") || "system";

@@ -26,6 +26,45 @@ if (previousNoti != $('#noti-preview').text()) {
 }
 
 
+if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
+    updateOrder();
+}
+
+function updateOrder() {
+    const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
+    for (var i = 0; i < 4; i++) {
+        const key = Object.keys(orderIndex[i])[0];
+        const value = orderIndex[i][key];
+        switch (key) {
+            case 'meal':
+                $('.meal-wrap').data('index', value);
+                break;
+            case 'selfcheck':
+                $('.selfcheck-wrap').data('index', value);
+                break;
+            case 'timetable':
+                $('.siganpyo-wrap').data('index', value);
+                break;
+            case 'schedule':
+                $('.schedule-wrap').data('index', value);
+                break;
+            case 'notice':
+                $('.notice-wrap').data('index', value);
+                break;
+        }
+    }
+    orderElements();
+}
+
+
+function orderElements() {
+    var listItems = Array.from(document.querySelectorAll("#order-item"));
+    listItems.sort(function (a, b) {
+        return $(a).data('index') - $(b).data('index');
+    }).forEach(function (item) {
+        document.querySelector(".home-order-wrap").appendChild(item);
+    });
+}
 
 function isApp() {
     var ua = navigator.userAgent;
@@ -922,7 +961,7 @@ setTimeout(function () {
     if (!isTest) {
         var cssRule = "font-size:25px;color:#ff4043;";
         var cssRule2 = "font-size:15px;";
-        console.clear();
+        //console.clear();
         console.log("%c경고!", cssRule);
         console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.", cssRule2);
     }
@@ -985,8 +1024,9 @@ function shareApp() {
     })
 }
 
+
 getSelfCheckStatus()
-/* 자가진단 */
+
 function getSelfCheckStatus() {
     const name = localStorage.getItem('selfcheck-name');
     const birth = localStorage.getItem('selfcheck-birth');
@@ -1128,3 +1168,17 @@ function saveSelfcheckInfo() {
         closeModal();
     }
 }
+
+
+$(window).resize(function () {
+    if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
+        updateOrder();
+    } else {
+        $('.meal-wrap').data('index', '0');
+        $('.selfcheck-wrap').data('index', '1');
+        $('.siganpyo-wrap').data('index', '2');
+        $('.schedule-wrap').data('index', '3');
+        $('.notice-wrap').data('index', '4');
+        orderElements();
+    }
+});

@@ -316,6 +316,7 @@
         </button>
     </div>
 
+
     <section id="home">
         <div class="home-header">
             <img src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
@@ -335,223 +336,221 @@
             </div>
         </div>
 
-        <div class="meal-wrap">
-            <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
-                <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
-                <div>
-                    <button id="shareBtn" class="mdc-button mdc-button--icon-leading" onclick="javascript:shareMeal();"
-                        aria-label="급식 공유"> <span class="mdc-button__ripple"></span> <span class="mdc-button__label"
-                            id="copied"></span> <i class="material-icons mdc-button__icon" aria-hidden="true">share</i>
-                    </button>
+        <div class="home-order-wrap">
+            <div class="meal-wrap" id="order-item">
+                <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
+                    <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
+                    <div>
+                        <button id="shareBtn" class="mdc-button mdc-button--icon-leading"
+                            onclick="javascript:shareMeal();" aria-label="급식 공유"> <span
+                                class="mdc-button__ripple"></span> <span class="mdc-button__label" id="copied"></span>
+                            <i class="material-icons mdc-button__icon" aria-hidden="true">share</i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div id="no-meal" style="opacity:0.7;"> <img class="no-meal-img" src="assets/icons/Failure.png"
-                    alt="급식 정보 없음 일러스트">
-                <br><span>급식
-                    정보가
-                    없어요</span>
-            </div>
-            <div id="exist-meal">
-                <div class="card">
-                    <div class="card__primary__title"> <small class="card__primary__title__subtext" id="kcal"></small>
-                        <div class="help-tip" role="tooltip" id="name-tooltip"
-                            aria-label="각 메뉴를 클릭하면 알레르기 정보 등 상세 정보 확인 가능">
-                            <div class="help-tip__content">
-                                <p class="help-tip__text" style="margin-bottom:0px;font-size:12px;">설정한 알레르기 성분이
-                                    함유된 메뉴는
-                                    빨간색으로 표시됩니다.<br>맛있는 메뉴 키워드가 포함된 메뉴는 밑줄과 별표가 표시됩니다.<br>각 메뉴를 클릭하면 알레르기 정보와
-                                    이미지 검색 결과를
-                                    확인할
-                                    수 있어요.</p>
+                <div id="no-meal" style="opacity:0.7;"> <img class="no-meal-img" src="assets/icons/Failure.png"
+                        alt="급식 정보 없음 일러스트">
+                    <br><span>급식
+                        정보가
+                        없어요</span>
+                </div>
+                <div id="exist-meal">
+                    <div class="card">
+                        <div class="card__primary__title"> <small class="card__primary__title__subtext"
+                                id="kcal"></small>
+                            <div class="help-tip" role="tooltip" id="name-tooltip"
+                                aria-label="각 메뉴를 클릭하면 알레르기 정보 등 상세 정보 확인 가능">
+                                <div class="help-tip__content">
+                                    <p class="help-tip__text" style="margin-bottom:0px;font-size:12px;">설정한 알레르기 성분이
+                                        함유된 메뉴는
+                                        빨간색으로 표시됩니다.<br>맛있는 메뉴 키워드가 포함된 메뉴는 밑줄과 별표가 표시됩니다.<br>각 메뉴를 클릭하면 알레르기 정보와
+                                        이미지 검색 결과를
+                                        확인할
+                                        수 있어요.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="card-body" id="meal-loader" style="background:transparent;">
-                        <h2 class="card-title skeleton">
-                        </h2>
-                        <h2 class="card-title skeleton">
-                        </h2>
+                        <div class="card-body" id="meal-loader" style="background:transparent;">
+                            <h2 class="card-title skeleton">
+                            </h2>
+                            <h2 class="card-title skeleton">
+                            </h2>
+                        </div>
+                        <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
+                        </p>
                     </div>
-                    <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
+                </div>
+            </div>
+
+            <div class="selfcheck-wrap" id="order-item">
+                <div class="card">
+                    <div class="card__primary__title selfcheck-card">
+                        <div style="padding:0;line-height:1;">
+                            <span class="card__primary__title"
+                                style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
+                                <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
+                                    href="javascript:openSelfcheckModal();">정보
+                                    수정 ></a>
+                            </span>
+                            <span id="selfcheck-status">제출 여부 확인 중</span>
+                        </div>
+                        <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
+                            <ion-icon name="flash"></ion-icon>제출하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="siganpyo-wrap" id="order-item">
+                <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
+                    <h3 style="float:left" class="card__primary__title__text">시간표</h3>
+                    <div> <button class="mdc-button mdc-button--icon-leading"
+                            onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
+                                class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
+                                aria-hidden="true">settings</i> <span class="mdc-button__label"
+                                id="gradeClassLabel">설정</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card" id="nosetting-timetable"
+                    style="height: 420px;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
+                    <p class="card__supporting__text"
+                        style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
+                        <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
+                        <br><span>학년/반을 먼저
+                            설정하고<br>시간표를 확인해보세요.</span>
+                        <button class="mdc-button mdc-button--icon-leading"
+                            onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
+                                class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
+                                aria-hidden="true">settings</i> <span class="mdc-button__label"
+                                id="gradeClassLabel">설정하러
+                                가기</span>
+                        </button>
                     </p>
                 </div>
+
+                <div class="timetable-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>월</th>
+                                <th>화</th>
+                                <th>수</th>
+                                <th>목</th>
+                                <th>금</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-timetable">
+                            <tr>
+                                <th id="m1"></th>
+                                <th id="tu1"></th>
+                                <th id="w1"></th>
+                                <th id="th1"></th>
+                                <th id="f1"></th>
+                            </tr>
+                            <tr>
+                                <th id="m2"></th>
+                                <th id="tu2"></th>
+                                <th id="w2"></th>
+                                <th id="th2"></th>
+                                <th id="f2"></th>
+                            </tr>
+                            <tr>
+                                <th id="m3"></th>
+                                <th id="tu3"></th>
+                                <th id="w3"></th>
+                                <th id="th3"></th>
+                                <th id="f3"></th>
+                            </tr>
+                            <tr>
+                                <th id="m4"></th>
+                                <th id="tu4"></th>
+                                <th id="w4"></th>
+                                <th id="th4"></th>
+                                <th id="f4"></th>
+                            </tr>
+                            <tr>
+                                <th id="m5"></th>
+                                <th id="tu5"></th>
+                                <th id="w5"></th>
+                                <th id="th5"></th>
+                                <th id="f5"></th>
+                            </tr>
+                            <tr>
+                                <th id="m6"></th>
+                                <th id="tu6"></th>
+                                <th id="w6"></th>
+                                <th id="th6"></th>
+                                <th id="f6"></th>
+                            </tr>
+                            <tr>
+                                <th id="m7"></th>
+                                <th id="tu7"></th>
+                                <th id="w7"></th>
+                                <th id="th7"></th>
+                                <th id="f7"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <Br><Br>
-            <div class="card">
-                <div class="card__primary__title selfcheck-wrap">
-                    <div style="padding:0;line-height:1;">
-                        <span class="card__primary__title"
-                            style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
-                            <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
-                                href="javascript:openSelfcheckModal();">정보
-                                수정 ></a>
-                        </span>
-                        <span id="selfcheck-status">제출 여부 확인 중</span>
+            <div class="schedule-wrap" id="order-item">
+                <h3 class="card__primary__title__text">학사일정</h3>
+                <div id="schedule-content" style="margin-top:15px;"> </div>
+                <br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx"
+                    data-ad-width="320" data-ad-height="100"></ins>
+            </div>
+
+
+            <div class="notice-wrap" id="order-item">
+                <div id="notices-content">
+
+                    <div class="card-body">
+                        <h2 class="card-title skeleton">
+                            <!-- wating for title to load from javascript -->
+                        </h2>
+                        <p class="card-intro skeleton">
+                            <!-- waiting for intro to load from Javascript -->
+                        </p>
                     </div>
-                    <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
-                        <ion-icon name="flash"></ion-icon>제출하기
-                    </button>
+
+                    <div class="card-body">
+                        <h2 class="card-title skeleton">
+                            <!-- wating for title to load from javascript -->
+                        </h2>
+                        <p class="card-intro skeleton">
+                            <!-- waiting for intro to load from Javascript -->
+                        </p>
+                    </div>
+
+                    <div class="card-body">
+                        <h2 class="card-title skeleton">
+                            <!-- wating for title to load from javascript -->
+                        </h2>
+                        <p class="card-intro skeleton">
+                            <!-- waiting for intro to load from Javascript -->
+                        </p>
+                    </div>
+
+                    <div class="card-body">
+                        <h2 class="card-title skeleton">
+                            <!-- wating for title to load from javascript -->
+                        </h2>
+                        <p class="card-intro skeleton">
+                            <!-- waiting for intro to load from Javascript -->
+                        </p>
+                    </div>
                 </div>
+
+                <button class="custom-btn modal-btn" aria-label="가정통신문 더보기"
+                    onclick="window.open('https://sungil-h.goesn.kr/sungil-h/na/ntt/selectNttList.do?mi=19914&bbsId=15524', '_blank');">
+                    <ion-icon name="add-outline"></ion-icon>더보기
+                </button>
             </div>
         </div>
-        <br><Br>
-
-        <div class="siganpyo-wrap">
-            <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
-                <h3 style="float:left" class="card__primary__title__text">시간표</h3>
-                <div> <button class="mdc-button mdc-button--icon-leading"
-                        onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
-                            class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
-                            aria-hidden="true">settings</i> <span class="mdc-button__label"
-                            id="gradeClassLabel">설정</span>
-                    </button>
-                </div>
-            </div>
-            <div class="card" id="nosetting-timetable"
-                style="height: 420px;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
-                <p class="card__supporting__text"
-                    style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
-                    <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
-                    <br><span>학년/반을 먼저
-                        설정하고<br>시간표를 확인해보세요.</span>
-                    <button class="mdc-button mdc-button--icon-leading"
-                        onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
-                            class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
-                            aria-hidden="true">settings</i> <span class="mdc-button__label" id="gradeClassLabel">설정하러
-                            가기</span>
-                    </button>
-                </p>
-            </div>
-
-            <div class="timetable-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>월</th>
-                            <th>화</th>
-                            <th>수</th>
-                            <th>목</th>
-                            <th>금</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-timetable">
-                        <tr>
-                            <th id="m1"></th>
-                            <th id="tu1"></th>
-                            <th id="w1"></th>
-                            <th id="th1"></th>
-                            <th id="f1"></th>
-                        </tr>
-                        <tr>
-                            <th id="m2"></th>
-                            <th id="tu2"></th>
-                            <th id="w2"></th>
-                            <th id="th2"></th>
-                            <th id="f2"></th>
-                        </tr>
-                        <tr>
-                            <th id="m3"></th>
-                            <th id="tu3"></th>
-                            <th id="w3"></th>
-                            <th id="th3"></th>
-                            <th id="f3"></th>
-                        </tr>
-                        <tr>
-                            <th id="m4"></th>
-                            <th id="tu4"></th>
-                            <th id="w4"></th>
-                            <th id="th4"></th>
-                            <th id="f4"></th>
-                        </tr>
-                        <tr>
-                            <th id="m5"></th>
-                            <th id="tu5"></th>
-                            <th id="w5"></th>
-                            <th id="th5"></th>
-                            <th id="f5"></th>
-                        </tr>
-                        <tr>
-                            <th id="m6"></th>
-                            <th id="tu6"></th>
-                            <th id="w6"></th>
-                            <th id="th6"></th>
-                            <th id="f6"></th>
-                        </tr>
-                        <tr>
-                            <th id="m7"></th>
-                            <th id="tu7"></th>
-                            <th id="w7"></th>
-                            <th id="th7"></th>
-                            <th id="f7"></th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div><br><Br>
-
-        <div class="schedule-wrap">
-            <h3 class="card__primary__title__text">학사일정</h3>
-            <div id="schedule-content" style="margin-top:15px;"> </div>
-            <br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx" data-ad-width="320"
-                data-ad-height="100"></ins>
-        </div><br><br><br>
-
-
-        <div id="notices-content">
-
-            <div class="card-body">
-                <h2 class="card-title skeleton">
-                    <!-- wating for title to load from javascript -->
-                </h2>
-                <p class="card-intro skeleton">
-                    <!-- waiting for intro to load from Javascript -->
-                </p>
-            </div>
-
-            <div class="card-body">
-                <h2 class="card-title skeleton">
-                    <!-- wating for title to load from javascript -->
-                </h2>
-                <p class="card-intro skeleton">
-                    <!-- waiting for intro to load from Javascript -->
-                </p>
-            </div>
-
-            <div class="card-body">
-                <h2 class="card-title skeleton">
-                    <!-- wating for title to load from javascript -->
-                </h2>
-                <p class="card-intro skeleton">
-                    <!-- waiting for intro to load from Javascript -->
-                </p>
-            </div>
-
-            <div class="card-body">
-                <h2 class="card-title skeleton">
-                    <!-- wating for title to load from javascript -->
-                </h2>
-                <p class="card-intro skeleton">
-                    <!-- waiting for intro to load from Javascript -->
-                </p>
-            </div>
-        </div>
-
-        <button class="custom-btn modal-btn" aria-label="가정통신문 더보기"
-            onclick="window.open('https://sungil-h.goesn.kr/sungil-h/na/ntt/selectNttList.do?mi=19914&bbsId=15524', '_blank');">
-            <ion-icon name="add-outline"></ion-icon>더보기
-        </button>
-
-
-        <Br><Br><Br> <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-vLJpC8H8ZejxstBA"
-            data-ad-width="300" data-ad-height="250"></ins>
-        <br><Br>
-
-        <!--
-        <a href="https://shinhub.live" target="_blank"><img class="custom_ad" src="assets/shinhub_ad.svg"></a>
-        <Br><br><Br>-->
-        <Br> <Br><br><Br>
-
+        <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-vLJpC8H8ZejxstBA" data-ad-width="300"
+            data-ad-height="250"></ins>
 
 
     </section>
