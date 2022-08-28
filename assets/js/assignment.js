@@ -152,15 +152,6 @@ function editAssignment() {
 }
 
 
-function closeModal() {
-    $('body').css('overflow', 'auto');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('display', 'none');
-    }, 100);
-    $('.sheet-backdrop').removeClass('backdrop-in');
-}
-
 function updateAssignList() {
     assignArr = [];
     $('#assignments-listview').html('');

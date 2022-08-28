@@ -3492,3 +3492,73 @@ input[type=checkbox] label {
 .selfcheck-card button {
     margin-top: 10px;
 }
+
+.button-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.button-footer .sub-btn {
+    font-size: 20px;
+    padding: 10px;
+}
+
+#vote-choice-list {
+    max-height: 50vh;
+    overflow: scroll;
+}
+
+#vote-choice-list.dark input {
+    background-color: #414141;
+    color: #b1b1b1;
+    border: none;
+}
+
+.post-vote {
+    display: none;
+}
+
+.post-vote .vote-choice-item {
+    padding: 0 20px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    border: 1px solid #12121228;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.post-vote .vote-choice-item .inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -10px;
+}
+
+.post-vote .vote-choice-item.dark {
+    border: 1px solid #eeeeee46;
+}
+
+.post-vote .vote-choice-item.active {
+    background-color: #527dff6e;
+    border: none;
+}
+
+.post-vote .vote-choice-item .vote-progress {
+    width: 0%;
+    height: 5px;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+    background-color: #527dff;
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+}
+
+.post-vote #participants-count {
+    position: relative;
+    top: 10px;
+}

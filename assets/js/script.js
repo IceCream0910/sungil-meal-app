@@ -33,7 +33,7 @@ if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 =
 
 function updateOrder() {
     const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 5; i++) {
         const key = Object.keys(orderIndex[i])[0];
         const value = orderIndex[i][key];
         switch (key) {
@@ -696,58 +696,17 @@ document.addEventListener('click', function (e) {
 
 /* bottom sheet */
 $('.pop').on('click', function () {
-    $('#modal-title').html('날짜 선택');
-    $('.content-wrap').hide();
-    $('#datepicker').show();
-    $('#exam').hide();
-    $('#calculator').hide();
-    $('#selfcheck').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#datepicker').height() + 130 + 'px');
-    }, 100);
+    openModal('날짜 선택', 'datepicker')
 });
 
 $('.sheet-backdrop').on('click', function () {
-    $('body').css('overflow', 'auto');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('display', 'none');
-    }, 100);
-    $('.sheet-backdrop').removeClass('backdrop-in');
+    closeModal();
 });
 
 /* bottom sheet */
 // 수행평가 추가 모달 띄우기
 $('.addAssignment-btn').on('click', function () {
-    $('.sheet-modal').css('height', '30%');
-    $('#modal-title').html('수행평가 추가');
-    $('.content-wrap').hide();
-    $('#assessment').show();
-    $('#exam').hide();
-    $('#calculator').hide();
-    $('#selfcheck').hide();
-    $('#assign-add-save-btn').show();
-    $('#assign-edit-save-btn').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
-    $('#title').val('');
-    $('.timetable_selector').html('');
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
-    }, 100);
+    openModal('수행평가 추가', 'assessment')
 });
 
 
@@ -762,14 +721,7 @@ $('.c-modal').each(function () {
 
     mc.on("swipedown", function (ev) {
         if (!$('#loginForm').is(':visible')) {
-            console.log(ev)
-            $('body').css('overflow', 'auto');
-            $('.modal-in').css('bottom', '-1850px');
-            setTimeout(function () {
-                $('.modal-in').css('display', 'none');
-            }, 100);
-
-            $('.sheet-backdrop').removeClass('backdrop-in');
+            closeModal();
         }
     });
 
@@ -786,14 +738,7 @@ $('.page-content').each(function () {
 
         mc.on("swipedown", function (ev) {
             if (!$('#loginForm').is(':visible') && !$('#assessment').is(':visible') && !$('#myClassAssign').is(':visible') && !$('#account').is(':visible') && !$('#writePost').is(':visible')) {
-                console.log(ev)
-                $('body').css('overflow', 'auto');
-                $('.modal-in').css('bottom', '-1850px');
-                setTimeout(function () {
-                    $('.modal-in').css('display', 'none');
-                }, 100);
-
-                $('.sheet-backdrop').removeClass('backdrop-in');
+                closeModal();
             }
         });
     }
@@ -823,16 +768,16 @@ $('.grade_btn').on('click', function () {
 /*
 $('.main-nav').hide();
 $('#home').hide();
-$('#community').hide();
+$('#community').show();
 $('#assignment').hide();
-$('#report').show();
+$('#report').hide();
 */
-
 $('.main-nav').show();
 $('#home').fadeIn();
 $('#community').hide();
 $('#assignment').hide();
 $('#report').hide();
+
 
 
 $('.bottom-nav a').on('click', function () {
@@ -846,6 +791,7 @@ $('.bottom-nav a').on('click', function () {
 
     var tab = $(this).attr('data-tab');
     $('.bottom-nav').removeClass("non-border");
+    disablePullToRefresh();
     switch (tab) {
         case 'home':
             $('.main-nav').show();
@@ -860,6 +806,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab3').attr('name', 'file-tray-full-outline');
             break;
         case 'community':
+            enablePullToRefresh();
             $('.main-nav').hide();
             $('#home').hide();
             $('#community').fadeIn(500);
@@ -951,12 +898,25 @@ const createConfirm = (message) => {
 }
 
 //PullToRefresh
-PullToRefresh.init({
+var refresher = PullToRefresh.init({
     mainElement: 'main',
     onRefresh: function () {
         loadPostList(currentCategory);
     }
 });
+
+function enablePullToRefresh() {
+    refresher = PullToRefresh.init({
+        mainElement: 'main',
+        onRefresh: function () {
+            loadPostList(currentCategory);
+        }
+    });
+}
+
+function disablePullToRefresh() {
+    refresher.destroy();
+}
 
 setTimeout(function () {
     if (!isTest) {
@@ -1061,28 +1021,7 @@ function getSelfCheckStatus() {
 }
 
 function openSelfcheckModal() {
-    $('#modal-title').html('자가진단 정보 수정');
-    $('.content-wrap').hide();
-    $('#datepicker').hide();
-    $('#exam').hide();
-    $('#calculator').hide();
-    $('#selfcheck').show();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    const name = localStorage.getItem('selfcheck-name') || '';
-    const birth = localStorage.getItem('selfcheck-birth') || '';
-    const pwd = localStorage.getItem('selfcheck-pwd') || '';
-    $('#selfcheck-name').val(name)
-    $('#selfcheck-birth').val(birth)
-    $('#selfcheck-pwd').val(pwd)
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#selfcheck').height() + 130 + 'px');
-    }, 100);
+    openModal('자가진단 정보 수정', 'selfcheck');
 }
 
 function submitSelfCheck() {
@@ -1095,6 +1034,7 @@ function submitSelfCheck() {
     } else {
         const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
         $('#selfcheck-btn').html('학교 가는 중');
+        $('#selfcheck-btn').attr('disabled', true);
         var progressCnt = 1;
         const progress = setInterval(function () {
             $('#selfcheck-btn').html(progressText[progressCnt]);
@@ -1125,6 +1065,7 @@ function submitSelfCheck() {
                 if (result) {
                     if (result.success == true) {
                         toast('자가진단을 제출했어요')
+                        $('#selfcheck-status').text(`${moment().format('HH시 mm분')} 제출`)
                         getSelfCheckStatus();
                     } else {
                         toast('자가진단 제출에 실패했어요.')
@@ -1133,7 +1074,7 @@ function submitSelfCheck() {
                     toast('자가진단 제출에 실패했어요.')
                 }
                 $('#selfcheck-btn').html(`<ion-icon name="checkmark-outline"></ion-icon>자가진단 완료`);
-
+                $('#selfcheck-btn').attr('disabled', false);
                 setTimeout(function () {
                     $('#selfcheck-btn').html(`<ion-icon name="flash"></ion-icon>제출하기`);
                 }, 3000);
@@ -1183,3 +1124,44 @@ $(window).resize(function () {
         orderElements();
     }
 });
+
+
+function openModal(title, id) {
+    disablePullToRefresh();
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').html(title);
+    $('.content-wrap').hide();
+    $('#' + id).show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
+    $('#title').val('');
+    $('.timetable_selector').html('');
+    const name = localStorage.getItem('selfcheck-name') || '';
+    const birth = localStorage.getItem('selfcheck-birth') || '';
+    const pwd = localStorage.getItem('selfcheck-pwd') || '';
+    $('#selfcheck-name').val(name)
+    $('#selfcheck-birth').val(birth)
+    $('#selfcheck-pwd').val(pwd)
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#' + id).height() + 130 + 'px');
+    }, 100);
+}
+
+
+function closeModal() {
+    enablePullToRefresh();
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    $('.sheet-backdrop').removeClass('backdrop-in');
+    $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+
+}

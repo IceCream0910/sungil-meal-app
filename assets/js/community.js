@@ -31,8 +31,8 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 var isDismissCommunityCallout = localStorage.getItem("dismiss_community_callout") || false
-if (isDismissCommunityCallout == true) {
-    $('.callout').hide();
+if (isDismissCommunityCallout != 'true') {
+    $('.callout').show();
 }
 
 function openLogin() {
@@ -84,27 +84,9 @@ const loginGoogle = () => {
 
                 $('#login-username').val(result.user.displayName);
 
-                //open bottom sheet
-                $('.sheet-modal').css('height', '30%');
-                $('#modal-title').html('시작하기');
-                $('.content-wrap').hide();
-                $('#loginForm').show();
-                $('#exam').hide();
-                $('#calculator').hide();
-                $('#selfcheck').hide();
-                $('#assign-add-save-btn').hide();
-                $('#assign-edit-save-btn').hide();
-                $('body').css('overflow', 'hidden');
-                $('.modal-in').css('display', 'block');
-                $('.modal-in').css('bottom', '-1850px');
-                setTimeout(function () {
-                    $('.modal-in').css('bottom', '0px');
-                }, 100);
+                openModal('시작하기', 'loginForm')
                 $('.sheet-backdrop-nocancel').addClass('backdrop-in');
                 $('.sheet-backdrop').removeClass('backdrop-in');
-                setTimeout(function () {
-                    $('.sheet-modal').css('height', $('#loginForm').height() + 130 + 'px');
-                }, 100);
             }
         }).catch((error) => {
             $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
@@ -163,26 +145,9 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
             $('#login-username').val(result.user.displayName);
 
             //open bottom sheet
-            $('.sheet-modal').css('height', '30%');
-            $('#modal-title').html('시작하기');
-            $('.content-wrap').hide();
-            $('#loginForm').show();
-            $('#exam').hide();
-            $('#calculator').hide();
-            $('#selfcheck').hide();
-            $('#assign-add-save-btn').hide();
-            $('#assign-edit-save-btn').hide();
-            $('body').css('overflow', 'hidden');
-            $('.modal-in').css('display', 'block');
-            $('.modal-in').css('bottom', '-1850px');
-            setTimeout(function () {
-                $('.modal-in').css('bottom', '0px');
-            }, 100);
+            openModal('시작하기', 'loginForm')
             $('.sheet-backdrop-nocancel').addClass('backdrop-in');
             $('.sheet-backdrop').removeClass('backdrop-in');
-            setTimeout(function () {
-                $('.sheet-modal').css('height', $('#loginForm').height() + 130 + 'px');
-            }, 100);
         }
     }).catch((error) => {
         console.log(error);
@@ -195,18 +160,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
 
 
 $('#community #account-btn').on('click', function () {
-    $('.sheet-modal').css('height', '30%');
-    $('#modal-title').html('내 프로필');
-    $('.content-wrap').hide();
-    $('#account').show();
-    $('#exam').hide();
-    $('#calculator').hide();
-    $('#selfcheck').hide();
-    $('#assign-add-save-btn').hide();
-    $('#assign-edit-save-btn').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
+    openModal('내 프로필', 'account')
     db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
         var user = doc_user.data();
         $('#account-username').val(user.nickname);
@@ -215,13 +169,6 @@ $('#community #account-btn').on('click', function () {
         $('.profile-image-btn').removeClass('active');
         $(document.getElementsByClassName('profile-image-btn')[profileImg]).addClass('active');
     });
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#account').height() + 130 + 'px');
-    }, 100);
 });
 
 
@@ -278,19 +225,7 @@ var editor = new toastui.Editor.factory({
 });;
 //글 작성
 $('.writePost-btn').on('click', function () {
-    $('.sheet-modal').css('height', '30%');
-    $('#modal-title').html('게시글 작성');
-    $('.content-wrap').hide();
-    $('#writePost').show();
-    $('#exam').hide();
-    $('#calculator').hide();
-    $('#selfcheck').hide();
-    $('#assign-add-save-btn').hide();
-    $('#assign-edit-save-btn').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-
+    openModal('게시글 작성', 'writePost')
     $('#editor').empty();
     //다크모드 에디터 적용
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
@@ -322,14 +257,6 @@ $('.writePost-btn').on('click', function () {
         });
     }
 
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#writePost').height() + 200 + 'px');
-    }, 100);
-
 });
 
 
@@ -341,6 +268,7 @@ function post(target) {
     if (content) {
         var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
         $(target).text('업로드 중...');
+        $(target).attr('disabled', true);
         var data = {
             title: title,
             userId: uid,
@@ -351,6 +279,7 @@ function post(target) {
         db.collection('board').add(data).then((result) => {
             closeModal();
             $(target).text('등록');
+            $(target).attr('disabled', false);
             openPost('board.html?id=' + result._key.path.segments[1]);
         }).catch((err) => {
             console.log(err);
@@ -406,7 +335,7 @@ function loadPostList(category) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
                             theme: 'dark'
                         });
                         $('.post-item').addClass("dark");
@@ -414,7 +343,7 @@ function loadPostList(category) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
                             theme: 'default'
                         });
                     }
@@ -472,7 +401,7 @@ function loadMore(category) {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
                                 theme: 'dark'
                             });
                             $('.post-item').addClass("dark");
@@ -480,7 +409,7 @@ function loadMore(category) {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1'),
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
                                 theme: 'default'
                             });
                         }
@@ -814,7 +743,7 @@ function timeForToday(value) {
     const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
     if (betweenTimeDay < 365) {
         if (betweenTimeDay > 30) {
-            return `${Math.floor(betweenTimeDay / 30)}개월 전`;
+            return `${Math.floor(betweenTimeDay / 30)}달 전`;
         } else {
             return `${betweenTimeDay}일 전`;
         }
@@ -847,14 +776,7 @@ function checkNicknameDuplicate(nickname) {
     db.collection('users').where('nickname', '==', nickname).get()
         .then(snapshot => {
             if (snapshot.size == 0) {
-                $('body').css('overflow', 'auto');
-                $('.modal-in').css('bottom', '-1850px');
-                setTimeout(function () {
-                    $('.modal-in').css('display', 'none');
-                }, 100);
-
-                $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
-                $('.sheet-backdrop').removeClass('backdrop-in');
+                closeModal();
 
                 var data = {
                     nickname: nickname,
@@ -868,14 +790,7 @@ function checkNicknameDuplicate(nickname) {
                     console.log(err);
                 })
             } else if ($('#header-username').text() == nickname) { //변경 사항 없으면 닫기
-                $('body').css('overflow', 'auto');
-                $('.modal-in').css('bottom', '-1850px');
-                setTimeout(function () {
-                    $('.modal-in').css('display', 'none');
-                }, 100);
-
-                $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
-                $('.sheet-backdrop').removeClass('backdrop-in');
+                closeModal();
             } else {
                 toast('이미 사용중인 닉네임입니다.')
             }
@@ -908,4 +823,68 @@ function changeCommunityCategory(category, btn) {
     $('.community-tab').removeClass('active');
     $(btn).addClass('active');
     loadPostList(category);
+}
+
+
+//투표 만들기
+function openVoteMaker() {
+    openModal('투표 만들기', 'vote')
+    $('#vote-title').val('');
+    $('#vote-choice-list').html(`
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    `);
+}
+
+function addChoice() {
+    $('#vote-choice-list').append(`
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    `);
+    $('.sheet-modal').css('height', $('#vote').height() + 130 + 'px');
+    $('#vote-choice-list').animate({
+        scrollTop: $('#vote-choice-list')[0].scrollHeight
+    }, 0);
+}
+
+function postVote(target) {
+    var options = [];
+    var cnt = 0;
+    if ($('#vote-title').val().length >= 2) {
+        $(target).text('게시중...');
+        $(target).attr('disabled', true);
+        $('#vote-choice-list').find('input').each(function () {
+            if ($(this).val().length >= 1) {
+                options[cnt] = {
+                    title: $(this).val(),
+                    count: 0
+                }
+                cnt++;
+            }
+        });
+
+        var uid = firebase.auth().currentUser.uid;
+        var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+        var data = {
+            title: $('#vote-title').val(),
+            options: options,
+            userId: uid,
+            category: '투표',
+            createdAt: timestamp,
+            participants: '',
+            content: '?vote?',
+        }
+
+        db.collection('board').add(data).then((result) => {
+            closeModal();
+            $(target).text('게시');
+            $(target).attr('disabled', false);
+            openPost('board.html?id=' + result._key.path.segments[1]);
+        }).catch((err) => {
+            toast(err);
+            closeModal();
+        });
+    } else {
+        toast('투표 제목을 입력해주세요.')
+    }
+
 }

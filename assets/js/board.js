@@ -81,12 +81,18 @@ articleRef.then(function (doc) {
             $('#post-title').html(doc.data().title);
             content = doc.data().content;
             category = doc.data().category;
+            if (category == '투표') {
+                updateVote();
+            } else {
+                $('.post-vote').hide();
+                viewer = new toastui.Editor.factory({
+                    el: document.querySelector('#viewer'),
+                    viewer: true,
+                    initialValue: doc.data().content,
+                });
+            }
 
-            viewer = new toastui.Editor.factory({
-                el: document.querySelector('#viewer'),
-                viewer: true,
-                initialValue: doc.data().content,
-            });
+
             //게시글 삭제 이벤트 등록
             $('#delete-btn').click(function () {
                 confirmDeletePost(doc.data());
@@ -103,6 +109,138 @@ articleRef.then(function (doc) {
         }, 1500);
     }
 });
+
+function updateVote() {
+    db.collection('board').doc(getParam('id')).get().then((doc) => {
+        $('#viewer').hide();
+        $('.post-vote').show();
+        $('#author-toolbar #edit-btn').hide();
+        $('#choices-list').html('');
+
+        $('#participants-count').text(`${doc.data().participants}명 참여`);
+        var cnt = 0;
+        doc.data().options.forEach((option) => {
+            console.log(option)
+            $('#choices-list').append(`<div class="vote-choice-item" data-index="${cnt}">
+                    <div class="inner">
+                    <h3>${option.title}</h3>
+                    <span>${(option.count != 0) ? Math.round((option.count / doc.data().participants) * 100) : 0}%</span>
+                    </div>
+                    <div class="vote-progress" style="width:${(option.count != 0) ? Math.round((option.count / doc.data().participants) * 100).toString() + '%' : '0%'}"></div>
+                </div>`);
+            cnt++;
+        });
+        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+            $('.vote-choice-item').each(function () {
+                $(this).addClass("dark");
+            });
+        }
+        //참여한 투표인지 확인
+        db.collection('users').doc(firebase.auth().currentUser.uid).get().then((currentUser) => {
+            if (currentUser.data().doneVotes) {
+                if (currentUser.data().doneVotes[getParam('id')]) {
+                    $('#choices-list .vote-choice-item').removeClass('active');
+                    $('#choices-list .vote-choice-item').eq(currentUser.data().doneVotes[getParam('id')]).addClass('active');
+                    $('#cancel-vote-btn').show();
+                    $('#vote-btn').hide();
+                }
+            }
+        });
+    });
+}
+
+$('#choices-list').on('click', '.vote-choice-item', function () {
+    if ($('#vote-btn').is(':visible')) {
+        $('.vote-choice-item').removeClass('active');
+        $(this).addClass('active');
+    }
+});
+
+function vote() {
+    var index = $('.vote-choice-item.active')[0].dataset.index;
+    if (index) {
+        var modifiedOptions = [];
+        db.collection('board').doc(getParam('id')).get().then((doc) => {
+            modifiedOptions = doc.data().options;
+            modifiedOptions[index].count++;
+
+            var data = {
+                participants: firebase.firestore.FieldValue.increment(1),
+                options: modifiedOptions,
+            };
+
+            console.log(data);
+            $('#cancel-vote-btn').show();
+            $('#vote-btn').hide();
+
+            db.collection('board').doc(getParam('id')).update(data).then((result) => {
+                addUserDoneVotes(index); //유저의 참여한 투표 목록 업데이트
+            }).catch((err) => {
+                console.log(err);
+            })
+        });
+
+
+    } else {
+        toast('투표할 항목을 선택해주세요')
+    }
+}
+
+function cancelVote() {
+    var index = $('.vote-choice-item.active')[0].dataset.index;
+    db.collection('board').doc(getParam('id')).get().then((doc) => {
+        modifiedOptions = doc.data().options;
+        modifiedOptions[index].count--;
+
+        var data = {
+            participants: firebase.firestore.FieldValue.increment(-1),
+            options: modifiedOptions,
+        };
+
+        console.log(data);
+        $('#cancel-vote-btn').hide();
+        $('#vote-btn').show();
+
+        db.collection('board').doc(getParam('id')).update(data).then((result) => {
+            deleteUserDoneVotes(); //유저의 참여한 투표 목록 업데이트
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+}
+
+function addUserDoneVotes(index) { //user 정보에 투표한 게시글 추가
+    var data = {};
+    db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc) => {
+        var oldData = doc.data().doneVotes || {};
+        oldData[getParam('id')] = index;
+        data = {
+            doneVotes: oldData,
+        }
+        db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result) => {
+            updateVote();
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+}
+
+function deleteUserDoneVotes() { //user 정보에 투표한 게시글 추가
+    var data = {};
+    db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc) => {
+        var oldData = doc.data().doneVotes || {};
+        delete oldData[getParam('id')];
+        data = {
+            doneVotes: oldData,
+        }
+        db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result) => {
+            updateVote();
+        }).catch((err) => {
+            console.log(err);
+        })
+    });
+
+}
 
 async function confirmDeletePost(data) {
     const confirm = await ui.confirm('게시물을 정말 삭제하시겠습니까?');
@@ -140,7 +278,7 @@ function timeForToday(value) {
     const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
     if (betweenTimeDay < 365) {
         if (betweenTimeDay > 30) {
-            return `${Math.floor(betweenTimeDay / 30)}개월 전`;
+            return `${Math.floor(betweenTimeDay / 30)}달 전`;
         } else {
             return `${betweenTimeDay}일 전`;
         }
@@ -708,6 +846,7 @@ function onDark() {
     $('.content-wrap input').each(function () {
         $(this).addClass("dark");
     });
+    $('.vote-choice-item').addClass("dark");
 }
 
 function offDark() {
@@ -732,6 +871,7 @@ function offDark() {
     $('.content-wrap input').each(function () {
         $(this).removeClass("dark");
     });
+    $('.vote-choice-item').removeClass("dark");
 }
 //toast
 function toast(msg) {

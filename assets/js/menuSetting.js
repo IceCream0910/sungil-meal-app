@@ -141,7 +141,8 @@ function complete() {
 
 
 function resetOrder() {
-    localStorage.setItem("ssoak-home-order", "");
+    localStorage.setItem("ssoak-home-order-for-setting", [0, 1, 2, 3, 4]);
+    localStorage.setItem("ssoak-home-order", `{ "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 }}`);
     toast('처음 설정으로 되돌릴게요.');
     setTimeout(function () {
         location.reload();
