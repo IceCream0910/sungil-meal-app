@@ -31,6 +31,13 @@ if (storedTheme != null) {
     }
 }
 
+const isAndroidNoti = localStorage.getItem("android-noti") || "true";
+if (isAndroidNoti === "true") {
+    $("#noti-switch").prop('checked', true);
+} else {
+    $("#noti-switch").prop('checked', false);
+}
+
 
 $("input[id='radio-1']:radio").change(function () {
     localStorage.setItem("darkTheme", "system");
@@ -350,44 +357,8 @@ function submitKeyword() {
     }
 }
 
-
-//pwa 설치
-var deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', function (e) {
-    console.log('beforeinstallprompt Event fired');
-    e.preventDefault();
-
-    // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-
-    return false;
-});
-
-const installWebApp = document.getElementById('installWebApp');
-
-installWebApp.addEventListener('click', function () {
-    if (deferredPrompt !== undefined) {
-        // The user has had a postive interaction with our app and Chrome
-        // has tried to prompt previously, so let's show the prompt.
-        deferredPrompt.prompt();
-
-        // Follow what the user has done with the prompt.
-        deferredPrompt.userChoice.then(function (choiceResult) {
-
-            console.log(choiceResult.outcome);
-
-            if (choiceResult.outcome == 'dismissed') {
-                console.log('User cancelled home screen install');
-            }
-            else {
-                console.log('User added to home screen');
-            }
-
-            // We no longer need the prompt.  Clear it up.
-            deferredPrompt = null;
-        });
-    } else {
-        alert('지원되지 않는 브라우저이거나 이미 설치되어 있습니다. 브라우저는 크롬 또는 사파리를 권장합니다.')
-    }
-});
+function onChangeSwitch() {
+    console.log($('#noti-switch').is(":checked"))
+    localStorage.setItem("android-noti", $('#noti-switch').is(":checked"));
+    Android.setNotiEnable($('#noti-switch').is(":checked"));
+}

@@ -3492,3 +3492,47 @@ input[type=checkbox] label {
 .selfcheck-card button {
     margin-top: 10px;
 }
+
+
+#hybridAppSettingsBtn input[type=checkbox] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+#hybridAppSettingsBtn label {
+    cursor: pointer;
+    color: inherit;
+    width: 60px;
+    height: 35px;
+    background: grey;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    top: -5px;
+}
+
+#hybridAppSettingsBtn label:after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
+    background: #fff;
+    border-radius: 60px;
+    transition: 0.3s;
+}
+
+#hybridAppSettingsBtn input:checked+label {
+    background: #6a89ff;
+}
+
+#hybridAppSettingsBtn input:checked+label:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+#hybridAppSettingsBtn label:active:after {
+    width: 60px;
+}
