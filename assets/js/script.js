@@ -907,6 +907,7 @@ var refresher = PullToRefresh.init({
 });
 
 function enablePullToRefresh() {
+    $('.ptr--ptr').remove();
     refresher = PullToRefresh.init({
         mainElement: 'main',
         onRefresh: function () {
