@@ -49,6 +49,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
@@ -58,7 +59,7 @@
     <script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
     <script type="text/javascript" src="https://unpkg.com/hammer-touchemulator@0.0.2/touch-emulator.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.1.1/compressor.min.js"></script>
     <link rel="manifest" href="manifest.json">
     <script>
         if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("service-worker.js"); }); } jQuery.browser = {}; (function () { jQuery.browser.msie = false; jQuery.browser.version = 0; if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) { jQuery.browser.msie = true; jQuery.browser.version = RegExp.$1; } })(); </script>
@@ -269,15 +270,23 @@
 
                     <div class="button-footer">
                         <div style="display:flex;flex-direction:row;">
-                            <input type="file" class="image-upload" accept="image/*" />
+                            <label for="file">
+                                <div class="custom-btn sub-btn" id="image-upload-btn">
+                                    <ion-icon name="image-outline"></ion-icon>
+                                </div>
+                            </label>
+                            <input type="file" class="image-upload" id="file" accept="image/*">
+
                             <button class="custom-btn sub-btn" onclick="openVoteMaker()">
                                 <ion-icon name="bar-chart-outline"></ion-icon>
                             </button>
                         </div>
-
                         <button class="custom-btn" onclick="post(this)">게시
                         </button>
                     </div>
+
+
+
 
                 </div>
 

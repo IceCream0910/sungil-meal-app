@@ -4,6 +4,7 @@ const auth = firebase.auth();
 var db = firebase.firestore();
 
 var currentCategory = 'all';
+var uploadedFile = null;
 
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
@@ -227,6 +228,7 @@ var editor = new toastui.Editor.factory({
 //글 작성
 $('.writePost-btn').on('click', function () {
     openModal('게시글 작성', 'writePost')
+    uploadedFile = null;
     $('#editor').empty();
     //다크모드 에디터 적용
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
@@ -267,26 +269,61 @@ function post(target) {
     var content = editor.getMarkdown();
     var uid = firebase.auth().currentUser.uid;
     if (content) {
-        var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
-        $(target).text('업로드 중...');
-        $(target).attr('disabled', true);
-        var data = {
-            title: title,
-            userId: uid,
-            content: content,
-            category: category || '자유',
-            createdAt: timestamp,
+        if (uploadedFile) { // 사진 있음
+            var storageRef = firebase.storage().ref();
+            var fileRef = storageRef.child(`images/${uploadedFile.name}`);
+            fileRef.put(uploadedFile).then(function (snapshot) {
+                fileRef.getDownloadURL().then(function (url) {
+                    var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+                    $(target).text('업로드 중...');
+                    $(target).attr('disabled', true);
+                    var data = {
+                        title: title,
+                        userId: uid,
+                        content: content,
+                        category: category || '자유',
+                        createdAt: timestamp,
+                        image: url,
+                    }
+                    db.collection('board').add(data).then((result) => {
+                        closeModal();
+                        $(target).text('게시');
+                        $(target).attr('disabled', false);
+                        openPost('board.html?id=' + result._key.path.segments[1]);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                    $('.snackbar').hide();
+                    loadPostList('all');
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+            $(target).text('업로드 중...');
+            $(target).attr('disabled', true);
+            var data = {
+                title: title,
+                userId: uid,
+                content: content,
+                category: category || '자유',
+                createdAt: timestamp,
+            }
+            db.collection('board').add(data).then((result) => {
+                closeModal();
+                $(target).text('게시');
+                $(target).attr('disabled', false);
+                openPost('board.html?id=' + result._key.path.segments[1]);
+            }).catch((err) => {
+                console.log(err);
+            });
+            $('.snackbar').hide();
+            loadPostList('all');
         }
-        db.collection('board').add(data).then((result) => {
-            closeModal();
-            $(target).text('등록');
-            $(target).attr('disabled', false);
-            openPost('board.html?id=' + result._key.path.segments[1]);
-        }).catch((err) => {
-            console.log(err);
-        });
-        $('.snackbar').hide();
-        loadPostList('all');
+
     } else {
         toast('글 내용을 작성해주세요.')
     }
@@ -324,7 +361,7 @@ function loadPostList(category) {
         
                         <div class="post-preview" id="viewer-`+ doc.id + `">
                         </div>
-    
+                        ${(data.image) ? `<img src="` + data.image + `" class="post-image" />` : ''}
                         <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>
                         <br>
         
@@ -887,6 +924,26 @@ function postVote(target) {
     } else {
         toast('투표 제목을 입력해주세요.')
     }
-
 }
 
+
+
+//사진 첨부
+$('.button-footer').on('change', '.image-upload', function () {
+    uploadedFile = null;
+    var fn = $(this).val();
+    var filename = fn.match(/[^\\/]*$/)[0];
+    $('#image-upload-btn').html(`<ion-icon name="image-outline"></ion-icon> ${(filename.length > 4) ? filename.substring(0, 4) + '...' : filename}`);
+    var file = $('.image-upload')[0].files[0];
+    uploadedFile = file;
+    new Compressor(file, {
+        quality: 0.6,
+        convertSize: 5000,
+        success(result) {
+            uploadedFile = result;
+        },
+        error(err) {
+            console.log(err.message);
+        },
+    });
+});

@@ -85,6 +85,7 @@ articleRef.then(function (doc) {
                 updateVote();
             } else {
                 $('.post-vote').hide();
+                $('#post-image').attr('src', doc.data().image);
                 viewer = new toastui.Editor.factory({
                     el: document.querySelector('#viewer'),
                     viewer: true,

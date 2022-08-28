@@ -2022,7 +2022,6 @@ thead th.dark {
         left: 20px;
         z-index: 99999;
         border-radius: 20px 20px 0 0;
-        box-shadow: 0 -2px 20px -5px #283a81;
     }
 
     .bottom-nav {
@@ -2458,6 +2457,20 @@ thead th.dark {
     background: #4c63bb;
     color: #eee;
     cursor: pointer;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.floating-btn:active {
+    background-color: #5272ff;
+    color: #becfff;
+    transform: scale(0.96);
+    -webkit-transform: scale(0.96);
+    -moz-transform: scale(0.96);
+    -ms-transform: scale(0.96);
+    -o-transform: scale(0.96);
 }
 
 .floating-btn ion-icon {
@@ -3548,6 +3561,11 @@ input[type=checkbox] label {
     margin-top: 10px;
 }
 
+
+#file {
+    display: none;
+}
+
 .button-footer .sub-btn {
     font-size: 20px;
     padding: 10px;
@@ -3613,4 +3631,23 @@ input[type=checkbox] label {
 .post-vote #participants-count {
     position: relative;
     top: 10px;
+}
+
+input[type=file]::file-selector-button {
+    background: none;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+.postpage-content-wrap .post-image {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.post-item .post-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    object-fit: cover;
 }
