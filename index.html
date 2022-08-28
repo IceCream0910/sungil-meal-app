@@ -269,7 +269,7 @@
 
                     <div class="button-footer">
                         <div style="display:flex;flex-direction:row;">
-                            <button class="custom-btn sub-btn" onclick="alert('사진 첨부 기능은 아직 개발중입니다.')">
+                            <button class="custom-btn sub-btn" onclick="toast('사진 첨부 기능은 아직 개발중입니다.')">
                                 <ion-icon name="image-outline"></ion-icon>
                             </button>
                             <button class="custom-btn sub-btn" onclick="openVoteMaker()">
@@ -320,7 +320,7 @@
 
                 <div class="content-wrap" id="selfcheck">
                     <input id="selfcheck-name" type="text" placeholder="이름" required>
-                    <input id="selfcheck-birth" type="text" placeholder="생년월일(6자리)" required>
+                    <input id="selfcheck-birth" type="number" placeholder="생년월일(6자리)" required>
                     <input id="selfcheck-pwd" type="password" placeholder="자가진단 앱 비밀번호" required>
 
                     <button class="custom-btn modal-btn" onclick="saveSelfcheckInfo()">저장하기
@@ -739,7 +739,7 @@
 
     <section id="report">
         <br>
-        <h3>나의 종합 등급은 <br><span id="totalGrade">계산중</span>등급</h3>
+        <h3>나의 종합 등급은 <br><span id="totalGrade">-</span>등급</h3>
         <canvas id="myChart" height="200"></canvas>
 
         <br><br>
