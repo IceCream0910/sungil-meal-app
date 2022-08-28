@@ -267,9 +267,42 @@
                         <div id="editor" style="height:40vh"></div>
                     </div>
 
-                    <button class="custom-btn modal-btn" style="float:right;margin-top:10px;" onclick="post(this)">등록
+                    <div class="button-footer">
+                        <div style="display:flex;flex-direction:row;">
+                            <button class="custom-btn sub-btn" onclick="alert('사진 첨부 기능은 아직 개발중입니다.')">
+                                <ion-icon name="image-outline"></ion-icon>
+                            </button>
+                            <button class="custom-btn sub-btn" onclick="openVoteMaker()">
+                                <ion-icon name="bar-chart-outline"></ion-icon>
+                            </button>
+                        </div>
+
+                        <button class="custom-btn" onclick="post(this)">게시
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="content-wrap" id="vote">
+
+                    <input id="vote-title" type="text" placeholder="투표 제목" style="font-size:16px;" required>
+                    <hr>
+                    <div id="vote-choice-list">
+                        <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;"
+                            required>
+                        <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;"
+                            required>
+                    </div>
+
+                    <button class="custom-btn modal-btn sub-btn" style="margin-top: 10px;margin-bottom: 20px;"
+                        onclick="addChoice();">
+                        <ion-icon style="font-size:25px;" name="add-circle-outline"></ion-icon>추가
+                    </button>
+
+                    <button class="custom-btn modal-btn" onclick="postVote(this)">게시
                     </button>
                 </div>
+
                 <div class="content-wrap" id="calculator">
                     <span style="font-size: 14px;opacity: 0.5;">계산방법에 따라 다를 수 있으니 참고용으로만
                         사용하세요<br><br></span>
@@ -336,7 +369,7 @@
             </div>
         </div>
 
-        <div class="home-order-wrap">
+        <div class="home-order-wrap" style="margin-bottom:150px;">
             <div class="meal-wrap" id="order-item">
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
@@ -579,10 +612,12 @@
         </div>
 
         <div class="main-community" style="display:none;">
-            <div class="callout custom-btn sub-btn" style="height:fit-content;margin:-20px;width:95vw;">
-                <span onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');">우리 모두를 위해 커뮤니티 이용가이드를 준수해주세요</span>
+            <div class="callout custom-btn sub-btn" style="display:none;height:fit-content;margin:-20px;width:95vw;">
+                <span
+                    onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');$('.callout').hide();localStorage.setItem('dismiss_community_callout', 'true')">우리
+                    모두를 위해 커뮤니티 이용가이드를 준수해주세요</span>
                 <ion-icon name="close" style="font-size:20px;"
-                    onclick="$('.callout').hide();localStorage.setItem('dismiss_community_callout', true)"></ion-icon>
+                    onclick="$('.callout').hide();localStorage.setItem('dismiss_community_callout', 'true')"></ion-icon>
             </div>
 
             <div class="community-tab-wrap">
@@ -591,6 +626,9 @@
                 </div>
                 <div class="community-tab" onclick="changeCommunityCategory('자유', this);">
                     <span>자유</span>
+                </div>
+                <div class="community-tab" onclick="changeCommunityCategory('투표', this);">
+                    <span>투표</span>
                 </div>
                 <div class="community-tab" onclick="changeCommunityCategory('공지', this);">
                     <span>공지</span>

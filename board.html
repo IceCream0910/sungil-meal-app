@@ -189,7 +189,7 @@
                 <ion-icon name="alert-circle-outline"></ion-icon>
             </a>
             <div id="author-toolbar" style="display:none;">
-                <a href="javascript:openEditPost();" style="margin-right:10px;">
+                <a id="edit-btn" href="javascript:openEditPost();" style="margin-right:10px;">
                     <ion-icon name="create-outline"></ion-icon>
                 </a>
                 <a id="delete-btn">
@@ -213,6 +213,17 @@
         </div>
 
         <h2 id="post-title"></h2>
+
+        <div class="post-vote">
+            <div id="choices-list">
+            </div>
+
+            <button class="custom-btn modal-btn" id="cancel-vote-btn" style="display:none;" onclick="cancelVote();">다시
+                투표</button>
+            <button class="custom-btn modal-btn" id="vote-btn" onclick="vote();">투표</button>
+            <br>
+            <span id="participants-count"></span>
+        </div>
 
         <p id="post-content">
         <div id="viewer">

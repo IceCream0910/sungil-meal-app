@@ -1,1 +1,892 @@
-const auth=firebase.auth();var db=firebase.firestore(),currentCategory="all";firebase.auth().onAuthStateChanged((function(e){e?(loadPostList("all"),$("#community .no-login").hide(),$("#community .main-community").show(),$("#community #account-btn").show(),$("#community .header").show(),db.collection("users").doc(firebase.auth().currentUser.uid).get().then((e=>{var t=e.data();$("#header-username").text(t.nickname),t.profileImg?$("#header-profile-img").attr("src",`assets/icons/profileImg/letter${t.profileImg+1}.png`):$("#header-profile-img").attr("src","assets/icons/profileImg/letter1.png")})),Android.sendUserIdForFCM(firebase.auth().currentUser.uid)):($("#community .no-login").show(),$("#community .main-community").hide(),$("#community #account-btn").hide(),$("#community .header").hide())}));var isDismissCommunityCallout=localStorage.getItem("dismiss_community_callout")||!1;function openLogin(){isApp()?(location.href="https://ssoak-72f93.firebaseapp.com/",$(".sheet-backdrop-nocancel2").addClass("backdrop-in"),$("#login-loader").show()):($(".sheet-backdrop-nocancel2").addClass("backdrop-in"),$("#login-loader").show(),loginGoogle().then((function(e){console.log("구글 로그인 완료",e),$(".sheet-backdrop-nocancel2").removeClass("backdrop-in"),$("#login-loader").hide()})))}1==isDismissCommunityCallout&&$(".callout").hide();var tempData=[];const provider=new firebase.auth.GoogleAuthProvider,loginGoogle=()=>firebase.auth().signInWithPopup(provider).then((e=>{if($(".sheet-backdrop-nocancel2").removeClass("backdrop-in"),$("#login-loader").hide(),e.additionalUserInfo.isNewUser){(tempData=[])[0]=e.user.uid,tempData[1]=e.user.email,tempData[2]=e.user.displayName;var t={uid:tempData[0],email:tempData[1],nickname:e.user.displayName,profileImg:Math.floor(5*Math.random()),admin:!1};db.collection("users").doc(tempData[0]).set(t).then((e=>{console.log("계정정보 1차 저장 완료")})).catch((e=>{console.log(e)})),$("#login-username").val(e.user.displayName),$(".sheet-modal").css("height","30%"),$("#modal-title").html("시작하기"),$(".content-wrap").hide(),$("#loginForm").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("#assign-add-save-btn").hide(),$("#assign-edit-save-btn").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop-nocancel").addClass("backdrop-in"),$(".sheet-backdrop").removeClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#loginForm").height()+130+"px")}),100)}})).catch((e=>{$(".sheet-backdrop-nocancel2").removeClass("backdrop-in"),$("#login-loader").hide(),console.log(e.message),"The popup has been closed by the user before finalizing the operation."==e.message||"The user has cancelled authentication."==e.message?toast("로그인이 취소되었습니다."):toast("로그인 에러 : "+e.message)}));function finishGoogleLogin(e){e.uid?$("#community #account-btn").show():Swal.fire({icon:"error",title:"오류",text:"계정이 정상적으로 생성되지 않았습니다. 다시 시도해주세요."})}function pushWebviewGoogleLoginToken(e){const t=firebase.auth.GoogleAuthProvider.credential(e);firebase.auth().signInWithCredential(t).then((e=>{if($(".sheet-backdrop-nocancel2").removeClass("backdrop-in"),$("#login-loader").hide(),e.additionalUserInfo.isNewUser){(tempData=[])[0]=e.user.uid,tempData[1]=e.user.email,tempData[2]=e.user.displayName;var t={uid:tempData[0],email:tempData[1],nickname:e.user.displayName,admin:!1};db.collection("users").doc(tempData[0]).set(t).then((e=>{console.log("계정정보 1차 저장 완료")})).catch((e=>{console.log(e)})),$("#login-username").val(e.user.displayName),$(".sheet-modal").css("height","30%"),$("#modal-title").html("시작하기"),$(".content-wrap").hide(),$("#loginForm").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("#assign-add-save-btn").hide(),$("#assign-edit-save-btn").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop-nocancel").addClass("backdrop-in"),$(".sheet-backdrop").removeClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#loginForm").height()+130+"px")}),100)}})).catch((t=>{console.log(t);const o=t.code,a=t.message;logError(`Error logging in: ${o} ${a} token: ${e}`,t)}))}async function confirmLogout(){await ui.confirm("정말 로그아웃 하시겠습니까?")&&firebase.auth().signOut().then((function(){$("#community #account-btn").hide(),$("#community .no-login").show(),closeModal(),toast("로그아웃 되었습니다."),Android.logoutAndroidApp()}))}function edit_saveAccountDb(){var e=$("#account-username").val();""==e||" "==e||null==e||null==e||"  "==e?toast("닉네임을 입력해주세요."):checkNicknameDuplicate(e)}function saveAccountDb(){var e=$("#login-username").val(),t=$("#signup-checklist input:checked").map((function(){return this.value})).get();""==e||" "==e||null==e||null==e||"  "==e?toast("닉네임을 입력해주세요."):3!=t.length?toast("모든 항목에 동의해주세요."):checkNicknameDuplicate($("#login-username").val())}$("#community #account-btn").on("click",(function(){$(".sheet-modal").css("height","30%"),$("#modal-title").html("내 프로필"),$(".content-wrap").hide(),$("#account").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("#assign-add-save-btn").hide(),$("#assign-edit-save-btn").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),db.collection("users").doc(firebase.auth().currentUser.uid).get().then((e=>{var t=e.data();$("#account-username").val(t.nickname),$("#header-username").text(t.nickname);var o=t.profileImg;$(".profile-image-btn").removeClass("active"),$(document.getElementsByClassName("profile-image-btn")[o]).addClass("active")})),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop").addClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#account").height()+130+"px")}),100)})),$("#account #logout-btn").on("click",(function(){confirmLogout()}));var lastVisible,editor=new toastui.Editor.factory({el:document.querySelector("#editor"),initialEditType:"wysiwyg",height:"40vh",initialValue:"",language:"ko_KR",theme:"default",autofocus:!1});function post(e){var t=$("#post-title").val(),o=$("#category-select").val(),a=editor.getMarkdown(),i=firebase.auth().currentUser.uid;if(a){var n=firebase.firestore.Timestamp.fromDate(new Date);$(e).text("업로드 중...");var s={title:t,userId:i,content:a,category:o||"자유",createdAt:n};db.collection("board").add(s).then((t=>{closeModal(),$(e).text("등록"),openPost("board.html?id="+t._key.path.segments[1])})).catch((e=>{console.log(e)})),$(".snackbar").hide(),loadPostList("all")}else toast("글 내용을 작성해주세요.")}$(".writePost-btn").on("click",(function(){$(".sheet-modal").css("height","30%"),$("#modal-title").html("게시글 작성"),$(".content-wrap").hide(),$("#writePost").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("#assign-add-save-btn").hide(),$("#assign-edit-save-btn").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),$("#editor").empty(),editor="true"==storedTheme||"system"==storedTheme&&mql.matches?new toastui.Editor.factory({el:document.querySelector("#editor"),toolbarItems:[["bold","italic","strike"],["hr","quote","ul","task"]],initialEditType:"wysiwyg",height:"40vh",initialValue:"",language:"ko_KR",theme:"dark",autofocus:!1}):new toastui.Editor.factory({el:document.querySelector("#editor"),toolbarItems:[["bold","italic","strike"],["hr","quote","ul","task"]],initialEditType:"wysiwyg",initialValue:"",height:"40vh",language:"ko_KR",autofocus:!1}),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop").addClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#writePost").height()+200+"px")}),100)}));var isFirstLoad=!0;function loadPostList(e){if("all"==e)var t=db.collection("board").orderBy("createdAt").limitToLast(4);else t=db.collection("board").where("category","==",e).orderBy("createdAt").limitToLast(4);t.get().then((e=>{$(".post-listview").html(""),e.forEach((t=>{var o=t.data();lastVisible=e.docs[3-(e.docs.length-1)],db.collection("users").doc(o.userId).get().then((e=>{var a=e.data();if($(".post-listview").prepend('\n                        <div class="post-item" onclick="openPost(\'board.html?id='+t.id+'\', this);" data-createdAt="'+o.createdAt.toDate().getTime()+'">\n                        <div class="post-header">\n                        <img src="assets/icons/profileImg/letter'+(a.profileImg?a.profileImg+1:1)+'.png" class="profile-img" />\n                            <span id="uname">'+(a.admin?a.nickname+' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>':a.nickname)+'<br>\n                                <span style="opacity:0.7">'+timeForToday(o.createdAt.toDate())+'</span>\n                            </span>\n        \n                        </div>\n        \n                        <h3 id="post-title">'+o.title+'</h3>\n        \n                        <div class="post-preview" id="viewer-'+t.id+'">\n                        </div>\n    \n                        <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>\n                        <br>\n        \n                        </div>\n                        '),"true"==storedTheme||"system"==storedTheme&&mql.matches){new toastui.Editor.factory({el:document.querySelector("#viewer-"+t.id),viewer:!0,initialValue:o.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm,"$1"),theme:"dark"});$(".post-item").addClass("dark")}else{new toastui.Editor.factory({el:document.querySelector("#viewer-"+t.id),viewer:!0,initialValue:o.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm,"$1"),theme:"default"})}$(".post-item").sort((function(e,t){return $(t).data("createdat")-$(e).data("createdat")})).appendTo(".post-listview")})),isFirstLoad=!1}))}))}function loadMore(e){if(lastVisible){if("all"==e)var t=db.collection("board").orderBy("createdAt").limitToLast(4).endBefore(lastVisible);else t=db.collection("board").where("category","==",e).orderBy("createdAt").limitToLast(4).endBefore(lastVisible);t.get().then((e=>{e.forEach((t=>{var o=t.data();lastVisible=e.docs[3-(e.docs.length-1)],console.log(lastVisible,e.docs.length),db.collection("users").doc(o.userId).get().then((e=>{var a=e.data();if($(".post-listview").prepend('\n                            <div class="post-item" onclick="openPost(\'board.html?id='+t.id+'\', this);" data-createdAt="'+o.createdAt.toDate().getTime()+'">\n                            <div class="post-header">\n                            <img src="assets/icons/profileImg/letter'+(a.profileImg?a.profileImg+1:1)+'.png" class="profile-img" />\n                                <span id="uname">'+(a.admin?a.nickname+' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>':a.nickname)+'<br>\n                                    <span style="opacity:0.7">'+timeForToday(o.createdAt.toDate())+'</span>\n                                </span>\n            \n                            </div>\n            \n                            <h3 id="post-title">'+o.title+'</h3>\n            \n                            <div class="post-preview" id="viewer-'+t.id+'">\n                            </div>\n        \n                            <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>\n                            <br>\n            \n                            </div>\n                            '),"true"==storedTheme||"system"==storedTheme&&mql.matches){new toastui.Editor.factory({el:document.querySelector("#viewer-"+t.id),viewer:!0,initialValue:o.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm,"$1"),theme:"dark"});$(".post-item").addClass("dark")}else{new toastui.Editor.factory({el:document.querySelector("#viewer-"+t.id),viewer:!0,initialValue:o.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm,"$1"),theme:"default"})}$(".post-item").sort((function(e,t){return $(t).data("createdat")-$(e).data("createdat")})).appendTo(".post-listview")}))}))})),$(".bottom_postList").html("")}else $(".bottom_postList").html("마지막 글입니다.")}const Element=document.querySelector(".bottom_postList"),options={},io=new IntersectionObserver(((e,t)=>{e.forEach((e=>{e.isIntersecting&&$(".post-listview").html().length>5&&loadMore(currentCategory||"all")}))}),options);function openPost(e,t){isApp()?location.href=e:window.open(e,"_blank")}function getRandomNickname(){const e={adjective:["귀여운","익명의","용감한","튼튼한","상냥한","마당발","멋쟁이","씩씩한","키다리","웃는","세심한","대범한","똑똑한"],noun:["체리","자두","딸기","오렌지","사과","키위","메론","포도","버찌","야자수","복숭아","레몬","수박","망고","홍시","머루","자몽","살구","리치","참다래","모과","청포도","유자","산딸기","매실","코코넛","바나나","석류","대추","단감","망고스틴","산딸기","아보카도","구아바","무화과","파파야","블루베리","파인애플","한라봉","블림빙","용과","오미자","꿀수박","왕체리","감자","고구마","깻잎","당근","도라지","대파","마늘","토마토","미나리","버섯","배추","부추","케일","브로콜리","생강","시금치","연근","우엉","양파","양배추","호박","깻잎","옥수수","청경채","배추","시금치","부추","가지","실파","대파","미나리","애호박","단호박","오이","당근","감자","고구마","버섯","양송이","단무지","피클","무청","상추","양배추","양상추","바질","마늘","생강","순무","브로콜리","인삼","쑥갓","피망","피자","햄버거","떡볶이","토스트","개발자","고니","공작","거위","기러기","까치","까마귀","두루미","독수리","백조","비둘기","부엉이","오리","앵무새","제비","참새","칠면조","타조","펭귄","개구리","재규어","족제비","치타","청설모","친칠라","침팬지","캥거루","코알라","코요테","코뿔소","카피바라","토끼","판다","표범","퓨마","하마","호랑이","하이에나","박쥐","북극곰","북극여우","바다사자","바다표범","사슴","사자","수달","순록","스컹크","스라소니","양","여우","염소","영양","야크","원숭이","알파카","오소리","얼룩말","바둑이","낙타","노루","노새","늑대","너구리","나무늘보","담비","밤비","듀공","돌고래","다람쥐","두더지","당나귀","라마","래서판다","물개","물범","밍크","도라에몽","미어캣","강아지","곰돌이","가젤","고래","기린","고릴라","고라니","고양이","고슴도치","기니피그","개미핥기","크롱","퉁퉁이","피카츄","파이리","꼬부기","피죤투","또가스","디지몬","마리오","비욘세","참치","연어","초밥","매운탕","쭈꾸미","돌고래","백구","누렁이","흰둥이","된장찌개","김치찌개","루피","파스타","비타민","코카콜라","자일리톨","치즈피자","참치김밥","새우깡","고래밥","치킨버거","닭다리","닭날개","숯불갈비","레몬사탕","뽀로로","치즈","닭갈비","마카롱","도너츠","누룽지","모짜렐라","커피","야옹이","팝스타","파랑새","마그네슘","서포터","만수르","재벌","갑부","후원자"]};var t=e.adjective[Math.floor(Math.random()*e.adjective.length)]+e.noun[Math.floor(Math.random()*e.noun.length)];$("#account-username").val(t),$("#login-username").val(t)}function timeForToday(e){const t=new Date,o=new Date(e),a=Math.floor((t.getTime()-o.getTime())/1e3/60);if(a<1)return"방금 전";if(a<60)return`${a}분 전`;const i=Math.floor(a/60);if(i<24)return`${i}시간 전`;const n=Math.floor(a/60/24);return n<365?n>30?`${Math.floor(n/30)}개월 전`:`${n}일 전`:`${Math.floor(n/365)}년 전`}io.observe(Element);var originalSize=jQuery(window).width()+jQuery(window).height();function checkNicknameDuplicate(e){db.collection("users").where("nickname","==",e).get().then((t=>{if(0==t.size){$("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop-nocancel").removeClass("backdrop-in"),$(".sheet-backdrop").removeClass("backdrop-in");var o={nickname:e};db.collection("users").doc(firebase.auth().currentUser.uid).update(o).then((t=>{$("#community #account-btn").show(),$("#header-username").text(e)})).catch((e=>{toast(e),console.log(e)}))}else $("#header-username").text()==e?($("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop-nocancel").removeClass("backdrop-in"),$(".sheet-backdrop").removeClass("backdrop-in")):toast("이미 사용중인 닉네임입니다.")})).catch((e=>{console.log("Error getting documents",e),toast(e)}))}function changeProfileImg(e){var t={profileImg:e};db.collection("users").doc(firebase.auth().currentUser.uid).update(t).then((t=>{$(".profile-image-btn").removeClass("active"),$(document.getElementsByClassName("profile-image-btn")[e]).addClass("active"),$("#header-profile-img").attr("src",`assets/icons/profileImg/letter${e+1}.png`)})).catch((e=>{toast(e),console.log(e)}))}function changeCommunityCategory(e,t){currentCategory=e,$(".community-tab").removeClass("active"),$(t).addClass("active"),loadPostList(e)}$(window).resize((function(){jQuery(window).width()+jQuery(window).height()!=originalSize&&$("#writePost").is(":visible")?$(".sheet-modal").addClass("full-modal"):$(".sheet-modal").removeClass("full-modal")})),$(document).on("focusout","input",(function(){$(".sheet-modal").removeClass("full-modal")}));
+
+//로그인
+const auth = firebase.auth();
+var db = firebase.firestore();
+
+var currentCategory = 'all';
+
+//로그인 여부 확인
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        loadPostList('all');
+        $('#community .no-login').hide();
+        $('#community .main-community').show();
+        $('#community #account-btn').show();
+        $('#community .header').show();
+        db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
+            var user = doc_user.data();
+            $('#header-username').text(user.nickname);
+            if (user.profileImg) {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${user.profileImg + 1}.png`);
+            } else {
+                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
+            }
+        });
+        Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
+    } else {
+        $('#community .no-login').show();
+        $('#community .main-community').hide();
+        $('#community #account-btn').hide();
+        $('#community .header').hide();
+    }
+});
+
+var isDismissCommunityCallout = localStorage.getItem("dismiss_community_callout") || false
+if (isDismissCommunityCallout != 'true') {
+    $('.callout').show();
+}
+
+function openLogin() {
+    if (isApp()) {
+        location.href = 'https://ssoak-72f93.firebaseapp.com/';
+        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
+        $('#login-loader').show();
+    } else {
+        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
+        $('#login-loader').show();
+        loginGoogle().then(function (result) {
+            console.log('구글 로그인 완료', result);
+            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+            $('#login-loader').hide();
+        })
+    }
+}
+
+//Google 로그인
+var tempData = [];
+const provider = new firebase.auth.GoogleAuthProvider();
+const loginGoogle = () => {
+    return firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+            $('#login-loader').hide();
+
+            if (result.additionalUserInfo.isNewUser) {
+                /** @type {firebase.auth.OAuthCredential} */
+                //회원가입 성공 => DB에 사용자 정보 저장
+                tempData = [];
+                tempData[0] = result.user.uid;
+                tempData[1] = result.user.email;
+                tempData[2] = result.user.displayName;
+                var data = {
+                    uid: tempData[0],
+                    email: tempData[1],
+                    nickname: result.user.displayName,
+                    profileImg: Math.floor(Math.random() * 5),
+                    admin: false,
+                }
+
+                db.collection('users').doc(tempData[0]).set(data).then((result) => {
+                    console.log('계정정보 1차 저장 완료')
+                }).catch((err) => {
+                    console.log(err);
+                })
+
+
+                $('#login-username').val(result.user.displayName);
+
+                openModal('시작하기', 'loginForm')
+                $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+                $('.sheet-backdrop').removeClass('backdrop-in');
+            }
+        }).catch((error) => {
+            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+            $('#login-loader').hide();
+            console.log(error.message);
+            if (error.message == "The popup has been closed by the user before finalizing the operation.") {
+                toast('로그인이 취소되었습니다.');
+            } else if (error.message == "The user has cancelled authentication.") {
+                toast('로그인이 취소되었습니다.');
+            } else {
+                toast('로그인 에러 : ' + error.message);
+            }
+        });
+};
+
+function finishGoogleLogin(res) {
+    if (res.uid) {
+        $('#community #account-btn').show();
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: '오류',
+            text: '계정이 정상적으로 생성되지 않았습니다. 다시 시도해주세요.',
+        })
+    }
+}
+
+
+//android webview google login
+function pushWebviewGoogleLoginToken(idTokenFromApp) {
+    const credential = firebase.auth.GoogleAuthProvider.credential(idTokenFromApp);
+    // Sign in with credential from the Google user.
+    firebase.auth().signInWithCredential(credential).then((result) => {
+        $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+        $('#login-loader').hide();
+        if (result.additionalUserInfo.isNewUser) {
+            /** @type {firebase.auth.OAuthCredential} */
+            //회원가입 성공 => DB에 사용자 정보 저장
+            tempData = [];
+            tempData[0] = result.user.uid;
+            tempData[1] = result.user.email;
+            tempData[2] = result.user.displayName;
+            var data = {
+                uid: tempData[0],
+                email: tempData[1],
+                nickname: result.user.displayName,
+                admin: false,
+            }
+
+            db.collection('users').doc(tempData[0]).set(data).then((result) => {
+                console.log('계정정보 1차 저장 완료')
+            }).catch((err) => {
+                console.log(err);
+            })
+
+            $('#login-username').val(result.user.displayName);
+
+            //open bottom sheet
+            openModal('시작하기', 'loginForm')
+            $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+            $('.sheet-backdrop').removeClass('backdrop-in');
+        }
+    }).catch((error) => {
+        console.log(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        logError(`Error logging in: ${errorCode} ${errorMessage} token: ${idTokenFromApp}`, error);
+    });
+}
+
+
+
+$('#community #account-btn').on('click', function () {
+    openModal('내 프로필', 'account')
+    db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
+        var user = doc_user.data();
+        $('#account-username').val(user.nickname);
+        $('#header-username').text(user.nickname);
+        var profileImg = user.profileImg;
+        $('.profile-image-btn').removeClass('active');
+        $(document.getElementsByClassName('profile-image-btn')[profileImg]).addClass('active');
+    });
+});
+
+
+$('#account #logout-btn').on('click', function () {
+    confirmLogout();
+});
+
+async function confirmLogout() {
+    const confirm = await ui.confirm('정말 로그아웃 하시겠습니까?');
+    if (confirm) {
+        firebase.auth().signOut().then(function () {
+            $('#community #account-btn').hide();
+            $('#community .no-login').show();
+            closeModal();
+            toast('로그아웃 되었습니다.');
+            Android.logoutAndroidApp();
+        });
+    }
+}
+
+function edit_saveAccountDb() {
+    var nickname = $('#account-username').val();
+    if (nickname == '' || nickname == ' ' || nickname == null || nickname == undefined || nickname == '  ') {
+        toast('닉네임을 입력해주세요.')
+    } else {
+        checkNicknameDuplicate(nickname);
+    }
+}
+
+function saveAccountDb() {
+    var nickname = $('#login-username').val();
+    var checkedValues = $('#signup-checklist input:checked').map(function () {
+        return this.value;
+    }).get();
+    //nickname is empty or blank or space
+    if (nickname == '' || nickname == ' ' || nickname == null || nickname == undefined || nickname == '  ') {
+        toast('닉네임을 입력해주세요.')
+    } else if (checkedValues.length != 3) {
+        toast('모든 항목에 동의해주세요.')
+    } else {
+        checkNicknameDuplicate($('#login-username').val());
+    }
+}
+
+
+var editor = new toastui.Editor.factory({
+    el: document.querySelector('#editor'),
+    initialEditType: 'wysiwyg',
+    height: '40vh',
+    initialValue: '',
+    language: 'ko_KR',
+    theme: 'default',
+    autofocus: false,
+});;
+//글 작성
+$('.writePost-btn').on('click', function () {
+    openModal('게시글 작성', 'writePost')
+    $('#editor').empty();
+    //다크모드 에디터 적용
+    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+        editor = new toastui.Editor.factory({
+            el: document.querySelector('#editor'),
+            toolbarItems: [
+                ['bold', 'italic', 'strike'],
+                ['hr', 'quote', 'ul', 'task'],
+            ],
+            initialEditType: 'wysiwyg',
+            height: '40vh',
+            initialValue: '',
+            language: 'ko_KR',
+            theme: 'dark',
+            autofocus: false,
+        });
+    } else {
+        editor = new toastui.Editor.factory({
+            el: document.querySelector('#editor'),
+            toolbarItems: [
+                ['bold', 'italic', 'strike'],
+                ['hr', 'quote', 'ul', 'task'],
+            ],
+            initialEditType: 'wysiwyg',
+            initialValue: '',
+            height: '40vh',
+            language: 'ko_KR',
+            autofocus: false,
+        });
+    }
+
+});
+
+
+function post(target) {
+    var title = $('#post-title').val();
+    var category = $('#category-select').val();
+    var content = editor.getMarkdown();
+    var uid = firebase.auth().currentUser.uid;
+    if (content) {
+        var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+        $(target).text('업로드 중...');
+        $(target).attr('disabled', true);
+        var data = {
+            title: title,
+            userId: uid,
+            content: content,
+            category: category || '자유',
+            createdAt: timestamp,
+        }
+        db.collection('board').add(data).then((result) => {
+            closeModal();
+            $(target).text('등록');
+            $(target).attr('disabled', false);
+            openPost('board.html?id=' + result._key.path.segments[1]);
+        }).catch((err) => {
+            console.log(err);
+        });
+        $('.snackbar').hide();
+        loadPostList('all');
+    } else {
+        toast('글 내용을 작성해주세요.')
+    }
+}
+
+var lastVisible;
+var isFirstLoad = true;
+//게시물 로딩
+function loadPostList(category) {
+    if (category == 'all') {
+        var database = db.collection('board').orderBy("createdAt").limitToLast(4);
+    } else {
+        var database = db.collection('board').where('category', '==', category).orderBy("createdAt").limitToLast(4);
+    }
+    database.get()
+        .then((querySnapshot) => {
+            $('.post-listview').html('');
+            querySnapshot.forEach((doc) => {
+                var data = doc.data();
+                lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length - 1)];
+                db.collection('users').doc(data.userId).get().then((doc_user) => {
+                    var user = doc_user.data();
+                    $('.post-listview').prepend(
+                        `
+                        <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                        <div class="post-header">
+                        <img src="assets/icons/profileImg/letter`+ ((user.profileImg) ? user.profileImg + 1 : 1) + `.png" class="profile-img" />
+                            <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
+                                <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
+                            </span>
+        
+                        </div>
+        
+                        <h3 id="post-title">`+ data.title + `</h3>
+        
+                        <div class="post-preview" id="viewer-`+ doc.id + `">
+                        </div>
+    
+                        <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>
+                        <br>
+        
+                        </div>
+                        `
+                    );
+
+                    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                        const viewer = new toastui.Editor.factory({
+                            el: document.querySelector('#viewer-' + doc.id),
+                            viewer: true,
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                            theme: 'dark'
+                        });
+                        $('.post-item').addClass("dark");
+                    } else {
+                        const viewer = new toastui.Editor.factory({
+                            el: document.querySelector('#viewer-' + doc.id),
+                            viewer: true,
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                            theme: 'default'
+                        });
+                    }
+                    $('.post-item').sort(function (a, b) {
+                        return $(b).data('createdat') - $(a).data('createdat');
+                    }
+                    ).appendTo('.post-listview');
+
+                });
+                isFirstLoad = false;
+            });
+        });
+}
+
+//firebase infinite scroll
+function loadMore(category) {
+    if (lastVisible) {
+        if (category == 'all') {
+            var nextVisible = db.collection('board').orderBy("createdAt").limitToLast(4).endBefore(lastVisible);
+        } else {
+            var nextVisible = db.collection('board').where('category', '==', category).orderBy("createdAt").limitToLast(4).endBefore(lastVisible);
+        }
+        nextVisible.get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var data = doc.data();
+                    lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length - 1)];
+                    console.log(lastVisible, querySnapshot.docs.length);
+                    db.collection('users').doc(data.userId).get().then((doc_user) => {
+                        var user = doc_user.data();
+                        $('.post-listview').prepend(
+                            `
+                            <div class="post-item" onclick="openPost('`+ 'board.html?id=' + doc.id + `', this);" data-createdAt="` + data.createdAt.toDate().getTime() + `">
+                            <div class="post-header">
+                            <img src="assets/icons/profileImg/letter`+ ((user.profileImg) ? user.profileImg + 1 : 1) + `.png" class="profile-img" />
+                                <span id="uname">`+ ((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)) + `<br>
+                                    <span style="opacity:0.7">`+ timeForToday(data.createdAt.toDate()) + `</span>
+                                </span>
+            
+                            </div>
+            
+                            <h3 id="post-title">`+ data.title + `</h3>
+            
+                            <div class="post-preview" id="viewer-`+ doc.id + `">
+                            </div>
+        
+                            <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>
+                            <br>
+            
+                            </div>
+                            `
+                        );
+
+                        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                            const viewer = new toastui.Editor.factory({
+                                el: document.querySelector('#viewer-' + doc.id),
+                                viewer: true,
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                                theme: 'dark'
+                            });
+                            $('.post-item').addClass("dark");
+                        } else {
+                            const viewer = new toastui.Editor.factory({
+                                el: document.querySelector('#viewer-' + doc.id),
+                                viewer: true,
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                                theme: 'default'
+                            });
+                        }
+                        $('.post-item').sort(function (a, b) {
+                            return $(b).data('createdat') - $(a).data('createdat');
+                        }
+                        ).appendTo('.post-listview');
+
+                    });
+                });
+            });
+
+        $('.bottom_postList').html('')
+    } else { //마지막 페이지
+        $('.bottom_postList').html('마지막 글입니다.')
+    }
+
+}
+
+
+// 무한 스크로 : 최하단 스크롤 감지
+const Element = document.querySelector('.bottom_postList')
+const options = {}
+// observer: IntersectionObserver instance
+const io = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && $('.post-listview').html().length > 5) {
+            loadMore(currentCategory || 'all');
+        }
+    })
+}, options)
+
+io.observe(Element)
+
+function openPost(url, target) {
+    if (isApp()) {
+        location.href = url;
+    } else {
+        window.open(url, '_blank');
+    }
+}
+//
+
+function getRandomNickname() {
+    const words = {
+        "adjective": [
+            "귀여운",
+            "익명의",
+            "용감한",
+            "튼튼한",
+            "상냥한",
+            "마당발",
+            "멋쟁이",
+            "씩씩한",
+            "키다리",
+            "웃는",
+            "세심한",
+            "대범한",
+            "똑똑한"
+        ],
+        "noun": [
+            "체리",
+            "자두",
+            "딸기",
+            "오렌지",
+            "사과",
+            "키위",
+            "메론",
+            "포도",
+            "버찌",
+            "야자수",
+            "복숭아",
+            "레몬",
+            "수박",
+            "망고",
+            "홍시",
+            "머루",
+            "자몽",
+            "살구",
+            "리치",
+            "참다래",
+            "모과",
+            "청포도",
+            "유자",
+            "산딸기",
+            "매실",
+            "코코넛",
+            "바나나",
+            "석류",
+            "대추",
+            "단감",
+            "망고스틴",
+            "산딸기",
+            "아보카도",
+            "구아바",
+            "무화과",
+            "파파야",
+            "블루베리",
+            "파인애플",
+            "한라봉",
+            "블림빙",
+            "용과",
+            "오미자",
+            "꿀수박",
+            "왕체리",
+            "감자",
+            "고구마",
+            "깻잎",
+            "당근",
+            "도라지",
+            "대파",
+            "마늘",
+            "토마토",
+            "미나리",
+            "버섯",
+            "배추",
+            "부추",
+            "케일",
+            "브로콜리",
+            "생강",
+            "시금치",
+            "연근",
+            "우엉",
+            "양파",
+            "양배추",
+            "호박",
+            "깻잎",
+            "옥수수",
+            "청경채",
+            "배추",
+            "시금치",
+            "부추",
+            "가지",
+            "실파",
+            "대파",
+            "미나리",
+            "애호박",
+            "단호박",
+            "오이",
+            "당근",
+            "감자",
+            "고구마",
+            "버섯",
+            "양송이",
+            "단무지",
+            "피클",
+            "무청",
+            "상추",
+            "양배추",
+            "양상추",
+            "바질",
+            "마늘",
+            "생강",
+            "순무",
+            "브로콜리",
+            "인삼",
+            "쑥갓",
+            "피망",
+            "피자",
+            "햄버거",
+            "떡볶이",
+            "토스트",
+            "개발자",
+            "고니",
+            "공작",
+            "거위",
+            "기러기",
+            "까치",
+            "까마귀",
+            "두루미",
+            "독수리",
+            "백조",
+            "비둘기",
+            "부엉이",
+            "오리",
+            "앵무새",
+            "제비",
+            "참새",
+            "칠면조",
+            "타조",
+            "펭귄",
+            "개구리",
+            "재규어",
+            "족제비",
+            "치타",
+            "청설모",
+            "친칠라",
+            "침팬지",
+            "캥거루",
+            "코알라",
+            "코요테",
+            "코뿔소",
+            "카피바라",
+            "토끼",
+            "판다",
+            "표범",
+            "퓨마",
+            "하마",
+            "호랑이",
+            "하이에나",
+            "박쥐",
+            "북극곰",
+            "북극여우",
+            "바다사자",
+            "바다표범",
+            "사슴",
+            "사자",
+            "수달",
+            "순록",
+            "스컹크",
+            "스라소니",
+            "양",
+            "여우",
+            "염소",
+            "영양",
+            "야크",
+            "원숭이",
+            "알파카",
+            "오소리",
+            "얼룩말",
+            "바둑이",
+            "낙타",
+            "노루",
+            "노새",
+            "늑대",
+            "너구리",
+            "나무늘보",
+            "담비",
+            "밤비",
+            "듀공",
+            "돌고래",
+            "다람쥐",
+            "두더지",
+            "당나귀",
+            "라마",
+            "래서판다",
+            "물개",
+            "물범",
+            "밍크",
+            "도라에몽",
+            "미어캣",
+            "강아지",
+            "곰돌이",
+            "가젤",
+            "고래",
+            "기린",
+            "고릴라",
+            "고라니",
+            "고양이",
+            "고슴도치",
+            "기니피그",
+            "개미핥기",
+            "크롱",
+            "퉁퉁이",
+            "피카츄",
+            "파이리",
+            "꼬부기",
+            "피죤투",
+            "또가스",
+            "디지몬",
+            "마리오",
+            "비욘세",
+            "참치",
+            "연어",
+            "초밥",
+            "매운탕",
+            "쭈꾸미",
+            "돌고래",
+            "백구",
+            "누렁이",
+            "흰둥이",
+            "된장찌개",
+            "김치찌개",
+            "루피",
+            "파스타",
+            "비타민",
+            "코카콜라",
+            "자일리톨",
+            "치즈피자",
+            "참치김밥",
+            "새우깡",
+            "고래밥",
+            "치킨버거",
+            "닭다리",
+            "닭날개",
+            "숯불갈비",
+            "레몬사탕",
+            "뽀로로",
+            "치즈",
+            "닭갈비",
+            "마카롱",
+            "도너츠",
+            "누룽지",
+            "모짜렐라",
+            "커피",
+            "야옹이",
+            "팝스타",
+            "파랑새",
+            "마그네슘",
+            "서포터",
+            "만수르",
+            "재벌",
+            "갑부",
+            "후원자"
+        ]
+    };
+    var adjective = words.adjective[Math.floor(Math.random() * words.adjective.length)];
+    var noun = words.noun[Math.floor(Math.random() * words.noun.length)];
+    var result = adjective + noun;
+    $('#account-username').val(result);
+    $('#login-username').val(result);
+}
+
+// 날짜 -> {n일/분/시간 전}  형식으로 변환
+function timeForToday(value) {
+    const today = new Date();
+    const timeValue = new Date(value);
+
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금 전';
+    if (betweenTime < 60) {
+        return `${betweenTime}분 전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+        return `${betweenTimeHour}시간 전`;
+    }
+
+
+    const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+    if (betweenTimeDay < 365) {
+        if (betweenTimeDay > 30) {
+            return `${Math.floor(betweenTimeDay / 30)}달 전`;
+        } else {
+            return `${betweenTimeDay}일 전`;
+        }
+
+    }
+
+    return `${Math.floor(betweenTimeDay / 365)}년 전`;
+}
+
+
+//모바일 키보드 높이 대응
+var originalSize = jQuery(window).width() + jQuery(window).height();
+
+// resize #sheet-modal on resize window
+$(window).resize(function () {
+    if (jQuery(window).width() + jQuery(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
+        $('.sheet-modal').addClass('full-modal')
+    } else {
+        $('.sheet-modal').removeClass('full-modal')
+    }
+});
+
+$(document).on('focusout', 'input', function () { //키보드 닫힐 때
+    $('.sheet-modal').removeClass('full-modal')
+});
+
+
+// 닉네임 중복 체크 후 등록
+function checkNicknameDuplicate(nickname) {
+    db.collection('users').where('nickname', '==', nickname).get()
+        .then(snapshot => {
+            if (snapshot.size == 0) {
+                closeModal();
+
+                var data = {
+                    nickname: nickname,
+                }
+
+                db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
+                    $('#community #account-btn').show();
+                    $('#header-username').text(nickname);
+                }).catch((err) => {
+                    toast(err)
+                    console.log(err);
+                })
+            } else if ($('#header-username').text() == nickname) { //변경 사항 없으면 닫기
+                closeModal();
+            } else {
+                toast('이미 사용중인 닉네임입니다.')
+            }
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+            toast(err)
+        });
+}
+
+//프로필 사진 변경
+function changeProfileImg(imgNum) {
+    var data = {
+        profileImg: imgNum,
+    }
+
+    db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
+        $('.profile-image-btn').removeClass('active');
+        $(document.getElementsByClassName('profile-image-btn')[imgNum]).addClass('active');
+        $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${imgNum + 1}.png`);
+    }).catch((err) => {
+        toast(err)
+        console.log(err);
+    })
+}
+
+//커뮤니티 카테고리 탭
+function changeCommunityCategory(category, btn) {
+    currentCategory = category;;
+    $('.community-tab').removeClass('active');
+    $(btn).addClass('active');
+    loadPostList(category);
+}
+
+
+//투표 만들기
+function openVoteMaker() {
+    openModal('투표 만들기', 'vote')
+    $('#vote-title').val('');
+    $('#vote-choice-list').html(`
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    `);
+}
+
+function addChoice() {
+    $('#vote-choice-list').append(`
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    `);
+    $('.sheet-modal').css('height', $('#vote').height() + 130 + 'px');
+    $('#vote-choice-list').animate({
+        scrollTop: $('#vote-choice-list')[0].scrollHeight
+    }, 0);
+}
+
+function postVote(target) {
+    var options = [];
+    var cnt = 0;
+    if ($('#vote-title').val().length >= 2) {
+        $(target).text('게시중...');
+        $(target).attr('disabled', true);
+        $('#vote-choice-list').find('input').each(function () {
+            if ($(this).val().length >= 1) {
+                options[cnt] = {
+                    title: $(this).val(),
+                    count: 0
+                }
+                cnt++;
+            }
+        });
+
+        var uid = firebase.auth().currentUser.uid;
+        var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+        var data = {
+            title: $('#vote-title').val(),
+            options: options,
+            userId: uid,
+            category: '투표',
+            createdAt: timestamp,
+            participants: '',
+            content: '?vote?',
+        }
+
+        db.collection('board').add(data).then((result) => {
+            closeModal();
+            $(target).text('게시');
+            $(target).attr('disabled', false);
+            openPost('board.html?id=' + result._key.path.segments[1]);
+        }).catch((err) => {
+            toast(err);
+            closeModal();
+        });
+    } else {
+        toast('투표 제목을 입력해주세요.')
+    }
+
+}
+

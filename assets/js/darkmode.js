@@ -68,6 +68,7 @@ function onDark() {
     $('.home-header').addClass("dark");
     $('.semester-tab').addClass("dark");
     $('.community-tab').addClass("dark");
+    $('#vote-choice-list').addClass("dark");
     loadPostList(currentCategory);
 }
 
@@ -113,5 +114,6 @@ function offDark() {
     $('.home-header').removeClass("dark");
     $('.semester-tab').removeClass("dark");
     $('.community-tab').removeClass("dark");
+    $('#vote-choice-list').removeClass("dark");
     loadPostList(currentCategory);
 }
