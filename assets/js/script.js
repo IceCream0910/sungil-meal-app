@@ -1,1 +1,1187 @@
-moment.lang("ko",{weekdays:["일","월","화","수","목","금","토"],weekdaysShort:["일","월","화","수","목","금","토"]}),moment.lang("en",{weekdays:["sun","mon","tue","wed","thu","fri","sat"],weekdaysShort:["sun","mon","tue","wed","thu","fri","sat"]});var previousNoti=localStorage.getItem("ssoak-notice-content")||"";function isApp(){return navigator.userAgent.indexOf("hybridApp")>-1}function mealTts(){if(ttsAudio.pause(),currentMenuRaw){for(var e=currentMenuRaw.replaceAll("'","").replaceAll("[중식]","").split("\n"),t="",a=0;a<e.length;a++){if(e[a].match(/\d+/)){var s=e[a].match(/\d+/).index;e[a].substring(s,e[a].length)}else;t+=e[a].substring(0,s)+", "}var l=moment(selectedDate).lang("ko").format("M월 D일 dddd요일")+" 급식 메뉴는 "+t.replaceAll("&",", ")+"입니다."}else l=moment(selectedDate).lang("ko").format("M월 D일 dddd요일")+"은 급식 정보가 없네요.";ttsAudio=new Audio("https://playentry.org/api/expansionBlock/tts/read.mp3?text="+l+"&speed=0&pitch=0&speaker="+voiceType+"&volume=1"),console.log(l),ttsAudio.play()}function timetableTts(){ttsAudio.pause();var e=moment(selectedDate).lang("en").format("dddd");if("sat"==e||"sun"==e)var t=moment(selectedDate).lang("ko").format("M월 D일 dddd요일")+"에는 수업이 없어요.";else{for(var a=timetableRaw[e],s="",l=0;l<a.length;l++)s+=l+1+"교시 "+a[l].ITRT_CNTNT+", ";t=moment(selectedDate).lang("ko").format("M월 D일 dddd요일")+" 시간표를 알려드릴게요. "+s+"입니다"}console.log(t),ttsAudio=new Audio("https://playentry.org/api/expansionBlock/tts/read.mp3?text="+t+"&speed=0&pitch=0&speaker="+voiceType+"&volume=1"),ttsAudio.play()}function playPause(){track.paused?(track.play(),controlBtn.className="pause"):(track.pause(),controlBtn.className="play")}previousNoti!=$("#noti-preview").text()?(localStorage.setItem("ssoak-notice-content",$("#noti-preview").text()),setTimeout((function(){$(".home-header #service-noti").css("background","transparent"),$(".home-header #service-noti").css("opacity","0.4"),$(".home-header #service-noti").css("gap","0"),$("#noti-preview").text("")}),8e3)):($(".home-header #service-noti").css("background","transparent"),$(".home-header #service-noti").css("opacity","0.4"),$(".home-header #service-noti").css("gap","0"),$("#noti-preview").text(""));var today=moment(new Date).format("YYYYMMDD"),todayForDday=new Date,ddayDate=new Date(2022,7,22),gap=ddayDate.getTime()-todayForDday.getTime(),ddayResult=Math.ceil(gap/864e5);ddayResult>0?$("#dday").html("개학까지 "+ddayResult+"일 남았어요"):0==ddayResult?$("#dday").html("오늘 개학이에요"):$("#dday").html("등록되는대로 보여줄게요.");var selectedDate=today;$("#date").html(moment(selectedDate).lang("ko").format("M월 D일 (dddd)")),$("#date").addClass("today");var alleList,favTagsList,data,newData,grade=localStorage.getItem("sungil_grade"),classNum=localStorage.getItem("sungil_classNum"),currentMenuRaw="",timetableRaw="",isTest=!1;function backDate(){let e=moment(selectedDate).add(-1,"days");selectedDate=moment(e).format("YYYYMMDD"),$("#date").html(moment(selectedDate).lang("ko").format("M월 D일 (dddd)")),today==selectedDate?$("#date").addClass("today"):$("#date").removeClass("today"),updateInfo()}function forwardDate(){let e=moment(selectedDate).add(1,"days");selectedDate=moment(e).format("YYYYMMDD"),$("#date").html(moment(selectedDate).lang("ko").format("M월 D일 (dddd)")),today==selectedDate?$("#date").addClass("today"):$("#date").removeClass("today"),updateInfo()}function updateInfo(){var e=JSON.parse(localStorage.getItem("sungil_api_cache"))||null,t=localStorage.getItem("sungil_api_cache_date")||null,a=selectedDate.substring(0,4)+"-"+selectedDate.substring(4,6).replace(/(^0+)/,"");if($("#meal-loader").show(),$("#meal-menus").empty(),!isTest){var s=["시간표 물어보는 중","달력 체크중","급식실 훔쳐보는 중"],l=0,n=$("#loading-text");if(setInterval((function(){n.fadeOut((function(){n.html(s[l]),++l>=s.length&&(l=0),n.fadeIn()}))}),1e3),document.getElementsByClassName("loading-overlay")[0].classList.add("is-active"),$("#schedule-content").html(""),e&&t==a?(displayMeal(e),displaySchedule(e),document.getElementsByClassName("loading-overlay")[0].classList.remove("is-active")):$.ajax({type:"GET",url:"https://sungil-school-api.vercel.app/api/"+selectedDate,success:function(e){data=JSON.parse(e),localStorage.setItem("sungil_api_cache",JSON.stringify(data)),localStorage.setItem("sungil_api_cache_date",selectedDate.substring(0,4)+"-"+selectedDate.substring(4,6).replace(/(^0+)/,"")),displayMeal(data),document.getElementsByClassName("loading-overlay")[0].classList.remove("is-active"),data.schedule&&displaySchedule(data)}}),grade&&classNum){$(".timetable-wrap").hide(),$("#nosetting-timetable").hide(),$("#vacation-timetable").show(),$(".timetable-wrap").show(),$("#nosetting-timetable").hide();var o=JSON.parse(localStorage.getItem("sungil_timeapi_cache"))||null,i=localStorage.getItem("sungil_timeapi_cache_date")||null,c=selectedDate.substring(0,4)+"-"+selectedDate.substring(4,6).replace(/(^0+)/,"")+"--"+getWeekNo(moment(selectedDate).format("YYYY-MM-DD"));o&&i==c?(displayTimetable(o),$.ajax({type:"GET",url:"https://sungil-school-api.vercel.app/timetable?date="+selectedDate+"&grade="+grade+"&classNum="+classNum,success:function(e){var t=JSON.parse(e);JSON.stringify(o)!=JSON.stringify(t)?(console.log("시간표 변동 사항 발견!",o,t),localStorage.setItem("sungil_timeapi_cache",JSON.stringify(t)),localStorage.setItem("sungil_timeapi_cache_date",selectedDate.substring(0,4)+"-"+selectedDate.substring(4,6).replace(/(^0+)/,"")+"--"+getWeekNo(moment(selectedDate).format("YYYY-MM-DD"))),displayTimetable(t)):console.log("시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지")}})):($(".loading-overlay").hasClass("is-active")||document.getElementsByClassName("loading-overlay")[0].classList.add("is-active"),$.ajax({type:"GET",url:"https://sungil-school-api.vercel.app/timetable?date="+selectedDate+"&grade="+grade+"&classNum="+classNum,success:function(e){var t=JSON.parse(e);localStorage.setItem("sungil_timeapi_cache",JSON.stringify(t)),localStorage.setItem("sungil_timeapi_cache_date",selectedDate.substring(0,4)+"-"+selectedDate.substring(4,6).replace(/(^0+)/,"")+"--"+getWeekNo(moment(selectedDate).format("YYYY-MM-DD"))),displayTimetable(t),$(".loading-overlay").hasClass("is-active")&&document.getElementsByClassName("loading-overlay")[0].classList.remove("is-active")}}))}else $("#timetable").html("학년/반 설정을 먼저 진행해주세요."),$(".timetable-wrap").hide(),$("#nosetting-timetable").show()}}function refreshNewData(){console.log(newData),displayTimetable(newData),$(".snackbar").fadeOut(250)}function displayMeal(e){var t=selectedDate.substring(6,8).replace(/(^0+)/,"");if(e.meal[t]){$("#no-meal").hide(),$("#exist-meal").fadeIn();for(var a=(currentMenuRaw=e.meal[t].toString().replace(":","")).replaceAll("'","").replaceAll("[중식]","").split("\n"),s="",l=0;l<a.length;l++){if(a[l].match(/\d+/))var n=a[l].match(/\d+/).index,o=a[l].substring(n,a[l].length);else o="none",n=a[l].length;var i=a[l].substring(0,n);if(""!=alleList){var c=!1,d=o.split(".");if($.each(d,(function(e,t){if(alleList.split(",").includes(t))return c=!0,!0})),c)s+='<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\''+i+"', '"+o+"')\">"+i+"</a><br>";else{var r=!1;$.each(favTagsList,(function(e,t){if(console.log(t,i,-1!==t.indexOf(i)),i.includes(t))return r=!0,!0})),s+=r?'<a class="mealItem favMenu" href="javascript:openMenuBanner(\''+i+"', '"+o+"')\">"+i+"✨</a><br>":'<a class="mealItem" href="javascript:openMenuBanner(\''+i+"', '"+o+"')\">"+i+"</a><br>"}}else{r=!1;$.each(favTagsList,(function(e,t){if(i.includes(t))return r=!0,!0})),s+=r?'<a class="mealItem favMenu" href="javascript:openMenuBanner(\''+i+"', '"+o+"')\">"+i+"✨</a><br>":'<a class="mealItem" href="javascript:openMenuBanner(\''+i+"', '"+o+"')\">"+i+"</a><br>"}}if($("#meal-menus").html(s),$("#meal-loader").hide(),"true"==storedTheme||"system"==storedTheme&&mql.matches){var m=document.getElementsByClassName("mealItem");for(l=0;l<m.length;l++)m[l].classList.add("dark")}}else currentMenuRaw="",$("#meal-loader").hide(),$("#no-meal").fadeIn(),$("#exist-meal").hide(),$("#kcal").html(""),$("#meal-menus").html("")}function displaySchedule(e){for(var t=e.schedule,a=Object.keys(t).length-2,s=1;s<=a;s++)""!=t[s]&&$("#schedule-content").append('<div class="schedule-item"><span class="day-text">'+s+'</span><h3 class="schedule-name">'+t[s].replaceAll(",","<br>")+"</h3></div>")}function displayTimetable(e){for(var t=moment(selectedDate).day(),a=document.querySelectorAll("tbody th"),s=0;s<a.length;s++){var l=a.item(s);$(l).removeClass("active"),$(l).html("")}switch(t){case 1:$("#m1").addClass("active"),$("#m2").addClass("active"),$("#m3").addClass("active"),$("#m4").addClass("active"),$("#m5").addClass("active"),$("#m6").addClass("active"),$("#m7").addClass("active");break;case 2:$("#tu1").addClass("active"),$("#tu2").addClass("active"),$("#tu3").addClass("active"),$("#tu4").addClass("active"),$("#tu5").addClass("active"),$("#tu6").addClass("active"),$("#tu7").addClass("active");break;case 3:$("#w1").addClass("active"),$("#w2").addClass("active"),$("#w3").addClass("active"),$("#w4").addClass("active"),$("#w5").addClass("active"),$("#w6").addClass("active"),$("#w7").addClass("active");break;case 4:$("#th1").addClass("active"),$("#th2").addClass("active"),$("#th3").addClass("active"),$("#th4").addClass("active"),$("#th5").addClass("active"),$("#th6").addClass("active"),$("#th7").addClass("active");break;case 5:$("#f1").addClass("active"),$("#f2").addClass("active"),$("#f3").addClass("active"),$("#f4").addClass("active"),$("#f5").addClass("active"),$("#f6").addClass("active"),$("#f7").addClass("active")}timetableRaw=e;for(s=0;s<e.mon.length;s++)$("#m"+(s+1).toString()).html(e.mon[s].ITRT_CNTNT);for(s=0;s<e.tue.length;s++)$("#tu"+(s+1).toString()).html(e.tue[s].ITRT_CNTNT);for(s=0;s<e.wed.length;s++)$("#w"+(s+1).toString()).html(e.wed[s].ITRT_CNTNT);for(s=0;s<e.thu.length;s++)$("#th"+(s+1).toString()).html(e.thu[s].ITRT_CNTNT);for(s=0;s<e.fri.length;s++)$("#f"+(s+1).toString()).html(e.fri[s].ITRT_CNTNT)}function shareMeal(){if(currentMenuRaw){for(var e=currentMenuRaw.replaceAll("'","").replaceAll("[중식]","").split("\n"),t="",a=0;a<e.length;a++){if(e[a].match(/\d+/)){var s=e[a].match(/\d+/).index;e[a].substring(s,e[a].length)}else;t+=e[a].substring(0,s)+"\n"}var l="<"+moment(selectedDate).lang("ko").format("M월 D일(dddd)")+" 성일고 급식>\n"+t,n=document.createElement("textarea");n.value=l,document.body.appendChild(n),n.select(),document.execCommand("copy"),document.body.removeChild(n),toast("급식 메뉴를 클립보드에도 복사했어요"),Kakao.Link.sendDefault({objectType:"text",text:l,link:{mobileWebUrl:"https://sungil.me/welcome.html",webUrl:"https://sungil.me/welcome.html"}})}else $("#copied").text("내용 없음"),setTimeout((function(){$("#copied").text("")}),1e3)}alleList=localStorage.getItem("sungil_alleList")?(alleList=(alleList=localStorage.getItem("sungil_alleList").split(",")).map((function(e){return++e}))).join(",").toString():"",favTagsList=localStorage.getItem("sungil_favTagsList")?localStorage.getItem("sungil_favTagsList").split(","):["훈제","참치마요","미트볼","우동","망고","샌드위치","피자","햄버거","돈까스","브라운소스","핫바","새우튀김","스파게티","감자튀김","빵","떡꼬치","와플","바나나","스테이크","탕수육","스크렘블","초코","맛탕","바베큐","떡갈비","비엔나","브라우니","치킨마요","타코야끼","도넛","치즈","핫도그","치킨","스프","소세지","메론","떡볶이","샐러드","모닝빵","불고기","햄"],grade&&classNum&&$("#gradeClassLabel").html(grade+"학년 "+classNum+"반"),$.datepicker.setDefaults({dateFormat:"yy-mm-dd",prevText:"이전 달",nextText:"다음 달",monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],monthNamesShort:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],dayNames:["일","월","화","수","목","금","토"],dayNamesShort:["일","월","화","수","목","금","토"],dayNamesMin:["일","월","화","수","목","금","토"],showMonthAfterYear:!0,yearSuffix:"년"}),$("#datepicker").datepicker({onSelect:function(e){selectedDate=moment(e).format("YYYYMMDD"),$("#date").html(moment(selectedDate).lang("ko").format("M월 D일 (dddd)")),$("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop").removeClass("backdrop-in"),updateInfo()}}),$(document).ready((function(){updateInfo(),$.ajax({type:"GET",url:"https://sungil-school-api.vercel.app/notices",success:function(e){var t=JSON.parse(e);$("#notices-content").html('<h3 class="card__primary__title__text">가정통신문</h3><br>');for(var a=0;a<5;a++){var s=t.articles[a].title,l=moment(new Date(t.articles[a].created_at)).format("YYYY-MM-DD"),n=t.articles[a].view_link;if(t.articles[a].files)var o=t.articles[a].files[0].url,i=t.articles[a].files[0].title;$("#notices-content").append('<div class="card notice-card" onclick="window.open(\''+n+"', '_blank')\">\n            <h4>"+s+'</h4>\n            <div class="file-box" onclick="window.open(\''+o+"', '_blank')\">\n            <ion-icon name=\"document-text-outline\"></ion-icon>\n            "+i+"\n            </div>\n            <p>"+l+"</p>\n        </div>")}if("true"==storedTheme||"system"==storedTheme&&mql.matches){var c=document.getElementsByClassName("notice-card");for(a=0;a<c.length;a++)c[a].classList.add("dark")}}})})),String.prototype.insertAt=function(e,t){return this.slice(0,e)+t+this.slice(e)},Kakao.init("c2c4f841a560ad18bfed29d190dfac19");const isMobile=()=>/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);function getWeekNo(e){var t=new Date;return e&&(t=new Date(e)),Math.ceil(t.getDate()/7)}function search(e){$.ajax({type:"GET",url:"https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q="+e,success:function(e){var t='<img class="menu-image" src="'+e.items[0].image.thumbnailLink+'" class="img-thumbnail">';$("#image_result").html(t)}})}function openMenuBanner(e,t){if("none"==t)$("#allergy-info").html("알레르기 정보 없음");else{var a=t.split(".");$.each(a,(function(e,t){alleList.split(",").includes(t)?a[e]="?"+t+"!":a[e]=t}));var s=(t=a.join(".")).replace("10","돼지고기").replace("11","복숭아").replace("12","토마토").replace("13","아황산염").replace("14","호두").replace("15","닭고기").replace("16","쇠고기").replace("17","오징어").replace("18","조개류(굴, 전복, 홍합 포함)").replace("19","잣").replaceAll(".",", ").replace("1","난류").replace("2","우유").replace("3","메밀").replace("4","땅콩").replace("5","대두").replace("6","밀").replace("7","고등어").replace("8","게").replace("9","새우").replaceAll("?",'<span id="dangerAllegy">').replaceAll("!","</span>");$("#allergy-info").html(s.substring(0,s.length-2))}search(e),$(".sheet-backdrop").addClass("backdrop-in"),$("#menu-name").html(e),$(".menuBanner").show("slide",{direction:"down"},100)}function isBigScreen(){return!!window.matchMedia("(min-width: 769px)").matches}function toast(e){Toastify({text:e,duration:2200,newWindow:!0,close:!1,gravity:"bottom",position:"center",stopOnFocus:!0,style:{background:"#000",color:"#fff",border:"none",borderRadius:"10px",boxShadow:"none"}}).showToast()}document.addEventListener("click",(function(e){$(".menuBanner").is(":visible")&&($(e.target).hasClass("menuBanner")||($(".sheet-backdrop").removeClass("backdrop-in"),$(".menuBanner").hide("slide",{direction:"down"},100)))})),$(".pop").on("click",(function(){$("#modal-title").html("날짜 선택"),$(".content-wrap").hide(),$("#datepicker").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop").addClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#datepicker").height()+130+"px")}),100)})),$(".sheet-backdrop").on("click",(function(){$("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop").removeClass("backdrop-in")})),$(".addAssignment-btn").on("click",(function(){$(".sheet-modal").css("height","30%"),$("#modal-title").html("수행평가 추가"),$(".content-wrap").hide(),$("#assessment").show(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").hide(),$("#assign-add-save-btn").show(),$("#assign-edit-save-btn").hide(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px"),$("#assessment #date_assign").val(moment().format("YYYY-MM-DD")),$("#title").val(""),$(".timetable_selector").html(""),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop").addClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#assessment").height()+130+"px")}),100)})),$(".c-modal").each((function(){var e=new Hammer(this);e.get("swipe").set({direction:Hammer.DIRECTION_ALL}),e.on("swipedown",(function(e){$("#loginForm").is(":visible")||(console.log(e),$("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop").removeClass("backdrop-in"))}))})),$(".page-content").each((function(){if(!$("#loginForm").is(":visible")){var e=new Hammer(this);e.get("swipe").set({direction:Hammer.DIRECTION_ALL}),e.on("swipedown",(function(e){$("#loginForm").is(":visible")||$("#assessment").is(":visible")||$("#myClassAssign").is(":visible")||$("#account").is(":visible")||$("#writePost").is(":visible")||(console.log(e),$("body").css("overflow","auto"),$(".modal-in").css("bottom","-1850px"),setTimeout((function(){$(".modal-in").css("display","none")}),100),$(".sheet-backdrop").removeClass("backdrop-in"))}))}})),$(".grade_btn").on("click",(function(){$(".grade_btn").removeClass("active"),$(this).addClass("active");var e=$(this).attr("data-grade");"1"==e?($(".exam1").show(),$(".exam2").hide(),$(".exam3").hide()):"2"==e?($(".exam1").hide(),$(".exam2").show(),$(".exam3").hide()):($(".exam1").hide(),$(".exam2").hide(),$(".exam3").show())})),$(".main-nav").show(),$("#home").fadeIn(),$("#community").hide(),$("#assignment").hide(),$("#report").hide(),$(".bottom-nav a").on("click",(function(){$(".bottom-nav a").removeClass("active"),$(".bottom-nav a").removeClass("bounce"),$(this).addClass("active"),$(this).addClass("bounce"),$("html, body").animate({scrollTop:0},"fast");var e=$(this).attr("data-tab");switch($(".bottom-nav").removeClass("non-border"),e){case"home":$(".main-nav").show(),$("#home").fadeIn(),$("#community").hide(),$("#assignment").hide(),$("#report").hide(),$(".bottom-nav").addClass("non-border"),isBigScreen()?$(".bottom-nav").css("border-radius","0 0 20px 20px"):$(".bottom-nav").css("border-radius","0"),$("#tab1").attr("name","planet"),$("#tab2").attr("name","chatbubbles-outline"),$("#tab3").attr("name","file-tray-full-outline");break;case"community":$(".main-nav").hide(),$("#home").hide(),$("#community").fadeIn(500),$("#assignment").hide(),$("#report").hide(),isBigScreen()?$(".bottom-nav").css("border-radius","20px"):$(".bottom-nav").css("border-radius","20px 20px 0 0"),$("#tab1").attr("name","planet-outline"),$("#tab2").attr("name","chatbubbles"),$("#tab3").attr("name","file-tray-full-outline"),$("#community-frame").height($(window).height()-$(".bottom-nav").height()-20);break;case"assignment":$(".main-nav").hide(),$("#home").hide(),$("#community").hide(),$("#assignment").fadeIn(500),$("#report").hide(),isBigScreen()?$(".bottom-nav").css("border-radius","20px"):$(".bottom-nav").css("border-radius","20px 20px 0 0"),$("#tab1").attr("name","planet-outline"),$("#tab2").attr("name","chatbubbles-outline"),$("#tab3").attr("name","file-tray-full");break;case"report":$(".main-nav").hide(),$("#home").hide(),$("#community").hide(),$("#assignment").hide(),$("#report").fadeIn(500),isBigScreen()?$(".bottom-nav").css("border-radius","20px"):$(".bottom-nav").css("border-radius","20px 20px 0 0"),$("#tab1").attr("name","planet-outline"),$("#tab2").attr("name","chatbubbles-outline"),$("#tab3").attr("name","file-tray-full-outline"),$("#tab4").attr("name","stats-chart")}}));const ui={confirm:async e=>createConfirm(e)},createConfirm=e=>new Promise(((t,a)=>{$("#confirmMessage").text(e),$("#confirmYes").off("click"),$("#confirmNo").off("click"),$("#confirmYes").on("click",(()=>{$(".confirm").hide(),t(!0)})),$("#confirmNo").on("click",(()=>{$(".confirm").hide(),t(!1)})),$(".confirm").show()}));function shareApp(){var e=document.createElement("textarea");e.value="성일고를 위한 모든 정보, 한 번에 쏙\n\n급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!\n\nhttps://sungil.me",document.body.appendChild(e),e.select(),document.execCommand("copy"),document.body.removeChild(e),toast("공유 메시지를 클립보드에도 복사했어요"),Kakao.Link.sendDefault({objectType:"feed",content:{title:"성일고를 위한 모든 정보, 한 번에 쏙",description:"급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!",imageUrl:"https://i.imgur.com/5LqdyDL.png",link:{mobileWebUrl:"https://sungil.me/welcome.html",webUrl:"https://sungil.me/welcome.html"}},buttons:[{title:"지금 바로 써보기",link:{mobileWebUrl:"https://sungil.me/welcome.html",webUrl:"https://sungil.me/welcome.html"}}]})}function getSelfCheckStatus(){const e=localStorage.getItem("selfcheck-name"),t=localStorage.getItem("selfcheck-birth"),a=localStorage.getItem("selfcheck-pwd");null==e||null==t||null==a?$("#selfcheck-status").text("학생 정보를 입력해주세요"):$.ajax({type:"GET",url:`https://selfcheck-api.vercel.app/status?name=${e}&birth=${t}&password=${a}`,success:function(e){e?1==e[0].registerRequired?$("#selfcheck-status").text("오늘 제출 안 함"):$("#selfcheck-status").text(`${moment(e[0].registeredAt).format("HH시 mm분")} ${e[0].isHealthy?"정상으로":"유증상으로"} 제출`):$("#selfcheck-status").text("불러오기 실패")},error:function(e,t,a){$("#selfcheck-status").text("불러오기 실패"),toast("자가진단 정보를 불러오는 데 실패했어요. 정보를 모두 올바르게 입력했는지 확인해주세요.")}})}function openSelfcheckModal(){$("#modal-title").html("자가진단 정보 수정"),$(".content-wrap").hide(),$("#datepicker").hide(),$("#exam").hide(),$("#calculator").hide(),$("#selfcheck").show(),$("body").css("overflow","hidden"),$(".modal-in").css("display","block"),$(".modal-in").css("bottom","-1850px");const e=localStorage.getItem("selfcheck-name")||"",t=localStorage.getItem("selfcheck-birth")||"",a=localStorage.getItem("selfcheck-pwd")||"";$("#selfcheck-name").val(e),$("#selfcheck-birth").val(t),$("#selfcheck-pwd").val(a),setTimeout((function(){$(".modal-in").css("bottom","0px")}),100),$(".sheet-backdrop").addClass("backdrop-in"),setTimeout((function(){$(".sheet-modal").css("height",$("#selfcheck").height()+130+"px")}),100)}function submitSelfCheck(){const e=localStorage.getItem("selfcheck-name"),t=localStorage.getItem("selfcheck-birth"),a=localStorage.getItem("selfcheck-pwd");if(null==e||null==t||null==a)toast("학생 정보를 먼저 등록해주세요");else{const n=["학교 가는 중","교무실 노크 중","소리치는 중",'"정상이에요!"'];$("#selfcheck-btn").html("학교 가는 중");var s=1;const o=setInterval((function(){$("#selfcheck-btn").html(n[s]),3==s?s=0:s++}),3e3);var l=0;const i=setInterval((function(){3==l?l=0:l++,$("#selfcheck-btn").html(n[s]+".".repeat(l))}),500);$.ajax({type:"GET",url:`https://selfcheck-api.vercel.app/api?name=${e}&birth=${t}&password=${a}`,success:function(e){clearInterval(o),clearInterval(i),e&&1==e.success?(toast("자가진단을 제출했어요"),getSelfCheckStatus()):toast("자가진단 제출에 실패했어요."),$("#selfcheck-btn").html('<ion-icon name="checkmark-outline"></ion-icon>자가진단 완료'),setTimeout((function(){$("#selfcheck-btn").html('<ion-icon name="flash"></ion-icon>제출하기')}),3e3)},error:function(e,t,a){clearInterval(o),clearInterval(i),$("#selfcheck-btn").html('<ion-icon name="warning"></ion-icon>자가진단 실패'),setTimeout((function(){$("#selfcheck-btn").html('<ion-icon name="flash"></ion-icon>제출하기')}),3e3),toast("자가진단 제출에 실패했어요. 정보를 올바르게 입력했는지 확인해주세요.")}})}}function saveSelfcheckInfo(){const e=$("#selfcheck-name").val(),t=$("#selfcheck-birth").val(),a=$("#selfcheck-pwd").val();""==e||""==t||""==a||6!=t.length?toast("모든 정보를 올바르게 입력해주세요"):(localStorage.setItem("selfcheck-name",e),localStorage.setItem("selfcheck-birth",t),localStorage.setItem("selfcheck-pwd",a),toast("저장되었어요"),$("#selfcheck-status").text("불러오는 중"),getSelfCheckStatus(),closeModal())}PullToRefresh.init({mainElement:"main",onRefresh:function(){loadPostList(currentCategory)}}),setTimeout((function(){if(!isTest){console.clear(),console.log("%c경고!","font-size:25px;color:#ff4043;"),console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.","font-size:15px;")}}),5e3),document.onkeydown=function(e){if(123==e.keyCode)return toast("보안 상의 이유로 금지된 동작입니다."),!1},window.addEventListener("load",(()=>{let e=document.querySelectorAll("ins.ADSENSE");Array.from(e).forEach((e=>{let t=e.parentElement;"none"===window.getComputedStyle(t).getPropertyValue("display")?e.remove():(e.classList.remove("ADSENSE"),e.classList.add("adsbygoogle"),(adsbygoogle=window.adsbygoogle||[]).push({}))}))})),getSelfCheckStatus();
+
+
+moment.lang('ko', {
+    weekdays: ["일", "월", "화", "수", "목", "금", "토"],
+    weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
+});
+moment.lang('en', {
+    weekdays: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+    weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
+});
+
+//공지 표시
+var previousNoti = localStorage.getItem('ssoak-notice-content') || '';
+if (previousNoti != $('#noti-preview').text()) {
+    localStorage.setItem('ssoak-notice-content', $('#noti-preview').text());
+    setTimeout(function () {
+        $('.home-header #service-noti').css('background', 'transparent');
+        $('.home-header #service-noti').css('opacity', '0.4');
+        $('.home-header #service-noti').css('gap', '0');
+        $('#noti-preview').text('');
+    }, 8000);
+} else {
+    $('.home-header #service-noti').css('background', 'transparent');
+    $('.home-header #service-noti').css('opacity', '0.4');
+    $('.home-header #service-noti').css('gap', '0');
+    $('#noti-preview').text('');
+}
+
+
+if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
+    updateOrder();
+}
+
+
+function updateOrder() {
+    const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
+    for (var i = 0; i < 4; i++) {
+        const key = Object.keys(orderIndex[i])[0];
+        const value = orderIndex[i][key];
+        switch (key) {
+            case 'meal':
+                $('.meal-wrap').data('index', value);
+                break;
+            case 'selfcheck':
+                $('.selfcheck-wrap').data('index', value);
+                break;
+            case 'timetable':
+                $('.siganpyo-wrap').data('index', value);
+                break;
+            case 'schedule':
+                $('.schedule-wrap').data('index', value);
+                break;
+            case 'notice':
+                $('.notice-wrap').data('index', value);
+                break;
+        }
+    }
+    orderElements();
+}
+
+
+function orderElements() {
+    var listItems = Array.from(document.querySelectorAll("#order-item"));
+    listItems.sort(function (a, b) {
+        return $(a).data('index') - $(b).data('index');
+    }).forEach(function (item) {
+        document.querySelector(".home-order-wrap").appendChild(item);
+    });
+}
+
+function isApp() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf('hybridApp') > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function mealTts() {
+    ttsAudio.pause();
+    if (currentMenuRaw) {
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
+
+        for (var i = 0; i < menuArr.length; i++) {
+            if (menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+            menuInfoTag += menuName + ', ';
+        }
+
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 급식 메뉴는 ' + menuInfoTag.replaceAll('&', ', ') + '입니다.';
+    } else {
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '은 급식 정보가 없네요.';
+    }
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
+    console.log(text);
+    ttsAudio.play();
+}
+
+function timetableTts() {
+    ttsAudio.pause();
+    var selectedDay = moment(selectedDate).lang("en").format('dddd');
+    if (selectedDay == 'sat' || selectedDay == 'sun') {
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '에는 수업이 없어요.';
+    } else {
+        var timeDataForTts = timetableRaw[selectedDay];
+        var listedClass = '';
+        for (var i = 0; i < timeDataForTts.length; i++) {
+            listedClass += (i + 1) + '교시 ' + timeDataForTts[i].ITRT_CNTNT + ', ';
+        }
+        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 시간표를 알려드릴게요. ' + listedClass + '입니다';
+    }
+    console.log(text);
+    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
+    ttsAudio.play();
+
+}
+
+function playPause() {
+    if (track.paused) {
+        track.play();
+        //controlBtn.textContent = "Pause";
+        controlBtn.className = "pause";
+    } else {
+        track.pause();
+        //controlBtn.textContent = "Play";
+        controlBtn.className = "play";
+    }
+}
+
+
+var today = moment(new Date()).format('YYYYMMDD');
+
+var todayForDday = new Date();
+var ddayDate = new Date(2022, 07, 22);
+var gap = ddayDate.getTime() - todayForDday.getTime();
+var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+if (ddayResult > 0) {
+    $('#dday').html('개학까지 ' + ddayResult + '일 남았어요');
+} else if (ddayResult == 0) {
+    $('#dday').html('오늘 개학이에요');
+} else {
+    $('#dday').html('등록되는대로 보여줄게요.');
+}
+
+var selectedDate = today;
+$('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
+$('#date').addClass('today');
+
+var grade = localStorage.getItem("sungil_grade");
+var classNum = localStorage.getItem("sungil_classNum");
+var currentMenuRaw = '';
+var timetableRaw = '';
+var isTest = false;
+
+var alleList;
+
+if (localStorage.getItem("sungil_alleList")) {
+    alleList = localStorage.getItem("sungil_alleList").split(',');
+    alleList = alleList.map(function (val) { return ++val; });
+    alleList = alleList.join(',').toString();
+} else {
+    alleList = '';
+}
+
+var favTagsList;
+if (localStorage.getItem("sungil_favTagsList")) {
+    favTagsList = localStorage.getItem("sungil_favTagsList").split(',');
+} else {
+    favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
+}
+
+
+if (grade && classNum) {
+    $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
+}
+
+$.datepicker.setDefaults({
+    dateFormat: 'yy-mm-dd',
+    prevText: '이전 달',
+    nextText: '다음 달',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+    showMonthAfterYear: true,
+    yearSuffix: '년'
+});
+
+$("#datepicker").datepicker({
+    onSelect: function (dataTExt) {
+        selectedDate = moment(dataTExt).format('YYYYMMDD');
+        $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
+        $('body').css('overflow', 'auto');
+        $('.modal-in').css('bottom', '-1850px');
+        setTimeout(function () {
+            $('.modal-in').css('display', 'none');
+        }, 100);
+        $('.sheet-backdrop').removeClass('backdrop-in');
+        updateInfo();
+    }
+});
+
+
+
+
+
+$(document).ready(function () {
+    updateInfo();
+    //가정통신문
+    $.ajax({
+        type: "GET",
+        url: "https://sungil-school-api.vercel.app/notices",
+        success: function (result) {
+            var data = JSON.parse(result);
+            $('#notices-content').html('<h3 class="card__primary__title__text">가정통신문</h3><br>');
+            for (var i = 0; i < 5; i++) {
+                var title = data.articles[i].title;
+                var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
+                var link = data.articles[i].view_link;
+                if (data.articles[i].files) {
+                    var fileUrl = data.articles[i].files[0].url;
+                    var fileName = data.articles[i].files[0].title;
+                }
+                $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
+            <h4>`+ title + `</h4>
+            <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
+            <ion-icon name="document-text-outline"></ion-icon>
+            `+ fileName + `
+            </div>
+            <p>`+ createdAt + `</p>
+        </div>`);
+            }
+            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                var notice_items = document.getElementsByClassName('notice-card');
+                for (var i = 0; i < notice_items.length; i++) {
+                    notice_items[i].classList.add("dark");
+                }
+            }
+        }
+    });
+});
+
+
+function backDate() {
+    let yesterday = moment(selectedDate).add(-1, 'days');
+    selectedDate = moment(yesterday).format('YYYYMMDD');
+    $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
+    if (today == selectedDate) {
+        $('#date').addClass('today');
+
+    } else {
+        $('#date').removeClass('today');
+    }
+    updateInfo();
+}
+
+function forwardDate() {
+    let tomorrow = moment(selectedDate).add(1, 'days');
+    selectedDate = moment(tomorrow).format('YYYYMMDD');
+    $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
+    if (today == selectedDate) {
+        $('#date').addClass('today');
+
+    } else {
+        $('#date').removeClass('today');
+    }
+    updateInfo();
+}
+
+String.prototype.insertAt = function (index, str) {
+    return this.slice(0, index) + str + this.slice(index)
+}
+
+var data;
+var newData;
+function updateInfo() {
+    var cachedData = JSON.parse(localStorage.getItem("sungil_api_cache")) || null;
+    var cachedData_date = localStorage.getItem("sungil_api_cache_date") || null;
+    var requestDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "");
+    $('#meal-loader').show();
+    $('#meal-menus').empty();
+    if (!isTest) {
+        var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
+        var counter = 0;
+        var elem = $("#loading-text");
+        setInterval(change, 1000);
+        function change() {
+            elem.fadeOut(function () {
+                elem.html(text[counter]);
+                counter++;
+                if (counter >= text.length) { counter = 0; }
+                elem.fadeIn();
+            });
+        }
+
+        document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
+        $('#schedule-content').html('');
+
+        if (cachedData && cachedData_date == requestDate) {
+            displayMeal(cachedData);
+            displaySchedule(cachedData);
+            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "https://sungil-school-api.vercel.app/api/" + selectedDate,
+                success: function (result) {
+                    data = JSON.parse(result);
+                    localStorage.setItem("sungil_api_cache", JSON.stringify(data));
+                    localStorage.setItem("sungil_api_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, ""));
+
+                    //급식
+                    displayMeal(data);
+                    document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
+
+                    //학사일정
+                    if (data.schedule) {
+                        displaySchedule(data);
+                        //$('#schedule-content').html(data.schedule.EVENT_NM);
+                    }
+                }
+            });
+        }
+
+
+        //시간표
+        if (!grade || !classNum) {
+            $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
+            $('.timetable-wrap').hide();
+            $('#nosetting-timetable').show();
+
+        } else {
+            $('.timetable-wrap').hide();
+            $('#nosetting-timetable').hide();
+            $('#vacation-timetable').show();
+            $('.timetable-wrap').show();
+            $('#nosetting-timetable').hide();
+
+            var cachedTimeData = JSON.parse(localStorage.getItem("sungil_timeapi_cache")) || null;
+            var cachedTimeData_date = localStorage.getItem("sungil_timeapi_cache_date") || null;
+            var requestTimeDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD'));
+
+            if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
+                displayTimetable(cachedTimeData);
+                //변경 사항 체크
+                $.ajax({
+                    type: "GET",
+                    url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
+                    success: function (result_time) {
+                        var data = JSON.parse(result_time);
+                        if (JSON.stringify(cachedTimeData) != JSON.stringify(data)) {
+                            console.log('시간표 변동 사항 발견!', cachedTimeData, data);
+                            localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                            localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+                            displayTimetable(data);
+                        } else { console.log('시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지'); }
+                    }
+                });
+
+            } else {
+                if (!$('.loading-overlay').hasClass('is-active')) {
+                    document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
+                    success: function (result_time) {
+                        var data = JSON.parse(result_time);
+
+                        localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
+                        localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
+
+                        displayTimetable(data);
+                        if ($('.loading-overlay').hasClass('is-active')) {
+                            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
+                        }
+                    }
+                });
+            }
+        }
+
+        //시간표 끝
+    }
+}
+
+function refreshNewData() {
+    console.log(newData)
+    displayTimetable(newData);
+    $('.snackbar').fadeOut(250);
+}
+
+
+function displayMeal(data) {
+    //급식
+    var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
+
+    if (data.meal[day]) {
+        $('#no-meal').hide();
+        $('#exist-meal').fadeIn();
+        currentMenuRaw = data.meal[day].toString().replace(':', '');
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
+
+        for (var i = 0; i < menuArr.length; i++) {
+            if (menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+                var allegyIndex = menuArr[i].length;
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+
+
+            if (alleList != '') {
+                var isDanger = false;
+                var tempAlleList = alle.split('.');
+                $.each(tempAlleList, function (index, element) {
+                    if (alleList.split(',').includes(element)) {
+                        isDanger = true;
+                        return true;
+                    }
+                });
+
+
+                if (isDanger) {
+                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                } else {
+                    var isFavorite = false;
+                    $.each(favTagsList, function (index, element) {
+                        console.log(element, menuName, element.indexOf(menuName) !== -1)
+                        if ((menuName).includes(element)) {
+                            isFavorite = true;
+                            return true;
+                        }
+                    });
+
+                    if (isFavorite) {
+                        menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                    } else {
+                        menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                    }
+                }
+            } else {
+                var isFavorite = false;
+                $.each(favTagsList, function (index, element) {
+                    if ((menuName).includes(element)) {
+                        isFavorite = true;
+                        return true;
+                    }
+                });
+
+                if (isFavorite) {
+                    menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                } else {
+                    menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                }
+            }
+
+
+
+        }
+
+
+        $('#meal-menus').html(menuInfoTag);
+        $('#meal-loader').hide();
+
+
+        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+            var items = document.getElementsByClassName('mealItem');
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.add("dark");
+            }
+        }
+
+    } else {
+        currentMenuRaw = '';
+        $('#meal-loader').hide();
+        $('#no-meal').fadeIn();
+        $('#exist-meal').hide();
+        $('#kcal').html('');
+        $('#meal-menus').html('');
+    }
+
+
+}
+
+function displaySchedule(data) {
+    var schedules = data.schedule;
+    var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
+    for (var i = 1; i <= length; i++) {
+        if (schedules[i] != '') {
+            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
+        }
+    }
+
+}
+
+function displayTimetable(data) {
+    var day = moment(selectedDate).day();
+    var sections = document.querySelectorAll("tbody th");
+    for (var i = 0; i < sections.length; i++) {
+        var item = sections.item(i);
+        $(item).removeClass('active');
+        $(item).html('');
+    }
+
+    switch (day) {
+        case 1:
+            $('#m1').addClass('active');
+            $('#m2').addClass('active');
+            $('#m3').addClass('active');
+            $('#m4').addClass('active');
+            $('#m5').addClass('active');
+            $('#m6').addClass('active');
+            $('#m7').addClass('active');
+            break;
+        case 2:
+            $('#tu1').addClass('active');
+            $('#tu2').addClass('active');
+            $('#tu3').addClass('active');
+            $('#tu4').addClass('active');
+            $('#tu5').addClass('active');
+            $('#tu6').addClass('active');
+            $('#tu7').addClass('active');
+            break;
+        case 3:
+            $('#w1').addClass('active');
+            $('#w2').addClass('active');
+            $('#w3').addClass('active');
+            $('#w4').addClass('active');
+            $('#w5').addClass('active');
+            $('#w6').addClass('active');
+            $('#w7').addClass('active');
+            break;
+        case 4:
+            $('#th1').addClass('active');
+            $('#th2').addClass('active');
+            $('#th3').addClass('active');
+            $('#th4').addClass('active');
+            $('#th5').addClass('active');
+            $('#th6').addClass('active');
+            $('#th7').addClass('active');
+            break;
+        case 5:
+            $('#f1').addClass('active');
+            $('#f2').addClass('active');
+            $('#f3').addClass('active');
+            $('#f4').addClass('active');
+            $('#f5').addClass('active');
+            $('#f6').addClass('active');
+            $('#f7').addClass('active');
+            break;
+        default:
+            break;
+
+    }
+
+    timetableRaw = data;
+    for (var i = 0; i < data.mon.length; i++) {
+        $('#m' + ((i + 1).toString())).html(data.mon[i].ITRT_CNTNT);
+    }
+    for (var i = 0; i < data.tue.length; i++) {
+        $('#tu' + ((i + 1).toString())).html(data.tue[i].ITRT_CNTNT);
+    }
+    for (var i = 0; i < data.wed.length; i++) {
+        $('#w' + ((i + 1).toString())).html(data.wed[i].ITRT_CNTNT);
+    }
+    for (var i = 0; i < data.thu.length; i++) {
+        $('#th' + ((i + 1).toString())).html(data.thu[i].ITRT_CNTNT);
+    }
+    for (var i = 0; i < data.fri.length; i++) {
+        $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
+    }
+}
+
+Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
+
+//kakao 공유
+function shareMeal() {
+    if (currentMenuRaw) {
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuInfoTag = '';
+
+        for (var i = 0; i < menuArr.length; i++) {
+            if (menuArr[i].match(/\d+/)) {
+                var allegyIndex = menuArr[i].match(/\d+/).index;
+                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
+            } else {
+                var alle = 'none';
+            }
+            var menuName = menuArr[i].substring(0, allegyIndex);
+            menuInfoTag += menuName + '\n';
+        }
+
+        var content = '<' + moment(selectedDate).lang("ko").format('M월 D일(dddd)') + ' 성일고 급식>\n' + menuInfoTag;
+
+        var tempElem = document.createElement('textarea');
+        tempElem.value = content;
+        document.body.appendChild(tempElem);
+        tempElem.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempElem);
+        toast('급식 메뉴를 클립보드에도 복사했어요');
+
+        Kakao.Link.sendDefault({
+            objectType: 'text',
+            text:
+                content,
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        })
+    } else {
+        $('#copied').text('내용 없음');
+        setTimeout(function () {
+            $('#copied').text('');
+        }, 1000);
+    }
+
+}
+
+
+const isMobile = () => { return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) }
+
+
+function getWeekNo(v_date_str) {
+    var date = new Date();
+    if (v_date_str) {
+        date = new Date(v_date_str);
+    }
+    return Math.ceil(date.getDate() / 7);
+}
+
+
+
+//kakao image search api
+function search(query) {
+    $.ajax({
+        type: "GET",
+        url: 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q=' + query,
+        success: function (result) {
+            var image_result = '<img class="menu-image" src="' + result.items[0].image.thumbnailLink + '" class="img-thumbnail">';
+            $('#image_result').html(image_result);
+        }
+    });
+}
+
+
+
+function openMenuBanner(name, allegy) {
+    if (allegy == 'none') {
+        $('#allergy-info').html('알레르기 정보 없음');
+    } else {
+
+        var tempAlleList = allegy.split('.');
+        $.each(tempAlleList, function (index, element) {
+            if (alleList.split(',').includes(element)) {
+                tempAlleList[index] = '?' + element + '!'
+            } else { tempAlleList[index] = element }
+        });
+        allegy = tempAlleList.join(".");
+
+        var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replaceAll('.', ', ').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우')
+            .replaceAll('?', '<span id="dangerAllegy">').replaceAll('!', '</span>');
+        $('#allergy-info').html(allegyString.substring(0, allegyString.length - 2));
+    }
+
+    search(name);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    $('#menu-name').html(name);
+    $('.menuBanner').show("slide", { direction: "down" }, 100);;
+
+}
+
+//메뉴 상세정보 팝업 이외 클릭 시 닫기
+document.addEventListener('click', function (e) {
+    if ($('.menuBanner').is(':visible')) {
+        if (!$(e.target).hasClass("menuBanner")) {
+            $('.sheet-backdrop').removeClass('backdrop-in');
+            $('.menuBanner').hide("slide", { direction: "down" }, 100);;
+        }
+
+    }
+});
+
+
+/* bottom sheet */
+$('.pop').on('click', function () {
+    $('#modal-title').html('날짜 선택');
+    $('.content-wrap').hide();
+    $('#datepicker').show();
+    $('#exam').hide();
+    $('#calculator').hide();
+    $('#selfcheck').hide();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#datepicker').height() + 130 + 'px');
+    }, 100);
+});
+
+$('.sheet-backdrop').on('click', function () {
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    $('.sheet-backdrop').removeClass('backdrop-in');
+});
+
+/* bottom sheet */
+// 수행평가 추가 모달 띄우기
+$('.addAssignment-btn').on('click', function () {
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').html('수행평가 추가');
+    $('.content-wrap').hide();
+    $('#assessment').show();
+    $('#exam').hide();
+    $('#calculator').hide();
+    $('#selfcheck').hide();
+    $('#assign-add-save-btn').show();
+    $('#assign-edit-save-btn').hide();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
+    $('#title').val('');
+    $('.timetable_selector').html('');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
+    }, 100);
+});
+
+
+///custom modal sheet///
+$('.c-modal').each(function () {
+
+    var mc = new Hammer(this);
+
+    mc.get('swipe').set({
+        direction: Hammer.DIRECTION_ALL
+    });
+
+    mc.on("swipedown", function (ev) {
+        if (!$('#loginForm').is(':visible')) {
+            console.log(ev)
+            $('body').css('overflow', 'auto');
+            $('.modal-in').css('bottom', '-1850px');
+            setTimeout(function () {
+                $('.modal-in').css('display', 'none');
+            }, 100);
+
+            $('.sheet-backdrop').removeClass('backdrop-in');
+        }
+    });
+
+
+});
+
+$('.page-content').each(function () {
+    if (!$('#loginForm').is(':visible')) {
+        var mc = new Hammer(this);
+
+        mc.get('swipe').set({
+            direction: Hammer.DIRECTION_ALL
+        });
+
+        mc.on("swipedown", function (ev) {
+            if (!$('#loginForm').is(':visible') && !$('#assessment').is(':visible') && !$('#myClassAssign').is(':visible') && !$('#account').is(':visible') && !$('#writePost').is(':visible')) {
+                console.log(ev)
+                $('body').css('overflow', 'auto');
+                $('.modal-in').css('bottom', '-1850px');
+                setTimeout(function () {
+                    $('.modal-in').css('display', 'none');
+                }, 100);
+
+                $('.sheet-backdrop').removeClass('backdrop-in');
+            }
+        });
+    }
+});
+
+$('.grade_btn').on('click', function () {
+    $('.grade_btn').removeClass('active');
+    $(this).addClass('active');
+    var grade = $(this).attr('data-grade');
+
+    if (grade == '1') {
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    } else {
+        $('.exam1').hide();
+        $('.exam2').hide();
+        $('.exam3').show();
+    }
+});
+
+
+/*
+$('.main-nav').hide();
+$('#home').hide();
+$('#community').hide();
+$('#assignment').hide();
+$('#report').show();
+*/
+
+$('.main-nav').show();
+$('#home').fadeIn();
+$('#community').hide();
+$('#assignment').hide();
+$('#report').hide();
+
+
+$('.bottom-nav a').on('click', function () {
+    $('.bottom-nav a').removeClass('active');
+    $('.bottom-nav a').removeClass('bounce');
+    $(this).addClass('active');
+    $(this).addClass('bounce');
+    $('html, body').animate({
+        scrollTop: 0
+    }, 'fast');
+
+    var tab = $(this).attr('data-tab');
+    $('.bottom-nav').removeClass("non-border");
+    switch (tab) {
+        case 'home':
+            $('.main-nav').show();
+            $('#home').fadeIn();
+            $('#community').hide();
+            $('#assignment').hide();
+            $('#report').hide();
+            $('.bottom-nav').addClass("non-border");
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
+            $('#tab1').attr('name', 'planet');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            break;
+        case 'community':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').fadeIn(500);
+            $('#assignment').hide();
+            $('#report').hide();
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
+            break;
+        case 'assignment':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').hide();
+            $('#assignment').fadeIn(500);
+            $('#report').hide();
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full');
+            break;
+        case 'report':
+            $('.main-nav').hide();
+            $('#home').hide();
+            $('#community').hide();
+            $('#assignment').hide();
+            $('#report').fadeIn(500);
+            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            $('#tab1').attr('name', 'planet-outline');
+            $('#tab2').attr('name', 'chatbubbles-outline');
+            $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#tab4').attr('name', 'stats-chart');
+            break;
+    }
+
+});
+
+
+function isBigScreen() {
+    if (window.matchMedia('(min-width: 769px)').matches) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+//toast
+function toast(msg) {
+    Toastify({
+        text: msg,
+        duration: 2200,
+        newWindow: true,
+        close: false,
+        gravity: "bottom", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "#000",
+            color: "#fff",
+            border: "none",
+            borderRadius: "10px",
+            boxShadow: "none"
+        }
+    }).showToast();
+}
+
+
+
+//confirm
+const ui = {
+    confirm: async (message) => createConfirm(message)
+}
+
+const createConfirm = (message) => {
+    return new Promise((complete, failed) => {
+        $('#confirmMessage').text(message)
+
+        $('#confirmYes').off('click');
+        $('#confirmNo').off('click');
+
+        $('#confirmYes').on('click', () => { $('.confirm').hide(); complete(true); });
+        $('#confirmNo').on('click', () => { $('.confirm').hide(); complete(false); });
+
+        $('.confirm').show();
+    });
+}
+
+//PullToRefresh
+PullToRefresh.init({
+    mainElement: 'main',
+    onRefresh: function () {
+        loadPostList(currentCategory);
+    }
+});
+
+setTimeout(function () {
+    if (!isTest) {
+        var cssRule = "font-size:25px;color:#ff4043;";
+        var cssRule2 = "font-size:15px;";
+        //console.clear();
+        console.log("%c경고!", cssRule);
+        console.log("%c이 기능은 개발자용으로 브라우저에서 제공되는 내용입니다.\n누군가 기능을 악의적으로 사용하거나 다른 사람의 계정을 '해킹'하기 위해 여기에 특정 콘텐츠를 복사하여 붙여넣으라고 했다면 사기 행위로 간주하세요.\n해당 경고문을 보고 있는 본인 역시, 개발자도구를 이용해 악의적인 공격을 시도한다면 법적 처벌을 받을 수 있습니다.", cssRule2);
+    }
+}, 5000);
+
+//prevent f12
+document.onkeydown = function (e) {
+    if (e.keyCode == 123) {
+        toast('보안 상의 이유로 금지된 동작입니다.')
+        return false;
+    }
+}
+
+
+window.addEventListener('load', () => {
+    let matches = document.querySelectorAll("ins.ADSENSE");
+
+    Array.from(matches).forEach((element) => {
+        let parentElement = element.parentElement;
+        if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none") {
+            element.remove();
+        } else {
+            element.classList.remove("ADSENSE");
+            element.classList.add("adsbygoogle");
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+    });
+
+});
+
+
+function shareApp() {
+    const content = `성일고를 위한 모든 정보, 한 번에 쏙\n\n급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!\n\nhttps://sungil.me`
+    var tempElem = document.createElement('textarea');
+    tempElem.value = content;
+    document.body.appendChild(tempElem);
+    tempElem.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempElem);
+    toast('공유 메시지를 클립보드에도 복사했어요');
+
+    Kakao.Link.sendDefault({
+        objectType: 'feed',
+        content: {
+            title: '성일고를 위한 모든 정보, 한 번에 쏙',
+            description: '급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!',
+            imageUrl: "https://i.imgur.com/5LqdyDL.png",
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        },
+        buttons: [{
+            title: '지금 바로 써보기',
+            link: {
+                mobileWebUrl: 'https://sungil.me/welcome.html',
+                webUrl: 'https://sungil.me/welcome.html',
+            },
+        },],
+    })
+}
+
+
+getSelfCheckStatus()
+
+function getSelfCheckStatus() {
+    const name = localStorage.getItem('selfcheck-name');
+    const birth = localStorage.getItem('selfcheck-birth');
+    const pwd = localStorage.getItem('selfcheck-pwd');
+
+    if (name == null || birth == null || pwd == null) {
+        $('#selfcheck-status').text('학생 정보를 입력해주세요');
+    } else {
+        $.ajax({
+            type: "GET",
+            url: `https://selfcheck-api.vercel.app/status?name=${name}&birth=${birth}&password=${pwd}`,
+            success: function (result) {
+                if (result) {
+                    if (result[0].registerRequired == true) { //안함
+                        $('#selfcheck-status').text('오늘 제출 안 함')
+                    } else {
+                        $('#selfcheck-status').text(`${moment(result[0].registeredAt).format('HH시 mm분')} ${(result[0].isHealthy) ? '정상으로' : '유증상으로'} 제출`)
+                    }
+
+                } else {
+                    $('#selfcheck-status').text('불러오기 실패')
+                }
+            },
+            error: function (request, status, error) {
+                $('#selfcheck-status').text('불러오기 실패');
+                toast('자가진단 정보를 불러오는 데 실패했어요. 정보를 모두 올바르게 입력했는지 확인해주세요.')
+            }
+        });
+    }
+
+}
+
+function openSelfcheckModal() {
+    $('#modal-title').html('자가진단 정보 수정');
+    $('.content-wrap').hide();
+    $('#datepicker').hide();
+    $('#exam').hide();
+    $('#calculator').hide();
+    $('#selfcheck').show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    const name = localStorage.getItem('selfcheck-name') || '';
+    const birth = localStorage.getItem('selfcheck-birth') || '';
+    const pwd = localStorage.getItem('selfcheck-pwd') || '';
+    $('#selfcheck-name').val(name)
+    $('#selfcheck-birth').val(birth)
+    $('#selfcheck-pwd').val(pwd)
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#selfcheck').height() + 130 + 'px');
+    }, 100);
+}
+
+function submitSelfCheck() {
+    const name = localStorage.getItem('selfcheck-name');
+    const birth = localStorage.getItem('selfcheck-birth');
+    const pwd = localStorage.getItem('selfcheck-pwd');
+
+    if (name == null || birth == null || pwd == null) {
+        toast('학생 정보를 먼저 등록해주세요');
+    } else {
+        const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
+        $('#selfcheck-btn').html('학교 가는 중');
+        var progressCnt = 1;
+        const progress = setInterval(function () {
+            $('#selfcheck-btn').html(progressText[progressCnt]);
+            if (progressCnt == 3) {
+                progressCnt = 0;
+            } else {
+                progressCnt++;
+            }
+        }, 3000);
+
+        //1초마다 ...개수 변경
+        var dotCnt = 0;
+        const dot = setInterval(function () {
+            if (dotCnt == 3) {
+                dotCnt = 0;
+            } else {
+                dotCnt++;
+            }
+            $('#selfcheck-btn').html(progressText[progressCnt] + '.'.repeat(dotCnt));
+        }, 500);
+
+        $.ajax({
+            type: "GET",
+            url: `https://selfcheck-api.vercel.app/api?name=${name}&birth=${birth}&password=${pwd}`,
+            success: function (result) {
+                clearInterval(progress);
+                clearInterval(dot);
+                if (result) {
+                    if (result.success == true) {
+                        toast('자가진단을 제출했어요')
+                        getSelfCheckStatus();
+                    } else {
+                        toast('자가진단 제출에 실패했어요.')
+                    }
+                } else {
+                    toast('자가진단 제출에 실패했어요.')
+                }
+                $('#selfcheck-btn').html(`<ion-icon name="checkmark-outline"></ion-icon>자가진단 완료`);
+
+                setTimeout(function () {
+                    $('#selfcheck-btn').html(`<ion-icon name="flash"></ion-icon>제출하기`);
+                }, 3000);
+
+            },
+            error: function (request, status, error) {
+                clearInterval(progress);
+                clearInterval(dot);
+                $('#selfcheck-btn').html(`<ion-icon name="warning"></ion-icon>자가진단 실패`);
+                setTimeout(function () {
+                    $('#selfcheck-btn').html(`<ion-icon name="flash"></ion-icon>제출하기`);
+                }, 3000);
+                toast('자가진단 제출에 실패했어요. 정보를 올바르게 입력했는지 확인해주세요.')
+            }
+        });
+    }
+}
+
+function saveSelfcheckInfo() {
+    const name = $('#selfcheck-name').val();
+    const birth = $('#selfcheck-birth').val();
+    const pwd = $('#selfcheck-pwd').val();
+
+    if (name == '' || birth == '' || pwd == '' || birth.length != 6) {
+        toast('모든 정보를 올바르게 입력해주세요')
+    } else {
+        localStorage.setItem('selfcheck-name', name);
+        localStorage.setItem('selfcheck-birth', birth);
+        localStorage.setItem('selfcheck-pwd', pwd);
+        toast('저장되었어요');
+        $('#selfcheck-status').text('불러오는 중');
+        getSelfCheckStatus();
+        closeModal();
+    }
+}
+
+
+$(window).resize(function () {
+    if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
+        updateOrder();
+    } else {
+        $('.meal-wrap').data('index', '0');
+        $('.selfcheck-wrap').data('index', '1');
+        $('.siganpyo-wrap').data('index', '2');
+        $('.schedule-wrap').data('index', '3');
+        $('.notice-wrap').data('index', '4');
+        orderElements();
+    }
+});
+
