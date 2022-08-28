@@ -119,7 +119,18 @@ function offDark() {
 }
 
 
+function isApp() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf('hybridApp') > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
+if (isApp()) {
+    $('#hybridAppSettingsBtn').show();
+}
 
 /* tts voice */
 if (storedVoice != null) {
