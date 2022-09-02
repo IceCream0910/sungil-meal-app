@@ -66,6 +66,7 @@ function orderElements() {
     }).forEach(function (item) {
         document.querySelector(".home-order-wrap").appendChild(item);
     });
+    $(".home-order-wrap").append(`<br><br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-vLJpC8H8ZejxstBA" data-ad-width="300" data-ad-height="250"></ins>`);
 }
 
 function isApp() {
