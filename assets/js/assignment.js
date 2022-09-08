@@ -110,6 +110,17 @@ function addAssignment() {
 }
 
 
+function writeUserData(idx, title, date, period, subject) {
+    database.ref('assignments/' + grade + '/' + classNum + '/' + idx).set({
+        id: idx,
+        title: title,
+        date: date,
+        period: period,
+        subject: subject
+    });
+}
+
+
 //날짜 차이 계산
 function fromToday(date) {
     var today = new Date();
