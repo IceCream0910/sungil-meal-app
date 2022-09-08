@@ -489,8 +489,6 @@ function openEditPost() {
     $('#writePost').show();
     $('#report').hide();
     $('#reportComment').hide();
-    $('#assign-add-save-btn').hide();
-    $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -561,8 +559,6 @@ function openReportModal() {
     $('#writePost').hide();
     $('#report').show();
     $('#reportComment').hide();
-    $('#assign-add-save-btn').hide();
-    $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
@@ -647,8 +643,6 @@ function reportComment(content, userId, createdAt) {
     $('#writePost').hide();
     $('#report').hide();
     $('#reportComment').show();
-    $('#assign-add-save-btn').hide();
-    $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');

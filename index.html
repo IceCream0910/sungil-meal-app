@@ -135,7 +135,7 @@
 
 <body oncontextmenu='return false' ondragstart='return false'>
     <span id="login-loader">로그인 요청중이에요...<br><a
-            href="javascript:$('.sheet-backdrop-nocancel').removeClass('backdrop-in');$('#login-loader').hide();"
+            href="javascript:$('.sheet-backdrop-nocancel').removeClass('backdrop-in');$('.sheet-backdrop-nocancel2').removeClass('backdrop-in');$('#login-loader').hide();"
             style="text-decoration: none;color: #5272ff;">취소</a></span>
     <div class="sheet-backdrop-nocancel2"></div>
     <div class="sheet-backdrop-nocancel"></div>
@@ -376,7 +376,7 @@
             </div>
         </div>
 
-        <div class="home-order-wrap" style="margin-bottom:150px;">
+        <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
@@ -431,7 +431,7 @@
                                 style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
                                 <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
                                     href="javascript:openSelfcheckModal();">정보
-                                    수정 ></a>
+                                    수정 <ion-icon name="chevron-forward-outline"></ion-icon></a>
                             </span>
                             <span id="selfcheck-status">제출 여부 확인 중</span>
                         </div>
@@ -454,18 +454,15 @@
                     </div>
                 </div>
                 <div class="card" id="nosetting-timetable"
-                    style="height: 420px;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
+                    style="margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
                     <p class="card__supporting__text"
                         style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
                         <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
                         <br><span>학년/반을 먼저
                             설정하고<br>시간표를 확인해보세요.</span>
-                        <button class="mdc-button mdc-button--icon-leading"
-                            onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
-                                class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
-                                aria-hidden="true">settings</i> <span class="mdc-button__label"
-                                id="gradeClassLabel">설정하러
-                                가기</span>
+                        <button class="custom-btn onclick=" javascript:window.location.href='init.html' ;"
+                            style="margin-top:10px;" aria-label="학년 반 설정 버튼">
+                            <ion-icon name="settings-outline"></ion-icon> 학년/반 설정</span>
                         </button>
                     </p>
                 </div>
@@ -534,7 +531,7 @@
                         </tbody>
                     </table>
                 </div>
-                <br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WmHiDQvtU4lxHgQx"
+                <br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-lzWwJ4Qck7GKxrw0"
                     data-ad-width="320" data-ad-height="100"></ins>
             </div>
             <div class="schedule-wrap" id="order-item">
@@ -587,12 +584,16 @@
                     onclick="window.open('https://sungil-h.goesn.kr/sungil-h/na/ntt/selectNttList.do?mi=19914&bbsId=15524', '_blank');">
                     <ion-icon name="add-outline"></ion-icon>더보기
                 </button>
-                <br><br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-XMWyxjehZ1CcPyJ8"
+                <br><br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-xbQeZtMOHIDs92cO"
                     data-ad-width="320" data-ad-height="100"></ins>
             </div>
 
         </div>
-        <br><br><br><br>
+
+        <button class="custom-btn modal-btn sub-btn" aria-label="피드 순서 변경" onclick="location.href='menu.html'">
+            <ion-icon name="file-tray-stacked-outline"></ion-icon> 피드 순서 변경
+        </button>
+        <br><br><br><br><br><br><br>
 
     </section>
 
@@ -608,22 +609,14 @@
             <button class="custom-btn" onclick="openLogin();" style="margin-top:10px;">
                 <ion-icon name="logo-google"></ion-icon>구글 계정으로 시작하기
             </button>
-            <span style="
-            font-size: 14px;
-            opacity: 0.5;
-            width: 70%;
-            margin-top: 20px;
-        ">
-                <ion-icon name="alert-circle" role="img" class="md hydrated" aria-label="alert circle"></ion-icon>
-                &nbsp;안드로이드 앱인 경우 최신 버전으로<br>업데이트해야 이용이 가능합니다.
-            </span>
         </div>
 
         <div class="main-community" style="display:none;">
-            <div class="callout custom-btn sub-btn" style="display:none;height:fit-content;margin:-20px;width:95vw;">
+            <div class="callout custom-btn sub-btn"
+                style="display:none;height:fit-content;margin:-20px;width:95vw;margin-top: 1px;">
                 <span
-                    onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');$('.callout').hide();localStorage.setItem('dismiss_community_callout', 'true')">우리
-                    모두를 위해 커뮤니티 이용가이드를 준수해주세요</span>
+                    onclick="openPost('/board.html?id=9HB6IEozDOPCKNJcNFGB');$('.callout').hide();localStorage.setItem('dismiss_community_callout', 'true')">
+                    먼저 커뮤니티 이용가이드를 확인해볼까요?</span>
                 <ion-icon name="close" style="font-size:20px;"
                     onclick="$('.callout').hide();localStorage.setItem('dismiss_community_callout', 'true')"></ion-icon>
             </div>
@@ -702,7 +695,7 @@
      data-full-width-responsive="true"></ins> -->
         <br><Br>
 
-        <div class="floating-btn writePost-btn">
+        <div class="floating-btn writePost-btn" style="display:none">
             <ion-icon name="pencil-outline" style="font-size:20px;"></ion-icon>
         </div>
         </div>
@@ -710,30 +703,25 @@
     </section>
 
     <section id="assignment">
-        <h3 class="card__primary__title__text">수행평가<span class="badge">beta</span></h3>
+        <br>
+        <h3 class="card__primary__title__text">우리 반 친구들이 추가한<br>수행평가 목록이에요.</h3>
+        <span style="opacity:0.6">항목을 눌러 잘못된 내용을 삭제할 수 있어요.</span>
 
-        <div id="before-setting-assign" style="display:15px;">
+        <div id="before-setting-assign" style="margin-top:15px;">
             <p
                 style="width:100%;height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
                 <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트"> <br><span>학년/반을
                     먼저
                     설정하고<br>수행평가 일정을 정리해보세요.</span>
-                <button class="mdc-button mdc-button--icon-leading"
-                    onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
-                        class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
-                        aria-hidden="true">settings</i> <span class="mdc-button__label" id="gradeClassLabel">설정하러
-                        가기</span>
+                <button class="custom-btn" onclick="window.location.href='init.html' ;" style="margin-top:10px;"
+                    aria-label="학년 반 설정 버튼">
+                    <ion-icon name="settings-outline"></ion-icon> 학년/반 설정</span>
                 </button>
             </p>
 
         </div>
 
-        <div id="assignments-list" style="margin-top:15px;">
-
-            <div class="idcard-btn-wrap"> <button class="ourclassAssign-btn" onclick="openClassAssign();">
-                    <ion-icon name="chevron-up-outline"></ion-icon>친구들이 추가한 수행평가
-                </button> </div>
-
+        <div id="assignments-list" style="margin-top:30px;">
             <div id="assignments-listview">
 
             </div>
@@ -856,8 +844,105 @@
         </div>
     </section>
 
-
 </body>
+
+<div class="onboard">
+    <div id="hello">
+        <img src="assets/icons/hello.gif" width="50px">
+        <h3 class="card__primary__title__text" style="margin-top:20px;">만나서 반가워요!</h3>
+    </div>
+
+    <div id="initialize">
+        <h3 class="card__primary__title__text"><br>학년과 반을 알려주세요</h3>
+        <br><br>
+        <ul class="mdc-list" id="grade-list">
+            <li class="mdc-list-item" id="grade" data-grade="1">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">1학년</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-grade="2">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">2학년</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-grade="3">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">3학년</span>
+            </li>
+        </ul>
+
+        <ul class="mdc-list" id="class-list" style="display: none; max-height: 70vh;overflow: scroll;">
+            <li class="mdc-list-item" id="grade" data-class="1">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">1반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="2">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">2반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="3">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">3반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="4">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">4반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="5">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">5반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="6">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">6반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="7">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">7반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="8">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">8반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="9">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">9반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="10">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">10반</span>
+            </li>
+            <li class="mdc-list-item" id="grade" data-class="11">
+                <span class="mdc-list-item__ripple"></span>
+                <span class="mdc-list-item__text">11반</span>
+            </li>
+            <br> <br><br> <br><br> <br>
+        </ul>
+
+        <button id="back-btn" onclick="back();" class="custom-btn modal-btn"
+            style="display:none;bottom:20px;float:left;width:45%;opacity:0.5">
+            <span class="mdc-button__label">뒤로</span>
+        </button>
+        <button id="save-btn" onclick="completeInfoInit();" class="custom-btn modal-btn"
+            style="display:none;bottom:20px;float:right;width:45%;opacity:0.5">
+            <span class="mdc-button__label" id="button-text">완료</span>
+        </button>
+
+    </div>
+
+    <div id="functions">
+        <ion-icon name="checkmark-circle" style="font-size: 80px;color: #60eb98;"></ion-icon>
+
+        <h3 class="card__primary__title__text" style="margin-top:20px;">기억해둘게요!</h3>
+        <h5>이제 시작해볼까요?</h5>
+
+        <a style="position: fixed; bottom: 20px; left: 0; width: 100%; box-sizing: border-box;padding:20px;">
+            <button id="start-btn" onclick="startFromOnboard();" class="custom-btn modal-btn">시작하기
+            </button>
+        </a>
+
+    </div>
+</div>
+
 <script src="assets/js/script.js"></script>
 <script src="assets/js/darkmode.js"></script>
 <script src="assets/js/assignment.js"></script>

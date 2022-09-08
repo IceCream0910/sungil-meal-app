@@ -26,9 +26,9 @@ function back() {
     isComplete = false;
 }
 
+
 const isIos = () => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    return /iphone|ipad|ipod/.test(userAgent);
+    return navigator.userAgent.toLowerCase().match(/(ipad|iphone)/);
 }
 
 function complete() {
@@ -41,6 +41,15 @@ function complete() {
         } else {
             history.back();
         }
+    }
+}
+
+function completeFromOnboard() {
+    if (isComplete) {
+        localStorage.setItem("sungil_grade", grade);
+        localStorage.setItem("sungil_classNum", classNum);
+        $('#initialize').hide()
+        $('#functions').fadeIn()
     }
 }
 

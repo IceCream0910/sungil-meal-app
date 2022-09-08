@@ -33,7 +33,7 @@ if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 =
 
 
 function updateOrder() {
-    const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "selfcheck": 1 }, "2": { "timetable": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
+    const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "timetable": 1 }, "2": { "selfcheck": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
     for (var i = 0; i < 5; i++) {
         const key = Object.keys(orderIndex[i])[0];
         const value = orderIndex[i][key];
@@ -66,7 +66,6 @@ function orderElements() {
     }).forEach(function (item) {
         document.querySelector(".home-order-wrap").appendChild(item);
     });
-    $(".home-order-wrap").append(`<br><br><ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-vLJpC8H8ZejxstBA" data-ad-width="300" data-ad-height="250"></ins>`);
 }
 
 function isApp() {
@@ -154,8 +153,8 @@ var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
 $('#date').addClass('today');
 
-var grade = localStorage.getItem("sungil_grade");
-var classNum = localStorage.getItem("sungil_classNum");
+var grade = localStorage.getItem("sungil_grade") || null;
+var classNum = localStorage.getItem("sungil_classNum") || null;
 var currentMenuRaw = '';
 var timetableRaw = '';
 var isTest = false;
@@ -175,11 +174,6 @@ if (localStorage.getItem("sungil_favTagsList")) {
     favTagsList = localStorage.getItem("sungil_favTagsList").split(',');
 } else {
     favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
-}
-
-
-if (grade && classNum) {
-    $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
 }
 
 $.datepicker.setDefaults({
@@ -214,6 +208,20 @@ $("#datepicker").datepicker({
 
 
 $(document).ready(function () {
+
+    if (grade == null || classNum == null) { //학년반 정보가 없을 경우 온보딩 표시
+        console.log('dd')
+        $('.onboard').css("display", "flex");
+        $('#hello').css("display", "flex");
+        $('#home').hide();
+        setTimeout(function () {
+            $('#hello').hide()
+            $('#initialize').fadeIn()
+        }, 2000);
+    } else {
+        $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
+    }
+
     updateInfo();
     //가정통신문
     $.ajax({
@@ -500,11 +508,21 @@ function displaySchedule(data) {
     var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
     for (var i = 1; i <= length; i++) {
         if (schedules[i] != '') {
-            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' + i + '</span><h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
+            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
+                `<span style="font-size: 20px;font-weight: 500;">${i}</span><span style="
+            font-size: 12px;
+            margin-top: -7px;
+        ">${getDay(moment(moment(selectedDate).format('YYYYMM') + i.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
         }
     }
-
 }
+
+// 숫자를 요일로
+function getDay(day) {
+    var dayList = ['일', '월', '화', '수', '목', '금', '토'];
+    return dayList[day];
+}
+
 
 function displayTimetable(data) {
     var day = moment(selectedDate).day();
@@ -706,11 +724,6 @@ $('.sheet-backdrop').on('click', function () {
 });
 
 /* bottom sheet */
-// 수행평가 추가 모달 띄우기
-$('.addAssignment-btn').on('click', function () {
-    openModal('수행평가 추가', 'assessment')
-});
-
 
 ///custom modal sheet///
 $('.c-modal').each(function () {
@@ -1033,7 +1046,7 @@ function submitSelfCheck() {
     const pwd = localStorage.getItem('selfcheck-pwd');
 
     if (name == null || birth == null || pwd == null) {
-        toast('학생 정보를 먼저 등록해주세요');
+        openModal('자가진단 정보 수정', 'selfcheck');
     } else {
         const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
         $('#selfcheck-btn').html('학교 가는 중');
@@ -1169,3 +1182,47 @@ function closeModal() {
 
 }
 
+
+//onboard 학년 반 설정
+var isComplete = false;
+
+$("#grade-list li").on("click", function () {
+    grade = $(this).data('grade');
+    $("#button-text").text(grade + '학년');
+    $('#back-btn').css('opacity', '1');
+    $('#back-btn').show();
+    $('#save-btn').show();
+    $('#grade-list').hide();
+    $('#class-list').fadeIn();
+});
+
+$("#class-list li").on("click", function () {
+    classNum = $(this).data('class');
+    $("#button-text").text(grade + '학년 ' + classNum + '반');
+    $('#save-btn').css('opacity', '1');
+    isComplete = true;
+});
+
+function back() {
+    $("#button-text").text('다음');
+    $('#grade-list').fadeIn();
+    $('#class-list').hide();
+    $('#back-btn').css('opacity', '0.5');
+    $('#save-btn').css('opacity', '0.5');
+    isComplete = false;
+}
+
+function completeInfoInit() {
+    if (isComplete) {
+        $('#initialize').hide()
+        $('#functions').css("display", "flex")
+        $('#functions').hide()
+        $('#functions').fadeIn()
+    }
+}
+
+function startFromOnboard() {
+    localStorage.setItem("sungil_grade", grade);
+    localStorage.setItem("sungil_classNum", classNum);
+    location.reload();
+}

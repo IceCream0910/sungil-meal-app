@@ -104,7 +104,6 @@ $('#openCalculator-btn').on('click', function () {
     $('#assessment').hide();
     $('#exam').hide();
     $('#calculator').show();
-    $('#assign-add-save-btn').show();
     $('#assign-edit-save-btn').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
