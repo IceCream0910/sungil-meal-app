@@ -17,6 +17,7 @@
     <meta name="naver-site-verification" content="fa35f8ef36dddfd6a7d8ca7db25136469aadf0c8" />
     <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+
     <script>Sentry.init({
             dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806",
             integrations: [new Sentry.Integrations.BrowserTracing()],
@@ -54,8 +55,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-
     <style>
         html,
         body {
@@ -96,20 +95,29 @@
                     <h3 style="float:left" class="card__primary__title__text" id="modal-title">게시글 수정</h3>
                 </div><br>
                 <div class="content-wrap" id="writePost">
-
-                    <input id="post-title-edit" type="text" placeholder="제목(선택)">
-                    <select id="category-select" name="category-select">
-                        <option value="자유">자유</option>
-                        <option value="질문">질문/고민</option>
-                        <option value="개발">개발자 나와라</option>
-                    </select>
-                    <div style="border-radius:10px; position: relative;" data-validate="글 내용 작성">
-                        <div id="editor"></div>
+                    <div id="post-form-wrap">
+                        <input id="post-title-edit" type="text" placeholder="제목(선택)" style="font-size:16px;">
+                        <select id="category-select" name="category-select">
+                            <option value="" selected disabled>카테고리 선택</option>
+                            <option value="자유">자유</option>
+                            <option value="질문">질문/고민</option>
+                            <option value="개발">개발자 나와라</option>
+                        </select>
                     </div>
 
-                    <button class="custom-btn modal-btn" id="edit-post-btn" style="float:right;margin-top:10px;"
-                        onclick="post(this)">저장
-                    </button>
+                    <div style="border-radius:10px; position: relative;" data-validate="글 내용 작성">
+                        <div id="editor" style="height:40vh"></div>
+                    </div>
+
+                    <div class="button-footer">
+                        <button onclick="if(confirm('글 작성을 그만할까요? 작성하던 글은 사라집니다.')) closeModal();"
+                            class="custom-btn modal-btn"
+                            style="background: none;justify-content: start;width:fit-content;">닫기
+                        </button>
+                        <button id="edit-post-btn" class="custom-btn modal-btn"
+                            style="width:fit-content;height: fit-content;" onclick="post(this)">게시
+                        </button>
+                    </div>
                 </div>
                 <div class="content-wrap" id="report">
                     <div class="checkbox-wrap" id="report-checklist">
@@ -241,7 +249,9 @@
         </p>
 
 
-        <img class="post-image" id="post-image">
+        <div id="post-image-wrap" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+
+        </div>
 
         <br>
         <hr><br>
@@ -279,8 +289,86 @@
     </div>
 
 
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe. 
+         It's a separate element, as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+            <!-- don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 </body>
 <script src="assets/js/board.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" />
+<style>
+    .pswp {
+        z-index: 999999;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js"></script>
+
+<script src="assets/js/photoswipe.js"></script>
 <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
 

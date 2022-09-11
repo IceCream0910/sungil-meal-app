@@ -62,6 +62,7 @@ var content;
 var viewer;
 var authorId;
 var category;
+var imagesArray = [];
 
 articleRef.then(function (doc) {
     if (doc.data()) {
@@ -85,12 +86,29 @@ articleRef.then(function (doc) {
                 updateVote();
             } else {
                 $('.post-vote').hide();
-                $('#post-image').attr('src', doc.data().image);
                 viewer = new toastui.Editor.factory({
                     el: document.querySelector('#viewer'),
                     viewer: true,
                     initialValue: doc.data().content,
                 });
+                if (doc.data().image) {
+                    for (var i = 0; i < doc.data().image.length; i++) { // ${doc.data().image[i]}
+                        $('#post-image-wrap').append(`
+                        <figure class="post-image" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+                        <a href="${doc.data().image[i]}" itemprop="contentUrl"
+                            data-size="1024x1024">
+                            <img src="${doc.data().image[i]}" itemprop="thumbnail"
+                                alt="Image description" style="width: 100%;
+                                border-radius: 20px;
+                                object-fit: cover;
+                                margin-left: 40px;"/>
+                        </a>
+                        <figcaption itemprop="caption description"></figcaption>
+        
+                    </figure>
+                        `)
+                    }
+                }
             }
 
 
@@ -110,6 +128,8 @@ articleRef.then(function (doc) {
         }, 1500);
     }
 });
+
+
 
 function updateVote() {
     db.collection('board').doc(getParam('id')).get().then((doc) => {
@@ -494,49 +514,55 @@ function openEditPost() {
     $('.modal-in').css('bottom', '-1850px');
     $('#post-title-edit').val($('#post-title').text());
     $('#category-select').val(category);
-    $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
-    $('.sheet-modal').removeClass('full-modal');
-
-    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-        editor = new toastui.Editor.factory({
-            el: document.querySelector('#editor'),
-            initialEditType: 'wysiwyg',
-            height: '40vh',
-            initialValue: content,
-            language: 'ko_KR',
-            theme: 'dark',
-            autofocus: false,
-        });
-    } else {
-        editor = new toastui.Editor.factory({
-            el: document.querySelector('#editor'),
-            initialEditType: 'wysiwyg',
-            initialValue: content,
-            height: '40vh',
-            language: 'ko_KR',
-            autofocus: false,
-        });
-    }
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#writePost').height() + 150 + 'px');
+        $('.sheet-backdrop').addClass('backdrop-in');
+        $('.sheet-modal').css('height', '100vh');
+        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+            editor = new toastui.Editor.factory({
+                el: document.querySelector('#editor'),
+                initialEditType: 'wysiwyg',
+                height: $(window).height() - $('#post-form-wrap').height() - 350 + 'px',
+                initialValue: content,
+                language: 'ko_KR',
+                theme: 'dark',
+                autofocus: false,
+            });
+        } else {
+            editor = new toastui.Editor.factory({
+                el: document.querySelector('#editor'),
+                initialEditType: 'wysiwyg',
+                initialValue: content,
+                height: $(window).height() - $('#post-form-wrap').height() - 350 + 'px',
+                language: 'ko_KR',
+                autofocus: false,
+            });
+        }
     }, 100);
 }
 
+
+function closeModal() {
+    enablePullToRefresh();
+    $('body').css('overflow', 'auto');
+    $('.modal-in').css('bottom', '-1850px');
+    setTimeout(function () {
+        $('.modal-in').css('display', 'none');
+    }, 100);
+    $('.sheet-backdrop').removeClass('backdrop-in');
+    $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
+
+}
+
 //수정
-function post() {
+function post(target) {
     var title = $('#post-title-edit').val();
     var content = editor.getMarkdown();
     var category = $('#category-select').val();
-    var uid = firebase.auth().currentUser.uid;
     if (content) {
         $('#edit-post-btn').text('업로드 중...');
         var data = {
             title: title,
-            userId: uid,
             content: content,
             category: category,
         }

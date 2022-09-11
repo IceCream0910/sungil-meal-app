@@ -4,15 +4,13 @@ const auth = firebase.auth();
 var db = firebase.firestore();
 
 var currentCategory = 'all';
-var uploadedFile = null;
-
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         loadPostList('all');
         $('#community .no-login').hide();
         $('#community .main-community').show();
-        $('#community #account-btn').show();
+        $('#community .community-member-header').show();
         $('#community .header').show();
         $('.writePost-btn').show();
         db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
@@ -28,7 +26,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     } else {
         $('#community .no-login').show();
         $('#community .main-community').hide();
-        $('#community #account-btn').hide();
+        $('#community .community-member-header').hide();
         $('#community .header').hide();
         $('.writePost-btn').hide();
     }
@@ -158,7 +156,7 @@ const loginGoogle = () => {
 
 function finishGoogleLogin(res) {
     if (res.uid) {
-        $('#community #account-btn').show();
+        $('#community .community-member-header').show();
     } else {
         Swal.fire({
             icon: 'error',
@@ -234,7 +232,7 @@ async function confirmLogout() {
     const confirm = await ui.confirm('정말 로그아웃 하시겠습니까?');
     if (confirm) {
         firebase.auth().signOut().then(function () {
-            $('#community #account-btn').hide();
+            $('#community .community-member-header').hide();
             $('#community .no-login').show();
             closeModal();
             toast('로그아웃 되었습니다.');
@@ -276,12 +274,36 @@ var editor = new toastui.Editor.factory({
     language: 'ko_KR',
     theme: 'default',
     autofocus: false,
-});;
+});
+
 //글 작성
 $('.writePost-btn').on('click', function () {
-    openModal('게시글 작성', 'writePost')
-    uploadedFile = null;
-    $('#editor').empty();
+    if (currentCategory == '투표') {
+        openVoteMaker();
+    } else if (currentCategory == 'all' || currentCategory == '공지') {
+        openFullModal('게시글 작성', 'writePost');
+        $('#post-btn').text('게시');
+        $('#post-btn').attr('disabled', false);
+        // 첨부 파일 초기화
+        currentAttachedImages = [];
+        $('.img-thumbs').children('.wrapper-thumb').remove();
+        //
+        $('#category-select').val("");
+        uploadedFile = null;
+        $('#editor').empty();
+    } else {
+        openFullModal('게시글 작성', 'writePost');
+        $('#post-btn').text('게시');
+        $('#post-btn').attr('disabled', false);
+        // 첨부 파일 초기화
+        currentAttachedImages = [];
+        $('.img-thumbs').children('.wrapper-thumb').remove();
+        //
+        $('#category-select').val(currentCategory);
+        uploadedFile = null;
+        $('#editor').empty();
+    }
+
     //다크모드 에디터 적용
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         editor = new toastui.Editor.factory({
@@ -291,7 +313,7 @@ $('.writePost-btn').on('click', function () {
                 ['hr', 'quote', 'ul', 'task'],
             ],
             initialEditType: 'wysiwyg',
-            height: '40vh',
+            height: $(window).height() - ($('#post-form-wrap').height() + $('.img-thumbs').height()) - 200 + 'px',
             initialValue: '',
             language: 'ko_KR',
             theme: 'dark',
@@ -306,7 +328,7 @@ $('.writePost-btn').on('click', function () {
             ],
             initialEditType: 'wysiwyg',
             initialValue: '',
-            height: '40vh',
+            height: $(window).height() - ($('#post-form-wrap').height() + $('.img-thumbs').height()) - 200 + 'px',
             language: 'ko_KR',
             autofocus: false,
         });
@@ -314,49 +336,58 @@ $('.writePost-btn').on('click', function () {
 
 });
 
+var imagesArray = [];
 
 function post(target) {
     var title = $('#post-title').val();
     var category = $('#category-select').val();
     var content = editor.getMarkdown();
     var uid = firebase.auth().currentUser.uid;
-    if (content) {
-        if (uploadedFile) { // 사진 있음
-            var storageRef = firebase.storage().ref();
-            var fileRef = storageRef.child(`images/${uploadedFile.name}`);
-            fileRef.put(uploadedFile).then(function (snapshot) {
-                fileRef.getDownloadURL().then(function (url) {
-                    var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
-                    $(target).text('업로드 중...');
-                    $(target).attr('disabled', true);
-                    var data = {
-                        title: title,
-                        userId: uid,
-                        content: content,
-                        category: category || '자유',
-                        createdAt: timestamp,
-                        image: url,
-                    }
-                    db.collection('board').add(data).then((result) => {
-                        closeModal();
-                        $(target).text('게시');
-                        $(target).attr('disabled', false);
-                        openPost('board.html?id=' + result._key.path.segments[1]);
-                    }).catch((err) => {
-                        console.log(err);
+    if (content && category) {
+        $(target).text('업로드 중...');
+        $(target).attr('disabled', true);
+        if (currentAttachedImages.length != 0) { // 사진 있음
+            for (var i = 0; i < currentAttachedImages.length; i++) { //파일 업로드
+                var storageRef = firebase.storage().ref();
+                var fileRef = storageRef.child(`images/${currentAttachedImages[i].name}`);
+                fileRef.put(currentAttachedImages[i]).then(function (snapshot) {
+                    fileRef.getDownloadURL().then(function (url) {
+                        imagesArray.push(url);
+                        if (imagesArray.length == currentAttachedImages.length) { //정상 업로드 확인
+                            var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
+                            var data = {
+                                title: title,
+                                userId: uid,
+                                content: content,
+                                category: category || '자유',
+                                createdAt: timestamp,
+                                image: imagesArray,
+                            }
+                            console.log(data)
+                            db.collection('board').add(data).then((result) => {
+                                closeModal();
+                                $(target).text('게시');
+                                $(target).attr('disabled', false);
+                                openPost('board.html?id=' + result._key.path.segments[1]);
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+                            $('.snackbar').hide();
+                            loadPostList(currentCategory);
+                        } else {
+                            toast('업로드 중 오류가 발생했어요. 다시 시도해주세요.')
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
                     });
-                    $('.snackbar').hide();
-                    loadPostList('all');
                 }).catch(function (error) {
                     console.log(error);
                 });
-            }).catch(function (error) {
-                console.log(error);
-            });
+            }
+
+
         } else {
             var timestamp = firebase.firestore.Timestamp.fromDate(new Date());
-            $(target).text('업로드 중...');
-            $(target).attr('disabled', true);
             var data = {
                 title: title,
                 userId: uid,
@@ -373,11 +404,12 @@ function post(target) {
                 console.log(err);
             });
             $('.snackbar').hide();
-            loadPostList('all');
+            loadPostList(currentCategory);
         }
 
+
     } else {
-        toast('글 내용을 작성해주세요.')
+        toast('글 내용과 카테고리를 모두 입력해주세요');
     }
 }
 
@@ -413,7 +445,10 @@ function loadPostList(category) {
         
                         <div class="post-preview" id="viewer-`+ doc.id + `">
                         </div>
-                        ${(data.image) ? `<img src="` + data.image + `" class="post-image" />` : ''}
+                        
+                        <div id="choices-list-`+ doc.id + `" style="width: 100%;"> </div>
+
+                        ${(data.image) ? `<img src="` + data.image[0] + `" class="post-image" />` : ''}
                         <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>
                         <br>
         
@@ -421,11 +456,30 @@ function loadPostList(category) {
                         `
                     );
 
+                    if (data.category == "투표") {
+                        var cnt = 0;
+                        data.options.forEach((option) => {
+                            $('#choices-list-' + doc.id).append(`<div class="post-vote" style="display:block;width: 100%;"><div class="vote-choice-item" style="padding-top: 15px;" data-index="${cnt}">
+                                    <div class="inner" style="margin-bottom: -5px;">
+                                    <h3>${option.title}</h3>
+                                    <span>${(option.count != 0) ? Math.round((option.count / data.participants) * 100) : 0}%</span>
+                                    </div>
+                                    <div class="vote-progress" style="width:${(option.count != 0) ? Math.round((option.count / data.participants) * 100).toString() + '%' : '0%'}"></div>
+                                </div></div>`);
+                            cnt++;
+                        });
+                        if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                            $('.vote-choice-item').each(function () {
+                                $(this).addClass("dark");
+                            });
+                        }
+                    }
+
                     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표에 참여하려면 클릭하세요.'),
                             theme: 'dark'
                         });
                         $('.post-item').addClass("dark");
@@ -433,7 +487,7 @@ function loadPostList(category) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표에 참여하려면 클릭하세요.'),
                             theme: 'default'
                         });
                     }
@@ -461,7 +515,6 @@ function loadMore(category) {
                 querySnapshot.forEach((doc) => {
                     var data = doc.data();
                     lastVisible = querySnapshot.docs[3 - (querySnapshot.docs.length - 1)];
-                    console.log(lastVisible, querySnapshot.docs.length);
                     db.collection('users').doc(data.userId).get().then((doc_user) => {
                         var user = doc_user.data();
                         $('.post-listview').prepend(
@@ -479,7 +532,7 @@ function loadMore(category) {
             
                             <div class="post-preview" id="viewer-`+ doc.id + `">
                             </div>
-        
+                            ${(data.image) ? `<img src="` + data.image[0] + `" class="post-image" />` : ''}
                             <span style="color:#5272ff;font-size:15px;margin-top:10px;">더보기</span>
                             <br>
             
@@ -873,7 +926,7 @@ function checkNicknameDuplicate(nickname) {
                 }
 
                 db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
-                    $('#community #account-btn').show();
+                    $('#community .community-member-header').show();
                     $('#header-username').text(nickname);
                 }).catch((err) => {
                     toast(err)
@@ -909,7 +962,7 @@ function changeProfileImg(imgNum) {
 
 //커뮤니티 카테고리 탭
 function changeCommunityCategory(category, btn) {
-    currentCategory = category;;
+    currentCategory = category;
     $('.community-tab').removeClass('active');
     $(btn).addClass('active');
     loadPostList(category);
@@ -980,22 +1033,61 @@ function postVote(target) {
 
 
 
-//사진 첨부
-$('.button-footer').on('change', '.image-upload', function () {
-    uploadedFile = null;
-    var fn = $(this).val();
-    var filename = fn.match(/[^\\/]*$/)[0];
-    $('#image-upload-btn').html(`<ion-icon name="image-outline"></ion-icon> ${(filename.length > 4) ? filename.substring(0, 4) + '...' : filename}`);
-    var file = $('.image-upload')[0].files[0];
-    uploadedFile = file;
-    new Compressor(file, {
-        quality: 0.6,
-        convertSize: 5000,
-        success(result) {
-            uploadedFile = result;
-        },
-        error(err) {
-            console.log(err.message);
-        },
-    });
+//파일 첨부
+var imgUpload = document.getElementById('upload-img')
+    , imgPreview = document.getElementById('img-preview')
+    , imgUploadForm = document.getElementById('form-upload')
+    , totalFiles
+    , previewTitle
+    , previewTitleText
+    , img;
+
+var currentAttachedImages = [];
+imgUpload.addEventListener('change', previewImgs, true);
+
+function previewImgs(event) {
+    totalFiles = imgUpload.files.length;
+
+    if (!!totalFiles) {
+        imgPreview.classList.remove('img-thumbs-hidden');
+    }
+
+    if (totalFiles > 3) {
+        toast('사진은 최대 3개까지만 추가할 수 있어요.')
+    } else {
+        for (var i = 0; i < totalFiles; i++) {
+            wrapper = document.createElement('div');
+            wrapper.classList.add('wrapper-thumb');
+            removeBtn = document.createElement("span");
+            nodeRemove = document.createTextNode('x');
+            removeBtn.classList.add('remove-btn');
+            removeBtn.appendChild(nodeRemove);
+            img = document.createElement('img');
+            img.src = URL.createObjectURL(event.target.files[i]);
+            img.classList.add('img-preview-thumb');
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            $(wrapper).data('file', event.target.files[i]);
+            imgPreview.appendChild(wrapper);
+
+            var compressedFile = event.target.files[i];
+            new Compressor(event.target.files[i], {
+                quality: 0.5,
+                convertSize: 5000,
+                success(result) {
+                    currentAttachedImages.push(result);
+                },
+                error(err) {
+                    console.log(err.message);
+                },
+            });
+        }
+    }
+}
+
+$('.img-thumbs').on('click', '.remove-btn', function () {
+    var index = currentAttachedImages.indexOf($(this).parent().data('file'));
+    currentAttachedImages.splice(index, 1);
+    console.log($(this).parent().data('file'), index, currentAttachedImages);
+    $(this).parent().remove();
 });

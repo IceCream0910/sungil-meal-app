@@ -160,6 +160,7 @@ var timetableRaw = '';
 var isTest = false;
 
 var alleList;
+const ENCRYPT_KEY = 'QXj2z5hrFXUcL9EGDDLf';
 
 if (localStorage.getItem("sungil_alleList")) {
     alleList = localStorage.getItem("sungil_alleList").split(',');
@@ -735,7 +736,7 @@ $('.c-modal').each(function () {
     });
 
     mc.on("swipedown", function (ev) {
-        if (!$('#loginForm').is(':visible')) {
+        if (!$('#loginForm').is(':visible') && !$('#writePost').is(':visible')) {
             closeModal();
         }
     });
@@ -1002,19 +1003,28 @@ function shareApp() {
 }
 
 
-getSelfCheckStatus()
+//getSelfCheckStatus()
 
 function getSelfCheckStatus() {
     const name = localStorage.getItem('selfcheck-name');
     const birth = localStorage.getItem('selfcheck-birth');
     const pwd = localStorage.getItem('selfcheck-pwd');
-
     if (name == null || birth == null || pwd == null) {
         $('#selfcheck-status').text('학생 정보를 입력해주세요');
     } else {
+        // 복호화
+        if (pwd.length > 4) {
+            const bytes = window.CryptoJS.AES.decrypt(pwd, ENCRYPT_KEY);
+            var decryptPwd = bytes.toString(window.CryptoJS.enc.Utf8);
+        } else {
+            decryptPwd = pwd;
+            // 암호화
+            const encrypt = window.CryptoJS.AES.encrypt(pwd, ENCRYPT_KEY).toString();
+            localStorage.setItem('selfcheck-pwd', encrypt);
+        }
         $.ajax({
             type: "GET",
-            url: `https://selfcheck-api.vercel.app/status?name=${name}&birth=${birth}&password=${pwd}`,
+            url: `https://selfcheck-api.vercel.app/status?name=${name}&birth=${birth}&password=${decryptPwd}`,
             success: function (result) {
                 if (result) {
                     if (result[0].registerRequired == true) { //안함
@@ -1048,6 +1058,17 @@ function submitSelfCheck() {
     if (name == null || birth == null || pwd == null) {
         openModal('자가진단 정보 수정', 'selfcheck');
     } else {
+        // 복호화
+        if (pwd.length > 4) {
+            const bytes = window.CryptoJS.AES.decrypt(pwd, ENCRYPT_KEY);
+            var decryptPwd = bytes.toString(window.CryptoJS.enc.Utf8);
+        } else {
+            decryptPwd = pwd;
+            // 암호화
+            const encrypt = window.CryptoJS.AES.encrypt(pwd, ENCRYPT_KEY).toString();
+            localStorage.setItem('selfcheck-pwd', encrypt);
+        }
+
         const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
         $('#selfcheck-btn').html('학교 가는 중');
         $('#selfcheck-btn').attr('disabled', true);
@@ -1074,7 +1095,7 @@ function submitSelfCheck() {
 
         $.ajax({
             type: "GET",
-            url: `https://selfcheck-api.vercel.app/api?name=${name}&birth=${birth}&password=${pwd}`,
+            url: `https://selfcheck-api.vercel.app/api?name=${name}&birth=${birth}&password=${decryptPwd}`,
             success: function (result) {
                 clearInterval(progress);
                 clearInterval(dot);
@@ -1119,7 +1140,9 @@ function saveSelfcheckInfo() {
     } else {
         localStorage.setItem('selfcheck-name', name);
         localStorage.setItem('selfcheck-birth', birth);
-        localStorage.setItem('selfcheck-pwd', pwd);
+        // 암호화
+        const encrypt = window.CryptoJS.AES.encrypt(pwd, ENCRYPT_KEY).toString();
+        localStorage.setItem('selfcheck-pwd', encrypt);
         toast('저장되었어요');
         $('#selfcheck-status').text('불러오는 중');
         getSelfCheckStatus();
@@ -1169,6 +1192,31 @@ function openModal(title, id) {
     }, 100);
 }
 
+function openFullModal(title, id) {
+    disablePullToRefresh();
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').html(title);
+    $('.content-wrap').hide();
+    $('#' + id).show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
+    $('#title').val('');
+    $('.timetable_selector').html('');
+    const name = localStorage.getItem('selfcheck-name') || '';
+    const birth = localStorage.getItem('selfcheck-birth') || '';
+    const pwd = localStorage.getItem('selfcheck-pwd') || '';
+    $('#selfcheck-name').val(name)
+    $('#selfcheck-birth').val(birth)
+    $('#selfcheck-pwd').val(pwd)
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop').addClass('backdrop-in');
+    $('.sheet-modal').css('height', '100vh');
+}
+
 
 function closeModal() {
     enablePullToRefresh();
@@ -1215,9 +1263,9 @@ function back() {
 function completeInfoInit() {
     if (isComplete) {
         $('#initialize').hide()
-        $('#functions').css("display", "flex")
-        $('#functions').hide()
-        $('#functions').fadeIn()
+        $('#login').css("display", "flex")
+        $('#login').hide()
+        $('#login').fadeIn()
     }
 }
 
@@ -1225,4 +1273,29 @@ function startFromOnboard() {
     localStorage.setItem("sungil_grade", grade);
     localStorage.setItem("sungil_classNum", classNum);
     location.reload();
+}
+
+function onboardLogin() {
+    if (isApp()) {
+        location.href = 'https://ssoak-72f93.firebaseapp.com/';
+        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
+        $('#login-loader').show();
+    } else {
+        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
+        $('#login-loader').show();
+        loginGoogle().then(function (result) {
+            //로그인 완료
+            $('#login').hide()
+            $('#complete').css("display", "flex")
+            $('#complete').hide()
+            $('#complete').fadeIn()
+        })
+    }
+}
+
+function skipLogin() {
+    $('#login').hide()
+    $('#complete').css("display", "flex")
+    $('#complete').hide()
+    $('#complete').fadeIn()
 }
