@@ -543,7 +543,6 @@ function openEditPost() {
 
 
 function closeModal() {
-    enablePullToRefresh();
     $('body').css('overflow', 'auto');
     $('.modal-in').css('bottom', '-1850px');
     setTimeout(function () {
