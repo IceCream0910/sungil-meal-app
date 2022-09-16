@@ -1351,10 +1351,6 @@ header button {
     color: #eee
 }
 
-#menu-name {
-    font-size: 17px
-}
-
 #allergy-info {
     font-size: 14px;
     font-family: S-CoreDream-3Light;
@@ -1368,7 +1364,6 @@ header button {
     width: 60px;
     height: 60px;
     margin-right: 20px;
-    border-radius: 20px
 }
 
 .close-modal {

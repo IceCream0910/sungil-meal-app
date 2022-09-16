@@ -670,7 +670,15 @@ function search(query) {
         type: "GET",
         url: 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q=' + query,
         success: function (result) {
-            var image_result = '<img class="menu-image" src="' + result.items[0].image.thumbnailLink + '" class="img-thumbnail">';
+            var image_result = `<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
+            <a href="${result.items[0].image.thumbnailLink}" itemprop="contentUrl"
+                data-size="1024x1024">
+                <img src="${result.items[0].image.thumbnailLink}" itemprop="thumbnail"
+                    alt="Image description" class="menu-image" style="border-radius:10px;"/>
+            </a>
+            <figcaption style="display:none;" itemprop="caption description">위 이미지는 실제 메뉴 사진이 아닌 인터넷 검색 결과예요.</figcaption>
+
+        </figure>`
             $('#image_result').html(image_result);
         }
     });

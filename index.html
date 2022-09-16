@@ -134,9 +134,10 @@
             </path>
         </svg> </a>
     <div class="d-flex flex-row">
-        <div id="image_result"></div>
+        <div id="image_result" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery"></div>
+        <br>
         <div>
-            <h4 id="menu-name"></h4> <span id="allergy-info"></span>
+            <h3 id="menu-name" class="card__primary__title__text"></h3> <span id="allergy-info"></span>
         </div>
     </div>
 </div>
@@ -454,37 +455,6 @@
                 </div>
             </div>
 
-            <div class="selfcheck-wrap" id="order-item">
-                <div class="card">
-                    <div class="card__primary__title selfcheck-card">
-                        <!--
-                        <div style="padding:0;line-height:1.3;">
-                            <span class="card__primary__title"
-                                style="display: flex;flex-direction: row;justify-content: space-between;">
-                                <ion-icon name="warning-outline"></ion-icon>건강상태 자가진단 기능 중단 안내<br>
-                                <span style="font-size:14px;opacity:0.7;margin-top:10px;">교육부에서 ‘건강상태 자가진단 서비스 운영을 저해하는
-                                    비정상적 접속’에 대한 법적
-                                    대응 방침을 밝힘에
-                                    따라 기능 제공을 중단합니다.</span>
-                            </span>
-                        </div>
-                        -->
-                        <div style="padding:0;line-height:1;">
-                            <span class="card__primary__title"
-                                style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
-                                <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
-                                    href="javascript:openSelfcheckModal();">정보
-                                    수정 <ion-icon name="chevron-forward-outline"></ion-icon></a>
-                            </span>
-                            <span id="selfcheck-status">제출 여부 확인 중</span>
-                        </div>
-                        <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
-                            <ion-icon name="flash"></ion-icon>제출하기
-                        </button>
-                    </div>
-                </div>
-            </div>
-
             <div class="siganpyo-wrap" id="order-item">
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">시간표</h3>
@@ -497,7 +467,7 @@
                     </div>
                 </div>
                 <div class="card" id="nosetting-timetable"
-                    style="margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
+                    style="display:none;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
                     <p class="card__supporting__text"
                         style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
                         <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
@@ -575,6 +545,40 @@
                     </table>
                 </div>
             </div>
+
+
+            <div class="selfcheck-wrap" id="order-item">
+                <div class="card">
+                    <div class="card__primary__title selfcheck-card">
+                        <!--
+                        <div style="padding:0;line-height:1.3;">
+                            <span class="card__primary__title"
+                                style="display: flex;flex-direction: row;justify-content: space-between;">
+                                <ion-icon name="warning-outline"></ion-icon>건강상태 자가진단 기능 중단 안내<br>
+                                <span style="font-size:14px;opacity:0.7;margin-top:10px;">교육부에서 ‘건강상태 자가진단 서비스 운영을 저해하는
+                                    비정상적 접속’에 대한 법적
+                                    대응 방침을 밝힘에
+                                    따라 기능 제공을 중단합니다.</span>
+                            </span>
+                        </div>
+                        -->
+                        <div style="padding:0;line-height:1;">
+                            <span class="card__primary__title"
+                                style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
+                                <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
+                                    href="javascript:openSelfcheckModal();">정보
+                                    수정 <ion-icon name="chevron-forward-outline"></ion-icon></a>
+                            </span>
+                            <span id="selfcheck-status">제출 여부 확인 중</span>
+                        </div>
+                        <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
+                            <ion-icon name="flash"></ion-icon>제출하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="schedule-wrap" id="order-item">
                 <h3 class="card__primary__title__text">학사일정</h3>
                 <div id="schedule-content" style="margin-top:15px;"> </div>
@@ -1003,11 +1007,90 @@
 
 </div>
 
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+     It's a separate element, as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+        <!-- don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <script src="assets/js/script.js"></script>
 <script src="assets/js/darkmode.js"></script>
 <script src="assets/js/assignment.js"></script>
 <script src="assets/js/community.js?v=220710"></script>
 <script src="assets/js/report.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" />
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" />
+<style>
+    .pswp {
+        z-index: 999999;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js"></script>
+
+<script src="assets/js/photoswipe.js"></script>
 
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
