@@ -540,6 +540,26 @@ function loadMore(category) {
                             `
                         );
 
+
+                        if (data.category == "투표") {
+                            var cnt = 0;
+                            data.options.forEach((option) => {
+                                $('#choices-list-' + doc.id).append(`<div class="post-vote" style="display:block;width: 100%;"><div class="vote-choice-item" style="padding-top: 15px;" data-index="${cnt}">
+                                    <div class="inner" style="margin-bottom: -5px;">
+                                    <h3>${option.title}</h3>
+                                    <span>${(option.count != 0) ? Math.round((option.count / data.participants) * 100) : 0}%</span>
+                                    </div>
+                                    <div class="vote-progress" style="width:${(option.count != 0) ? Math.round((option.count / data.participants) * 100).toString() + '%' : '0%'}"></div>
+                                </div></div>`);
+                                cnt++;
+                            });
+                            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                                $('.vote-choice-item').each(function () {
+                                    $(this).addClass("dark");
+                                });
+                            }
+                        }
+
                         if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),

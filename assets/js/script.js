@@ -1003,7 +1003,7 @@ function shareApp() {
 }
 
 
-//getSelfCheckStatus()
+getSelfCheckStatus()
 
 function getSelfCheckStatus() {
     const name = localStorage.getItem('selfcheck-name');
@@ -1048,6 +1048,22 @@ function getSelfCheckStatus() {
 
 function openSelfcheckModal() {
     openModal('자가진단 정보 수정', 'selfcheck');
+    const name = localStorage.getItem('selfcheck-name') || '';
+    const birth = localStorage.getItem('selfcheck-birth') || '';
+    const pwd = localStorage.getItem('selfcheck-pwd') || '';
+
+    $('#selfcheck-name').val(name)
+    $('#selfcheck-birth').val(birth)
+
+    if (pwd.length > 4) {
+        const bytes = window.CryptoJS.AES.decrypt(pwd, ENCRYPT_KEY);
+        var decryptPwd = bytes.toString(window.CryptoJS.enc.Utf8);
+        $('#selfcheck-pwd').val(decryptPwd)
+    } else {
+        $('#selfcheck-pwd').val(pwd)
+    }
+
+
 }
 
 function submitSelfCheck() {
@@ -1069,8 +1085,8 @@ function submitSelfCheck() {
             localStorage.setItem('selfcheck-pwd', encrypt);
         }
 
-        const progressText = ['학교 가는 중', '교무실 노크 중', '소리치는 중', '"정상이에요!"'];
-        $('#selfcheck-btn').html('학교 가는 중');
+        const progressText = ['서버 로딩 중', '제출하고 있어요', '조금만 기다려주세요', '거의 다됐어요'];
+        $('#selfcheck-btn').html('서버 로딩 중');
         $('#selfcheck-btn').attr('disabled', true);
         var progressCnt = 1;
         const progress = setInterval(function () {
@@ -1177,12 +1193,6 @@ function openModal(title, id) {
     $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
     $('#title').val('');
     $('.timetable_selector').html('');
-    const name = localStorage.getItem('selfcheck-name') || '';
-    const birth = localStorage.getItem('selfcheck-birth') || '';
-    const pwd = localStorage.getItem('selfcheck-pwd') || '';
-    $('#selfcheck-name').val(name)
-    $('#selfcheck-birth').val(birth)
-    $('#selfcheck-pwd').val(pwd)
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
     }, 100);
@@ -1204,12 +1214,6 @@ function openFullModal(title, id) {
     $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
     $('#title').val('');
     $('.timetable_selector').html('');
-    const name = localStorage.getItem('selfcheck-name') || '';
-    const birth = localStorage.getItem('selfcheck-birth') || '';
-    const pwd = localStorage.getItem('selfcheck-pwd') || '';
-    $('#selfcheck-name').val(name)
-    $('#selfcheck-birth').val(birth)
-    $('#selfcheck-pwd').val(pwd)
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
     }, 100);
