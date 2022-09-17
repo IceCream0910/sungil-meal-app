@@ -77,7 +77,7 @@ articleRef.then(function (doc) {
             } else {
                 $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
             }
-            $('#uname').html(((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname)));
+            $('#uname').html(((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname || '(어디론가 사라진 사용자)')));
             $('#createdAt').html(timeForToday(doc.data().createdAt.toDate()));
             $('#post-title').html(doc.data().title);
             content = doc.data().content;
