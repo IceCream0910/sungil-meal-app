@@ -418,6 +418,25 @@ function refreshNewData() {
     $('.snackbar').fadeOut(250);
 }
 
+//숫자 카운트 애니메이션 실행 함수
+function counter(counter, max) {
+    let now = max;
+
+    const handle = setInterval(() => {
+        $(counter).html(Math.ceil(max - now));
+
+        // 목표에 도달하면 정지
+        if (now < 1) {
+            clearInterval(handle);
+        }
+
+        // 적용될 수치, 점점 줄어듬
+        const step = now / 10;
+
+        now -= step;
+    }, 50);
+}
+
 
 function displayMeal(data) {
     //급식
@@ -426,6 +445,23 @@ function displayMeal(data) {
     if (data.meal[day]) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
+
+        //급식 좋아요 싫어요 실시간 가져오기
+        db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
+            if (doc.exists) {
+                counter('#meal-like-count', doc.data().like);
+                counter('#meal-dislike-count', doc.data().dislike);
+            } else {
+                $('#meal-like-count').html('0');
+                $('#meal-dislike-count').html('0');
+                var mealRef = db.collection("meal").doc(selectedDate);
+                mealRef.set({
+                    like: 0,
+                    dislike: 0
+                })
+            }
+        });
+
         currentMenuRaw = data.meal[day].toString().replace(':', '');
         var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
         var menuInfoTag = '';
@@ -1314,4 +1350,39 @@ function skipLogin() {
     $('#complete').css("display", "flex")
     $('#complete').hide()
     $('#complete').fadeIn()
+}
+
+function mealLikeBtn() {
+    var mealRef = db.collection("meal").doc(selectedDate);
+    mealRef.get().then(function (doc) {
+        console.log(doc.data())
+        if (doc.exists) {
+            mealRef.update({
+                like: doc.data().like + 1
+            })
+        } else {
+            mealRef.set({
+                like: 1,
+                dislike: 0
+            })
+        }
+    }
+    );
+}
+
+function mealdislikeBtn() {
+    var mealRef = db.collection("meal").doc(selectedDate);
+    mealRef.get().then(function (doc) {
+        if (doc.exists) {
+            mealRef.update({
+                dislike: doc.data().dislike + 1
+            })
+        } else {
+            mealRef.set({
+                like: 0,
+                dislike: 1
+            })
+        }
+    }
+    );
 }
