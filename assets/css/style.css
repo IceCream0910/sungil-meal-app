@@ -3793,7 +3793,7 @@ input[type=file]::file-selector-button {
     right: 10px;
     padding: 10px;
     gap: 20px;
-    background-color: #000;
+    background-color: #f0f0f0;
 }
 
 .reaction-wrap .reaction {
@@ -3801,4 +3801,8 @@ input[type=file]::file-selector-button {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.reaction-wrap.dark {
+    background-color: #000;
 }
