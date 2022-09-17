@@ -1361,9 +1361,18 @@ header button {
     color: rgb(255, 70, 70);
 }
 
+.pswp img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    top: -25% !important;
+}
+
 .menu-image {
-    width: 60px;
     height: 60px;
+    width: 60px;
+    object-fit: cover;
     margin-right: 20px;
 }
 
@@ -1956,6 +1965,11 @@ thead th {
 thead th.dark {
     background: 0 0;
     color: #959595
+}
+
+th.hasAssign {
+    color: #ff7272 !important;
+    font-weight: 800
 }
 
 .kakao_ad_area iframe {

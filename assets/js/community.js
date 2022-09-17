@@ -22,7 +22,9 @@ firebase.auth().onAuthStateChanged(function (user) {
                 $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
             }
         });
-        Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
+        if (isApp()) {
+            Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
+        }
     } else {
         $('#community .no-login').show();
         $('#community .main-community').hide();

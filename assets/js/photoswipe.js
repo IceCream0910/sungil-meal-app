@@ -27,11 +27,9 @@ var initPhotoSwipeFromDOM = function (gallerySelector) {
             // create slide object
             item = {
                 src: linkEl.getAttribute('href'),
-                w: linkEl.children[0].offsetWidth,
+                w: document.documentElement.clientWidth,
                 h: linkEl.children[0].offsetHeight,
             };
-
-
 
             if (figureEl.children.length > 1) {
                 // <figcaption> content

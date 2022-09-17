@@ -1,16 +1,5 @@
 
 //수행평가
-const firebaseConfig = {
-    apiKey: "AIzaSyDsE3S6NdSB_BO03pHBA3VVkCo6RWn-3Tw",
-    authDomain: "ssoak-72f93.firebaseapp.com",
-    projectId: "ssoak-72f93",
-    storageBucket: "ssoak-72f93.appspot.com",
-    messagingSenderId: "998236238275",
-    appId: "1:998236238275:web:254b37e7a33448259ecd76",
-    databaseURL: "https://ssoak-72f93-default-rtdb.firebaseio.com",
-};
-
-firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 
 //반번호 설정 되어있는지 확인
@@ -97,27 +86,11 @@ function addAssignment() {
             date: $('#date_assign').val(),
             period: selectedPeriod,
             subject: selctedSubject,
-            grade: grade,
-            classNum: classNum
         };
-        assignArr.push(data);
-        writeUserData(id, $('#title').val(), $('#date_assign').val(), selectedPeriod, selctedSubject);
-        assignArr.sort((a, b) => new Date(b.date) - new Date(a.date));
+        database.ref('assignments/' + grade + '/' + classNum + '/' + id).set(data);
         closeModal();
         updateAssignList();
-
     }
-}
-
-
-function writeUserData(idx, title, date, period, subject) {
-    database.ref('assignments/' + grade + '/' + classNum + '/' + idx).set({
-        id: idx,
-        title: title,
-        date: date,
-        period: period,
-        subject: subject
-    });
 }
 
 
@@ -283,38 +256,71 @@ async function deleteAssignment(id) {
     }
 }
 
-
 // 수행평가 목록 로딩
 function updateAssignList() {
     firebase.database().ref('assignments/' + grade + '/' + classNum).once('value').then((snapshot) => {
-        console.log(snapshot.val());
         var data = snapshot.val();
         if (data) {
+            console.log(data)
             var keys = Object.keys(data);
             $('#assignments-listview').html('');
             for (var i = 0; i < keys.length; i++) {
-                if (new Date(data[keys[i]].date) < new Date()) {//기한 지남
+                if (new Date(data[keys[i]].date) < new Date()) {//기한 지난 수행평가는 삭제
                     firebase.database().ref('assignments/' + grade + '/' + classNum + '/' + keys[i]).remove();
                 } else {
-                    $('#assignments-listview').append(`
-            <div class="task-box" onclick="deleteAssignment('`+ keys[i] + `');">
-            <div class="assign-date">`+ moment(new Date(data[keys[i]].date)).format('MM/DD') + `<br><span style="font-size:15px;opacity:0.6">D-` + fromToday(new Date(data[keys[i]].date)) + `</span></div>
-            <div class="description-task">
-                <div class="time">`+ data[keys[i]].period + `교시 ` + data[keys[i]].subject + `</div>
-                <div class="task-name">`+ data[keys[i]].title + `</div>
-            </div>
-            </div>`);
-                    //다크모드 적용
-                    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-                        var items = document.getElementsByClassName('task-box');
-                        for (var i = 0; i < items.length; i++) {
-                            items[i].classList.add("dark");
+                    console.log(data[keys[i]]);
+                    //5일 이내면 시간표에 표시
+                    if (new Date(data[keys[i]].date) - new Date() < 432000000) {
+                        const dayName = ['', 'm', 'tu', 'w', 'th', 'f', ''];
+                        var day = dayName[new Date(data[keys[i]].date).getDay()];
+                        var period = data[keys[i]].period;
+                        if (day != '' && period != '') {
+                            $(`#${day}${period}`).addClass('hasAssign');
                         }
                     }
+                    // 목록에 추가
+                    $('#assignments-listview').append(`
+                     <div class="task-box" onclick="deleteAssignment('`+ keys[i] + `');">
+                     <div class="assign-date">`+ moment(new Date(data[keys[i]].date)).format('MM/DD') + `<br><span style="font-size:15px;opacity:0.6">D-` + fromToday(new Date(data[keys[i]].date)) + `</span></div>
+                     <div class="description-task">
+                         <div class="time">`+ data[keys[i]].period + `교시 ` + data[keys[i]].subject + `</div>
+                         <div class="task-name">`+ data[keys[i]].title + `</div>
+                     </div>
+                     </div>`);
+                }
+            }
+            //다크모드 적용
+            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                var items = document.getElementsByClassName('task-box');
+                for (var i = 0; i < items.length; i++) {
+                    items[i].classList.add("dark");
                 }
             }
         } else {
-            $('#assignments-listview').html('아직 우리 반이 추가한 수행평가가 없어요');
+            $('#assignments-listview').html('아직 우리 반 수행평가가 없어요');
         }
     });
+
 }
+
+
+//시간표에서 하이라이팅 과목 누름련 수행평가 탭으로 이동
+$(document).on('click', '.hasAssign', function () {
+    $('.bottom-nav a').removeClass('active');
+    $('.bottom-nav a').removeClass('bounce');
+    $('#assignment-btn').addClass('active');
+    $('#assignment-btn').addClass('bounce');
+    $('html, body').animate({
+        scrollTop: 0
+    }, 'fast');
+
+    $('.main-nav').hide();
+    $('#home').hide();
+    $('#community').hide();
+    $('#assignment').fadeIn(500);
+    $('#report').hide();
+    isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+    $('#tab1').attr('name', 'planet-outline');
+    $('#tab2').attr('name', 'chatbubbles-outline');
+    $('#tab3').attr('name', 'file-tray-full');
+});

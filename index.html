@@ -88,22 +88,22 @@
     </div>
 </header>
 <div class="bottom-nav non-border">
-    <a class="active" data-tab="home">
+    <a class="active" data-tab="home" id="home-btn">
         <ion-icon id="tab1" name="planet"></ion-icon>
         <span>홈</span>
     </a>
 
-    <a data-tab="community">
+    <a data-tab="community" id="community-btn">
         <ion-icon id="tab2" name="chatbubbles-outline"></ion-icon>
         <span>커뮤니티</span>
     </a>
 
-    <a data-tab="assignment">
+    <a data-tab="assignment" id="assignment-btn">
         <ion-icon id="tab3" name="file-tray-full-outline"></ion-icon>
         <span>수행</span>
     </a>
 
-    <a data-tab="report">
+    <a data-tab="report" id="report-btn">
         <ion-icon id="tab4" name="stats-chart-outline"></ion-icon>
         <span>성적</span>
     </a>
@@ -122,21 +122,6 @@
     </div>
 </div>
 <!-- confirm dialog -->
-
-<div class="menuBanner" style="display:none;"> <a class="close-modal" href="javascript:$('.menuBanner').fadeOut();">
-        <svg viewBox="0 0 20 20">
-            <path id="close-path"
-                d="M15.898,4.045c-0.271-0.272-0.713-0.272-0.986,0l-4.71,4.711L5.493,4.045c-0.272-0.272-0.714-0.272-0.986,0s-0.272,0.714,0,0.986l4.709,4.711l-4.71,4.711c-0.272,0.271-0.272,0.713,0,0.986c0.136,0.136,0.314,0.203,0.492,0.203c0.179,0,0.357-0.067,0.493-0.203l4.711-4.711l4.71,4.711c0.137,0.136,0.314,0.203,0.494,0.203c0.178,0,0.355-0.067,0.492-0.203c0.273-0.273,0.273-0.715,0-0.986l-4.711-4.711l4.711-4.711C16.172,4.759,16.172,4.317,15.898,4.045z">
-            </path>
-        </svg> </a>
-    <div class="d-flex flex-row">
-        <div id="image_result" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery"></div>
-        <br>
-        <div>
-            <h3 id="menu-name" class="card__primary__title__text"></h3> <span id="allergy-info"></span>
-        </div>
-    </div>
-</div>
 </head>
 
 <body oncontextmenu='return false' ondragstart='return false'>
@@ -361,6 +346,24 @@
                     <button class="custom-btn modal-btn" onclick="saveSelfcheckInfo()">저장하기
                     </button>
                 </div>
+
+                <div class="content-wrap" id="menuInfo">
+                    <div class="d-flex flex-row" style="margin-top:-20px;">
+                        <div id="image_result" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+                            <img loading="lazy" src="assets/icons/menu_blank.png" itemprop="thumbnail"
+                                alt="Image description" class="menu-image" style="border-radius:10px;" />
+                        </div>
+                        <br>
+                        <div>
+                            <h3 id="menu-name" class="card__primary__title__text"></h3>
+                            <span id="allergy-info"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
     </div>
@@ -387,7 +390,7 @@
 
     <section id="home">
         <div class="home-header">
-            <img src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
+            <img loading="lazy" src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
             <div style="display:flex;flex-direction:row;justify-content: center;align-items: center;">
                 <a href="javascript:shareApp()" style="font-size:30px;position:relative;top:3px;opacity:0.6;"
                     aria-label="앱 공유">
@@ -416,8 +419,8 @@
                         </button>
                     </div>
                 </div>
-                <div id="no-meal" style="opacity:0.7;"> <img class="no-meal-img" src="assets/icons/Failure.png"
-                        alt="급식 정보 없음 일러스트">
+                <div id="no-meal" style="opacity:0.7;"> <img loading="lazy" class="no-meal-img"
+                        src="assets/icons/Failure.png" alt="급식 정보 없음 일러스트">
                     <br><span>급식
                         정보가
                         없어요</span>
@@ -466,7 +469,7 @@
                     style="display:none;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
                     <p class="card__supporting__text"
                         style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
-                        <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
+                        <img loading="lazy" class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
                         <br><span>학년/반을 먼저
                             설정하고<br>시간표를 확인해보세요.</span>
                         <button class="custom-btn onclick=" javascript:window.location.href='init.html' ;"
@@ -645,7 +648,8 @@
     <section id="community">
         <div class="header community-member-header" style="display:none;">
             <div id="account-btn" style="display: flex;gap: 15px;">
-                <img class="profile-img" id="header-profile-img" src="assets/icons/profileImg/letter1.png">
+                <img loading="lazy" class="profile-img" id="header-profile-img"
+                    src="assets/icons/profileImg/letter1.png">
                 <h3 class="card__primary__title__text" id="header-username" style="padding-top: 5px;"></h3>
             </div>
         </div>
@@ -756,7 +760,8 @@
         <div id="before-setting-assign" style="margin-top:15px;">
             <p
                 style="width:100%;height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
-                <img class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트"> <br><span>학년/반을
+                <img loading="lazy" class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
+                <br><span>학년/반을
                     먼저
                     설정하고<br>수행평가 일정을 정리해보세요.</span>
                 <button class="custom-btn" onclick="window.location.href='init.html' ;" style="margin-top:10px;"
@@ -894,7 +899,7 @@
 
 <div class="onboard">
     <div class="onboard-section" id="hello">
-        <img src="assets/icons/hello.gif" width="50px">
+        <img loading="lazy" src="assets/icons/hello.gif" width="50px">
         <h3 class="card__primary__title__text" style="margin-top:20px;">만나서 반가워요!</h3>
     </div>
 
@@ -1075,9 +1080,9 @@
 </div>
 
 <script src="assets/js/script.js"></script>
+<script src="assets/js/community.js?v=220710"></script>
 <script src="assets/js/darkmode.js"></script>
 <script src="assets/js/assignment.js"></script>
-<script src="assets/js/community.js?v=220710"></script>
 <script src="assets/js/report.js"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" />

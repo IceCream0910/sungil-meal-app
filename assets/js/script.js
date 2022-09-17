@@ -1,4 +1,14 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyDsE3S6NdSB_BO03pHBA3VVkCo6RWn-3Tw",
+    authDomain: "ssoak-72f93.firebaseapp.com",
+    projectId: "ssoak-72f93",
+    storageBucket: "ssoak-72f93.appspot.com",
+    messagingSenderId: "998236238275",
+    appId: "1:998236238275:web:254b37e7a33448259ecd76",
+    databaseURL: "https://ssoak-72f93-default-rtdb.firebaseio.com",
+};
 
+firebase.initializeApp(firebaseConfig);
 
 moment.lang('ko', {
     weekdays: ["일", "월", "화", "수", "목", "금", "토"],
@@ -531,6 +541,7 @@ function displayTimetable(data) {
     for (var i = 0; i < sections.length; i++) {
         var item = sections.item(i);
         $(item).removeClass('active');
+        $(item).removeClass('hasAssign');
         $(item).html('');
     }
 
@@ -665,21 +676,25 @@ function getWeekNo(v_date_str) {
 
 
 //kakao image search api
-function search(query) {
+function imageSearch(query) {
     $.ajax({
         type: "GET",
         url: 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q=' + query,
         success: function (result) {
+            console.log(result.items[0].link)
             var image_result = `<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-            <a href="${result.items[0].image.thumbnailLink}" itemprop="contentUrl"
-                data-size="1024x1024">
-                <img src="${result.items[0].image.thumbnailLink}" itemprop="thumbnail"
+            <a href="${result.items[0].link}" itemprop="contentUrl"
+                data-size="${result.items[0].width}x${result.items[0].height}">
+                <img src="${result.items[0].link}" itemprop="thumbnail"
                     alt="Image description" class="menu-image" style="border-radius:10px;"/>
             </a>
             <figcaption style="display:none;" itemprop="caption description">위 이미지는 실제 메뉴 사진이 아닌 인터넷 검색 결과예요.</figcaption>
 
         </figure>`
             $('#image_result').html(image_result);
+            setTimeout(function () {
+                $('.sheet-modal').css('height', $('#menuInfo').height() + 70 + 'px');
+            }, 100);
         }
     });
 }
@@ -703,25 +718,13 @@ function openMenuBanner(name, allegy) {
             .replaceAll('?', '<span id="dangerAllegy">').replaceAll('!', '</span>');
         $('#allergy-info').html(allegyString.substring(0, allegyString.length - 2));
     }
-
-    search(name);
-    $('.sheet-backdrop').addClass('backdrop-in');
     $('#menu-name').html(name);
-    $('.menuBanner').show("slide", { direction: "down" }, 100);;
-
+    imageSearch(name);
+    openModal('', 'menuInfo')
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#menuInfo').height() + 70 + 'px');
+    }, 100);
 }
-
-//메뉴 상세정보 팝업 이외 클릭 시 닫기
-document.addEventListener('click', function (e) {
-    if ($('.menuBanner').is(':visible')) {
-        if (!$(e.target).hasClass("menuBanner")) {
-            $('.sheet-backdrop').removeClass('backdrop-in');
-            $('.menuBanner').hide("slide", { direction: "down" }, 100);;
-        }
-
-    }
-});
-
 
 /* bottom sheet */
 $('.pop').on('click', function () {
@@ -886,17 +889,18 @@ function toast(msg) {
         text: msg,
         duration: 2200,
         newWindow: true,
-        close: false,
+        close: true,
         gravity: "bottom", // `top` or `bottom`
         position: "center", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
+        stopOnFocus: false, // Prevents dismissing of toast on hover
         style: {
             background: "#000",
             color: "#fff",
             border: "none",
             borderRadius: "10px",
             boxShadow: "none"
-        }
+        },
+        onClick: function () { $('.toastify').hide(); }
     }).showToast();
 }
 
