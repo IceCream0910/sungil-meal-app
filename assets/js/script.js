@@ -19,23 +19,6 @@ moment.lang('en', {
     weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
 });
 
-//공지 표시
-var previousNoti = localStorage.getItem('ssoak-notice-content') || '';
-if (previousNoti != $('#noti-preview').text()) {
-    localStorage.setItem('ssoak-notice-content', $('#noti-preview').text());
-    setTimeout(function () {
-        $('.home-header #service-noti').css('background', 'transparent');
-        $('.home-header #service-noti').css('opacity', '0.4');
-        $('.home-header #service-noti').css('gap', '0');
-        $('#noti-preview').text('');
-    }, 8000);
-} else {
-    $('.home-header #service-noti').css('background', 'transparent');
-    $('.home-header #service-noti').css('opacity', '0.4');
-    $('.home-header #service-noti').css('gap', '0');
-    $('#noti-preview').text('');
-}
-
 
 if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
     updateOrder();
@@ -920,26 +903,46 @@ function isBigScreen() {
 
 //toast
 function toast(msg) {
-    Toastify({
-        text: msg,
-        duration: 2200,
-        newWindow: true,
-        close: true,
-        gravity: "bottom", // `top` or `bottom`
-        position: "center", // `left`, `center` or `right`
-        stopOnFocus: false, // Prevents dismissing of toast on hover
-        style: {
-            background: "#000",
-            color: "#fff",
-            border: "none",
-            borderRadius: "10px",
-            boxShadow: "none"
-        },
-        onClick: function () { $('.toastify').hide(); }
-    }).showToast();
+    if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+        Toastify({
+            text: msg,
+            duration: 2200,
+            newWindow: true,
+            close: false,
+            gravity: "bottom", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: false, // Prevents dismissing of toast on hover
+            style: {
+                background: "rgba(255, 255, 255, 0.08)",
+                color: "inherit",
+                border: "none",
+                borderRadius: "10px",
+                boxShadow: "none",
+                borderTop: "1px solid rgba(209, 213, 219, 0.5)",
+            },
+            onClick: function () { $('.toastify').hide(); }
+        }).showToast();
+    } else {
+        Toastify({
+            text: msg,
+            duration: 2200,
+            newWindow: true,
+            close: false,
+            gravity: "bottom", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: false, // Prevents dismissing of toast on hover
+            style: {
+                background: "rgba(0, 0, 0, 0.08)",
+                color: "inherit",
+                border: "none",
+                borderRadius: "10px",
+                boxShadow: "none",
+                borderTop: "1px solid rgba(70, 70, 70, 0.2)",
+            },
+            onClick: function () { $('.toastify').hide(); }
+        }).showToast();
+    }
 }
-
-
 
 //confirm
 const ui = {

@@ -390,16 +390,16 @@
 
     <section id="home">
         <div class="home-header">
-            <img loading="lazy" src="assets/icons/icon-transparent.png" style="width:30px;height:30px;">
+            <img loading="lazy" src="assets/icons/icon-transparent.png"
+                style="width:30px;height:30px;filter:grayscale(100%);">
             <div style="display:flex;flex-direction:row;justify-content: center;align-items: center;">
-                <a href="javascript:shareApp()" style="font-size:30px;position:relative;top:3px;opacity:0.6;"
+                <a href="javascript:shareApp()" style="font-size:25px;position:relative;top:3px;opacity:0.4;"
                     aria-label="앱 공유">
                     <ion-icon name="share"></ion-icon>
                 </a>
 
                 <a id="service-noti" href="https://log.sungil.me/tags/업데이트-내역" target="_blank" aria-label="업데이트 내역 열기">
-
-                    <span id="noti-preview">09-18 업데이트 내역</span>
+                    <span id="noti-preview"></span>
                     <div class="icon-bubble">
                         <ion-icon name="notifications"></ion-icon>
                     </div>
@@ -410,7 +410,7 @@
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
-                    <h3 style="float:left" class="card__primary__title__text">급식🍴</h3>
+                    <h3 style="float:left" class="card__primary__title__text">급식</h3>
                     <div>
                         <button id="shareBtn" class="mdc-button mdc-button--icon-leading"
                             onclick="javascript:shareMeal();" aria-label="급식 공유"> <span
@@ -419,11 +419,12 @@
                         </button>
                     </div>
                 </div>
-                <div id="no-meal" style="opacity:0.7;"> <img loading="lazy" class="no-meal-img"
-                        src="assets/icons/Failure.png" alt="급식 정보 없음 일러스트">
-                    <br><span>급식
-                        정보가
-                        없어요</span>
+                <div id="no-meal" style="opacity:0.7;">
+                    <picture>
+                        <source srcset="assets/icons/webp/drink.webp" type="image/webp" class="no-meal-img" />
+                        <img loading="lazy" class="no-meal-img" src="assets/icons/drink.png" alt="급식 정보 없음 일러스트">
+                    </picture>
+                    <br><br><span>오늘은 급식이 없어요</span>
                 </div>
                 <div id="exist-meal">
                     <div class="card">
@@ -483,8 +484,7 @@
                     style="display:none;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
                     <p class="card__supporting__text"
                         style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
-                        <img loading="lazy" class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
-                        <br><span>학년/반을 먼저
+                        <span>학년/반을 먼저
                             설정하고<br>시간표를 확인해보세요.</span>
                         <button class="custom-btn onclick=" javascript:window.location.href='init.html' ;"
                             style="margin-top:10px;" aria-label="학년 반 설정 버튼">
@@ -774,7 +774,6 @@
         <div id="before-setting-assign" style="margin-top:15px;">
             <p
                 style="width:100%;height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
-                <img loading="lazy" class="no-meal-img" src="assets/icons/Empty-BOX.png" alt="급식 정보 없음 일러스트">
                 <br><span>학년/반을
                     먼저
                     설정하고<br>수행평가 일정을 정리해보세요.</span>
@@ -786,7 +785,7 @@
 
         </div>
 
-        <div id="assignments-list" style="margin-top:30px;">
+        <div id="assignments-list" style="margin-top:30px;text-align:center;">
             <div id="assignments-listview">
 
             </div>
@@ -913,7 +912,10 @@
 
 <div class="onboard">
     <div class="onboard-section" id="hello">
-        <img loading="lazy" src="assets/icons/hello.gif" width="50px">
+        <picture>
+            <source srcset="assets/icons/webp/hello.webp" type="image/webp" width="50px" />
+            <img loading="lazy" src="assets/icons/hello.gif" width="50px">
+        </picture>
         <h3 class="card__primary__title__text" style="margin-top:20px;">만나서 반가워요!</h3>
     </div>
 
@@ -994,8 +996,10 @@
     </div>
 
     <div class="onboard-section" id="login">
-        <ion-icon name="checkmark-circle" style="font-size: 80px;color: #60eb98;"></ion-icon>
-
+        <picture>
+            <source srcset="assets/icons/webp/chat-bubble.webp" type="image/webp" width="40%" />
+            <img loading="lazy" src="assets/icons/chat-bubble.png" width="40%">
+        </picture>
         <h3 class="card__primary__title__text" style="margin-top:20px;">로그인해볼까요?</h3>
         <h5 style="text-align:center;opacity:0.7">로그인하면 커뮤니티에 참여해<br>함께 이야기할 수 있어요</h5>
 

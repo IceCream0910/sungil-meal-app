@@ -30,6 +30,10 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.mdc-button__icon {
+    color: #5875e3 !important;
+}
+
 body,
 html {
     background: #eee;
@@ -55,6 +59,10 @@ ion-icon {
     position: relative;
     top: 2px;
     margin-right: 5px
+}
+
+picture {
+    text-align: center;
 }
 
 ::-webkit-scrollbar {
@@ -937,6 +945,11 @@ header {
 
 header button {
     color: #5272ff;
+}
+
+.toastify {
+    backdrop-filter: blur(15px) saturate(200%);
+    -webkit-backdrop-filter: blur(15px) saturate(200%);
 }
 
 .main-nav.dark {
@@ -2631,10 +2644,10 @@ th.hasAssign {
     outline: none;
     border: none;
     box-sizing: border-box;
-    -webkit-transition: all .5s ease;
-    -moz-transition: all .5s ease;
-    -o-transition: all .5s ease;
-    transition: all .5s ease;
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease;
 }
 
 .custom-btn.transparent {
@@ -3272,16 +3285,12 @@ input[type=checkbox] label {
 
 .home-header .icon-bubble {
     text-decoration: none;
-    background: #527dff;
-    color: white;
-    border-radius: 50%;
     width: 35px;
     height: 35px;
+    font-size: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 5px;
-    padding-bottom: 4px;
 }
 
 
@@ -3309,19 +3318,8 @@ input[type=checkbox] label {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    background: #dedede;
     padding-left: 15px;
-}
-
-.home-header.dark #service-noti {
-    background: #1f1f1f;
-}
-
-
-
-.home-header.dark #service-noti #noti-preview {
-    font-size: 13px;
+    opacity: 0.4;
 }
 
 .input-btn {
