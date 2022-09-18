@@ -430,8 +430,7 @@ function displayMeal(data) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
 
-        var mealRef = db.collection("meal").doc(selectedDate);
-        mealRef.onSnapshot(function (doc) {
+        db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
             if (doc.exists) {
                 counter('#meal-like-count', doc.data().like);
                 counter('#meal-dislike-count', doc.data().dislike);
