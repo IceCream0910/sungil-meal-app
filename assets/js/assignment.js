@@ -271,11 +271,6 @@ function updateAssignList() {
                     console.log(data[keys[i]]);
                     //5일 이내면 시간표에 표시
                     if (new Date(data[keys[i]].date) - new Date() < 432000000) {
-                        var sections = document.querySelectorAll("tbody th");
-                        for (var i = 0; i < sections.length; i++) {
-                            var item = sections.item(i);
-                            $(item).removeClass('hasAssign');
-                        }
                         const dayName = ['', 'm', 'tu', 'w', 'th', 'f', ''];
                         var day = dayName[new Date(data[keys[i]].date).getDay()];
                         var period = data[keys[i]].period;
