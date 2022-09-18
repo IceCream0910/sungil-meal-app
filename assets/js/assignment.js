@@ -299,8 +299,8 @@ function updateAssignList() {
         } else {
             $('#assignments-listview').html(`
                 <picture>
-                 <source srcset="assets/icons/webp/Empty-BOX.webp" type="image/webp" width="50%" />
-                 <img loading="lazy" src="assets/icons/Empty-BOX.png" width="50%">
+                 <source srcset="assets/icons/webp/Empty-BOX.webp" class="no-assign-img" type="image/webp" width="50%" />
+                 <img loading="lazy" class="no-assign-img" src="assets/icons/Empty-BOX.png" width="50%">
                 </picture><br>
                 <span>아직 우리 반 수행평가가 없어요</span>`);
         }

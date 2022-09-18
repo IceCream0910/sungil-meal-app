@@ -1810,6 +1810,10 @@ body.dark {
     width: 40%
 }
 
+.no-assign-img {
+    width: 40%
+}
+
 
 .custom_ad {
     width: 100%;
@@ -1820,6 +1824,10 @@ body.dark {
         width: 25%
     }
 
+    .no-assign-img {
+        width: 25%
+    }
+
     .custom_ad {
         width: 30%;
     }
@@ -1827,6 +1835,10 @@ body.dark {
 
 @media (min-width:1200px) {
     .no-meal-img {
+        width: 30%
+    }
+
+    .no-assign-img {
         width: 30%
     }
 

@@ -420,6 +420,7 @@ function counter(counter, max) {
     }, 50);
 }
 
+var realTimeMealRef;
 
 function displayMeal(data) {
     //급식
@@ -429,8 +430,8 @@ function displayMeal(data) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
 
-        //급식 좋아요 싫어요 실시간 가져오기
-        db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.onSnapshot(function (doc) {
             if (doc.exists) {
                 counter('#meal-like-count', doc.data().like);
                 counter('#meal-dislike-count', doc.data().dislike);
@@ -703,8 +704,7 @@ function imageSearch(query) {
             var image_result = `<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
             <a href="${result.items[0].link}" itemprop="contentUrl"
                 data-size="${result.items[0].width}x${result.items[0].height}">
-                <img src="${result.items[0].link}" itemprop="thumbnail"
-                    alt="Image description" class="menu-image" style="border-radius:10px;"/>
+                <img src="${result.items[0].link}" itemprop="thumbnail" onerror="this.src='assets/icons/menu_blank.png'" class="menu-image" style="border-radius:10px;"/>
             </a>
             <figcaption style="display:none;" itemprop="caption description">위 이미지는 실제 메뉴 사진이 아닌 인터넷 검색 결과예요.</figcaption>
 
@@ -1388,3 +1388,5 @@ function mealdislikeBtn() {
     }
     );
 }
+
+
