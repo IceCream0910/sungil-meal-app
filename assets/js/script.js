@@ -906,7 +906,7 @@ function toast(msg) {
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         Toastify({
             text: msg,
-            duration: 22222200,
+            duration: 2200,
             newWindow: true,
             close: false,
             gravity: "bottom", // `top` or `bottom`
