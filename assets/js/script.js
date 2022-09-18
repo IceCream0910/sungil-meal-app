@@ -577,7 +577,6 @@ function displayTimetable(data) {
     for (var i = 0; i < sections.length; i++) {
         var item = sections.item(i);
         $(item).removeClass('active');
-        $(item).removeClass('hasAssign');
         $(item).html('');
     }
 

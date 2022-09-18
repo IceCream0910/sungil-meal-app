@@ -3791,7 +3791,7 @@ input[type=file]::file-selector-button {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    padding: 10px;
+    padding: 5px 10px;
     gap: 20px;
     background-color: #f0f0f0;
 }
@@ -3805,4 +3805,9 @@ input[type=file]::file-selector-button {
 
 .reaction-wrap.dark {
     background-color: #000;
+}
+
+.reaction__icon {
+    font-size: 25px;
+    margin-top: 2px;
 }
