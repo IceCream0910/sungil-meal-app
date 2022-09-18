@@ -906,21 +906,21 @@ function toast(msg) {
     if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
         Toastify({
             text: msg,
-            duration: 2200,
+            duration: 22222200,
             newWindow: true,
             close: false,
             gravity: "bottom", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(255, 255, 255, 0.08)",
+                background: "rgba(0, 0, 0, 0.4)",
                 color: "inherit",
                 border: "none",
                 borderRadius: "10px",
                 boxShadow: "none",
-                borderTop: "1px solid rgba(209, 213, 219, 0.5)",
+                borderTop: "1px solid rgba(70, 70, 70, 0.4)",
             },
-            onClick: function () { $('.toastify').hide(); }
+            onClick: function () { $('.toastify').fadeOut(); }
         }).showToast();
     } else {
         Toastify({
@@ -932,12 +932,12 @@ function toast(msg) {
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(0, 0, 0, 0.08)",
+                background: "rgba(255, 255, 255, 0.4)",
                 color: "inherit",
                 border: "none",
                 borderRadius: "10px",
                 boxShadow: "none",
-                borderTop: "1px solid rgba(70, 70, 70, 0.2)",
+                borderTop: "1px solid rgba(58, 58, 58, 0.2)",
             },
             onClick: function () { $('.toastify').hide(); }
         }).showToast();

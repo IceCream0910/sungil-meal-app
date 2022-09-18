@@ -2379,6 +2379,7 @@ th.hasAssign {
     display: flex;
     flex-direction: row;
     align-items: center;
+    text-align: start;
     position: relative;
     gap: 20px;
     border-radius: 12px;
