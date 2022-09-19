@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
     apiKey: "AIzaSyDsE3S6NdSB_BO03pHBA3VVkCo6RWn-3Tw",
     authDomain: "ssoak-72f93.firebaseapp.com",
@@ -1399,6 +1400,7 @@ var log = localStorage.getItem("ssoak_meal_reaction_log");
         if(log.indexOf(selectedDate) > -1) { 
             toast('이미 반응을 표시한 날짜의 급식이에요.');
         } else {
+            log = [];
         localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
         var mealRef = db.collection("meal").doc(selectedDate);
         mealRef.get().then(function (doc) {
@@ -1415,6 +1417,7 @@ var log = localStorage.getItem("ssoak_meal_reaction_log");
           });
         }
     } else {
+        log = [];
         localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
         var mealRef = db.collection("meal").doc(selectedDate);
         mealRef.get().then(function (doc) {
