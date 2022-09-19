@@ -430,7 +430,6 @@ function displayMeal(data) {
     if (data.meal[day]) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
-
         db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
             if (doc.exists) {
                 $('#meal-like-count').html(doc.data().like);
@@ -913,7 +912,7 @@ function toast(msg) {
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(0, 0, 0, 0.4)",
+                background: "rgba(0, 0, 0, 0.3)",
                 color: "inherit",
                 border: "none",
                 borderRadius: "10px",
@@ -1354,86 +1353,57 @@ function skipLogin() {
     $('#complete').fadeIn()
 }
 
-function mealLikeBtn() {if(log) {
-    log.split(',');
-    if(log.indexOf(selectedDate) > -1) { 
+function mealLikeBtn() {
+    var reactionHistory = localStorage.getItem("ssoak_meal_reaction_history") || [];
+    reactionHistory = reactionHistory.toString().split(',');
+
+    if (reactionHistory.indexOf(selectedDate) > -1) {
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
-    localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
-    var mealRef = db.collection("meal").doc(selectedDate);
-    mealRef.get().then(function (doc) {
-        if (doc.exists) {
-            mealRef.update({
-                dislike: doc.data().dislike + 1
-            })
-        } else {
-            mealRef.set({
-                like: 0,
-                dislike: 1
-            })
-        }
-      });
-    }
-} else {
-    localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
-    var mealRef = db.collection("meal").doc(selectedDate);
-    mealRef.get().then(function (doc) {
-        if (doc.exists) {
-            mealRef.update({
-                dislike: doc.data().dislike + 1
-            })
-        } else {
-            mealRef.set({
-                like: 0,
-                dislike: 1
-            })
-        }
-      });
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    like: doc.data().like + 1
+                });
+                reactionHistory.push(selectedDate)
+                localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
+                console.log(reactionHistory);
+            } else {
+                mealRef.set({
+                    like: 1,
+                    dislike: 0
+                })
+            }
+        });
     }
 
 }
 
 function mealdislikeBtn() {
-var log = localStorage.getItem("ssoak_meal_reaction_log");
-    if(log) {
-        log.split(',');
-        if(log.indexOf(selectedDate) > -1) { 
-            toast('이미 반응을 표시한 날짜의 급식이에요.');
-        } else {
-            log = [];
-        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
-        var mealRef = db.collection("meal").doc(selectedDate);
-        mealRef.get().then(function (doc) {
-            if (doc.exists) {
-                mealRef.update({
-                    dislike: doc.data().dislike + 1
-                })
-            } else {
-                mealRef.set({
-                    like: 0,
-                    dislike: 1
-                })
-            }
-          });
-        }
-    } else {
-        log = [];
-        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
-        var mealRef = db.collection("meal").doc(selectedDate);
-        mealRef.get().then(function (doc) {
-            if (doc.exists) {
-                mealRef.update({
-                    dislike: doc.data().dislike + 1
-                })
-            } else {
-                mealRef.set({
-                    like: 0,
-                    dislike: 1
-                })
-            }
-          });
-        }
+    var reactionHistory = localStorage.getItem("ssoak_meal_reaction_history") || [];
+    reactionHistory = reactionHistory.toString().split(',');
 
+    if (reactionHistory.indexOf(selectedDate) > -1) {
+        toast('이미 반응을 표시한 날짜의 급식이에요.');
+    } else {
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    dislike: doc.data().dislike + 1
+                });
+                reactionHistory.push(selectedDate)
+                localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
+                console.log(reactionHistory);
+            } else {
+                mealRef.set({
+                    like: 0,
+                    dislike: 1
+                })
+            }
+        });
+    }
 }
 
 
