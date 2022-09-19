@@ -432,8 +432,8 @@ function displayMeal(data) {
 
         db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
             if (doc.exists) {
-                counter('#meal-like-count', doc.data().like);
-                counter('#meal-dislike-count', doc.data().dislike);
+                $('#meal-like-count').html(doc.data().like);
+                $('#meal-dislike-count').html(doc.data().dislike);
             } else {
                 $('#meal-like-count').html('0');
                 $('#meal-dislike-count').html('0');
