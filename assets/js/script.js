@@ -1354,24 +1354,35 @@ function skipLogin() {
 }
 
 function mealLikeBtn() {
-    var mealRef = db.collection("meal").doc(selectedDate);
-    mealRef.get().then(function (doc) {
-        console.log(doc.data())
-        if (doc.exists) {
-            mealRef.update({
-                like: doc.data().like + 1
-            })
-        } else {
-            mealRef.set({
-                like: 1,
-                dislike: 0
-            })
+    const log = localStorage.getItem("ssoak_meal_reaction_log") || null;
+    if(log != null && log.indexOf(selectedDate) > -1) { //이미 참여
+        toast('이미 반응을 표시한 날짜의 급식이에요.');
+    } else {
+        localStorage.setItem("ssoak_meal_reaction_log", moment(selectedDate));
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            console.log(doc.data())
+            if (doc.exists) {
+                mealRef.update({
+                    like: doc.data().like + 1
+                })
+            } else {
+                mealRef.set({
+                    like: 1,
+                    dislike: 0
+                })
+            }
         }
+        );
     }
-    );
+    
 }
 
 function mealdislikeBtn() {
+    const log = localStorage.getItem("ssoak_meal_reaction_log") || null;
+    if(log != null && log.indexOf(selectedDate) > -1) { 
+        toast('이미 반응을 표시한 날짜의 급식이에요.');
+    } else {
     var mealRef = db.collection("meal").doc(selectedDate);
     mealRef.get().then(function (doc) {
         if (doc.exists) {
@@ -1384,8 +1395,8 @@ function mealdislikeBtn() {
                 dislike: 1
             })
         }
+      });
     }
-    );
 }
 
 
