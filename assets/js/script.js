@@ -1353,41 +1353,8 @@ function skipLogin() {
     $('#complete').fadeIn()
 }
 
-function mealLikeBtn() {
-    var log = localStorage.getItem("ssoak_meal_reaction_log");
-    if(log) {
-        log.split(',');
-    }
-
-    if(log.indexOf(selectedDate) > -1) { //이미 참여
-        toast('이미 반응을 표시한 날짜의 급식이에요.');
-    } else {
-        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
-        var mealRef = db.collection("meal").doc(selectedDate);
-        mealRef.get().then(function (doc) {
-            console.log(doc.data())
-            if (doc.exists) {
-                mealRef.update({
-                    like: doc.data().like + 1
-                })
-            } else {
-                mealRef.set({
-                    like: 1,
-                    dislike: 0
-                })
-            }
-        }
-        );
-    }
-    
-}
-
-function mealdislikeBtn() {
-var log = localStorage.getItem("ssoak_meal_reaction_log");
-    if(log) {
-        log.split(',');
-    }
-    
+function mealLikeBtn() {if(log) {
+    log.split(',');
     if(log.indexOf(selectedDate) > -1) { 
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
@@ -1406,6 +1373,64 @@ var log = localStorage.getItem("ssoak_meal_reaction_log");
         }
       });
     }
+} else {
+    localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
+    var mealRef = db.collection("meal").doc(selectedDate);
+    mealRef.get().then(function (doc) {
+        if (doc.exists) {
+            mealRef.update({
+                dislike: doc.data().dislike + 1
+            })
+        } else {
+            mealRef.set({
+                like: 0,
+                dislike: 1
+            })
+        }
+      });
+    }
+
+}
+
+function mealdislikeBtn() {
+var log = localStorage.getItem("ssoak_meal_reaction_log");
+    if(log) {
+        log.split(',');
+        if(log.indexOf(selectedDate) > -1) { 
+            toast('이미 반응을 표시한 날짜의 급식이에요.');
+        } else {
+        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    dislike: doc.data().dislike + 1
+                })
+            } else {
+                mealRef.set({
+                    like: 0,
+                    dislike: 1
+                })
+            }
+          });
+        }
+    } else {
+        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    dislike: doc.data().dislike + 1
+                })
+            } else {
+                mealRef.set({
+                    like: 0,
+                    dislike: 1
+                })
+            }
+          });
+        }
+
 }
 
 
