@@ -1354,11 +1354,11 @@ function skipLogin() {
 }
 
 function mealLikeBtn() {
-    const log = localStorage.getItem("ssoak_meal_reaction_log") || null;
-    if(log != null && log.indexOf(selectedDate) > -1) { //이미 참여
+    const log = localStorage.getItem("ssoak_meal_reaction_log").split(',') || null;
+    if(log.indexOf(selectedDate) > -1) { //이미 참여
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
-        localStorage.setItem("ssoak_meal_reaction_log", moment(selectedDate));
+        localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
         var mealRef = db.collection("meal").doc(selectedDate);
         mealRef.get().then(function (doc) {
             console.log(doc.data())
@@ -1379,10 +1379,11 @@ function mealLikeBtn() {
 }
 
 function mealdislikeBtn() {
-    const log = localStorage.getItem("ssoak_meal_reaction_log") || null;
-    if(log != null && log.indexOf(selectedDate) > -1) { 
+    const log = localStorage.getItem("ssoak_meal_reaction_log").split(',') || null;
+    if(log.indexOf(selectedDate) > -1) { 
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
+    localStorage.setItem("ssoak_meal_reaction_log", log.push(selectedDate).toString());
     var mealRef = db.collection("meal").doc(selectedDate);
     mealRef.get().then(function (doc) {
         if (doc.exists) {
