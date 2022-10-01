@@ -550,11 +550,13 @@ function getDay(day) {
 
 function displayTimetable(data) {
     var day = moment(selectedDate).day();
-    var sections = document.querySelectorAll("timetable-wrap tbody th");
+    var sections = document.querySelectorAll("tbody th");
     for (var i = 0; i < sections.length; i++) {
-        var item = sections.item(i);
-        $(item).removeClass('active');
-        $(item).html('');
+        if (sections[i].parentNode.parentNode.parentNode.parentNode.classList.contains('timetable-wrap')) {
+            var item = sections.item(i);
+            $(item).removeClass('active');
+            $(item).html('');
+        }
     }
 
     switch (day) {
