@@ -347,6 +347,16 @@
                     </button>
                 </div>
 
+                <div class="content-wrap" id="selfcheck-confirm">
+                    <span>아래 문항에 해당하는 경우 공식 자가진단을 통해 제출해주세요.<br><br>
+                        - 코로나19 감염 의심 증상이 있나요?<br>
+                        - 오늘(어제 저녁) 신속항원검사를 실시했나요?<br>
+                        - 본인 또는 동거인이 PCR 검사를 받고 결과 대기 중인가요?<br><br><span>
+                            <button class="custom-btn modal-btn" onclick="submitSelfCheck();">아니요, 이상이 없어요.
+                            </button>
+                </div>
+
+
                 <div class="content-wrap" id="menuInfo">
                     <div class="d-flex flex-row" style="margin-top:-20px;">
                         <div id="image_result" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
@@ -359,6 +369,85 @@
                             <span id="allergy-info"></span>
                         </div>
                     </div>
+                </div>
+
+                <div class="content-wrap" id="exam">
+                    <div class="grade_tab">
+                        <button class="grade_btn active" data-grade="1">1학년</button>
+                        <button class="grade_btn" data-grade="2">2학년</button>
+                        <button class="grade_btn" data-grade="3">3학년</button>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>10/20(목)</th>
+                                <th>10/21(금)</th>
+                                <th>10/24(월)</th>
+                                <th>10/25(화)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-timetable" class="exam1">
+                            <tr>
+                                <th>국어</th>
+                                <th></th>
+                                <th>통합과학</th>
+                                <th>영어</th>
+                            </tr>
+                            <tr>
+                                <th>정보</th>
+                                <th>수학</th>
+                                <th>한국사</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                        <tbody id="tbody-timetable" class="exam2" style="display:none;">
+                            <tr>
+                                <th>언어와 매체</th>
+                                <th>수학II</th>
+                                <th>생활과 윤리<br>기하</th>
+                                <th>영어</th>
+                            </tr>
+                            <tr>
+                                <th>세계사<br>생명과학I</th>
+                                <th>경제<br>화학I</th>
+                                <th>정치와 법<br>물리학I</th>
+                                <th>세계지리<br>지구과학I</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th><br></th>
+                                <th><br></th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                        <tbody id="tbody-timetable" class="exam3" style="display:none;">
+                            <tr>
+                                <th>화법과 작문</th>
+                                <th>수학과제탐구</th>
+                                <th>영어권 문화<br>미적분</th>
+                                <th>영어 독해와 작문</th>
+                            </tr>
+                            <tr>
+                                <th>동아시아사<br>생명과학II</th>
+                                <th>사회문화<br>화학II</th>
+                                <th>윤리와 사상<br>물리학II</th>
+                                <th>한국지리<br>융합과학</th>
+                            </tr>
+                            <tr>
+                                <th>경제수학<br>인공지능수학<br>정보과학<br>심화수학</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
 
@@ -451,7 +540,7 @@
                         </div>
                         <p class="card__supporting__text" id="meal-menus" style="margin-top:-50px;">
                         </p>
-                        <div class="reaction-wrap">
+                        <div class="reaction-wrap" style="display:none;">
                             <div class="reaction" onclick="mealLikeBtn()">
                                 <div class="reaction__icon">
                                     <ion-icon name="happy" style="color:#5c90ff"></ion-icon>
@@ -470,6 +559,12 @@
             </div>
 
             <div class="siganpyo-wrap" id="order-item">
+                <h3 class="card__primary__title__text" style="display: flex;justify-content: space-between;">중간고사
+                    <button class="custom-btn" id="examSchedule" style="margin-top:-5px;">일정보기</button>
+                </h3>
+                <h3 id="dday" style="color:#8798db;margin-top:-10px;font-size:30px;font-weight:800;"></h3>
+                <br>
+
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">시간표</h3>
                     <div> <button class="mdc-button mdc-button--icon-leading"
@@ -584,7 +679,7 @@
                             </span>
                             <span id="selfcheck-status">제출 여부 확인 중</span>
                         </div>
-                        <button class="custom-btn" id="selfcheck-btn" onclick="submitSelfCheck();">
+                        <button class="custom-btn" id="selfcheck-btn" onclick="confirmSelfCheck();">
                             <ion-icon name="flash"></ion-icon>제출하기
                         </button>
                     </div>

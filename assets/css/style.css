@@ -3822,3 +3822,33 @@ input[type=file]::file-selector-button {
     font-size: 25px;
     margin-top: 2px;
 }
+
+/* 지필평가 일정 */
+.grade_tab {
+    display: flex;
+    gap: 15px;
+    margin-bottom: -10px;
+    margin-bottom: 15px;
+}
+
+.grade_btn {
+    border: none;
+    background: transparent;
+    color: #878787;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.grade_btn.active {
+    border: none;
+    background: transparent;
+    color: #9eb2ff;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.grade_btn.active::after {
+    content: '✔️'
+}

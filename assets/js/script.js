@@ -71,77 +71,70 @@ function isApp() {
     }
 }
 
-function mealTts() {
-    ttsAudio.pause();
-    if (currentMenuRaw) {
-        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
-        var menuInfoTag = '';
 
-        for (var i = 0; i < menuArr.length; i++) {
-            if (menuArr[i].match(/\d+/)) {
-                var allegyIndex = menuArr[i].match(/\d+/).index;
-                var alle = menuArr[i].substring(allegyIndex, menuArr[i].length);
-            } else {
-                var alle = 'none';
-            }
-            var menuName = menuArr[i].substring(0, allegyIndex);
-            menuInfoTag += menuName + ', ';
-        }
-
-        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 급식 메뉴는 ' + menuInfoTag.replaceAll('&', ', ') + '입니다.';
-    } else {
-        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '은 급식 정보가 없네요.';
-    }
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
-    console.log(text);
-    ttsAudio.play();
+// 중간고사 일정.
+//d day
+var todayForDday = new Date();
+var ddayDate = new Date(2022, 10, 20);
+var gap = ddayDate.getTime() - todayForDday.getTime();
+var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+if (ddayResult < 0) {
+    $('#dday').html((-ddayResult + 1) + '일차');
+} else if (ddayResult == 0) {
+    $('#dday').html('1일차');
+} else {
+    $('#dday').html('D-' + ddayResult);
 }
 
-function timetableTts() {
-    ttsAudio.pause();
-    var selectedDay = moment(selectedDate).lang("en").format('dddd');
-    if (selectedDay == 'sat' || selectedDay == 'sun') {
-        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + '에는 수업이 없어요.';
-    } else {
-        var timeDataForTts = timetableRaw[selectedDay];
-        var listedClass = '';
-        for (var i = 0; i < timeDataForTts.length; i++) {
-            listedClass += (i + 1) + '교시 ' + timeDataForTts[i].ITRT_CNTNT + ', ';
-        }
-        var text = moment(selectedDate).lang("ko").format('M월 D일 dddd요일') + ' 시간표를 알려드릴게요. ' + listedClass + '입니다';
-    }
-    console.log(text);
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + text + '&speed=0&pitch=0&speaker=' + voiceType + '&volume=1');
-    ttsAudio.play();
 
-}
-
-function playPause() {
-    if (track.paused) {
-        track.play();
-        //controlBtn.textContent = "Pause";
-        controlBtn.className = "pause";
+$('#examSchedule').on('click', function () {
+    openModal('2학기 1차 지필평가 일정', 'exam');
+    if (grade == '1') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(0)').addClass('active');
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(1)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
     } else {
-        track.pause();
-        //controlBtn.textContent = "Play";
-        controlBtn.className = "play";
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(2)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').hide();
+        $('.exam3').show();
     }
-}
+});
+
+
+$('.grade_btn').on('click', function () {
+    $('.grade_btn').removeClass('active');
+    $(this).addClass('active');
+    var grade = $(this).attr('data-grade');
+
+    if (grade == '1') {
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    } else {
+        $('.exam1').hide();
+        $('.exam2').hide();
+        $('.exam3').show();
+    }
+    $('.sheet-modal').css('height', $('#' + id).height() + 130 + 'px');
+});
+// 중간고사 일정
 
 
 var today = moment(new Date()).format('YYYYMMDD');
-
-var todayForDday = new Date();
-var ddayDate = new Date(2022, 07, 22);
-var gap = ddayDate.getTime() - todayForDday.getTime();
-var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-if (ddayResult > 0) {
-    $('#dday').html('개학까지 ' + ddayResult + '일 남았어요');
-} else if (ddayResult == 0) {
-    $('#dday').html('오늘 개학이에요');
-} else {
-    $('#dday').html('등록되는대로 보여줄게요.');
-}
 
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
@@ -431,6 +424,7 @@ function displayMeal(data) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
         db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
+            $('.reaction-wrap').fadeIn();
             if (doc.exists) {
                 $('#meal-like-count').html(doc.data().like);
                 $('#meal-dislike-count').html(doc.data().dislike);
@@ -556,7 +550,7 @@ function getDay(day) {
 
 function displayTimetable(data) {
     var day = moment(selectedDate).day();
-    var sections = document.querySelectorAll("tbody th");
+    var sections = document.querySelectorAll("timetable-wrap tbody th");
     for (var i = 0; i < sections.length; i++) {
         var item = sections.item(i);
         $(item).removeClass('active');
@@ -1115,7 +1109,12 @@ function openSelfcheckModal() {
 
 }
 
+function confirmSelfCheck() {
+    openModal('잠깐! 해당 사항이 있나요?', 'selfcheck-confirm');
+}
+
 function submitSelfCheck() {
+    closeModal();
     const name = localStorage.getItem('selfcheck-name');
     const birth = localStorage.getItem('selfcheck-birth');
     const pwd = localStorage.getItem('selfcheck-pwd');
