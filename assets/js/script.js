@@ -75,7 +75,7 @@ function isApp() {
 // 중간고사 일정.
 //d day
 var todayForDday = new Date();
-var ddayDate = new Date(2022, 10, 20);
+var ddayDate = new Date(2022, 9, 20);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult < 0) {
