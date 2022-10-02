@@ -662,8 +662,8 @@ function shareMeal() {
             text:
                 content,
             link: {
-                mobileWebUrl: 'https://sungil.me/welcome.html',
-                webUrl: 'https://sungil.me/welcome.html',
+                mobileWebUrl: 'https://hello.sungil.me/',
+                webUrl: 'https://hello.sungil.me/',
             },
         })
     } else {
@@ -1033,15 +1033,15 @@ function shareApp() {
             description: '급식 메뉴부터 실시간 시간표, 익명 커뮤니티, 수행평가 정리까지 쏙에서 확인해보세요!',
             imageUrl: "https://i.imgur.com/5LqdyDL.png",
             link: {
-                mobileWebUrl: 'https://sungil.me/welcome.html',
-                webUrl: 'https://sungil.me/welcome.html',
+                mobileWebUrl: 'https://hello.sungil.me/',
+                webUrl: 'https://hello.sungil.me/',
             },
         },
         buttons: [{
             title: '지금 바로 써보기',
             link: {
-                mobileWebUrl: 'https://sungil.me/welcome.html',
-                webUrl: 'https://sungil.me/welcome.html',
+                mobileWebUrl: 'https://hello.sungil.me/',
+                webUrl: 'https://hello.sungil.me/',
             },
         },],
     })
