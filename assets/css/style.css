@@ -1,4 +1,6 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://cdn.jsdelivr.net/gh/toss/tossface/dist/tossface.css');
+
 
 * {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
@@ -13,6 +15,10 @@
     font-display: swap;
     src: url(https://fonts.gstatic.com/s/materialicons/v129/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
+
+.tossface {
+    font-family: Tossface;
+  }
 
 .material-icons {
     font-family: 'Material Icons';
