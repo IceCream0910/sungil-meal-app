@@ -59,7 +59,6 @@ html {
     -ms-user-select: none;
     user-select: none;
     touch-action: pan-x pan-y;
-    overflow-x: hidden;
 }
 
 ion-icon {
@@ -3858,8 +3857,4 @@ input[type=file]::file-selector-button {
 
 .grade_btn.active::after {
     content: '✔️'
-}
-
-.adsbygoogle iframe {
-    left: -25px !important;
 }
