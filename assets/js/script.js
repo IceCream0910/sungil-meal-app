@@ -1089,7 +1089,7 @@ function getSelfCheckStatus() {
             },
             error: function (request, status, error) {
                 $('#selfcheck-status').text('불러오기 실패');
-                toast('자가진단 정보를 불러오는 데 실패했어요. 정보를 모두 올바르게 입력했는지 확인해주세요.')
+                //toast('자가진단 정보를 불러오는 데 실패했어요. 정보를 모두 올바르게 입력했는지 확인해주세요.')
             }
         });
     }
