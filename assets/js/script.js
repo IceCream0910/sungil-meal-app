@@ -26,6 +26,11 @@ if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 =
 }
 
 
+if (window.location.href.indexOf('sungil.vercel.app') > -1) {
+    $('.adsbygoogle').hide();
+}
+
+
 function updateOrder() {
     const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "timetable": 1 }, "2": { "selfcheck": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
     for (var i = 0; i < 5; i++) {
