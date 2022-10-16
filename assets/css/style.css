@@ -59,6 +59,7 @@ html {
     -ms-user-select: none;
     user-select: none;
     touch-action: pan-x pan-y;
+    overflow-x: hidden;
 }
 
 ion-icon {
@@ -3860,5 +3861,5 @@ input[type=file]::file-selector-button {
 }
 
 .adsbygoogle iframe {
-    left: -45px;
+    left: -25px !important;
 }
