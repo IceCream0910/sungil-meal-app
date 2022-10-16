@@ -18,7 +18,7 @@
 
 .tossface {
     font-family: Tossface;
-  }
+}
 
 .material-icons {
     font-family: 'Material Icons';
@@ -3857,4 +3857,8 @@ input[type=file]::file-selector-button {
 
 .grade_btn.active::after {
     content: '✔️'
+}
+
+.adsbygoogle iframe {
+    left: -45px;
 }
