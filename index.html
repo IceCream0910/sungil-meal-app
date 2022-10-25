@@ -15,19 +15,15 @@
     <meta name="apple-mobile-web-app-title" content="쏙" />
     <meta name="description" content="성일고 급식, 시간표, 학사일정을 한 눈에" />
     <meta name="naver-site-verification" content="fa35f8ef36dddfd6a7d8ca7db25136469aadf0c8" />
-    <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous"></script>
-    <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+    <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous" defer></script>
+    <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous" defer></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
         crossorigin="anonymous"></script>
-    <script>Sentry.init({
-            dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806",
-            integrations: [new Sentry.Integrations.BrowserTracing()],
-            tracesSampleRate: 1.0,
-        });</script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-        crossorigin="anonymous"></script>
+    <script>
+        window.addEventListener('load', function () { Sentry.init({ dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806", integrations: [new Sentry.Integrations.BrowserTracing()], tracesSampleRate: 1.0, }); });
+    </script>
     <meta name="theme-color" content="#5264AE" />
-    <meta property="og:url" content="https://sungil.vercel.app">
+    <meta property="og:url" content="https://sungil.me">
     <meta property="og:title" content="쏙">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://i.imgur.com/frj9qPN.png">
@@ -35,27 +31,24 @@
 
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet"
         type="text/css" />
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/material/material-components-web.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <link href="assets/css/style.css?v=221025" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" />
+    <style>
+        .pswp {
+            z-index: 999999;
+        }
+    </style>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-    <script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
     <link rel="manifest" href="manifest.json">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ4S7QNCR2"></script>
@@ -68,20 +61,22 @@
     </script>
     <script>
         if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("service-worker.js"); }); } jQuery.browser = {}; (function () { jQuery.browser.msie = false; jQuery.browser.version = 0; if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) { jQuery.browser.msie = true; jQuery.browser.version = RegExp.$1; } })(); </script>
+    <link rel="prefetch" href="settings.html">
 </head>
 <header class="main-nav">
-    <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
-        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="backDate();" aria-label="날짜 1일 전으로 이동">
-            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon"
-                style="font-size:15px;">arrow_back_ios_new</span>
+    <div class="d-flex flex-row" id="nav-flex" <button class="mdc-fab mdc-fab--mini mdc-fab--touch"
+        onclick="backDate();" aria-label="날짜 1일 전으로 이동">
+        <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon">arrow_back_ios_new</span>
+        <div class="mdc-fab__touch"></div>
+        </button>
+
+        <input type="date" id="datepicker" />
+
+        <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="forwardDate();" aria-label="날짜 1일 후로 이동">
+            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon">arrow_forward_ios</span>
             <div class="mdc-fab__touch"></div>
         </button>
-        <h4 id="date" class="pop" style="margin-top:10px;"></h4> <button class="mdc-fab mdc-fab--mini mdc-fab--touch"
-            style="margin-left:20px;" onclick="forwardDate();" aria-label="날짜 1일 후로 이동">
-            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon"
-                style="font-size:15px;">arrow_forward_ios</span>
-            <div class="mdc-fab__touch"></div>
-        </button> <button style="float:right;position:absolute;right:0px;" class="mdc-button mdc-button--icon-leading"
+        <button style="float:right;position:absolute;right:10px;" class="mdc-button mdc-button--icon-leading"
             onclick="javascript:window.location.href='settings.html';" aria-label="설정"> <span
                 class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
                 aria-hidden="true">settings</i> </button>
@@ -100,7 +95,7 @@
 
     <a data-tab="assignment" id="assignment-btn">
         <ion-icon id="tab3" name="file-tray-full-outline"></ion-icon>
-        <span>수행</span>
+        <span>할일</span>
     </a>
 
     <a data-tab="report" id="report-btn">
@@ -139,23 +134,23 @@
                 <div class="d-flex flex-row">
                     <h3 style="float:left" class="card__primary__title__text" id="modal-title">날짜 선택</h3>
                 </div><br>
-                <div class="content-wrap" id="datepicker"></div>
                 <div class="content-wrap" id="assessment">
                     <br>
                     <div class="group">
                         <input id="title" type="text" required>
                         <span class="highlight"></span>
                         <span class="bar"></span>
-                        <label>수행평가 주제</label>
+                        <label>제목</label>
                     </div>
 
                     <div class="group">
                         <input id="date_assign" type="date" required>
                         <span class="highlight"></span>
                         <span class="bar"></span>
-                        <label>시행 날짜</label>
+                        <label>날짜</label>
                     </div>
 
+                    <span style="margin-left:15px;opacity:0.5">수업은 꼭 선택하지 않아도 괜찮아요</span>
                     <div class="timetable_selector">
                     </div>
                     <br>
@@ -187,24 +182,18 @@
                     <div class="checkbox-wrap" id="signup-checklist">
                         <div class="checkbox-item">
                             <input type="checkbox" id="checkbox-1" name="checkbox-1" value="1" aria-checked="false" />
-                            <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank" style="
-            color: inherit;
-            margin-left: 15px;
-        ">내용 보기 &gt;</a></label>
+                            <label for="checkbox-1">커뮤니티 이용가이드에 동의합니다*<a href="docu/guide.html" target="_blank"
+                                    id="hyperlink">내용 보기 &gt;</a></label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="checkbox-2" name="checkbox-2" value="2" aria-checked="false" />
-                            <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank" style="
-            color: inherit;
-            margin-left: 15px;
-        ">내용 보기 &gt;</a></label>
+                            <label for="checkbox-2">커뮤니티 이용약관에 동의합니다*<a href="docu/policy.html" target="_blank"
+                                    id="hyperlink">내용 보기 &gt;</a></label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="checkbox-3" name="checkbox-3" value="3" aria-checked="false" />
-                            <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank" style="
-            color: inherit;
-            margin-left: 15px;
-        ">내용 보기 &gt;</a></label>
+                            <label for="checkbox-3">개인정보 처리방침에 동의합니다*<a href="docu/privacy.html" target="_blank"
+                                    id="hyperlink">내용 보기 &gt;</a></label>
                         </div>
                     </div>
                     <br><br>
@@ -268,10 +257,8 @@
                         <form action="" method="post" enctype="multipart/form-data" id="form-upload">
 
                             <div class="img-thumbs img-thumbs-hidden" id="img-preview">
-                                <div class="filebox custom-btn dark"
-                                    style="height: 80px;width: 80px;font-size: 30px;margin-right: 20px; margin-top: 15px;">
-                                    <label for="upload-img"
-                                        style="display: flex; justify-content: center;align-items: center;padding-left: 10px;">
+                                <div class="filebox custom-btn dark">
+                                    <label for="upload-img">
                                         <ion-icon name="images-outline" role="img" class="md hydrated"></ion-icon>
                                     </label>
                                     <input type="file" class="form-control dark" name="images[]" multiple=""
@@ -284,17 +271,14 @@
                     <div class="button-footer">
                         <div style="display:flex;gap:10px;">
                             <button onclick="if(confirm('글 작성을 그만할까요? 작성하던 글은 사라집니다.')) closeModal();"
-                                class="custom-btn modal-btn"
-                                style="background: none;justify-content: start;width:fit-content;">닫기
+                                class="custom-btn modal-btn">닫기
                             </button>
 
-                            <button class="custom-btn modal-btn" onclick="openVoteMaker()"
-                                style="background: none;justify-content: start;width:fit-content;">
+                            <button class="custom-btn modal-btn" onclick="openVoteMaker()">
                                 <ion-icon name="bar-chart-outline"></ion-icon> 투표
                             </button>
                         </div>
-                        <button id="post-btn" class="custom-btn modal-btn"
-                            style="width:fit-content;height: fit-content;" onclick="post(this)">게시
+                        <button id="post-btn" class="custom-btn modal-btn" onclick="post(this)">게시
                         </button>
                     </div>
 
@@ -330,7 +314,7 @@
                     <input id="grade-rank" type="number" placeholder="내 석차" required>
                     <input id="grade-total" type="number" placeholder="이수자" required>
 
-                    <h3 id="calculator-result" style="margin-top:20px;margin-bottom:20px;font-size:24px;">계산 결과
+                    <h3 id="calculator-result">계산 결과
                         <span id="resultGrade" style="color: #6a89ff;"></span>등급이에요
                     </h3>
 
@@ -371,83 +355,12 @@
                     </div>
                 </div>
 
-                <div class="content-wrap" id="exam">
-                    <div class="grade_tab">
-                        <button class="grade_btn active" data-grade="1">1학년</button>
-                        <button class="grade_btn" data-grade="2">2학년</button>
-                        <button class="grade_btn" data-grade="3">3학년</button>
-                    </div>
+                <div class="content-wrap" id="mealList">
+                    <div class="d-flex flex-row" id="meallist-wrap" style="margin-top:-20px;">
+                        <div id="meallist-result">
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>10/20(목)</th>
-                                <th>10/21(금)</th>
-                                <th>10/24(월)</th>
-                                <th>10/25(화)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-timetable" class="exam1">
-                            <tr>
-                                <th>국어</th>
-                                <th></th>
-                                <th>통합과학</th>
-                                <th>영어</th>
-                            </tr>
-                            <tr>
-                                <th>정보</th>
-                                <th>수학</th>
-                                <th>한국사</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tbody>
-                        <tbody id="tbody-timetable" class="exam2" style="display:none;">
-                            <tr>
-                                <th>언어와 매체</th>
-                                <th>수학II</th>
-                                <th>생활과 윤리<br>기하</th>
-                                <th>영어</th>
-                            </tr>
-                            <tr>
-                                <th>세계사<br>생명과학I</th>
-                                <th>경제<br>화학I</th>
-                                <th>정치와 법<br>물리학I</th>
-                                <th>세계지리<br>지구과학I</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th><br></th>
-                                <th><br></th>
-                                <th></th>
-                            </tr>
-                        </tbody>
-                        <tbody id="tbody-timetable" class="exam3" style="display:none;">
-                            <tr>
-                                <th>화법과 작문</th>
-                                <th>수학과제탐구</th>
-                                <th>영어권 문화<br>미적분</th>
-                                <th>영어 독해와 작문</th>
-                            </tr>
-                            <tr>
-                                <th>동아시아사<br>생명과학II</th>
-                                <th>사회문화<br>화학II</th>
-                                <th>윤리와 사상<br>물리학II</th>
-                                <th>한국지리<br>융합과학</th>
-                            </tr>
-                            <tr>
-                                <th>경제수학<br>인공지능수학<br>정보과학<br>심화수학</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -466,24 +379,13 @@
         <div class="donut"></div>
         <h6 id="loading-text">급식실 훔쳐보는 중</h6>
     </div>
-    <div id="datepickerholder" style="display: none;">
-        <div id="datepicker"></div>
-    </div>
-    <script>$(function () { $("#datepicker").datepicker(); $(".pop").click(function () { if ($("#datepickerholder").is(':visible') == false) { $("#datepickerholder").show(); } else { $("#datepickerholder").hide(); } }); }); </script>
-    <div class="snackbar" onclick="$('.snackbar').fadeOut();isFirstLoad = true;loadPostList();" style="display: none;">
-        <button class="snackbar_action">
-            <ion-icon name="refresh-outline"></ion-icon>새 게시물
-        </button>
-    </div>
-
 
     <section id="home">
         <div class="home-header">
-            <img loading="lazy" src="assets/icons/icon-transparent.png"
+            <img loading="lazy" src="assets/icons/header_logo.png"
                 style="width:30px;height:30px;filter:grayscale(100%);">
-            <div style="display:flex;flex-direction:row;justify-content: center;align-items: center;">
-                <a href="javascript:shareApp()" style="font-size:25px;position:relative;top:3px;opacity:0.4;"
-                    aria-label="앱 공유">
+            <div class="header-btn-wrap">
+                <a href="javascript:shareApp()" id="appshare-btn" aria-label="앱 공유">
                     <ion-icon name="share"></ion-icon>
                 </a>
 
@@ -498,8 +400,10 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
-                <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
-                    <h3 style="float:left" class="card__primary__title__text">급식<span class="tossface">🍴</span></h3>
+                <div class="d-flex flex-row" id="meal-flex">
+                    <h3 style="float:left" class="card__primary__title__text" onclick="showAllMeal()">급식 <ion-icon
+                            name="chevron-forward-outline"></ion-icon> </span>
+                    </h3>
                     <div>
                         <button id="shareBtn" class="mdc-button mdc-button--icon-leading"
                             onclick="javascript:shareMeal();" aria-label="급식 공유"> <span
@@ -559,29 +463,22 @@
             </div>
 
             <div class="siganpyo-wrap" id="order-item">
-                <h3 class="card__primary__title__text" style="display: flex;justify-content: space-between;">중간고사
-                    <button class="custom-btn" id="examSchedule" style="margin-top:-5px;">일정보기</button>
-                </h3>
-                <h3 id="dday" style="color:#8798db;margin-top:-10px;font-size:30px;font-weight:800;"></h3>
-                <br>
-
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
-                    <h3 style="float:left" class="card__primary__title__text">시간표<span class="tossface">📚</span></h3>
+                    <h3 style="float:left" class="card__primary__title__text">시간표
+                    </h3>
                     <div> <button class="mdc-button mdc-button--icon-leading"
-                            onclick="javascript:window.location.href='init.html';" aria-label="학년 반 설정 버튼"> <span
-                                class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
+                            onclick="javascript:window.location.href='grade_setting.html';" aria-label="학년 반 설정 버튼">
+                            <span class="mdc-button__ripple"></span> <i class="material-icons mdc-button__icon"
                                 aria-hidden="true">settings</i> <span class="mdc-button__label"
                                 id="gradeClassLabel">설정</span>
                         </button>
                     </div>
                 </div>
-                <div class="card" id="nosetting-timetable"
-                    style="display:none;margin-top:10px;padding-left:30px;background:none;box-shadow: none;border:none;">
-                    <p class="card__supporting__text"
-                        style="height:100%;display:flex;text-align:center;justify-content: center;align-items: center;flex-direction: column;background:none;">
+                <div class="card" id="nosetting-timetable">
+                    <p class="card__supporting__text">
                         <span>학년/반을 먼저
                             설정하고<br>시간표를 확인해보세요.</span>
-                        <button class="custom-btn onclick=" javascript:window.location.href='init.html' ;"
+                        <button class="custom-btn onclick=" javascript:window.location.href='grade_setting.html' ;"
                             style="margin-top:10px;" aria-label="학년 반 설정 버튼">
                             <ion-icon name="settings-outline"></ion-icon> 학년/반 설정</span>
                         </button>
@@ -752,6 +649,12 @@
         </button>
         <br><br>
 
+        <button class="custom-btn modal-btn sub-btn" aria-label="캐시 초기화"
+            onclick="localStorage.removeItem('sungil_api_cache');localStorage.removeItem('sungil_timeapi_cache');location.reload();">
+            <ion-icon name="refresh-outline"></ion-icon>캐시 초기화
+        </button>
+        <br><br>
+
         <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed"
             data-ad-client="ca-pub-3961376550354587" data-ad-slot="5146966694"></ins>
         <script>
@@ -851,12 +754,7 @@
         </div>
 
         <br>
-        <!-- 배너광고2 -->
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3961376550354587"
-            data-ad-slot="9219240939" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+
         <br><Br>
 
         <div class="floating-btn writePost-btn" style="display:none">
@@ -868,7 +766,7 @@
 
     <section id="assignment">
         <br>
-        <h3 class="card__primary__title__text">우리 반 친구들이 추가한<br>수행평가 목록이에요.</h3>
+        <h3 class="card__primary__title__text">우리 반 할 일</h3>
         <span style="opacity:0.6">항목을 눌러 잘못된 내용을 삭제할 수 있어요.</span>
 
         <div id="before-setting-assign" style="margin-top:15px;">
@@ -877,8 +775,8 @@
                 <br><span>학년/반을
                     먼저
                     설정하고<br>수행평가 일정을 정리해보세요.</span>
-                <button class="custom-btn" onclick="window.location.href='init.html' ;" style="margin-top:10px;"
-                    aria-label="학년 반 설정 버튼">
+                <button class="custom-btn" onclick="window.location.href='grade_setting.html' ;"
+                    style="margin-top:10px;" aria-label="학년 반 설정 버튼">
                     <ion-icon name="settings-outline"></ion-icon> 학년/반 설정</span>
                 </button>
             </p>
@@ -1010,127 +908,6 @@
 
 </body>
 
-<div class="onboard">
-    <div class="onboard-section" id="hello">
-        <picture>
-            <source srcset="assets/icons/webp/hello.webp" type="image/webp" width="50px" />
-            <img src="assets/icons/hello.gif" width="50px">
-        </picture>
-        <h3 class="card__primary__title__text" style="margin-top:20px;">만나서 반가워요!</h3>
-    </div>
-
-    <div class="onboard-section" id="initialize">
-        <h3 class="card__primary__title__text"><br>학년과 반을 알려주세요</h3>
-        <br><br>
-        <ul class="mdc-list" id="grade-list">
-            <li class="mdc-list-item" id="grade" data-grade="1">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">1학년</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-grade="2">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">2학년</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-grade="3">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">3학년</span>
-            </li>
-        </ul>
-
-        <ul class="mdc-list" id="class-list" style="display: none; max-height: 70vh;overflow: scroll;">
-            <li class="mdc-list-item" id="grade" data-class="1">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">1반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="2">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">2반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="3">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">3반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="4">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">4반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="5">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">5반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="6">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">6반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="7">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">7반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="8">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">8반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="9">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">9반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="10">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">10반</span>
-            </li>
-            <li class="mdc-list-item" id="grade" data-class="11">
-                <span class="mdc-list-item__ripple"></span>
-                <span class="mdc-list-item__text">11반</span>
-            </li>
-        </ul>
-
-        <div class="onboard-button-wrap">
-            <button id="back-btn" onclick="back();" class="custom-btn modal-btn">
-                <span class="mdc-button__label">뒤로</span>
-            </button>
-            <button id="save-btn" onclick="completeInfoInit();" class="custom-btn modal-btn">
-                <span class="mdc-button__label" id="button-text">완료</span>
-            </button>
-        </div>
-
-    </div>
-
-    <div class="onboard-section" id="login">
-        <picture>
-            <source srcset="assets/icons/webp/chat-bubble.webp" type="image/webp" width="40%" />
-            <img loading="lazy" src="assets/icons/chat-bubble.png" width="40%">
-        </picture>
-        <h3 class="card__primary__title__text" style="margin-top:20px;">로그인해볼까요?</h3>
-        <h5 style="text-align:center;opacity:0.7">로그인하면 커뮤니티에 참여해<br>함께 이야기할 수 있어요</h5>
-
-        <div class="onboard-button-wrap">
-            <button onclick="skipLogin();" class="custom-btn modal-btn"
-                style="background: none;justify-content: start;">
-                <span class="mdc-button__label">나중에 할게요 <ion-icon style="top:3px;" name="chevron-forward-outline">
-                    </ion-icon></span>
-            </button>
-            <button onclick="onboardLogin();" class="custom-btn modal-btn">구글 계정으로 로그인
-            </button>
-        </div>
-    </div>
-
-    <div class="onboard-section" id="complete">
-        <ion-icon name="checkmark-circle" style="font-size: 80px;color: #60eb98;"></ion-icon>
-
-        <h3 class="card__primary__title__text" style="margin-top:20px;">이제 시작해볼까요?</h3>
-        <h5>쏙을 만날 준비가 끝났어요</h5>
-
-
-        <a style="position: fixed; bottom: 20px; left: 0; width: 100%; box-sizing: border-box;padding:20px;">
-            <button onclick="startFromOnboard();" class="custom-btn modal-btn">시작하기
-            </button>
-        </a>
-
-    </div>
-
-
-</div>
-
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
@@ -1197,33 +974,37 @@
 
 </div>
 
-<script src="assets/js/script.js"></script>
-<script src="assets/js/community.js?v=220710"></script>
-<script src="assets/js/darkmode.js"></script>
-<script src="assets/js/assignment.js"></script>
-<script src="assets/js/report.js"></script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" />
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" />
-<style>
-    .pswp {
-        z-index: 999999;
-    }
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js"></script>
-
-<script src="assets/js/photoswipe.js"></script>
-
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script type="text/javascript" src="assets/js/pullToRefresh.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+<script type="text/javascript" src="assets/js/pullToRefresh.js?v=221025"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-storage-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-database-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-firestore-compat.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js" defer></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+<script src="assets/js/script.js?v=221025"></script>
+<script src="assets/js/community.js?v=221025"></script>
+<script src="assets/js/darkmode.js?v=221025"></script>
+<script src="assets/js/assignment.js?v=221025"></script>
+<script src="assets/js/report.js?v=221025"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" defer></script>
+
+<script src="assets/js/photoswipe.js?v=22102"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/hammer-touchemulator@0.0.2/touch-emulator.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.1.1/compressor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.1.1/compressor.min.js" defer></script>
 <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async"

@@ -73,10 +73,8 @@ function addAssignment() {
     if (!$('#title').val()) {
         toast('제목을 입력해주세요');
     } else if (!$('#date_assign').val()) {
-        toast('시행 날짜를 선택해주세요');
-    } else if (!selectedPeriod) {
-        toast('시행 날짜를 선택한 후 교시를 선택해주세요');
-    } else if (selectedDateAssign < new Date()) {
+        toast('날짜를 선택해주세요');
+    } else if (selectedDateAssign <= new Date()) {
         toast('이미 지난 날짜는 선택할 수 없습니다.');
     } else {  //null 체크 통과
         var id = Math.random().toString(36).substr(2, 9);
@@ -84,8 +82,8 @@ function addAssignment() {
             id: id,
             title: $('#title').val(),
             date: $('#date_assign').val(),
-            period: selectedPeriod,
-            subject: selctedSubject,
+            period: selectedPeriod || '',
+            subject: selctedSubject || '',
         };
         database.ref('assignments/' + grade + '/' + classNum + '/' + id).set(data);
         closeModal();
@@ -279,14 +277,26 @@ function updateAssignList() {
                         }
                     }
                     // 목록에 추가
-                    $('#assignments-listview').append(`
+                    if (data[keys[i]].period) { //교시 지정됨
+                        $('#assignments-listview').append(`
+                        <div class="task-box" onclick="deleteAssignment('`+ keys[i] + `');">
+                        <div class="assign-date">`+ moment(new Date(data[keys[i]].date)).format('MM/DD') + `<br><span style="font-size:15px;opacity:0.6">D-` + fromToday(new Date(data[keys[i]].date)) + `</span></div>
+                        <div class="description-task">
+                            <div class="time">`+ data[keys[i]].period + `교시 ` + data[keys[i]].subject + `</div>
+                            <div class="task-name">`+ data[keys[i]].title + `</div>
+                        </div>
+                        </div>`);
+                    } else { //교시 지정 안됨
+                        $('#assignments-listview').append(`
                      <div class="task-box" onclick="deleteAssignment('`+ keys[i] + `');">
                      <div class="assign-date">`+ moment(new Date(data[keys[i]].date)).format('MM/DD') + `<br><span style="font-size:15px;opacity:0.6">D-` + fromToday(new Date(data[keys[i]].date)) + `</span></div>
                      <div class="description-task">
-                         <div class="time">`+ data[keys[i]].period + `교시 ` + data[keys[i]].subject + `</div>
+                         <div class="time">하루 종일</div>
                          <div class="task-name">`+ data[keys[i]].title + `</div>
                      </div>
                      </div>`);
+                    }
+
                 }
             }
             //다크모드 적용
@@ -302,7 +312,7 @@ function updateAssignList() {
                  <source srcset="assets/icons/webp/Empty-BOX.webp" class="no-assign-img" type="image/webp" width="50%" />
                  <img loading="lazy" class="no-assign-img" src="assets/icons/Empty-BOX.png" width="50%">
                 </picture><br>
-                <span>아직 우리 반 수행평가가 없어요</span>`);
+                <span>아직 우리 반 할 일이 없어요</span>`);
         }
     });
 

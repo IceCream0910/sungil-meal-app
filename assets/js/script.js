@@ -21,6 +21,34 @@ moment.lang('en', {
 });
 
 
+$.datepicker.setDefaults({
+    dateFormat: 'yy-mm-dd',
+    prevText: '이전 달',
+    nextText: '다음 달',
+    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+    showMonthAfterYear: true,
+    yearSuffix: '년'
+});
+
+$("#datepicker").datepicker({
+    defaultDate: new Date(),
+    ignoreReadonly: true,
+    beforeShowDay: function (date) {
+        var day = date.getDay();
+        return [(day != 0 && day != 6)];
+    }
+});
+$("#datepicker").datepicker("setDate", new Date());
+
+$('#datepicker').datepicker().on("input change", function (e) {
+    selectedDate = moment(e.target.value).format('YYYYMMDD');
+    updateInfo();
+});
+
 if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
     updateOrder();
 }
@@ -76,69 +104,6 @@ function isApp() {
     }
 }
 
-
-// 중간고사 일정.
-//d day
-var todayForDday = new Date();
-var ddayDate = new Date(2022, 9, 20);
-var gap = ddayDate.getTime() - todayForDday.getTime();
-var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-if (ddayResult < 0) {
-    $('#dday').html((-ddayResult + 1) + '일차');
-} else if (ddayResult == 0) {
-    $('#dday').html('1일차');
-} else {
-    $('#dday').html('D-' + ddayResult);
-}
-
-
-$('#examSchedule').on('click', function () {
-    openModal('2학기 1차 지필평가 일정', 'exam');
-    if (grade == '1') {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(0)').addClass('active');
-        $('.exam1').show();
-        $('.exam2').hide();
-        $('.exam3').hide();
-    } else if (grade == '2') {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(1)').addClass('active');
-        $('.exam1').hide();
-        $('.exam2').show();
-        $('.exam3').hide();
-    } else {
-        $('.grade_btn').removeClass('active');
-        $('.grade_btn:eq(2)').addClass('active');
-        $('.exam1').hide();
-        $('.exam2').hide();
-        $('.exam3').show();
-    }
-});
-
-
-$('.grade_btn').on('click', function () {
-    $('.grade_btn').removeClass('active');
-    $(this).addClass('active');
-    var grade = $(this).attr('data-grade');
-
-    if (grade == '1') {
-        $('.exam1').show();
-        $('.exam2').hide();
-        $('.exam3').hide();
-    } else if (grade == '2') {
-        $('.exam1').hide();
-        $('.exam2').show();
-        $('.exam3').hide();
-    } else {
-        $('.exam1').hide();
-        $('.exam2').hide();
-        $('.exam3').show();
-    }
-    $('.sheet-modal').css('height', $('#' + id).height() + 130 + 'px');
-});
-// 중간고사 일정
-
-
 var today = moment(new Date()).format('YYYYMMDD');
 
 var selectedDate = today;
@@ -169,48 +134,12 @@ if (localStorage.getItem("sungil_favTagsList")) {
     favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
 }
 
-$.datepicker.setDefaults({
-    dateFormat: 'yy-mm-dd',
-    prevText: '이전 달',
-    nextText: '다음 달',
-    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-    showMonthAfterYear: true,
-    yearSuffix: '년'
-});
-
-$("#datepicker").datepicker({
-    onSelect: function (dataTExt) {
-        selectedDate = moment(dataTExt).format('YYYYMMDD');
-        $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
-        $('body').css('overflow', 'auto');
-        $('.modal-in').css('bottom', '-1850px');
-        setTimeout(function () {
-            $('.modal-in').css('display', 'none');
-        }, 100);
-        $('.sheet-backdrop').removeClass('backdrop-in');
-        updateInfo();
-    }
-});
-
-
-
 
 
 $(document).ready(function () {
 
     if (grade == null || classNum == null) { //학년반 정보가 없을 경우 온보딩 표시
-        console.log('dd')
-        $('.onboard').css("display", "flex");
-        $('#hello').css("display", "flex");
-        $('#home').hide();
-        setTimeout(function () {
-            $('#hello').hide()
-            $('#initialize').fadeIn()
-        }, 2000);
+        location.href = 'init.html'
     } else {
         $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
     }
@@ -254,6 +183,7 @@ $(document).ready(function () {
 function backDate() {
     let yesterday = moment(selectedDate).add(-1, 'days');
     selectedDate = moment(yesterday).format('YYYYMMDD');
+    $("#datepicker").datepicker("setDate", moment(yesterday).format('YYYY-MM-DD'));
     $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
     if (today == selectedDate) {
         $('#date').addClass('today');
@@ -267,6 +197,7 @@ function backDate() {
 function forwardDate() {
     let tomorrow = moment(selectedDate).add(1, 'days');
     selectedDate = moment(tomorrow).format('YYYYMMDD');
+    $("#datepicker").datepicker("setDate", moment(tomorrow).format('YYYY-MM-DD'));
     $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
     if (today == selectedDate) {
         $('#date').addClass('today');
@@ -528,9 +459,26 @@ function displayMeal(data) {
         $('#kcal').html('');
         $('#meal-menus').html('');
     }
-
-
 }
+
+function showAllMeal() {
+    $('#meallist-result').html('');
+    var data = JSON.parse(localStorage.getItem("sungil_api_cache"));
+    if (data) {
+        //올해 연도
+        var year = selectedDate.substring(0, 4);
+        for (var i = 1; i < new Date(year, data.meal.month - 1, 0).getDate() + 2; i++) {
+            if (data.meal[i]) {
+                console.log(i, data.meal[i])
+                $('#meallist-result').append(`<div class="meal-list-item">
+                <h2>${moment(new Date(year, data.meal.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
+                ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
+            }
+        }
+        openModal('이번 달 급식', 'mealList');
+    }
+}
+
 
 function displaySchedule(data) {
     var schedules = data.schedule;
@@ -616,24 +564,34 @@ function displayTimetable(data) {
     }
 
     timetableRaw = data;
-    for (var i = 0; i < data.mon.length; i++) {
-        $('#m' + ((i + 1).toString())).html(data.mon[i].ITRT_CNTNT);
+
+    if (data.mon) {
+        for (var i = 0; i < data.mon.length; i++) {
+            $('#m' + ((i + 1).toString())).html(data.mon[i].ITRT_CNTNT);
+        }
     }
-    for (var i = 0; i < data.tue.length; i++) {
-        $('#tu' + ((i + 1).toString())).html(data.tue[i].ITRT_CNTNT);
+    if (data.tue) {
+        for (var i = 0; i < data.tue.length; i++) {
+            $('#tu' + ((i + 1).toString())).html(data.tue[i].ITRT_CNTNT);
+        }
     }
-    for (var i = 0; i < data.wed.length; i++) {
-        $('#w' + ((i + 1).toString())).html(data.wed[i].ITRT_CNTNT);
+    if (data.wed) {
+        for (var i = 0; i < data.wed.length; i++) {
+            $('#w' + ((i + 1).toString())).html(data.wed[i].ITRT_CNTNT);
+        }
     }
-    for (var i = 0; i < data.thu.length; i++) {
-        $('#th' + ((i + 1).toString())).html(data.thu[i].ITRT_CNTNT);
+    if (data.thu) {
+        for (var i = 0; i < data.thu.length; i++) {
+            $('#th' + ((i + 1).toString())).html(data.thu[i].ITRT_CNTNT);
+        }
     }
-    for (var i = 0; i < data.fri.length; i++) {
-        $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
+    if (data.fri) {
+        for (var i = 0; i < data.fri.length; i++) {
+            $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
+        }
     }
 }
 
-Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
 
 //kakao 공유
 function shareMeal() {
@@ -744,18 +702,12 @@ function openMenuBanner(name, allegy) {
     }, 100);
 }
 
-/* bottom sheet */
-$('.pop').on('click', function () {
-    openModal('날짜 선택', 'datepicker')
-});
 
+//modal
 $('.sheet-backdrop').on('click', function () {
     closeModal();
 });
 
-/* bottom sheet */
-
-///custom modal sheet///
 $('.c-modal').each(function () {
 
     var mc = new Hammer(this);
@@ -818,7 +770,7 @@ $('#assignment').hide();
 $('#report').hide();
 */
 $('.main-nav').show();
-$('#home').fadeIn();
+$('#home').show();
 $('#community').hide();
 $('#assignment').hide();
 $('#report').hide();
@@ -854,7 +806,7 @@ $('.bottom-nav a').on('click', function () {
             enablePullToRefresh();
             $('.main-nav').hide();
             $('#home').hide();
-            $('#community').fadeIn(500);
+            $('#community').fadeIn(100);
             $('#assignment').hide();
             $('#report').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
@@ -867,7 +819,7 @@ $('.bottom-nav a').on('click', function () {
             $('.main-nav').hide();
             $('#home').hide();
             $('#community').hide();
-            $('#assignment').fadeIn(500);
+            $('#assignment').fadeIn(100);
             $('#report').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
@@ -879,7 +831,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').hide();
             $('#assignment').hide();
-            $('#report').fadeIn(500);
+            $('#report').fadeIn(100);
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
@@ -1005,6 +957,7 @@ document.onkeydown = function (e) {
 
 
 window.addEventListener('load', () => {
+    Kakao.init('c2c4f841a560ad18bfed29d190dfac19');
     let matches = document.querySelectorAll("ins.ADSENSE");
 
     Array.from(matches).forEach((element) => {
@@ -1287,76 +1240,6 @@ function closeModal() {
     $('.sheet-backdrop').removeClass('backdrop-in');
     $('.sheet-backdrop-nocancel').removeClass('backdrop-in');
 
-}
-
-
-//onboard 학년 반 설정
-var isComplete = false;
-
-$("#grade-list li").on("click", function () {
-    grade = $(this).data('grade');
-    $("#button-text").text(grade + '학년');
-    $('#back-btn').css('opacity', '1');
-    $('#back-btn').show();
-    $('#save-btn').show();
-    $('#grade-list').hide();
-    $('#class-list').fadeIn();
-});
-
-$("#class-list li").on("click", function () {
-    classNum = $(this).data('class');
-    $("#button-text").text(grade + '학년 ' + classNum + '반');
-    $('#save-btn').css('opacity', '1');
-    isComplete = true;
-});
-
-function back() {
-    $("#button-text").text('다음');
-    $('#grade-list').fadeIn();
-    $('#class-list').hide();
-    $('#back-btn').css('opacity', '0.5');
-    $('#save-btn').css('opacity', '0.5');
-    isComplete = false;
-}
-
-function completeInfoInit() {
-    if (isComplete) {
-        $('#initialize').hide()
-        $('#login').css("display", "flex")
-        $('#login').hide()
-        $('#login').fadeIn()
-    }
-}
-
-function startFromOnboard() {
-    localStorage.setItem("sungil_grade", grade);
-    localStorage.setItem("sungil_classNum", classNum);
-    location.reload();
-}
-
-function onboardLogin() {
-    if (isApp()) {
-        location.href = 'https://ssoak-72f93.firebaseapp.com/';
-        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
-        $('#login-loader').show();
-    } else {
-        $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
-        $('#login-loader').show();
-        loginGoogle().then(function (result) {
-            //로그인 완료
-            $('#login').hide()
-            $('#complete').css("display", "flex")
-            $('#complete').hide()
-            $('#complete').fadeIn()
-        })
-    }
-}
-
-function skipLogin() {
-    $('#login').hide()
-    $('#complete').css("display", "flex")
-    $('#complete').hide()
-    $('#complete').fadeIn()
 }
 
 function mealLikeBtn() {

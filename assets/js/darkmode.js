@@ -36,6 +36,7 @@ function onDark() {
     $('.card__supporting__text').addClass("dark");
     $('.mdc-button').addClass("dark");
     $('.mdc-fab--mini').addClass("dark");
+    $('#datepicker').addClass("dark");
     $('.pwaBanner').addClass("dark");
     $('.menuBanner').addClass("dark");
     $('.inp').addClass("dark");
@@ -82,6 +83,7 @@ function offDark() {
     $('.card__supporting__text').removeClass("dark");
     $('.mdc-button').removeClass("dark");
     $('.mdc-fab--mini').removeClass("dark");
+    $('#datepicker').removeClass("dark");
     $('.pwaBanner').removeClass("dark");
     $('.menuBanner').removeClass("dark");
     $('.inp').removeClass("dark");
