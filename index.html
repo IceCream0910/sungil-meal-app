@@ -65,15 +65,16 @@
 </head>
 <header class="main-nav">
     <div class="d-flex flex-row" id="nav-flex"><button class="mdc-fab mdc-fab--mini mdc-fab--touch"
-        onclick="backDate();" aria-label="날짜 1일 전으로 이동">
-        <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon" style="margin-left:10px;">arrow_back_ios_new</span>
-        <div class="mdc-fab__touch"></div>
+            onclick="backDate();" aria-label="날짜 1일 전으로 이동">
+            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon"
+                style="margin-left:10px;">arrow_back_ios_new</span>
+            <div class="mdc-fab__touch"></div>
         </button>
 
         <input type="date" id="datepicker" />
 
         <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="forwardDate();" aria-label="날짜 1일 후로 이동">
-            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon" >arrow_forward_ios</span>
+            <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon">arrow_forward_ios</span>
             <div class="mdc-fab__touch"></div>
         </button>
         <button style="float:right;position:absolute;right:10px;" class="mdc-button mdc-button--icon-leading"
@@ -400,6 +401,15 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
+                <div class="callout custom-btn sub-btn"
+                    onclick="window.open('https://www.ebsi.co.kr/ebs/xip/xipa/retrieveSCVPreparation.ebs?targetCd=D300', '_blank')"
+                    style="background-color: #5272ff36 !important;padding: 25px 0;text-align: left;">
+                    <span id="suneung-dday">
+                        💪 수능 -일 전, 수험생 여러분을 응원합니다!</span>
+                    <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
+                </div>
+                <br><br><br>
+
                 <div class="d-flex flex-row" id="meal-flex">
                     <h3 style="float:left" class="card__primary__title__text" onclick="showAllMeal()">급식 <ion-icon
                             name="chevron-forward-outline"></ion-icon> </span>

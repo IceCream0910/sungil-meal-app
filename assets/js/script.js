@@ -86,6 +86,7 @@ function updateOrder() {
 }
 
 
+
 function orderElements() {
     var listItems = Array.from(document.querySelectorAll("#order-item"));
     listItems.sort(function (a, b) {
@@ -134,7 +135,17 @@ if (localStorage.getItem("sungil_favTagsList")) {
     favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
 }
 
-
+// 수능
+//d day
+var todayForDday = new Date();
+var ddayDate = new Date(2022, 10, 17);
+var gap = ddayDate.getTime() - todayForDday.getTime();
+var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+if (ddayResult == 0) {
+    $('#suneung-dday').html(`🎉 수험생 여러분의 내일을 응원합니다.`);
+} else {
+    $('#suneung-dday').html(`💪 수능 ${ddayResult}일 전, 수험생 여러분을 응원합니다!`);
+}
 
 $(document).ready(function () {
 
