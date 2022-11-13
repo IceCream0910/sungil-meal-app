@@ -34,11 +34,6 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-var isDismissCommunityCallout = localStorage.getItem("dismiss_community_callout") || false
-if (isDismissCommunityCallout != 'true') {
-    $('.callout').show();
-}
-
 function openLogin() {
     if (isApp()) {
         location.href = 'https://ssoak-72f93.firebaseapp.com/';
