@@ -1,4 +1,3 @@
-
 const firebaseConfig = {
     apiKey: "AIzaSyDsE3S6NdSB_BO03pHBA3VVkCo6RWn-3Tw",
     authDomain: "ssoak-72f93.firebaseapp.com",
@@ -141,10 +140,8 @@ var todayForDday = new Date();
 var ddayDate = new Date(2022, 10, 17);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-if (ddayResult == 0) {
+if (ddayResult <= 0) {
     $('#suneung-dday').html(`🎉 수험생 여러분의 내일을 응원합니다.`);
-} else {
-    $('#suneung-dday').html(`💪 수능 ${ddayResult}일 전, 수험생 여러분을 응원합니다!`);
 }
 
 $(document).ready(function () {
@@ -776,15 +773,16 @@ $('.grade_btn').on('click', function () {
 /*
 $('.main-nav').hide();
 $('#home').hide();
-$('#community').show();
+$('#community').hide();
 $('#assignment').hide();
-$('#report').hide();
+$('#tools').show();
 */
+
 $('.main-nav').show();
 $('#home').show();
 $('#community').hide();
 $('#assignment').hide();
-$('#report').hide();
+$('#tools').hide();
 
 
 
@@ -806,7 +804,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').fadeIn();
             $('#community').hide();
             $('#assignment').hide();
-            $('#report').hide();
+            $('#tools').hide();
             $('.bottom-nav').addClass("non-border");
             isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
             $('#tab1').attr('name', 'planet');
@@ -819,7 +817,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').fadeIn(100);
             $('#assignment').hide();
-            $('#report').hide();
+            $('#tools').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles');
@@ -831,7 +829,7 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').hide();
             $('#assignment').fadeIn(100);
-            $('#report').hide();
+            $('#tools').hide();
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
@@ -842,12 +840,12 @@ $('.bottom-nav a').on('click', function () {
             $('#home').hide();
             $('#community').hide();
             $('#assignment').hide();
-            $('#report').fadeIn(100);
+            $('#tools').fadeIn(100);
             isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full-outline');
-            $('#tab4').attr('name', 'stats-chart');
+            $('#tab4').attr('name', 'cube');
             break;
     }
 
@@ -872,7 +870,7 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "bottom", // `top` or `bottom`
+            gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
@@ -891,7 +889,7 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "bottom", // `top` or `bottom`
+            gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {

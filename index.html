@@ -100,8 +100,8 @@
     </a>
 
     <a data-tab="report" id="report-btn">
-        <ion-icon id="tab4" name="stats-chart-outline"></ion-icon>
-        <span>성적</span>
+        <ion-icon id="tab4" name="cube-outline"></ion-icon>
+        <span>마법상자</span>
     </a>
 
 </div>
@@ -308,21 +308,6 @@
                     </button>
                 </div>
 
-                <div class="content-wrap" id="calculator">
-                    <span style="font-size: 14px;opacity: 0.5;">계산방법에 따라 다를 수 있으니 참고용으로만
-                        사용하세요<br><br></span>
-
-                    <input id="grade-rank" type="number" placeholder="내 석차" required>
-                    <input id="grade-total" type="number" placeholder="이수자" required>
-
-                    <h3 id="calculator-result">계산 결과
-                        <span id="resultGrade" style="color: #6a89ff;"></span>등급이에요
-                    </h3>
-
-                    <button class="custom-btn modal-btn" onclick="calculateGrade()">계산하기
-                    </button>
-                </div>
-
                 <div class="content-wrap" id="selfcheck">
                     <input id="selfcheck-name" type="text" placeholder="이름" required>
                     <input id="selfcheck-birth" type="number" placeholder="생년월일(6자리)" required>
@@ -404,7 +389,7 @@
                 <div class="callout custom-btn"
                     onclick="window.open('https://www.suneung.re.kr/sub/info.do?m=0104&s=suneung', '_blank')">
                     <span id="suneung-dday">
-                        💪 수능 -일 전, 수험생 여러분을 응원합니다!</span>
+                        💪 수능 D-1. 수험생 여러분을 응원합니다!</span>
                     <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
                 </div>
                 <br><br><br>
@@ -568,34 +553,6 @@
 
 
             <div class="selfcheck-wrap" id="order-item">
-                <div class="card">
-                    <div class="card__primary__title selfcheck-card">
-                        <!--
-                        <div style="padding:0;line-height:1.3;">
-                            <span class="card__primary__title"
-                                style="display: flex;flex-direction: row;justify-content: space-between;">
-                                <ion-icon name="warning-outline"></ion-icon>건강상태 자가진단 기능 중단 안내<br>
-                                <span style="font-size:14px;opacity:0.7;margin-top:10px;">교육부에서 ‘건강상태 자가진단 서비스 운영을 저해하는
-                                    비정상적 접속’에 대한 법적
-                                    대응 방침을 밝힘에
-                                    따라 기능 제공을 중단합니다.</span>
-                            </span>
-                        </div>
-                        -->
-                        <div style="padding:0;line-height:1;">
-                            <span class="card__primary__title"
-                                style="display: flex;flex-direction: row;justify-content: space-between;">건강상태 자가진단
-                                <a style="color: #6a89ff;font-size:16px;text-decoration: none;text-align:right;width: fit-content;"
-                                    href="javascript:openSelfcheckModal();">정보
-                                    수정 <ion-icon name="chevron-forward-outline"></ion-icon></a>
-                            </span>
-                            <span id="selfcheck-status">제출 여부 확인 중</span>
-                        </div>
-                        <button class="custom-btn" id="selfcheck-btn" onclick="confirmSelfCheck();">
-                            <ion-icon name="flash"></ion-icon>제출하기
-                        </button>
-                    </div>
-                </div>
             </div>
 
 
@@ -676,22 +633,22 @@
 
 
     <section id="community">
-        <div class="header community-member-header" style="display:none;">
-            <div id="account-btn" style="display: flex;gap: 15px;">
+        <div class="header community-member-header">
+            <div class="header-signed-in" id="account-btn" style="display: flex;gap: 15px;display:none;">
                 <img loading="lazy" class="profile-img" id="header-profile-img"
                     src="assets/icons/profileImg/letter1.png">
                 <h3 class="card__primary__title__text" id="header-username" style="padding-top: 5px;"></h3>
             </div>
+
+            <div class="header-unsigned" style="display:none;">
+                <button class="custom-btn sub-btn" onclick="openLogin();"
+                    style="font-size: 18px;color: inherit;padding: 10px;">
+                    <ion-icon name="logo-google"></ion-icon> 구글 계정으로 로그인하기
+                </button>
+            </div>
         </div>
 
-        <div class="no-login" style="display:none;">
-            <h5>로그인하고<br>커뮤니티에 참여해보세요</h5>
-            <button class="custom-btn" onclick="openLogin();" style="margin-top:10px;">
-                <ion-icon name="logo-google"></ion-icon>구글 계정으로 시작하기
-            </button>
-        </div>
-
-        <div class="main-community" style="display:none;">
+        <div class="main-community">
             <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
                 💡 쏙의 새로운 기능을 제안해주세요!
                 <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
@@ -770,7 +727,6 @@
     </section>
 
     <section id="assignment">
-        <br>
         <h3 class="card__primary__title__text">우리 반 할 일</h3>
         <span style="opacity:0.6">항목을 눌러 잘못된 내용을 삭제할 수 있어요.</span>
 
@@ -801,115 +757,81 @@
 
 
 
-    <section id="report">
-        <br>
-        <h3>나의 종합 등급은 <br><span id="totalGrade">-</span>등급</h3>
-        <canvas id="myChart" height="200"></canvas>
+    <section id="tools">
 
-        <br><br>
-        <h3>학기별 성적</h3>
-        <div class="semester-tab-wrap">
-            <div class="semester-tab active" onclick="openSemester(0, this);">
-                <span>1학년 1학기</span>
-            </div>
-            <div class="semester-tab" onclick="openSemester(1, this);">
-                <span>1학년 2학기</span>
-            </div>
-            <div class="semester-tab" onclick="openSemester(2, this);">
-                <span>2학년 1학기</span>
-            </div>
-            <div class="semester-tab" onclick="openSemester(3, this);">
-                <span>2학년 2학기</span>
-            </div>
-            <div class="semester-tab" onclick="openSemester(4, this);">
-                <span>3학년 1학기</span>
-            </div>
-            <div class="semester-tab" onclick="openSemester(5, this);">
-                <span>3학년 2학기</span>
-            </div>
-        </div>
+        <!-- Contenedor -->
+        <ul id="accordion" class="accordion">
+            <br>
+            <h3 class="card__primary__title__text">&nbsp;&nbsp;마법상자<span class="badge">beta</span></h3>
 
-        <div class="semester-subject" style="opacity:0.7;justify-content: none;">
-            <h6 style="width:40%;">과목명</h6>
-            <h6 style="width:15%;">단위수</h6>
-            <h6 style="width:25%;">등급</h6>
-        </div>
+            <li>
+                <div class="link">등급 계산기
+                </div>
+                <ul class="submenu" id="grade-calculator">
+                    <input id="grade-rank" type="number" placeholder="내 등수" style="margin-top:5px;" required>
+                    <input id="grade-total" type="number" placeholder="전체 수강자 수" required>
+                    <button class="custom-btn modal-btn" onclick="calculateGrade()">계산하기
+                    </button>
 
-        <div class="semester-subjectList active" data-semester="1_1">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
+                    <h3 id="calculator-result">계산 결과
+                        <span id="resultGrade" style="color: #6a89ff;">-</span>등급이에요
+                    </h3>
+                    <span style="font-size: 14px;opacity: 0.5;margin-top:-5px">학년 별 반영 비율이나 과목 별 가중치 등 대학 별 계산방식에 따라
+                        다를 수 있으니
+                        참고용으로만
+                        사용하세요</span>
+                </ul>
+            </li>
+            <li>
+                <div class="link">글자 수 세기
+                </div>
+                <ul class="submenu" id="letter-counter">
+                    <textarea id="counter" class="counter"></textarea>
+                    <div class="flex flex-row">
+                        <button class="custom-btn" id="spell-check-btn" onclick="spellCheck();">맞춤법 검사</button>
+                        <button class="custom-btn" onclick="copyText();">복사하기</button>
+                        <button class="custom-btn sub-btn"
+                            style="float: right;width: auto;font-size: 22px; padding: 20px;padding-right: 0; padding-left: 0;"
+                            onclick="resetCounter();">
+                            <ion-icon name="refresh-outline"></ion-icon>
+                        </button>
+                    </div><br>
+                    <div id="result" class="result">공백 제외 0자, 공백 포함 0자, 0바이트</div>
+                    <span style="font-size: 12pt;opacity:0.6;letter-spacing: -1.25px;">
+                        자율활동, 동아리활동, 교과세특, 개인별세특 1500바이트 / 진로활동 2100 바이트</span>
+                    <br><br>
+                    <div id="spell-check" style="display:none;">
+                        <div class="flex-row" style="display:flex;align-items: center;">
+                            <h5>맞춤법 오류</h5><button class="custom-btn" style="position:absolute;right:30px;"
+                                onclick="replaceAllText();">모두 수정</button>
+                        </div>
+                        <div id="spell-check-result">
+
+                        </div>
+                        <br>
+                        <span style="font-size: 12pt;opacity:0.4;letter-spacing: -1.25px;">
+                            - 맞춤법 검사는 부산대학교 한국어 맞춤법/문법 검사기를 사용합니다.<br>
+                            - 맞춤법 검사 결과는 부정확할 수 있으니 참고용으로 사용하세요.</span>
+                    </div>
+                </ul>
+            </li>
+            <br>
+            <div class="callout custom-btn">
+                🔥 앞으로 유용한 도구들을 더 많이 모아둘게요
             </div>
-        </div>
-
-        <div class="semester-subjectList " data-semester="1_2">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
-            </div>
-        </div>
-
-        <div class="semester-subjectList " data-semester="2_1">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
-            </div>
-        </div>
-
-        <div class="semester-subjectList" data-semester="2_2">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
-            </div>
-        </div>
-
-        <div class="semester-subjectList" data-semester="3_1">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
-            </div>
-        </div>
-
-        <div class="semester-subjectList" data-semester="3_2">
-            <div class="semester-subject">
-                <input id="subjectName" type="text" placeholder="과목명" required>
-                <input id="subjectUnit" type="number" placeholder="단위수" maxLength="1" required>
-                <input id="subjectGrade" type="number" placeholder="등급" maxLength="1" required>
-                <button style="width:10%" class="custom-btn sub-btn" onclick="deleteSubject(this);">X
-                </button>
-            </div>
-        </div>
-
-        <button class="custom-btn modal-btn sub-btn" style="margin-top:20px;" onclick="addSubject();">
-            <ion-icon style="font-size:25px;" name="add-circle-outline"></ion-icon>추가
-        </button>
-        <button class="custom-btn modal-btn" style="margin-top:20px;" onclick="saveSemester();">저장
-        </button>
-
-        <br><br><br><br><br>
-        <br><br><br><br><br>
+        </ul>
 
 
-        <div class="floating-btn floating-btn-with-label" id="openCalculator-btn">
-            <span style="font-size:17px">등급 계산기</span>
-            <ion-icon name="calculator-outline"></ion-icon>
-        </div>
-    </section>
+
+        <br><br><br><br>
+
+</body>
+
+</html>
+
+</div>
+
+</section>
 
 </body>
 
@@ -1000,7 +922,7 @@
 <script src="assets/js/community.js?v=221025"></script>
 <script src="assets/js/darkmode.js?v=221025"></script>
 <script src="assets/js/assignment.js?v=221025"></script>
-<script src="assets/js/report.js?v=221025"></script>
+<script src="assets/js/tools.js?v=221025"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" defer></script>

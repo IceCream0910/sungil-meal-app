@@ -6,12 +6,10 @@ var db = firebase.firestore();
 var currentCategory = 'all';
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
+    loadPostList('all');
     if (user) {
-        loadPostList('all');
-        $('#community .no-login').hide();
-        $('#community .main-community').show();
-        $('#community .community-member-header').show();
-        $('#community .header').show();
+        $('#community .header .header-signed-in').css("display", "flex");
+        $('#community .header .header-unsigned').hide();
         $('.writePost-btn').show();
         db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
             var user = doc_user.data();
@@ -26,10 +24,8 @@ firebase.auth().onAuthStateChanged(function (user) {
             Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
         }
     } else {
-        $('#community .no-login').show();
-        $('#community .main-community').hide();
-        $('#community .community-member-header').hide();
-        $('#community .header').hide();
+        $('#community .header .header-signed-in').hide();
+        $('#community .header .header-unsigned').show();
         $('.writePost-btn').hide();
     }
 });
@@ -229,8 +225,6 @@ async function confirmLogout() {
     const confirm = await ui.confirm('정말 로그아웃 하시겠습니까?');
     if (confirm) {
         firebase.auth().signOut().then(function () {
-            $('#community .community-member-header').hide();
-            $('#community .no-login').show();
             closeModal();
             toast('로그아웃 되었습니다.');
             Android.logoutAndroidApp();
@@ -605,11 +599,17 @@ const io = new IntersectionObserver((entries, observer) => {
 io.observe(Element)
 
 function openPost(url, target) {
-    if (isApp()) {
-        location.href = url;
-    } else {
-        window.open(url, '_blank');
+    //login check
+    if (firebase.auth().currentUser) {
+        if (isApp()) {
+            location.href = url;
+        } else {
+            window.open(url, '_blank');
+        }
+    } else { //로그인 안됨
+        toast('게시물을 보려면 먼저 로그인 해주세요');
     }
+
 }
 //
 
