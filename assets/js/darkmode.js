@@ -72,7 +72,7 @@ function onDark() {
     $('#vote-choice-list').addClass("dark");
     $('.reaction-wrap').addClass("dark");
     $('#tools').addClass("dark");
-    $('#letter-counter .counter').addClass("dark");
+    $('#tools textarea').removeClass("dark");
     $('.badge').addClass("dark");
 
 }
@@ -123,6 +123,6 @@ function offDark() {
     $('#vote-choice-list').removeClass("dark");
     $('.reaction-wrap').removeClass("dark");
     $('#tools').removeClass("dark");
-    $('#letter-counter .counter').removeClass("dark");
+    $('#tools textarea').removeClass("dark");
     $('.badge').removeClass("dark");
 }
