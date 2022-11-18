@@ -53,11 +53,6 @@ if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 =
 }
 
 
-if (window.location.href.indexOf('sungil.vercel.app') > -1) {
-    $('.adsbygoogle').hide();
-}
-
-
 function updateOrder() {
     const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "timetable": 1 }, "2": { "selfcheck": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
     for (var i = 0; i < 5; i++) {
@@ -770,20 +765,11 @@ $('.grade_btn').on('click', function () {
 });
 
 
-/*
-$('.main-nav').hide();
-$('#home').hide();
-$('#community').hide();
-$('#assignment').hide();
-$('#tools').show();
-*/
-
 $('.main-nav').show();
 $('#home').show();
 $('#community').hide();
 $('#assignment').hide();
 $('#tools').hide();
-
 
 
 $('.bottom-nav a').on('click', function () {
@@ -870,11 +856,11 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "top", // `top` or `bottom`
+            gravity: "bottom", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(0, 0, 0, 0.3)",
+                background: "rgba(82, 114, 255, 0.3)",
                 color: "inherit",
                 border: "none",
                 borderRadius: "10px",
@@ -889,11 +875,11 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "top", // `top` or `bottom`
+            gravity: "bottom", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(255, 255, 255, 0.4)",
+                background: "rgba(82, 114, 255, 0.4)",
                 color: "inherit",
                 border: "none",
                 borderRadius: "10px",
@@ -1305,3 +1291,24 @@ function mealdislikeBtn() {
 }
 
 
+//임시
+function moveTo() {
+    $('.bottom-nav a').removeClass('active');
+    $('.bottom-nav a').removeClass('bounce');
+    $('#report-btn').addClass('active');
+    $('#report-btn').addClass('bounce');
+    $('html, body').animate({
+        scrollTop: 0
+    }, 'fast');
+
+    $('.main-nav').hide();
+    $('#home').hide();
+    $('#community').hide();
+    $('#assignment').hide();
+    $('#tools').fadeIn(100);
+    isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+    $('#tab1').attr('name', 'planet-outline');
+    $('#tab2').attr('name', 'chatbubbles-outline');
+    $('#tab3').attr('name', 'file-tray-outline');
+    $('#tab4').attr('name', 'cube');
+}

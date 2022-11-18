@@ -71,7 +71,10 @@ function onDark() {
     $('.community-tab').addClass("dark");
     $('#vote-choice-list').addClass("dark");
     $('.reaction-wrap').addClass("dark");
+    $('#tools').addClass("dark");
     $('#letter-counter .counter').addClass("dark");
+    $('.badge').addClass("dark");
+
 }
 
 function offDark() {
@@ -119,5 +122,7 @@ function offDark() {
     $('.community-tab').removeClass("dark");
     $('#vote-choice-list').removeClass("dark");
     $('.reaction-wrap').removeClass("dark");
+    $('#tools').removeClass("dark");
     $('#letter-counter .counter').removeClass("dark");
+    $('.badge').removeClass("dark");
 }

@@ -4,6 +4,11 @@ $(function () {
         this.el = el || {};
         this.multiple = multiple || false;
 
+        el.find(".submenu")
+            .slideUp()
+            .parent()
+            .removeClass("open");
+
         // Variables privadas
         var links = this.el.find(".link");
         // Evento
@@ -122,12 +127,14 @@ function resetCounter() {
 var spellCheckResult = {};
 function spellCheck() {
     if (textarea.value.length < 1300) {
-        $('#spell-check-btn').html('맞춤법 검사<img src="assets/icons/circle_loading.gif" width="25px">')
+        $('#spell-check-btn').html('맞춤법 검사<img src="assets/icons/circle_loading.gif" width="25px">');
+        $('#spell-check-btn').attr('disabled', true);
         $.ajax({
             url: "https://spell.rycont.workers.dev/" + textarea.value,
             type: "GET",
             success: function (data) {
-                $('#spell-check-btn').html('맞춤법 검사')
+                $('#spell-check-btn').html('맞춤법 검사');
+                $('#spell-check-btn').attr('disabled', false);
                 if (data) {
                     spellCheckResult = data;
                     if (data.length > 0) {
@@ -192,4 +199,202 @@ function copyText() {
     copyText.setSelectionRange(0, textarea.value.length);
     document.execCommand("copy");
     toast('클립보드에 복사했어요');
+}
+
+
+//목차 생성
+var lastSubject = '';
+function aiGenerateIndex() {
+    const subject = $('#ai-index-generator #ai-index-subject').val();
+    if (subject.length > 1) {
+        $('#index-generator-btn').html('생성하기<img src="assets/icons/circle_loading.gif" width="25px">');
+        $('#index-generator-btn').attr('disabled', true);
+        $.ajax({
+            url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+            data: JSON.stringify({
+                "prompt": `주제에 대한 보고서의 목차를 생성합니다.\n주제:${subject}\n목차:\n`,
+                "max_tokens": 80,
+                "top_p": 0.9
+            }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            success: function (data) {
+                if (data.generations[0].text) {
+                    if (subject != lastSubject) {
+                        $('#ai-index-result').html('');
+                    }
+                    lastSubject = subject;
+                    $('#ai-index-result').prepend(`<div class="card notice-card">
+                    <p>${data.generations[0].text.replaceAll('\n', '<br>')}</p>
+                    <div class="flex flex-row">
+                        <button class="custom-btn sub-btn" onclick="aiCompleteMore(\`${data.generations[0].text.replaceAll('\"', '\'')}\`);" style="left: 20px;width: auto;padding: 18px;">
+                           이어 쓰기
+                        </button>
+                        <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                            <ion-icon name="copy-outline"></ion-icon>복사
+                        </button>
+                        <br><br>
+                    </div>
+                </div>`);
+                } else {
+                    toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+                }
+                $('#index-generator-btn').html('생성하기');
+                $('#index-generator-btn').attr('disabled', false);
+                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                    var notice_items = document.getElementsByClassName('notice-card');
+                    for (var i = 0; i < notice_items.length; i++) {
+                        notice_items[i].classList.add("dark");
+                    }
+                }
+            }
+        });
+    } else {
+        toast('주제가 너무 짧아요. 좀 더 길게 입력해주세요.');
+    }
+
+}
+
+function aiCompleteMore(text) {
+    $('#index-generator-btn').html('이어쓰는중<img src="assets/icons/circle_loading.gif" width="25px">');
+    $('#index-generator-btn').attr('disabled', true);
+    $.ajax({
+        url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+        data: JSON.stringify({
+            "prompt": `목차\n${text}`,
+            "max_tokens": 20,
+            "top_p": 0.9
+        }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        type: "POST",
+        success: function (data) {
+            if (data.generations[0].text) {
+                $('#ai-index-result').prepend(`<div class="card notice-card">
+                <p>${text.replaceAll('<br>', '\n') + data.generations[0].text.replaceAll('\n', '<br>').replaceAll('[EOS]', '')}</p>
+                <div class="flex flex-row">
+                    <button class="custom-btn sub-btn" onclick="aiCompleteMore(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="left: 20px;width: auto;padding: 18px;">
+                       이어 쓰기
+                    </button>
+                    <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                        <ion-icon name="copy-outline"></ion-icon>복사
+                    </button>
+                    <br><br>
+                </div>
+            </div>`);
+            } else {
+                toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+            }
+            $('#index-generator-btn').html('생성하기');
+            $('#index-generator-btn').attr('disabled', false);
+            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                var notice_items = document.getElementsByClassName('notice-card');
+                for (var i = 0; i < notice_items.length; i++) {
+                    notice_items[i].classList.add("dark");
+                }
+            }
+        }
+    });
+}
+
+function copyTextRaw(text) {
+    var dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    toast('클립보드에 복사했어요');
+}
+
+//요약
+function aiGenerateSummary() {
+    const content = $('#ai-summary-generator #ai-summary-content').val();
+    if (content.length > 1) {
+        $('#summary-generator-btn').html('요약하기<img src="assets/icons/circle_loading.gif" width="25px">');
+        $('#summary-generator-btn').attr('disabled', true);
+        $.ajax({
+            url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+            data: JSON.stringify({
+                "prompt": `${content}\n\n한줄 요약:`,
+                "max_tokens": 128,
+                "top_p": 0.7
+            }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            success: function (data) {
+                if (data.generations[0].text) {
+                    $('#ai-summary-result').html(`<br><div class="card notice-card">
+                    <p>${data.generations[0].text.replaceAll('\n', '<br>').replaceAll('[EOS]', '')}</p>
+                    <div class="flex flex-row">
+                        <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                            <ion-icon name="copy-outline"></ion-icon>복사
+                        </button>
+                        <br><br>
+                    </div>
+                </div>`);
+                } else {
+                    toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+                }
+                $('#summary-generator-btn').html('요약하기');
+                $('#summary-generator-btn').attr('disabled', false);
+                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                    var notice_items = document.getElementsByClassName('notice-card');
+                    for (var i = 0; i < notice_items.length; i++) {
+                        notice_items[i].classList.add("dark");
+                    }
+                }
+            }
+        });
+    } else {
+        toast('글이 너무 짧아요. 좀 더 길게 입력해주세요.');
+    }
+}
+
+//기계독해 질의응답
+function aiGenerateQna() {
+    const content = $('#ai-qna-generator #ai-qna-content').val();
+    const question = $('#ai-qna-generator #ai-qna-question').val();
+    if (content.length > 1 && question.length > 2) {
+        $('#qna-generator-btn').html('질문하기<img src="assets/icons/circle_loading.gif" width="25px">');
+        $('#qna-generator-btn').attr('disabled', true);
+        $.ajax({
+            url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+            data: JSON.stringify({
+                "prompt": `${content}\n\n${question}?:`,
+                "max_tokens": 128,
+                "temperature": 0.2
+            }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            success: function (data) {
+                if (data.generations[0].text) {
+                    $('#ai-qna-result').html(`<br><div class="card notice-card">
+                    <p>${data.generations[0].text.replaceAll('\n', '<br>').replaceAll('[EOS]', '')}</p>
+                    <div class="flex flex-row">
+                        <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                            <ion-icon name="copy-outline"></ion-icon>복사
+                        </button>
+                        <br><br>
+                    </div>
+                </div>`);
+                } else {
+                    toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+                }
+                $('#qna-generator-btn').html('질문하기');
+                $('#qna-generator-btn').attr('disabled', false);
+                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                    var notice_items = document.getElementsByClassName('notice-card');
+                    for (var i = 0; i < notice_items.length; i++) {
+                        notice_items[i].classList.add("dark");
+                    }
+                }
+            }
+        });
+    } else {
+        toast('글이나 질문이 너무 짧아요. 좀 더 길게 입력해주세요.');
+    }
 }

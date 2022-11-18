@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>쏙 - 성일고 급식, 시간표, 학사일정을 한 눈에</title>
+    <title>쏙 - 성일고의 모든 정보, 한 눈에 쏙</title>
     <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
     <link rel="shortcut icon" href="assets/icons/icon-192x192.png">
@@ -13,12 +13,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="white" />
     <meta name="apple-mobile-web-app-title" content="쏙" />
-    <meta name="description" content="성일고 급식, 시간표, 학사일정을 한 눈에" />
+    <meta name="description" content="성일고의 모든 정보, 한 눈에 쏙" />
     <meta name="naver-site-verification" content="fa35f8ef36dddfd6a7d8ca7db25136469aadf0c8" />
     <script src="https://browser.sentry-cdn.com/7.2.0/bundle.min.js" crossorigin="anonymous" defer></script>
     <script src="https://browser.sentry-cdn.com/5.29.0/bundle.tracing.min.js" crossorigin="anonymous" defer></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3961376550354587"
-        crossorigin="anonymous"></script>
     <script>
         window.addEventListener('load', function () { Sentry.init({ dsn: "https://ab3d91734c6a4ab4bf68dcf24cf572a2@o1296273.ingest.sentry.io/6522806", integrations: [new Sentry.Integrations.BrowserTracing()], tracesSampleRate: 1.0, }); });
     </script>
@@ -27,7 +25,7 @@
     <meta property="og:title" content="쏙">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://i.imgur.com/frj9qPN.png">
-    <meta property="og:description" content="성일고 급식, 시간표, 학사일정을 한 눈에">
+    <meta property="og:description" content="성일고의 모든 정보, 한 눈에 쏙">
 
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet"
         type="text/css" />
@@ -317,16 +315,6 @@
                     </button>
                 </div>
 
-                <div class="content-wrap" id="selfcheck-confirm">
-                    <span>아래 문항에 해당하는 경우 공식 자가진단을 통해 제출해주세요.<br><br>
-                        - 코로나19 감염 의심 증상이 있나요?<br>
-                        - 오늘(어제 저녁) 신속항원검사를 실시했나요?<br>
-                        - 본인 또는 동거인이 PCR 검사를 받고 결과 대기 중인가요?<br><br><span>
-                            <button class="custom-btn modal-btn" onclick="submitSelfCheck();">아니요, 이상이 없어요.
-                            </button>
-                </div>
-
-
                 <div class="content-wrap" id="menuInfo">
                     <div class="d-flex flex-row" style="margin-top:-20px;">
                         <div id="image_result" class="my-gallery" itemscope itemtype="http://schema.org/ImageGallery">
@@ -386,11 +374,9 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
-                <div class="callout custom-btn"
-                    onclick="window.open('https://www.suneung.re.kr/sub/info.do?m=0104&s=suneung', '_blank')">
-                    <span id="suneung-dday">
-                        💪 수능 D-1. 수험생 여러분을 응원합니다!</span>
-                    <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
+                <div class="callout custom-btn" onclick="moveTo();">
+                    ✨️ 새롭게 추가된 마법상자 탭을 구경해보세요<ion-icon name="chevron-forward-outline" style="font-size:20px;">
+                    </ion-icon>
                 </div>
                 <br><br><br>
 
@@ -544,11 +530,13 @@
                     </table>
                 </div>
                 <br><br>
-                <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
-                    data-ad-format="fluid" data-ad-client="ca-pub-3961376550354587" data-ad-slot="4478884297"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+                <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WCT8chS2JYxIPFuG" data-ad-width="320"
+                    data-ad-height="100"></ins>
+                <br><br>
+                <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
+                    💡 쏙의 새로운 기능을 제안해주세요!
+                    <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
+                </div>
             </div>
 
 
@@ -621,18 +609,15 @@
         </button>
         <br><br>
 
-        <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed"
-            data-ad-client="ca-pub-3961376550354587" data-ad-slot="5146966694"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-tQSkVhsaftmuhLpL" data-ad-width="320"
+            data-ad-height="100"></ins>
 
         <br><br><br><br><br>
 
     </section>
 
 
-    <section id="community">
+    <section id="community" style="display:none;">
         <div class="header community-member-header">
             <div class="header-signed-in" id="account-btn" style="display: flex;gap: 15px;display:none;">
                 <img loading="lazy" class="profile-img" id="header-profile-img"
@@ -649,11 +634,6 @@
         </div>
 
         <div class="main-community">
-            <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
-                💡 쏙의 새로운 기능을 제안해주세요!
-                <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
-            </div>
-
             <div class="community-tab-wrap">
                 <div class="community-tab active" onclick="changeCommunityCategory('all', this);">
                     <span>전체</span>
@@ -726,7 +706,7 @@
 
     </section>
 
-    <section id="assignment">
+    <section id="assignment" style="display:none;">
         <h3 class="card__primary__title__text">우리 반 할 일</h3>
         <span style="opacity:0.6">항목을 눌러 잘못된 내용을 삭제할 수 있어요.</span>
 
@@ -757,13 +737,17 @@
 
 
 
-    <section id="tools">
+    <section id="tools" style="display:none;">
 
         <!-- Contenedor -->
         <ul id="accordion" class="accordion">
             <br>
-            <h3 class="card__primary__title__text">&nbsp;&nbsp;마법상자<span class="badge">beta</span></h3>
-
+            <h3 class="card__primary__title__text">&nbsp;&nbsp;마법상자<span class="badge">beta</span></h3>.
+            <div class="callout custom-btn"
+                onclick="window.open('https://log.sungil.me/blog/story/magicbox', '_blank');">
+                🔥 똑똑한 학교생활 도우미, 마법상자를 소개합니다!<ion-icon name="chevron-forward-outline" style="font-size:20px;">
+                </ion-icon>
+            </div>
             <li>
                 <div class="link">등급 계산기
                 </div>
@@ -815,9 +799,48 @@
                     </div>
                 </ul>
             </li>
+            <li>
+                <div class="link">글 요약<span class="badge">AI</span>
+                </div>
+                <ul class="submenu" id="ai-summary-generator">
+                    <textarea id="ai-summary-content" type="text" placeholder="요약할 글을 입력해주세요" style="margin-top:5px;"
+                        required></textarea>
+                    <button class="custom-btn modal-btn" id="summary-generator-btn" onclick="aiGenerateSummary()">요약하기
+                    </button>
+                    <div id="ai-summary-result">
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <div class="link">글 질의응답<span class="badge">AI</span>
+                </div>
+                <ul class="submenu" id="ai-qna-generator">
+                    <textarea id="ai-qna-content" type="text" placeholder="AI가 읽을 글을 입력해주세요" style="margin-top:5px;"
+                        required></textarea>
+                    <input id="ai-qna-question" type="text" placeholder="글에 대한 질문을 입력해주세요" required>
+                    <button class="custom-btn modal-btn" id="qna-generator-btn" onclick="aiGenerateQna()">질문하기
+                    </button>
+                    <div id="ai-qna-result">
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <div class="link">보고서 목차<span class="badge">AI</span>
+                </div>
+                <ul class="submenu" id="ai-index-generator">
+                    <input id="ai-index-subject" type="text" placeholder="보고서 주제를 알려주세요" style="margin-top:5px;"
+                        required>
+                    <button class="custom-btn modal-btn" id="index-generator-btn" onclick="aiGenerateIndex()">생성하기
+                    </button>
+                    <div id="ai-index-result" class="ai-result-wrap">
+                    </div>
+
+                </ul>
+            </li>
+
             <br>
-            <div class="callout custom-btn">
-                🔥 앞으로 유용한 도구들을 더 많이 모아둘게요
+            <div class="callout custom-btn" style="background:none !important;">
+                앞으로 유용한 도구들을 더 많이 모아둘게요
             </div>
         </ul>
 
@@ -825,13 +848,7 @@
 
         <br><br><br><br>
 
-</body>
-
-</html>
-
-</div>
-
-</section>
+    </section>
 
 </body>
 
@@ -936,5 +953,6 @@
 
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async"
     type="text/javascript"></script>
+<script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
 </html>
