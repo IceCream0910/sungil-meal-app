@@ -101,7 +101,7 @@ function isApp() {
 }
 
 if (isApp()) {
-    const isActiveMealPush = localStorage.getItem("android-noti") || "true";
+    const isActiveMealPush = localStorage.getItem("android-noti") || true;
     if (isActiveMealPush) {
         Android.setNotiEnable(true);
     } else {
