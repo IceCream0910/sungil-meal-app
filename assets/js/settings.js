@@ -31,8 +31,8 @@ if (storedTheme != null) {
     }
 }
 
-const isAndroidNoti = localStorage.getItem("android-noti") || "true";
-if (isAndroidNoti === "true") {
+const isAppMealPush = localStorage.getItem("android-noti") || "true";
+if (isAppMealPush === "true") {
     $("#noti-switch").prop('checked', true);
 } else {
     $("#noti-switch").prop('checked', false);

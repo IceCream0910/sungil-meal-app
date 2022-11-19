@@ -90,6 +90,7 @@ function orderElements() {
     });
 }
 
+//안드로이드 앱인지 확인
 function isApp() {
     var ua = navigator.userAgent;
     if (ua.indexOf('hybridApp') > -1) {
@@ -98,6 +99,14 @@ function isApp() {
         return false;
     }
 }
+
+if (isApp()) {
+    const isActiveMealPush = localStorage.setItem("android-noti", $('#noti-switch').is(":checked"));
+    if (isActiveMealPush) {
+        Android.setNotiEnable(true);
+    }
+}
+
 
 var today = moment(new Date()).format('YYYYMMDD');
 
