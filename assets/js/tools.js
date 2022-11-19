@@ -398,3 +398,97 @@ function aiGenerateQna() {
         toast('글이나 질문이 너무 짧아요. 좀 더 길게 입력해주세요.');
     }
 }
+
+//주제 글쓰기
+var lastSubjectEssay = '';
+function aiGenerateEssay() {
+    const subject = $('#ai-essay-generator #ai-essay-topic').val();
+    if (subject.length > 1) {
+        $('#essay-generator-btn').html('생성하기<img src="assets/icons/circle_loading.gif" width="25px">');
+        $('#essay-generator-btn').attr('disabled', true);
+        $.ajax({
+            url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+            data: JSON.stringify({
+                "prompt": `주제: ${subject}\n`,
+                "max_tokens": 256
+            }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: "POST",
+            success: function (data) {
+                if (data.generations[0].text) {
+                    if (subject != lastSubjectEssay) {
+                        $('#ai-index-result').html('');
+                    }
+                    lastSubjectEssay = subject;
+                    $('#ai-essay-result').prepend(`<div class="card notice-card">
+                    <p>${data.generations[0].text.replaceAll('\n', '<br>')}</p>
+                    <div class="flex flex-row">
+                        <button class="custom-btn sub-btn" onclick="aiCompleteMoreEssay(\`${data.generations[0].text.replaceAll('\"', '\'')}\`);" style="left: 20px;width: auto;padding: 18px;">
+                           이어 쓰기
+                        </button>
+                        <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                            <ion-icon name="copy-outline"></ion-icon>복사
+                        </button>
+                        <br><br>
+                    </div>
+                </div>`);
+                } else {
+                    toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+                }
+                $('#essay-generator-btn').html('생성하기');
+                $('#essay-generator-btn').attr('disabled', false);
+                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                    var notice_items = document.getElementsByClassName('notice-card');
+                    for (var i = 0; i < notice_items.length; i++) {
+                        notice_items[i].classList.add("dark");
+                    }
+                }
+            }
+        });
+    } else {
+        toast('주제가 너무 짧아요. 좀 더 길게 입력해주세요.');
+    }
+
+}
+
+function aiCompleteMoreEssay(text) {
+    $('#essay-generator-btn').html('이어쓰는중<img src="assets/icons/circle_loading.gif" width="25px">');
+    $('#essay-generator-btn').attr('disabled', true);
+    $.ajax({
+        url: "https://kogpt-api-icecream0910.koyeb.app/koGPT",
+        data: JSON.stringify({
+            "prompt": `${text}`,
+            "max_tokens": 128
+        }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        type: "POST",
+        success: function (data) {
+            if (data.generations[0].text) {
+                $('#ai-essay-result').prepend(`<div class="card notice-card">
+                <p>${text.replaceAll('<br>', '\n') + data.generations[0].text.replaceAll('\n', '<br>').replaceAll('[EOS]', '')}</p>
+                <div class="flex flex-row">
+                    <button class="custom-btn sub-btn" onclick="aiCompleteMoreEssay(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="left: 20px;width: auto;padding: 18px;">
+                       이어 쓰기
+                    </button>
+                    <button class="custom-btn sub-btn" onclick="copyTextRaw(\`${data.generations[0].text.replaceAll('\"', '\'').replaceAll('[EOS]', '')}\`);" style="position: absolute;right: 20px;width: auto;padding: 18px;">
+                        <ion-icon name="copy-outline"></ion-icon>복사
+                    </button>
+                    <br><br>
+                </div>
+            </div>`);
+            } else {
+                toast('지금 AI가 힘든가봐요. 나중에 다시 시도해주세요.');
+            }
+            $('#essay-generator-btn').html('생성하기');
+            $('#essay-generator-btn').attr('disabled', false);
+            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                var notice_items = document.getElementsByClassName('notice-card');
+                for (var i = 0; i < notice_items.length; i++) {
+                    notice_items[i].classList.add("dark");
+                }
+            }
+        }
+    });
+}

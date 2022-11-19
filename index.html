@@ -743,6 +743,7 @@
         <ul id="accordion" class="accordion">
             <br>
             <h3 class="card__primary__title__text">&nbsp;&nbsp;마법상자<span class="badge">beta</span></h3>
+            <br>
             <div class="callout custom-btn"
                 onclick="window.open('https://log.sungil.me/blog/story/magicbox', '_blank');">
                 🔥 똑똑한 학교생활 도우미, 마법상자를 소개합니다!<ion-icon name="chevron-forward-outline" style="font-size:20px;">
@@ -808,6 +809,17 @@
                     <button class="custom-btn modal-btn" id="summary-generator-btn" onclick="aiGenerateSummary()">요약하기
                     </button>
                     <div id="ai-summary-result">
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <div class="link">주제 글쓰기<span class="badge">AI</span>
+                </div>
+                <ul class="submenu" id="ai-essay-generator">
+                    <input id="ai-essay-topic" type="text" placeholder="주제를 입력해주세요" required>
+                    <button class="custom-btn modal-btn" id="essay-generator-btn" onclick="aiGenerateEssay()">생성하기
+                    </button>
+                    <div id="ai-essay-result">
                     </div>
                 </ul>
             </li>

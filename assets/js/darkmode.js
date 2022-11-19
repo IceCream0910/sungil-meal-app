@@ -72,7 +72,7 @@ function onDark() {
     $('#vote-choice-list').addClass("dark");
     $('.reaction-wrap').addClass("dark");
     $('#tools').addClass("dark");
-    $('#tools textarea').removeClass("dark");
+    $('#tools textarea').addClass("dark");
     $('.badge').addClass("dark");
 
 }
