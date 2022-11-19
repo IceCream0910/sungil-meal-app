@@ -107,7 +107,6 @@ if (isApp()) {
     }
 }
 
-
 var today = moment(new Date()).format('YYYYMMDD');
 
 var selectedDate = today;
