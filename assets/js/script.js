@@ -142,11 +142,13 @@ if (localStorage.getItem("sungil_favTagsList")) {
 // 수능
 //d day
 var todayForDday = new Date();
-var ddayDate = new Date(2022, 10, 17);
+var ddayDate = new Date(2022, 11, 19);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult <= 0) {
-    $('#suneung-dday').html(`🎉 수험생 여러분의 내일을 응원합니다.`);
+    $('#exam-dday').html(`&nbsp;${ddayResult * -1}일차, 끝까지 힘내봐요`);
+} else {
+    $('#exam-dday').html(`가 ${ddayResult}일 남았어요.`);
 }
 
 $(document).ready(function () {

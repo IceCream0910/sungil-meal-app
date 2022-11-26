@@ -200,91 +200,6 @@
                     </button>
 
                 </div>
-                <div class="content-wrap" id="account">
-
-                    <input id="account-username" type="text" placeholder="닉네임" required>
-                    <button class="custom-btn input-btn" onclick="getRandomNickname()">
-                        <ion-icon name="shuffle-outline"></ion-icon>
-                    </button>
-
-                    <div class="profile-image-list">
-                        <button class="custom-btn profile-image-btn"
-                            style="background-image:url(assets/icons/profileImg/letter1.png)"" onclick="
-                            changeProfileImg(0)">
-                        </button>
-                        <button class="custom-btn profile-image-btn"
-                            style="background-image:url(assets/icons/profileImg/letter2.png)"" onclick="
-                            changeProfileImg(1)">
-                        </button>
-                        <button class="custom-btn profile-image-btn"
-                            style="background-image:url(assets/icons/profileImg/letter3.png)"" onclick="
-                            changeProfileImg(2)">
-                        </button>
-                        <button class="custom-btn profile-image-btn"
-                            style="background-image:url(assets/icons/profileImg/letter4.png)"" onclick="
-                            changeProfileImg(3)">
-                        </button>
-                        <button class="custom-btn profile-image-btn"
-                            style="background-image:url(assets/icons/profileImg/letter5.png)"" onclick="
-                            changeProfileImg(4)">
-                        </button>
-                    </div>
-
-                    <button class="custom-btn modal-btn" onclick="edit_saveAccountDb()">완료
-                    </button>
-                    <br><br>
-                    <button class="custom-btn sub-btn logout" id="logout-btn">로그아웃
-                    </button>
-                </div>
-                <div class="content-wrap" id="writePost">
-                    <div id="post-form-wrap">
-                        <input id="post-title" type="text" placeholder="제목(선택)" style="font-size:16px;">
-                        <select id="category-select" name="category-select">
-                            <option value="" selected disabled>카테고리 선택</option>
-                            <option value="자유">자유</option>
-                            <option value="질문">질문/고민</option>
-                            <option value="개발">개발자 나와라</option>
-                        </select>
-                    </div>
-
-                    <div style="border-radius:10px; position: relative;" data-validate="글 내용 작성">
-                        <div id="editor" style="height:40vh"></div>
-                    </div>
-
-
-                    <div class="col">
-                        <form action="" method="post" enctype="multipart/form-data" id="form-upload">
-
-                            <div class="img-thumbs img-thumbs-hidden" id="img-preview">
-                                <div class="filebox custom-btn dark">
-                                    <label for="upload-img">
-                                        <ion-icon name="images-outline" role="img" class="md hydrated"></ion-icon>
-                                    </label>
-                                    <input type="file" class="form-control dark" name="images[]" multiple=""
-                                        id="upload-img">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="button-footer">
-                        <div style="display:flex;gap:10px;">
-                            <button onclick="if(confirm('글 작성을 그만할까요? 작성하던 글은 사라집니다.')) closeModal();"
-                                class="custom-btn modal-btn">닫기
-                            </button>
-
-                            <button class="custom-btn modal-btn" onclick="openVoteMaker()">
-                                <ion-icon name="bar-chart-outline"></ion-icon> 투표
-                            </button>
-                        </div>
-                        <button id="post-btn" class="custom-btn modal-btn" onclick="post(this)">게시
-                        </button>
-                    </div>
-
-
-
-
-                </div>
 
                 <div class="content-wrap" id="vote">
 
@@ -303,15 +218,6 @@
                     </button>
 
                     <button class="custom-btn modal-btn" onclick="postVote(this)">게시
-                    </button>
-                </div>
-
-                <div class="content-wrap" id="selfcheck">
-                    <input id="selfcheck-name" type="text" placeholder="이름" required>
-                    <input id="selfcheck-birth" type="number" placeholder="생년월일(6자리)" required>
-                    <input id="selfcheck-pwd" type="password" placeholder="자가진단 앱 비밀번호" required>
-
-                    <button class="custom-btn modal-btn" onclick="saveSelfcheckInfo()">저장하기
                     </button>
                 </div>
 
@@ -344,9 +250,48 @@
         </div>
     </div>
     </div>
-    <script>
 
-    </script>
+    <div class="overlay-popup" id="write-post-popup">
+        <div id="post-form-wrap">
+            <h3 class="card__primary__title__text">글쓰기
+                <button onclick="if(confirm('글 작성을 그만할까요? 작성하던 글은 사라집니다.')) closeWritePopup();"
+                    class="custom-btn modal-btn sub-btn"
+                    style="padding: 15px;width: auto; font-size: 30px;position: absolute; right: 0;">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
+            </h3><br>
+            <input id="post-title" type="text" placeholder="제목" style="font-size:16px;">
+            <select id="category-select" name="category-select">
+                <option value="" selected disabled>카테고리*</option>
+                <option value="자유">자유</option>
+                <option value="질문">질문/고민</option>
+                <option value="개발">개발자 나와라</option>
+            </select>
+
+            <div id="editor" width="100%"></div>
+        </div>
+
+
+
+        <div class="write-popup-footer">
+            <div class="col">
+                <form action="" method="post" enctype="multipart/form-data" id="form-upload">
+
+                    <div class="img-thumbs img-thumbs-hidden" id="img-preview">
+                        <div class="filebox custom-btn dark">
+                            <label for="upload-img">
+                                <ion-icon name="images-outline" role="img" class="md hydrated"></ion-icon>
+                            </label>
+                            <input type="file" class="form-control dark" name="images[]" multiple="" id="upload-img">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <button id="post-btn" class="custom-btn modal-btn" onclick="post(this)">게시
+            </button>
+        </div>
+    </div>
 
 
     <div class="loading-overlay">
@@ -374,8 +319,8 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
-                <div class="callout custom-btn" onclick="moveTo();">
-                    ✨️ 새롭게 추가된 마법상자 탭을 구경해보세요<ion-icon name="chevron-forward-outline" style="font-size:20px;">
+                <div class="callout custom-btn" style="text-align:left;">
+                    📓 기말고사<span id="exam-dday"></span>
                     </ion-icon>
                 </div>
                 <br><br><br>
@@ -619,10 +564,16 @@
 
     <section id="community" style="display:none;">
         <div class="header community-member-header">
-            <div class="header-signed-in" id="account-btn" style="display: flex;gap: 15px;display:none;">
+            <div class="header-signed-in" style="display: flex;gap: 15px;display:none;">
                 <img loading="lazy" class="profile-img" id="header-profile-img"
                     src="assets/icons/profileImg/letter1.png">
-                <h3 class="card__primary__title__text" id="header-username" style="padding-top: 5px;"></h3>
+                <h3 class="card__primary__title__text" id="header-username" style="padding-top: 5px;">
+                </h3>
+
+                <button class="custom-btn sub-btn logout" style="width: auto;position: absolute;right: 0;padding: 20px;"
+                    id="logout-btn">
+                    <ion-icon name="log-out-outline" style="font-size:25px;"></ion-icon>
+                </button>
             </div>
 
             <div class="header-unsigned" style="display:none;">
@@ -702,6 +653,11 @@
         <div class="floating-btn writePost-btn" style="display:none">
             <ion-icon name="pencil-outline" style="font-size:20px;"></ion-icon>
         </div>
+
+        <div class="floating-btn writeVote-btn" style="display:none;bottom:150px;">
+            <ion-icon name="stats-chart-outline" style="font-size:20px;"></ion-icon>
+        </div>
+
         </div>
 
     </section>
@@ -746,7 +702,7 @@
             <br>
             <div class="callout custom-btn"
                 onclick="window.open('https://log.sungil.me/blog/story/magicbox', '_blank');">
-                🔥 똑똑한 학교생활 도우미, 마법상자를 소개합니다!<ion-icon name="chevron-forward-outline" style="font-size:20px;">
+                🔥 AI 글쓰기 도우미, 마법상자를 소개합니다!<ion-icon name="chevron-forward-outline" style="font-size:20px;">
                 </ion-icon>
             </div>
             <li>
@@ -813,17 +769,6 @@
                 </ul>
             </li>
             <li>
-                <div class="link">주제 글쓰기<span class="badge">AI</span>
-                </div>
-                <ul class="submenu" id="ai-essay-generator">
-                    <input id="ai-essay-topic" type="text" placeholder="주제를 입력해주세요" required>
-                    <button class="custom-btn modal-btn" id="essay-generator-btn" onclick="aiGenerateEssay()">생성하기
-                    </button>
-                    <div id="ai-essay-result">
-                    </div>
-                </ul>
-            </li>
-            <li>
                 <div class="link">글 질의응답<span class="badge">AI</span>
                 </div>
                 <ul class="submenu" id="ai-qna-generator">
@@ -850,6 +795,17 @@
                 </ul>
             </li>
 
+            <li>
+                <div class="link">주제 글쓰기<span class="badge">AI</span>
+                </div>
+                <ul class="submenu" id="ai-essay-generator">
+                    <input id="ai-essay-topic" type="text" placeholder="주제를 입력해주세요" required>
+                    <button class="custom-btn modal-btn" id="essay-generator-btn" onclick="aiGenerateEssay()">생성하기
+                    </button>
+                    <div id="ai-essay-result">
+                    </div>
+                </ul>
+            </li>
             <br>
             <div class="callout custom-btn" style="background:none !important;">
                 앞으로 유용한 도구들을 더 많이 모아둘게요
@@ -935,7 +891,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
 <script type="text/javascript" src="assets/js/pullToRefresh.js?v=221025"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-app-compat.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-auth-compat.min.js"></script>

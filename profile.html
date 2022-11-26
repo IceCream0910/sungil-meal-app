@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>님의 프로필 - 쏙</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/theme/toastui-editor-dark.min.css" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<style>
+    #header-profile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 30px;
+        margin-right: 15px;
+    }
+</style>
+
+<body oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
+    <div class="d-flex flex-row" style="width:100%;align-items: center;align-content: center;text-align: center;">
+        <button class="custom-btn mdc-fab mdc-fab--mini" onclick="javasceript:window.close();">
+            <div class="mdc-fab__ripple"></div>
+            <span class="material-icons mdc-button__icon" style="font-size:15px;">arrow_back_ios_new</span>
+        </button>
+    </div>
+
+    <div class="post-header">
+        <img id="header-profile-img" class="profile-img" />
+        <div>
+            <h3 class="card__primary__title__text" id="uname"></h3>
+            <button class="custom-btn" id="edit-btn">
+                프로필 수정
+            </button>
+        </div>
+    </div>
+    <br><br>
+    <h3 class="card__primary__title__text" style="margin-bottom:25px;">내가 쓴 글</h3>
+    <main>
+        <div class="post-listview">
+            <div class="card-body">
+                <h2 class="card-intro skeleton">
+                </h2>
+                <p class="card-title skeleton">
+                </p>
+            </div>
+            <div class="card-body">
+                <h2 class="card-intro skeleton">
+                </h2>
+                <p class="card-title skeleton">
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- confirm dialog -->
+    <div class="confirm" role="dialog">
+        <div></div>
+        <div id="main-confirm">
+            <div id="confirmMessage"></div>
+            <div>
+                <input id="confirmYes" type="button" aria-label="삭제 확인" value="확인" />
+                <input id="confirmNo" type="button" aria-label="삭제 취소" value="취소" />
+            </div>
+        </div>
+    </div>
+    <!-- confirm dialog -->
+
+    <!-- modal -->
+    <div class="sheet-backdrop"></div>
+    <div class="c-modal sheet-modal demo-sheet-swipe-to-close modal-in addreFinder" id="addressFinder"
+        style="position: fixed;">
+        <div class="sheet-modal-inner">
+            <div class="swipe-handler"></div>
+            <div class="page-content">
+                <div class="d-flex flex-row">
+                    <h3 style="float:left" class="card__primary__title__text" id="modal-title">프로필 수정</h3>
+                </div><br>
+                <div class="content-wrap" id="account">
+                    <input id="account-username" type="text" placeholder="닉네임" required>
+                    <button class="custom-btn input-btn" onclick="getRandomNickname()">
+                        <ion-icon name="shuffle-outline"></ion-icon>
+                    </button>
+
+                    <div class="profile-image-list">
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter1.png)"" onclick="
+                            changeProfileImg(0)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter2.png)"" onclick="
+                            changeProfileImg(1)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter3.png)"" onclick="
+                            changeProfileImg(2)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter4.png)"" onclick="
+                            changeProfileImg(3)">
+                        </button>
+                        <button class="custom-btn profile-image-btn"
+                            style="background-image:url(assets/icons/profileImg/letter5.png)"" onclick="
+                            changeProfileImg(4)">
+                        </button>
+                    </div>
+
+                    <button class="custom-btn modal-btn" onclick="edit_saveAccountDb()">완료
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-auth-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-storage-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.12.1/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+    <script src="assets/js/profile.js"></script>
+    <script src="assets/js/darkmode.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+
+</body>
+
+</html>

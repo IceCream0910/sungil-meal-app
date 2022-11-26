@@ -11,6 +11,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#community .header .header-signed-in').css("display", "flex");
         $('#community .header .header-unsigned').hide();
         $('.writePost-btn').show();
+        $('.writeVote-btn').show();
         db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
             var user = doc_user.data();
             $('#header-username').text(user.nickname);
@@ -27,6 +28,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         $('#community .header .header-signed-in').hide();
         $('#community .header .header-unsigned').show();
         $('.writePost-btn').hide();
+        $('.writeVote-btn').hide();
     }
 });
 
@@ -204,42 +206,14 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
 
 
 
-$('#community #account-btn').on('click', function () {
-    openModal('내 프로필', 'account')
-    db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
-        var user = doc_user.data();
-        $('#account-username').val(user.nickname);
-        $('#header-username').text(user.nickname);
-        var profileImg = user.profileImg;
-        $('.profile-image-btn').removeClass('active');
-        $(document.getElementsByClassName('profile-image-btn')[profileImg]).addClass('active');
-    });
+$('#community .header-signed-in img, h3').on('click', function () {
+    if (firebase.auth().currentUser) {
+        window.open('/profile.html?uid=' + firebase.auth().currentUser.uid);
+    }
 });
 
 
-$('#account #logout-btn').on('click', function () {
-    confirmLogout();
-});
 
-async function confirmLogout() {
-    const confirm = await ui.confirm('정말 로그아웃 하시겠습니까?');
-    if (confirm) {
-        firebase.auth().signOut().then(function () {
-            closeModal();
-            toast('로그아웃 되었습니다.');
-            Android.logoutAndroidApp();
-        });
-    }
-}
-
-function edit_saveAccountDb() {
-    var nickname = $('#account-username').val();
-    if (nickname == '' || nickname == ' ' || nickname == null || nickname == undefined || nickname == '  ') {
-        toast('닉네임을 입력해주세요.')
-    } else {
-        checkNicknameDuplicate(nickname);
-    }
-}
 
 function saveAccountDb() {
     var nickname = $('#login-username').val();
@@ -269,21 +243,19 @@ var editor = new toastui.Editor.factory({
 
 //글 작성
 $('.writePost-btn').on('click', function () {
-    if (currentCategory == '투표') {
-        openVoteMaker();
-    } else if (currentCategory == 'all' || currentCategory == '공지') {
-        openFullModal('게시글 작성', 'writePost');
+    $('html').css('overflow', 'hidden');
+    if (currentCategory == 'all' || currentCategory == '공지') {
+        $('#write-post-popup').show(200);
         $('#post-btn').text('게시');
         $('#post-btn').attr('disabled', false);
         // 첨부 파일 초기화
         currentAttachedImages = [];
         $('.img-thumbs').children('.wrapper-thumb').remove();
-        //
-        $('#category-select').val("");
+        $('#category-select').val("자유");
         uploadedFile = null;
         $('#editor').empty();
     } else {
-        openFullModal('게시글 작성', 'writePost');
+        $('#write-post-popup').show();
         $('#post-btn').text('게시');
         $('#post-btn').attr('disabled', false);
         // 첨부 파일 초기화
@@ -304,7 +276,7 @@ $('.writePost-btn').on('click', function () {
                 ['hr', 'quote', 'ul', 'task'],
             ],
             initialEditType: 'wysiwyg',
-            height: $(window).height() - ($('#post-form-wrap').height() + $('.img-thumbs').height()) - 200 + 'px',
+            height: 'auto',
             initialValue: '',
             language: 'ko_KR',
             theme: 'dark',
@@ -319,14 +291,27 @@ $('.writePost-btn').on('click', function () {
             ],
             initialEditType: 'wysiwyg',
             initialValue: '',
-            height: $(window).height() - ($('#post-form-wrap').height() + $('.img-thumbs').height()) - 200 + 'px',
+            height: 'auto',
             language: 'ko_KR',
             autofocus: false,
         });
     }
-
 });
 
+//투표 만들기 버튼
+$('.writeVote-btn').on('click', function () {
+    openModal('투표 만들기', 'vote')
+    $('#vote-title').val('');
+    $('#vote-choice-list').html(`
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
+    `);
+});
+
+function closeWritePopup() {
+    $('html').css('overflow', '');
+    $('#write-post-popup').hide(100);
+}
 var imagesArray = [];
 
 function post(target) {
@@ -356,7 +341,7 @@ function post(target) {
                             }
                             console.log(data)
                             db.collection('board').add(data).then((result) => {
-                                closeModal();
+                                closeWritePopup();
                                 $(target).text('게시');
                                 $(target).attr('disabled', false);
                                 openPost('board.html?id=' + result._key.path.segments[1]);
@@ -387,7 +372,7 @@ function post(target) {
                 createdAt: timestamp,
             }
             db.collection('board').add(data).then((result) => {
-                closeModal();
+                closeWritePopup();
                 $(target).text('게시');
                 $(target).attr('disabled', false);
                 openPost('board.html?id=' + result._key.path.segments[1]);
@@ -453,9 +438,7 @@ function loadPostList(category) {
                             $('#choices-list-' + doc.id).append(`<div class="post-vote" style="display:block;width: 100%;"><div class="vote-choice-item" style="padding-top: 15px;" data-index="${cnt}">
                                     <div class="inner" style="margin-bottom: -5px;">
                                     <h3>${option.title}</h3>
-                                    <span>${(option.count != 0) ? Math.round((option.count / data.participants) * 100) : 0}%</span>
                                     </div>
-                                    <div class="vote-progress" style="width:${(option.count != 0) ? Math.round((option.count / data.participants) * 100).toString() + '%' : '0%'}"></div>
                                 </div></div>`);
                             cnt++;
                         });
@@ -470,7 +453,7 @@ function loadPostList(category) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표에 참여하려면 클릭하세요.'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.').substring(0, 100),
                             theme: 'dark'
                         });
                         $('.post-item').addClass("dark");
@@ -478,7 +461,7 @@ function loadPostList(category) {
                         const viewer = new toastui.Editor.factory({
                             el: document.querySelector('#viewer-' + doc.id),
                             viewer: true,
-                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표에 참여하려면 클릭하세요.'),
+                            initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.').substring(0, 100),
                             theme: 'default'
                         });
                     }
@@ -538,9 +521,7 @@ function loadMore(category) {
                                 $('#choices-list-' + doc.id).append(`<div class="post-vote" style="display:block;width: 100%;"><div class="vote-choice-item" style="padding-top: 15px;" data-index="${cnt}">
                                     <div class="inner" style="margin-bottom: -5px;">
                                     <h3>${option.title}</h3>
-                                    <span>${(option.count != 0) ? Math.round((option.count / data.participants) * 100) : 0}%</span>
                                     </div>
-                                    <div class="vote-progress" style="width:${(option.count != 0) ? Math.round((option.count / data.participants) * 100).toString() + '%' : '0%'}"></div>
                                 </div></div>`);
                                 cnt++;
                             });
@@ -555,7 +536,7 @@ function loadMore(category) {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.').substring(0, 100),
                                 theme: 'dark'
                             });
                             $('.post-item').addClass("dark");
@@ -563,7 +544,7 @@ function loadMore(category) {
                             const viewer = new toastui.Editor.factory({
                                 el: document.querySelector('#viewer-' + doc.id),
                                 viewer: true,
-                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.'),
+                                initialValue: data.content.replace(/(?:__|[*#])|\[(.*?)\]\(.*?\)/gm, '$1').replace('?vote?', '투표를 확인하려면 클릭하세요.').substring(0, 100),
                                 theme: 'default'
                             });
                         }
@@ -613,275 +594,7 @@ function openPost(url, target) {
 }
 //
 
-function getRandomNickname() {
-    const words = {
-        "adjective": [
-            "귀여운",
-            "익명의",
-            "용감한",
-            "튼튼한",
-            "상냥한",
-            "마당발",
-            "멋쟁이",
-            "씩씩한",
-            "키다리",
-            "웃는",
-            "세심한",
-            "대범한",
-            "똑똑한"
-        ],
-        "noun": [
-            "체리",
-            "자두",
-            "딸기",
-            "오렌지",
-            "사과",
-            "키위",
-            "메론",
-            "포도",
-            "버찌",
-            "야자수",
-            "복숭아",
-            "레몬",
-            "수박",
-            "망고",
-            "홍시",
-            "머루",
-            "자몽",
-            "살구",
-            "리치",
-            "참다래",
-            "모과",
-            "청포도",
-            "유자",
-            "산딸기",
-            "매실",
-            "코코넛",
-            "바나나",
-            "석류",
-            "대추",
-            "단감",
-            "망고스틴",
-            "산딸기",
-            "아보카도",
-            "구아바",
-            "무화과",
-            "파파야",
-            "블루베리",
-            "파인애플",
-            "한라봉",
-            "블림빙",
-            "용과",
-            "오미자",
-            "꿀수박",
-            "왕체리",
-            "감자",
-            "고구마",
-            "깻잎",
-            "당근",
-            "도라지",
-            "대파",
-            "마늘",
-            "토마토",
-            "미나리",
-            "버섯",
-            "배추",
-            "부추",
-            "케일",
-            "브로콜리",
-            "생강",
-            "시금치",
-            "연근",
-            "우엉",
-            "양파",
-            "양배추",
-            "호박",
-            "깻잎",
-            "옥수수",
-            "청경채",
-            "배추",
-            "시금치",
-            "부추",
-            "가지",
-            "실파",
-            "대파",
-            "미나리",
-            "애호박",
-            "단호박",
-            "오이",
-            "당근",
-            "감자",
-            "고구마",
-            "버섯",
-            "양송이",
-            "단무지",
-            "피클",
-            "무청",
-            "상추",
-            "양배추",
-            "양상추",
-            "바질",
-            "마늘",
-            "생강",
-            "순무",
-            "브로콜리",
-            "인삼",
-            "쑥갓",
-            "피망",
-            "피자",
-            "햄버거",
-            "떡볶이",
-            "토스트",
-            "개발자",
-            "고니",
-            "공작",
-            "거위",
-            "기러기",
-            "까치",
-            "까마귀",
-            "두루미",
-            "독수리",
-            "백조",
-            "비둘기",
-            "부엉이",
-            "오리",
-            "앵무새",
-            "제비",
-            "참새",
-            "칠면조",
-            "타조",
-            "펭귄",
-            "개구리",
-            "재규어",
-            "족제비",
-            "치타",
-            "청설모",
-            "친칠라",
-            "침팬지",
-            "캥거루",
-            "코알라",
-            "코요테",
-            "코뿔소",
-            "카피바라",
-            "토끼",
-            "판다",
-            "표범",
-            "퓨마",
-            "하마",
-            "호랑이",
-            "하이에나",
-            "박쥐",
-            "북극곰",
-            "북극여우",
-            "바다사자",
-            "바다표범",
-            "사슴",
-            "사자",
-            "수달",
-            "순록",
-            "스컹크",
-            "스라소니",
-            "양",
-            "여우",
-            "염소",
-            "영양",
-            "야크",
-            "원숭이",
-            "알파카",
-            "오소리",
-            "얼룩말",
-            "바둑이",
-            "낙타",
-            "노루",
-            "노새",
-            "늑대",
-            "너구리",
-            "나무늘보",
-            "담비",
-            "밤비",
-            "듀공",
-            "돌고래",
-            "다람쥐",
-            "두더지",
-            "당나귀",
-            "라마",
-            "래서판다",
-            "물개",
-            "물범",
-            "밍크",
-            "도라에몽",
-            "미어캣",
-            "강아지",
-            "곰돌이",
-            "가젤",
-            "고래",
-            "기린",
-            "고릴라",
-            "고라니",
-            "고양이",
-            "고슴도치",
-            "기니피그",
-            "개미핥기",
-            "크롱",
-            "퉁퉁이",
-            "피카츄",
-            "파이리",
-            "꼬부기",
-            "피죤투",
-            "또가스",
-            "디지몬",
-            "마리오",
-            "비욘세",
-            "참치",
-            "연어",
-            "초밥",
-            "매운탕",
-            "쭈꾸미",
-            "돌고래",
-            "백구",
-            "누렁이",
-            "흰둥이",
-            "된장찌개",
-            "김치찌개",
-            "루피",
-            "파스타",
-            "비타민",
-            "코카콜라",
-            "자일리톨",
-            "치즈피자",
-            "참치김밥",
-            "새우깡",
-            "고래밥",
-            "치킨버거",
-            "닭다리",
-            "닭날개",
-            "숯불갈비",
-            "레몬사탕",
-            "뽀로로",
-            "치즈",
-            "닭갈비",
-            "마카롱",
-            "도너츠",
-            "누룽지",
-            "모짜렐라",
-            "커피",
-            "야옹이",
-            "팝스타",
-            "파랑새",
-            "마그네슘",
-            "서포터",
-            "만수르",
-            "재벌",
-            "갑부",
-            "후원자"
-        ]
-    };
-    var adjective = words.adjective[Math.floor(Math.random() * words.adjective.length)];
-    var noun = words.noun[Math.floor(Math.random() * words.noun.length)];
-    var result = adjective + noun;
-    $('#account-username').val(result);
-    $('#login-username').val(result);
-}
+
 
 // 날짜 -> {n일/분/시간 전}  형식으로 변환
 function timeForToday(value) {
@@ -919,15 +632,18 @@ var originalSize = jQuery(window).width() + jQuery(window).height();
 
 // resize #sheet-modal on resize window
 $(window).resize(function () {
-    if (jQuery(window).width() + jQuery(window).height() != originalSize && $('#writePost').is(':visible')) { //모바일에서 키보드 열렸을 때
-        $('.sheet-modal').addClass('full-modal')
-    } else {
-        $('.sheet-modal').removeClass('full-modal')
+    if ($('#write-post-popup').is(':visible')) {
+        if (jQuery(window).width() + jQuery(window).height() != originalSize) { //모바일에서 키보드 열렸을 때
+            $('.write-popup-footer').hide();
+        } else {
+            $('.write-popup-footer').show();
+        }
     }
+
 });
 
 $(document).on('focusout', 'input', function () { //키보드 닫힐 때
-    $('.sheet-modal').removeClass('full-modal')
+    $('.write-popup-footer').show()
 });
 
 
@@ -961,21 +677,6 @@ function checkNicknameDuplicate(nickname) {
         });
 }
 
-//프로필 사진 변경
-function changeProfileImg(imgNum) {
-    var data = {
-        profileImg: imgNum,
-    }
-
-    db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
-        $('.profile-image-btn').removeClass('active');
-        $(document.getElementsByClassName('profile-image-btn')[imgNum]).addClass('active');
-        $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${imgNum + 1}.png`);
-    }).catch((err) => {
-        toast(err)
-        console.log(err);
-    })
-}
 
 //커뮤니티 카테고리 탭
 function changeCommunityCategory(category, btn) {
@@ -983,17 +684,6 @@ function changeCommunityCategory(category, btn) {
     $('.community-tab').removeClass('active');
     $(btn).addClass('active');
     loadPostList(category);
-}
-
-
-//투표 만들기
-function openVoteMaker() {
-    openModal('투표 만들기', 'vote')
-    $('#vote-title').val('');
-    $('#vote-choice-list').html(`
-    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
-    <input id="vote-choice" type="text" placeholder="항목 내용을 입력해주세요" style="font-size:16px;" required>
-    `);
 }
 
 function addChoice() {
@@ -1047,8 +737,6 @@ function postVote(target) {
         toast('투표 제목을 입력해주세요.')
     }
 }
-
-
 
 //파일 첨부
 var imgUpload = document.getElementById('upload-img')
@@ -1108,3 +796,21 @@ $('.img-thumbs').on('click', '.remove-btn', function () {
     console.log($(this).parent().data('file'), index, currentAttachedImages);
     $(this).parent().remove();
 });
+
+
+$('#logout-btn').on('click', function () {
+    confirmLogout();
+});
+
+async function confirmLogout() {
+    const confirm = await ui.confirm('정말 로그아웃 하시겠습니까?');
+    if (confirm) {
+        firebase.auth().signOut().then(function () {
+            closeModal();
+            toast('로그아웃 되었습니다.');
+            if (isApp()) {
+                Android.logoutAndroidApp();
+            }
+        });
+    }
+}
