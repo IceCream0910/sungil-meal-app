@@ -206,13 +206,11 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
 
 
 
-$('#community .header-signed-in img, h3').on('click', function () {
+$('#community .header-signed-in img, #community .header-signed-in h3').on('click', function () {
     if (firebase.auth().currentUser) {
         window.open('/profile.html?uid=' + firebase.auth().currentUser.uid);
     }
 });
-
-
 
 
 function saveAccountDb() {
@@ -800,6 +798,10 @@ $('.img-thumbs').on('click', '.remove-btn', function () {
 
 $('#logout-btn').on('click', function () {
     confirmLogout();
+});
+
+$('#search-btn').on('click', function () {
+    window.open('search.html');
 });
 
 async function confirmLogout() {

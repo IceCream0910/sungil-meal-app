@@ -80,6 +80,7 @@ articleRef.then(function (doc) {
             $('#uname').html(((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname || '(어디론가 사라진 사용자)')));
             $('#createdAt').html(timeForToday(doc.data().createdAt.toDate()));
             $('#post-title').html(doc.data().title);
+            document.title = doc.data().title + ' - 쏙';
             content = doc.data().content;
             category = doc.data().category;
             if (category == '투표') {

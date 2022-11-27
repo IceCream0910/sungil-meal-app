@@ -629,3 +629,12 @@ function timeForToday(value) {
 
     return `${Math.floor(betweenTimeDay / 365)}년 전`;
 }
+
+function isApp() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf('hybridApp') > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}

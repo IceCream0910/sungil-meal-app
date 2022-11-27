@@ -385,7 +385,8 @@ function displayMeal(data) {
                 var mealRef = db.collection("meal").doc(selectedDate);
                 mealRef.set({
                     like: 0,
-                    dislike: 0
+                    dislike: 0,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
                 })
             }
         });
@@ -1260,7 +1261,8 @@ function mealLikeBtn() {
         mealRef.get().then(function (doc) {
             if (doc.exists) {
                 mealRef.update({
-                    like: doc.data().like + 1
+                    like: doc.data().like + 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
                 });
                 reactionHistory.push(selectedDate)
                 localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
@@ -1268,7 +1270,8 @@ function mealLikeBtn() {
             } else {
                 mealRef.set({
                     like: 1,
-                    dislike: 0
+                    dislike: 0,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
                 })
             }
         });
@@ -1287,7 +1290,8 @@ function mealdislikeBtn() {
         mealRef.get().then(function (doc) {
             if (doc.exists) {
                 mealRef.update({
-                    dislike: doc.data().dislike + 1
+                    dislike: doc.data().dislike + 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
                 });
                 reactionHistory.push(selectedDate)
                 localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
@@ -1295,7 +1299,8 @@ function mealdislikeBtn() {
             } else {
                 mealRef.set({
                     like: 0,
-                    dislike: 1
+                    dislike: 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
                 })
             }
         });
