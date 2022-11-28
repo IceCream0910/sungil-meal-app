@@ -36,6 +36,8 @@ $('#search-input').on('keyup', function (e) {
 function search(q) {
     index.search(q).then(({ hits }) => {
         $('.post-listview').html(`<div class="card-body"><h2 class="card-intro skeleton"></h2> <p class="card-title skeleton"></p> </div><div class="card-body"><h2 class="card-intro skeleton"></h2> <p class="card-title skeleton"></p> </div><div class="card-body"><h2 class="card-intro skeleton"></h2> <p class="card-title skeleton"></p> </div><div class="card-body"><h2 class="card-intro skeleton"> </h2><p class="card-title skeleton"> </p></div>`)
+        if(hits.length > 0){
+
         hits.forEach(hit => {
             var database = db.collection('board').doc(hit.objectID);
             database.get().then(function (doc) {
@@ -112,6 +114,10 @@ function search(q) {
                 }
             });
         });
+    } else {
+        $('.post-listview').empty();
+        $('.post-listview').append('<div class="card-body"><h2 class="card-intro">&nbsp;&nbsp;&nbsp;&nbsp;검색 결과가 없습니다.</h2></div>');
+    }
     });
 }
 

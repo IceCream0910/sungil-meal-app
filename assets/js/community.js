@@ -208,7 +208,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
 
 $('#community .header-signed-in img, #community .header-signed-in h3').on('click', function () {
     if (firebase.auth().currentUser) {
-        window.open('/profile.html?uid=' + firebase.auth().currentUser.uid);
+        window.open('/profile.html?uid=' + firebase.auth().currentUser.uid, '_blank');
     }
 });
 
@@ -801,7 +801,7 @@ $('#logout-btn').on('click', function () {
 });
 
 $('#search-btn').on('click', function () {
-    window.open('search.html');
+    window.open('search.html', '_blank');
 });
 
 async function confirmLogout() {

@@ -244,6 +244,66 @@
                     </div>
                 </div>
 
+                <div class="content-wrap" id="exam">
+                    <div class="grade_tab">
+                        <button class="grade_btn active" data-grade="1">1학년</button>
+                        <button class="grade_btn" data-grade="2">2학년</button>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>12/19(월)</th>
+                                <th>12/20(화)</th>
+                                <th>12/21(수)</th>
+                                <th>12/22(목)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-timetable" class="exam1">
+                            <tr>
+                                <th>영어</th>
+                                <th></th>
+                                <th>통합사회</th>
+                                <th>국어</th>
+                            </tr>
+                            <tr>
+                                <th>한국사</th>
+                                <th>수학</th>
+                                <th>통합과학</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                        <tbody id="tbody-timetable" class="exam2" style="display:none;">
+                            <tr>
+                                <th>영어II</th>
+                                <th>수학II</th>
+                                <th>심화국어<br>기하</th>
+                                <th>언어와 매체</th>
+                            </tr>
+                            <tr>
+                                <th>생활과 윤리<br>화학I</th>
+                                <th>일본어<br>중국어</th>
+                                <th>생활과 과학<br>물리학I</th>
+                                <th>정치와 법*<br>지구과학I*</th>
+                            </tr>
+                            <tr>
+                                <th>세계사*<br>사문탐*</th>
+                                <th>경제*<br>생명과학I*</th>
+                                <th >세계지리*</th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <span style="opacity:0.6;font-size:13px;">* 표시된 과목은 미선택 귀가</span>
+                </div>
+
 
 
 
@@ -320,8 +380,9 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
-                <div class="callout custom-btn" style="text-align:left;">
-                    📓 기말고사<span id="exam-dday"></span>
+                <div class="callout custom-btn" style="text-align:left;" id="examSchedule">
+                    🔥 <span id="exam-dday"></span>
+                    <ion-icon name="chevron-forward-outline"></ion-icon>
                     </ion-icon>
                 </div>
                 <br><br><br>

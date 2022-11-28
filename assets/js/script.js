@@ -139,17 +139,57 @@ if (localStorage.getItem("sungil_favTagsList")) {
     favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
 }
 
-// 수능
 //d day
 var todayForDday = new Date();
 var ddayDate = new Date(2022, 11, 19);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult <= 0) {
-    $('#exam-dday').html(`&nbsp;${ddayResult * -1}일차, 끝까지 힘내봐요`);
+    $('#exam-dday').html(`기말고사 ${ddayResult * -1}일차. 남은 시험 일정 확인 `);
 } else {
-    $('#exam-dday').html(`가 ${ddayResult}일 남았어요.`);
+    $('#exam-dday').html(`${ddayResult}일 남은 기말고사 일정 확인하기 `);
 }
+
+
+$('#examSchedule').on('click', function () {
+    openModal('2학기 2차 지필평가 일정', 'exam');
+    if (grade == '1') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(0)').addClass('active');
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(1)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    } else {
+        $('.grade_btn').removeClass('active');
+        $('.grade_btn:eq(1)').addClass('active');
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    }
+});
+
+
+$('.grade_btn').on('click', function () {
+    $('.grade_btn').removeClass('active');
+    $(this).addClass('active');
+    var grade = $(this).attr('data-grade');
+    if (grade == '1') {
+        $('.exam1').show();
+        $('.exam2').hide();
+        $('.exam3').hide();
+    } else if (grade == '2') {
+        $('.exam1').hide();
+        $('.exam2').show();
+        $('.exam3').hide();
+    }
+    $('.sheet-modal').css('height', $('#' + id).height() + 150 + 'px');
+});
 
 $(document).ready(function () {
 
