@@ -27,7 +27,12 @@ db.collection('users').doc(uid).get().then((doc_user) => {
     }
     $('#uname').html(((user.admin) ? (user.nickname + ' <ion-icon class="admin-badge" name="checkmark-circle"></ion-icon>') : (user.nickname || '(어디론가 사라진 사용자)')));
     document.title = user.nickname + '님의 프로필 - 쏙';
-
+    if(firebase.auth().currentUser.uid == uid){
+        document.title = '내 프로필 - 쏙';
+        $('#edit-btn').show();
+    } else {
+        $('#edit-btn').remove();
+    }
 });
 
 function getUrlParameter(sParam) {
@@ -146,6 +151,23 @@ $('#edit-btn').on('click', function () {
     });
 });
 
+$('#user-call-btn').on('click', function () {
+    db.collection('users').doc(uid).get().then((doc_user) => {
+        var user = doc_user.data();
+        if (user.fcmToken) { //token 존재
+            $.ajax({
+                type: "GET",
+                url: `https://sungil-school-api.vercel.app/fcm?key=9pcd01YwxIIO3ZVZWFLN&title=${$('#uname').text()}님이 나를 깨웠어요.&desc=아무 이유도 없을 가능성이 큽니다.&token=${user.fcmToken}`,
+                success: function (result) {
+                    toast('친구를 깨웠어요!');
+                    console.log(result);
+                }
+            });
+        } else {
+            toast('안드로이드 앱을 사용중인 친구만 깨울 수 있어요.');
+        }
+    });
+});
 
 function closeModal() {
     $('body').css('overflow', 'auto');
@@ -250,13 +272,6 @@ function changeProfileImg(imgNum) {
     })
 }
 
-//커뮤니티 카테고리 탭
-function changeCommunityCategory(category, btn) {
-    currentCategory = category;
-    $('.community-tab').removeClass('active');
-    $(btn).addClass('active');
-    loadPostList(category);
-}
 
 function addChoice() {
     $('#vote-choice-list').append(`
@@ -638,3 +653,4 @@ function isApp() {
         return false;
     }
 }
+

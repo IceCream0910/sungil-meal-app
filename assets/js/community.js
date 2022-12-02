@@ -20,10 +20,23 @@ firebase.auth().onAuthStateChanged(function (user) {
             } else {
                 $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
             }
+            if(user.grade != localStorage.getItem("sungil_grade") || user.class != localStorage.getItem("sungil_classNum")){ //유저 학년 반 정보 갱신
+                var data = {
+                    grade: localStorage.getItem("sungil_grade"),
+                    class: localStorage.getItem("sungil_classNum"),
+                }
+        
+                db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
+                    console.log('유저 학년 반 정보 db 갱신 완료')
+                }).catch((err) => {
+                    console.log(err);
+                })
+            }
         });
         if (isApp()) {
             Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
         }
+        
     } else {
         $('#community .header .header-signed-in').hide();
         $('#community .header .header-unsigned').show();
