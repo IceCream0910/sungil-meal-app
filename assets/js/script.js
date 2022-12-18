@@ -145,9 +145,9 @@ var ddayDate = new Date(2022, 11, 19);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult <= 0) {
-    $('#exam-dday').html(`기말고사 ${ddayResult * -1}일차. 남은 시험 일정 확인 `);
+    $('#exam-dday').html(` 기말고사 ${(ddayResult * -1)+1}일차. 남은 시험 일정 확인 `);
 } else {
-    $('#exam-dday').html(`${ddayResult}일 남은 기말고사 일정 확인하기 `);
+    $('#exam-dday').html(` ${ddayResult}일 남은 기말고사 일정 확인하기 `);
 }
 
 
