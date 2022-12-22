@@ -1,7 +1,24 @@
-const storedTheme = localStorage.getItem("darkTheme") || "system";
+var storedTheme = localStorage.getItem("darkTheme") || "system";
 
-const mql = window.matchMedia("(prefers-color-scheme: dark)");
+var mql = window.matchMedia("(prefers-color-scheme: dark)");
 
+function updateTheme() {
+    storedTheme = localStorage.getItem("darkTheme") || "system";
+    if (storedTheme !== null) {
+        if (storedTheme === "true") {
+            onDark();
+        } else if (storedTheme === "false") {
+            offDark();
+        } else if (storedTheme === "system") {
+            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                onDark();
+            } else {
+                offDark();
+            }
+        }
+    }
+
+}
 
 mql.addEventListener("change", () => {
     if (storedTheme == "system" || !storedTheme) {
@@ -74,6 +91,23 @@ function onDark() {
     $('#tools').addClass("dark");
     $('#tools textarea').addClass("dark");
     $('.badge').addClass("dark");
+    $('.bottom-nav').addClass("dark");
+    $('.main-nav').addClass("dark");
+    //설정 화면 요소
+    $(':root').addClass("dark");
+    $('.mdc-radio__outer-circle').addClass("dark");
+    var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
+        border-color: rgba(255,255,255, 0.54);
+    }`
+    var styleSheet = document.createElement("style")
+    styleSheet.type = "text/css"
+    styleSheet.innerText = styles
+    document.head.appendChild(styleSheet);
+    // 로딩 이후 만들어지는 요소들 변경
+    $('th').addClass("dark");
+    $('.header').addClass("dark");
+    $('.community-tab').addClass("dark");
+    $('.post-item').addClass("dark");
 
 }
 
@@ -125,4 +159,21 @@ function offDark() {
     $('#tools').removeClass("dark");
     $('#tools textarea').removeClass("dark");
     $('.badge').removeClass("dark");
+    $('.bottom-nav').removeClass("dark");
+    $('.main-nav').removeClass("dark");
+    //설정 화면 요소
+    $(':root').removeClass("dark");
+    $('.mdc-radio__outer-circle').removeClass("dark");
+    var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
+        border-color: rgba(0,0,0, 0.54);
+    }`
+    var styleSheet = document.createElement("style")
+    styleSheet.type = "text/css"
+    styleSheet.innerText = styles
+    document.head.appendChild(styleSheet);
+    // 로딩 이후 만들어지는 요소들 변경
+    $('th').removeClass("dark");
+    $('.header').removeClass("dark");
+    $('.community-tab').removeClass("dark");
+    $('.post-item').removeClass("dark");
 }

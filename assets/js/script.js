@@ -48,48 +48,6 @@ $('#datepicker').datepicker().on("input change", function (e) {
     updateInfo();
 });
 
-if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
-    updateOrder();
-}
-
-
-function updateOrder() {
-    const orderIndex = JSON.parse(localStorage.getItem('ssoak-home-order')) || { "0": { "meal": 0 }, "1": { "timetable": 1 }, "2": { "selfcheck": 2 }, "3": { "schedule": 3 }, "4": { "notice": 4 } };
-    for (var i = 0; i < 5; i++) {
-        const key = Object.keys(orderIndex[i])[0];
-        const value = orderIndex[i][key];
-        switch (key) {
-            case 'meal':
-                $('.meal-wrap').data('index', value);
-                break;
-            case 'selfcheck':
-                $('.selfcheck-wrap').data('index', value);
-                break;
-            case 'timetable':
-                $('.siganpyo-wrap').data('index', value);
-                break;
-            case 'schedule':
-                $('.schedule-wrap').data('index', value);
-                break;
-            case 'notice':
-                $('.notice-wrap').data('index', value);
-                break;
-        }
-    }
-    orderElements();
-}
-
-
-
-function orderElements() {
-    var listItems = Array.from(document.querySelectorAll("#order-item"));
-    listItems.sort(function (a, b) {
-        return $(a).data('index') - $(b).data('index');
-    }).forEach(function (item) {
-        document.querySelector(".home-order-wrap").appendChild(item);
-    });
-}
-
 //안드로이드 앱인지 확인
 function isApp() {
     var ua = navigator.userAgent;
@@ -145,7 +103,7 @@ var ddayDate = new Date(2022, 11, 19);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 if (ddayResult <= 0) {
-    $('#exam-dday').html(` 기말고사 ${(ddayResult * -1)+1}일차. 남은 시험 일정 확인 `);
+    $('#exam-dday').html(` 기말고사 ${(ddayResult * -1) + 1}일차. 남은 시험 일정 확인 `);
 } else {
     $('#exam-dday').html(` ${ddayResult}일 남은 기말고사 일정 확인하기 `);
 }
@@ -194,7 +152,7 @@ $('.grade_btn').on('click', function () {
 $(document).ready(function () {
 
     if (grade == null || classNum == null) { //학년반 정보가 없을 경우 온보딩 표시
-        location.href = 'init.html'
+        startOnBoarding();
     } else {
         $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
     }
@@ -324,7 +282,6 @@ function updateInfo() {
             $('#timetable').html('학년/반 설정을 먼저 진행해주세요.');
             $('.timetable-wrap').hide();
             $('#nosetting-timetable').show();
-
         } else {
             $('.timetable-wrap').hide();
             $('#nosetting-timetable').hide();
@@ -380,30 +337,6 @@ function updateInfo() {
     }
 }
 
-function refreshNewData() {
-    console.log(newData)
-    displayTimetable(newData);
-    $('.snackbar').fadeOut(250);
-}
-
-//숫자 카운트 애니메이션 실행 함수
-function counter(counter, max) {
-    let now = max;
-
-    const handle = setInterval(() => {
-        $(counter).html(Math.ceil(max - now));
-
-        // 목표에 도달하면 정지
-        if (now < 1) {
-            clearInterval(handle);
-        }
-
-        // 적용될 수치, 점점 줄어듬
-        const step = now / 10;
-
-        now -= step;
-    }, 50);
-}
 
 var realTimeMealRef;
 
@@ -521,11 +454,9 @@ function showAllMeal() {
     $('#meallist-result').html('');
     var data = JSON.parse(localStorage.getItem("sungil_api_cache"));
     if (data) {
-        //올해 연도
         var year = selectedDate.substring(0, 4);
         for (var i = 1; i < new Date(year, data.meal.month - 1, 0).getDate() + 2; i++) {
             if (data.meal[i]) {
-                console.log(i, data.meal[i])
                 $('#meallist-result').append(`<div class="meal-list-item">
                 <h2>${moment(new Date(year, data.meal.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
@@ -773,7 +704,7 @@ $('.c-modal').each(function () {
     });
 
     mc.on("swipedown", function (ev) {
-        if (!$('#loginForm').is(':visible') && !$('#writePost').is(':visible')) {
+        if (!$('#loginForm').is(':visible') && !$('#writePost').is(':visible') && !$('#onboarding').is(':visible')) {
             closeModal();
         }
     });
@@ -790,7 +721,7 @@ $('.page-content').each(function () {
         });
 
         mc.on("swipedown", function (ev) {
-            if (!$('#loginForm').is(':visible') && !$('#assessment').is(':visible') && !$('#myClassAssign').is(':visible') && !$('#account').is(':visible') && !$('#writePost').is(':visible')) {
+            if (!$('#loginForm').is(':visible') && !$('#assessment').is(':visible') && !$('#myClassAssign').is(':visible') && !$('#account').is(':visible') && !$('#writePost').is(':visible') && !$('#onboarding').is(':visible')) {
                 closeModal();
             }
         });
@@ -816,6 +747,7 @@ $('.grade_btn').on('click', function () {
         $('.exam3').show();
     }
 });
+
 
 
 $('.main-nav').show();
@@ -849,6 +781,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab1').attr('name', 'planet');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#tab4').attr('name', 'settings-outline');
             break;
         case 'community':
             enablePullToRefresh();
@@ -861,6 +794,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
+            $('#tab4').attr('name', 'settings-outline');
             $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
             break;
         case 'assignment':
@@ -873,6 +807,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full');
+            $('#tab4').attr('name', 'settings-outline');
             break;
         case 'report':
             $('.main-nav').hide();
@@ -884,7 +819,7 @@ $('.bottom-nav a').on('click', function () {
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full-outline');
-            $('#tab4').attr('name', 'cube');
+            $('#tab4').attr('name', 'settings');
             break;
     }
 
@@ -1053,19 +988,6 @@ function shareApp() {
     })
 }
 
-$(window).resize(function () {
-    if (!window.matchMedia("screen and (min-width: 769px)").matches) { //모바일 => false
-        updateOrder();
-    } else {
-        $('.meal-wrap').data('index', '0');
-        $('.selfcheck-wrap').data('index', '1');
-        $('.siganpyo-wrap').data('index', '2');
-        $('.schedule-wrap').data('index', '3');
-        $('.notice-wrap').data('index', '4');
-        orderElements();
-    }
-});
-
 
 function openModal(title, id) {
     disablePullToRefresh();
@@ -1083,6 +1005,27 @@ function openModal(title, id) {
         $('.modal-in').css('bottom', '0px');
     }, 100);
     $('.sheet-backdrop').addClass('backdrop-in');
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#' + id).height() + 130 + 'px');
+    }, 100);
+}
+
+function openUnclosableModal(title, id) {
+    disablePullToRefresh();
+    $('.sheet-modal').css('height', '30%');
+    $('#modal-title').html(title);
+    $('.content-wrap').hide();
+    $('#' + id).show();
+    $('body').css('overflow', 'hidden');
+    $('.modal-in').css('display', 'block');
+    $('.modal-in').css('bottom', '-1850px');
+    $('#assessment #date_assign').val(moment().format('YYYY-MM-DD'));
+    $('#title').val('');
+    $('.timetable_selector').html('');
+    setTimeout(function () {
+        $('.modal-in').css('bottom', '0px');
+    }, 100);
+    $('.sheet-backdrop-nocancel').addClass('backdrop-in');
     setTimeout(function () {
         $('.sheet-modal').css('height', $('#' + id).height() + 130 + 'px');
     }, 100);
@@ -1178,24 +1121,48 @@ function mealdislikeBtn() {
 }
 
 
-//임시
-function moveTo() {
-    $('.bottom-nav a').removeClass('active');
-    $('.bottom-nav a').removeClass('bounce');
-    $('#report-btn').addClass('active');
-    $('#report-btn').addClass('bounce');
-    $('html, body').animate({
-        scrollTop: 0
-    }, 'fast');
+var onBoardingProcess = 0;
+function startOnBoarding() {
+    openUnclosableModal(`반가워요&nbsp;<picture>
+    <source srcset="assets/icons/webp/hello.webp" type="image/webp" width="25px" />
+    <img src="assets/icons/hello.gif" width="25px">
+</picture>`, 'onboarding');
+}
 
-    $('.main-nav').hide();
-    $('#home').hide();
-    $('#community').hide();
-    $('#assignment').hide();
-    $('#tools').fadeIn(100);
-    isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
-    $('#tab1').attr('name', 'planet-outline');
-    $('#tab2').attr('name', 'chatbubbles-outline');
-    $('#tab3').attr('name', 'file-tray-outline');
-    $('#tab4').attr('name', 'cube');
+
+function onBoardingNext() {
+    switch (onBoardingProcess) {
+        case 0:
+            $('#modal-title').text('학년/반을 알려주세요');
+            $('#onBoardingNextBtn').text('완료')
+            $('#onboarding #page1').hide();
+            $('#onboarding #page2').show();
+            break;
+        case 1:
+            grade = $("#grade-select-onboarding").val();
+            classNum = $("#class-select-onboarding").val();
+            localStorage.setItem("sungil_grade", grade);
+            localStorage.setItem("sungil_classNum", classNum);
+            if (grade !== null && classNum !== null) {
+                $('#profile-text').html('성일고&nbsp;<span style="color:#5272ff">' + grade + '</span>학년&nbsp; <span style="color:#5272ff">' + classNum + '</span>반');
+            } else {
+                $('#profile-text').html('학년과 반을 알려주세요.');
+            }
+            $('#assignments-listview').show();
+            $('#before-setting-assign').hide();
+            $('.addAssignment-btn').show();
+            updateAssignList();
+            closeModal();
+            $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
+            updateInfo();
+            setTimeout(function () {
+                openModal('로그인', 'login');
+            }, 500);
+
+            break;
+    }
+    onBoardingProcess++;
+    setTimeout(function () {
+        $('.sheet-modal').css('height', $('#onboarding').height() + 130 + 'px');
+    }, 100);
 }

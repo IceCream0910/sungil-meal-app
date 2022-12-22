@@ -1,5 +1,3 @@
-var grade = localStorage.getItem("sungil_grade");
-var classNum = localStorage.getItem("sungil_classNum");
 
 if (grade !== null && classNum !== null) {
     $('#profile-text').html('성일고&nbsp;<span style="color:#5272ff">' + grade + '</span>학년&nbsp; <span style="color:#5272ff">' + classNum + '</span>반');
@@ -7,9 +5,6 @@ if (grade !== null && classNum !== null) {
     $('#profile-text').html('학년과 반을 알려주세요.');
 }
 
-const storedVoice = localStorage.getItem("sungil_ttsVoice") || 'dinna';
-
-const storedTheme = localStorage.getItem("darkTheme") || "system";
 if (storedTheme != null) {
     if (storedTheme === "true") {
         onDark();
@@ -45,12 +40,14 @@ $("input[id='radio-1']:radio").change(function () {
         onDark();
     }
     console.log('system');
+    updateTheme();
 });
 
 $("input[id='radio-2']:radio").change(function () {
     localStorage.setItem("darkTheme", "false");
     console.log('light');
     offDark();
+    updateTheme();
 });
 
 
@@ -58,10 +55,10 @@ $("input[id='radio-3']:radio").change(function () {
     localStorage.setItem("darkTheme", "true");
     console.log('dark');
     onDark();
+    updateTheme();
 });
 
 
-const mql = window.matchMedia("(prefers-color-scheme: dark)");
 mql.addEventListener("change", () => {
     var darkTheme = localStorage.getItem("darkTheme");
     if (darkTheme == 'system' || !darkTheme) {
@@ -73,113 +70,10 @@ mql.addEventListener("change", () => {
     }
 });
 
-function onDark() {
-    $('html').addClass("dark");
-    $('body').addClass("dark");
-    $('.card').addClass("dark");
-    $('.card__primary__title').addClass("dark");
-    $('.card__supporting__text').addClass("dark");
-    $('.mdc-form-field').addClass("dark");
-    $('input').addClass("dark");
-    $('.mdc-button__label').addClass("dark");
-    $('.mdc-fab--mini').addClass("dark");
-    $(':root').addClass("dark");
-    var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
-        border-color: rgba(255, 255, 255, 0.54);
-    }`
-    var styleSheet = document.createElement("style")
-    styleSheet.type = "text/css"
-    styleSheet.innerText = styles
-    document.head.appendChild(styleSheet);
-    $('.sheet-modal').addClass("dark");
-    $('.swipe-handler').addClass("dark");
-    $('.checkbox').addClass("dark");
-    $('.tagResetBtn').addClass("dark");
-    $('.custom-btn').addClass("dark");
-
-}
-
-function offDark() {
-    $('html').removeClass("dark");
-    $('body').removeClass("dark");
-    $('.mdc-form-field').removeClass("dark");
-    $('.card').removeClass("dark");
-    $('.card__primary__title').removeClass("dark");
-    $('.card__supporting__text').removeClass("dark");
-    $('input').removeClass("dark");
-    $('.mdc-button__label').removeClass("dark");
-    $('.mdc-fab--mini').removeClass("dark");
-    $(':root').removeClass("dark");
-    $('.mdc-radio__outer-circle').removeClass("dark");
-    var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
-        border-color: rgba(0,0,0, 0.54);
-    }`
-    var styleSheet = document.createElement("style")
-    styleSheet.type = "text/css"
-    styleSheet.innerText = styles
-    document.head.appendChild(styleSheet);
-    $('.sheet-modal').removeClass("dark");
-    $('.swipe-handler').removeClass("dark");
-    $('.checkbox').removeClass("dark");
-    $('.tagResetBtn').removeClass("dark");
-    $('.custom-btn').removeClass("dark");
-}
-
-
-function isApp() {
-    var ua = navigator.userAgent;
-    if (ua.indexOf('hybridApp') > -1) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 if (isApp()) {
     $('#hybridAppSettingsBtn').show();
 }
-
-/* tts voice */
-if (storedVoice != null) {
-    if (storedVoice === "dinna") {
-        $("input[id='tts_radio-1']:radio").prop('checked', true);
-        $("input[id='tts_radio-2']:radio").prop('checked', false);
-        $("input[id='tts_radio-3']:radio").prop('checked', false);
-    } else if (storedVoice === "hana") {
-        $("input[id='tts_radio-1']:radio").prop('checked', false);
-        $("input[id='tts_radio-2']:radio").prop('checked', true);
-        $("input[id='tts_radio-3']:radio").prop('checked', false);
-    } else {
-        $("input[id='tts_radio-1']:radio").prop('checked', false);
-        $("input[id='tts_radio-2']:radio").prop('checked', false);
-        $("input[id='tts_radio-3']:radio").prop('checked', true);
-    }
-}
-
-var ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=잘못된 요청입니다.')
-
-$("input[id='tts_radio-1']:radio").change(function () {
-    console.log('dinna');
-    localStorage.setItem("sungil_ttsVoice", "dinna");
-    ttsAudio.pause();
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요.' + '&speed=0&pitch=0&speaker=dinna&volume=1');
-    ttsAudio.play();
-});
-
-$("input[id='tts_radio-2']:radio").change(function () {
-    localStorage.setItem("sungil_ttsVoice", "hana");
-    ttsAudio.pause();
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요!' + '&speed=0&pitch=0&speaker=hana&volume=1');
-    ttsAudio.play();
-});
-
-
-$("input[id='tts_radio-3']:radio").change(function () {
-    localStorage.setItem("sungil_ttsVoice", "jinho");
-    ttsAudio.pause();
-    ttsAudio = new Audio('https://playentry.org/api/expansionBlock/tts/read.mp3?text=' + '목소리를 변경했어요!' + '&speed=0&pitch=0&speaker=jinho&volume=1');
-    ttsAudio.play();
-});
 
 //알레르기
 if (localStorage.getItem("sungil_alleList")) {
@@ -219,42 +113,10 @@ function getCheckedIndex() {
     }
 }
 
-
 /* bottom sheet */
 $('#alleSettingBtn').on('click', function () {
-    $('#modal-title').text('알레르기 정보 등록');
-    $('#alleSetting').show();
-    $('#favorSetting').hide();
-    $('body').css('overflow', 'hidden');
-    $('.modal-in').css('display', 'block');
-    $('.modal-in').css('bottom', '-1850px');
-    setTimeout(function () {
-        $('.modal-in').css('bottom', '0px');
-    }, 100);
-    $('.sheet-backdrop').addClass('backdrop-in');
-    setTimeout(function () {
-        $('.sheet-modal').css('height', $('#alleSetting').height() + 130 + 'px');
-    }, 100);
+    openModal('알레르기 정보 등록', 'alleSetting')
 });
-
-$('.sheet-backdrop').on('click', function () {
-    modalClose();
-});
-
-
-///custom modal sheet///
-$('.c-modal').each(function () {
-    var mc = new Hammer(this);
-
-    mc.get('swipe').set({
-        direction: Hammer.DIRECTION_ALL
-    });
-
-    mc.on("swipedown", function (ev) {
-        modalClose()
-    });
-});
-
 
 //맛있는 메뉴
 /* bottom sheet */
@@ -345,6 +207,13 @@ $(".fav-tag-area").on("click", ".tag > span", function () {
     favTagsList = favTagsList.filter((element) => element !== deletedText);
     $('.sheet-modal').css('height', $('#favorSetting').height() + 160 + 'px');
     localStorage.setItem("sungil_favTagsList", favTagsList.toString());
+    if (localStorage.getItem("sungil_alleList")) {
+        alleList = localStorage.getItem("sungil_alleList").split(',');
+        alleList = alleList.map(function (val) { return ++val; });
+        alleList = alleList.join(',').toString();
+    } else {
+        alleList = '';
+    }
 });
 
 function submitKeyword() {
@@ -361,4 +230,23 @@ function onChangeSwitch() {
     console.log($('#noti-switch').is(":checked"))
     localStorage.setItem("android-noti", $('#noti-switch').is(":checked"));
     Android.setNotiEnable($('#noti-switch').is(":checked"));
+}
+
+function saveGradeClass() {
+    grade = $("#grade-select").val();
+    classNum = $("#class-select").val();
+    localStorage.setItem("sungil_grade", grade);
+    localStorage.setItem("sungil_classNum", classNum);
+    if (grade !== null && classNum !== null) {
+        $('#profile-text').html('성일고&nbsp;<span style="color:#5272ff">' + grade + '</span>학년&nbsp; <span style="color:#5272ff">' + classNum + '</span>반');
+    } else {
+        $('#profile-text').html('학년과 반을 알려주세요.');
+    }
+    $('#assignments-listview').show();
+    $('#before-setting-assign').hide();
+    $('.addAssignment-btn').show();
+    updateAssignList();
+    closeModal();
+    $('#gradeClassLabel').html(grade + '학년 ' + classNum + '반');
+    updateInfo();
 }

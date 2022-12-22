@@ -20,12 +20,12 @@ firebase.auth().onAuthStateChanged(function (user) {
             } else {
                 $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
             }
-            if(user.grade != localStorage.getItem("sungil_grade") || user.class != localStorage.getItem("sungil_classNum")){ //유저 학년 반 정보 갱신
+            if (user.grade != localStorage.getItem("sungil_grade") || user.class != localStorage.getItem("sungil_classNum")) { //유저 학년 반 정보 갱신
                 var data = {
                     grade: localStorage.getItem("sungil_grade"),
                     class: localStorage.getItem("sungil_classNum"),
                 }
-        
+
                 db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
                     console.log('유저 학년 반 정보 db 갱신 완료')
                 }).catch((err) => {
@@ -36,7 +36,7 @@ firebase.auth().onAuthStateChanged(function (user) {
         if (isApp()) {
             Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
         }
-        
+
     } else {
         $('#community .header .header-signed-in').hide();
         $('#community .header .header-unsigned').show();
@@ -45,7 +45,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-function openLogin() {
+function loginWithGoogle() {
     if (isApp()) {
         location.href = 'https://ssoak-72f93.firebaseapp.com/';
         $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
@@ -57,6 +57,7 @@ function openLogin() {
             console.log('구글 로그인 완료', result);
             $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
             $('#login-loader').hide();
+            closeModal();
         })
     }
 }
@@ -103,6 +104,7 @@ const loginGoogle = () => {
             }).catch((error) => {
                 $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
                 $('#login-loader').hide();
+                closeModal();
                 console.log(error.message);
                 if (error.message == "The popup has been closed by the user before finalizing the operation.") {
                     toast('로그인이 취소되었습니다.');
@@ -149,6 +151,7 @@ const loginGoogle = () => {
             }).catch((error) => {
                 $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
                 $('#login-loader').hide();
+                closeModal();
                 console.log(error.message);
                 if (error.message == "The popup has been closed by the user before finalizing the operation.") {
                     toast('로그인이 취소되었습니다.');
@@ -217,6 +220,53 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
     });
 }
 
+//TODO : https://lanicc.medium.com/%ED%8C%8C%EC%9D%B4%EC%96%B4%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%97%90-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0-1-455e0b5f50c8
+function loginWithKakao() {
+    toast('아직 열심히 만들고 있어요')
+    /*
+    Kakao.Auth.login({
+        success: function (response) {
+            Kakao.API.request({
+                url: '/v2/user/me',
+                success: function (response) {
+                    // 가입 여부 확인
+                    const docSnapshot = await db.collection('users').doc(response.id).get();
+                    if (docSnapshot.exists) {
+
+                    } else {
+
+                    }
+
+                    var data = {
+                        uid: response.id,
+                        email: response.kakao_account.email || response.kakao_account.id + '@kakao.com',
+                        nickname: response.kakao_account.profile.nickname,
+                        admin: false,
+                    }
+
+                    db.collection('users').doc(response.id).add(data).then((result) => {
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+
+                    $('#login-username').val(response.kakao_account.profile.nickname);
+
+                    openModal('시작하기', 'loginForm')
+                    $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+                    $('.sheet-backdrop').removeClass('backdrop-in');
+                },
+                fail: function (error) {
+                    toast('로그인 오류 : ' + error)
+                },
+            })
+        },
+        fail: function (error) {
+            console.log(error)
+            toast('로그인 오류 : ' + error)')
+        },
+    })
+    */
+}
 
 
 $('#community .header-signed-in img, #community .header-signed-in h3').on('click', function () {
