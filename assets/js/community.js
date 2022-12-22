@@ -72,6 +72,7 @@ const loginGoogle = () => {
             .then((result) => {
                 $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
                 $('#login-loader').hide();
+                closeModal();
 
                 if (result.additionalUserInfo.isNewUser) {
                     /** @type {firebase.auth.OAuthCredential} */
@@ -119,6 +120,7 @@ const loginGoogle = () => {
             .then((result) => {
                 $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
                 $('#login-loader').hide();
+                closeModal();
 
                 if (result.additionalUserInfo.isNewUser) {
                     /** @type {firebase.auth.OAuthCredential} */
@@ -185,6 +187,7 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
     firebase.auth().signInWithCredential(credential).then((result) => {
         $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
         $('#login-loader').hide();
+        closeModal();
         if (result.additionalUserInfo.isNewUser) {
             /** @type {firebase.auth.OAuthCredential} */
             //회원가입 성공 => DB에 사용자 정보 저장
