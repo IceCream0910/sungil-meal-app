@@ -437,6 +437,12 @@
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
+
+                <div class="callout custom-btn" id="2023-btn">
+                    <span id="2023-txt">🎉 2023년 새해까지&nbsp;<span id="countdown"></span>&nbsp;남았어요
+                    </span>
+                </div>
+                <br><br>
                 <div class="d-flex flex-row" id="meal-flex">
                     <h3 style="float:left" class="card__primary__title__text" onclick="showAllMeal()">급식 <ion-icon
                             name="chevron-forward-outline"></ion-icon> </span>
@@ -1021,8 +1027,9 @@
         </div>
 
     </div>
-
 </div>
+
+<div class="fireworks"></div>
 
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
@@ -1060,5 +1067,145 @@
 <script src="https://betteruptime.com/widgets/announcement.js" data-id="145819" async="async"
     type="text/javascript"></script>
 <script type="text/javascript" src="https://t1.daumcdn.net/kas/static/ba.min.js" async></script>
+
+<style>
+    :root {
+        --fc1: #f20;
+        --fc2: #ff0;
+        --fc3: #04f;
+        --fc4: #0f4;
+        --fc5: #f0f;
+        --fc: var(--fc1);
+    }
+
+    .fireworks {
+        display: none;
+        z-index: 999;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 20%;
+        left: 0
+    }
+
+    .fireworks:before,
+    .fireworks:after {
+        position: absolute;
+        content: '';
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        box-shadow: -120px 0 var(--fc),
+            120px 0 var(--fc),
+            0 120px var(--fc),
+            0 -120px var(--fc),
+            45px 45px var(--fc),
+            -45px 45px var(--fc),
+            85px 85px var(--fc),
+            -85px 85px var(--fc),
+            45px -45px var(--fc),
+            -45px -45px var(--fc),
+            85px -85px var(--fc),
+            -85px -85px var(--fc),
+            65px 0 var(--fc),
+            -65px 0 var(--fc),
+            0 65px var(--fc),
+            0 -65px var(--fc),
+            100px 45px var(--fc),
+            -100px 45px var(--fc),
+            -50px 100px var(--fc),
+            50px 100px var(--fc),
+            100px -45px var(--fc),
+            -100px -45px var(--fc),
+            -50px -100px var(--fc),
+            50px -100px var(--fc),
+            5px 10px var(--fc);
+        animation: 1s bang ease-out infinite backwards,
+            1s gravity ease-in infinite backwards,
+            5s position linear infinite backwards;
+    }
+
+    .fireworks:after {
+        animation-delay: 1.25s, 1.25s, 1.25s;
+        animation-duration: 1.25s, 1.25s, 6.25s;
+    }
+
+    @keyframes bang {
+        from {
+            box-shadow: 0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff,
+                0 0 #fff;
+        }
+    }
+
+    @keyframes gravity {
+        to {
+            transform: translate(-10px, 150px);
+            height: 6px;
+            width: 4px;
+            opacity: 0;
+        }
+    }
+
+    @keyframes position {
+
+        0%,
+        19.9% {
+            margin-top: 10%;
+            margin-left: 40%;
+            --fc: var(--fc1);
+        }
+
+        20%,
+        39.9% {
+            margin-top: 2%;
+            margin-left: 70%;
+            --fc: var(--fc2);
+        }
+
+        40%,
+        59.9% {
+            margin-top: 20%;
+            margin-left: 70%;
+            --fc: var(--fc3);
+        }
+
+        60%,
+        79.9% {
+            margin-top: 30%;
+            margin-left: 20%;
+            --fc: var(--fc4);
+        }
+
+        80%,
+        99.9% {
+            margin-top: 30%;
+            margin-left: 80%;
+            --fc: var(--fc5);
+        }
+    }
+</style>
 
 </html>

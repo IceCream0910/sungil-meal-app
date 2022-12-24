@@ -1166,3 +1166,45 @@ function onBoardingNext() {
         $('.sheet-modal').css('height', $('#onboarding').height() + 130 + 'px');
     }, 100);
 }
+
+
+//2023-01-01 00:00 countdown
+var countDownDate = new Date("Jan 1, 2023 00:00:00").getTime();
+
+var x = setInterval(function () {
+
+    var now = new Date().getTime();
+
+    var distance = countDownDate - now;
+
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML = days + "일 " + hours + "시간 "
+        + minutes + "분 " + seconds + "초";
+
+    if (distance < 0) {
+        clearInterval(x);
+        $('#2023-txt').html('2023년, 새해 복 많이 받으세요!')
+        document.getElementById("countdown").innerHTML = "";
+    }
+}, 1000);
+
+
+var fireworkTimer;
+$('#2023-btn').click(function () {
+    clearTimeout(fireworkTimer);
+    var random = Math.floor(Math.random() * 50);
+    $('.fireworks').css('top', random + '%');
+    $('.fireworks').addClass('active');
+    $('.fireworks').show();
+    fireworkTimer = setTimeout(function () {
+        $('.fireworks').removeClass('active');
+        $('.fireworks').hide();
+    }, 2000);
+});
+
+
+
