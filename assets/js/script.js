@@ -776,8 +776,8 @@ $('.bottom-nav a').on('click', function () {
             $('#community').hide();
             $('#assignment').hide();
             $('#tools').hide();
+            if (!isBigScreen()) $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('.bottom-nav').addClass("non-border");
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '0 0 20px 20px') : $('.bottom-nav').css('border-radius', '0');
             $('#tab1').attr('name', 'planet');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full-outline');
@@ -790,7 +790,7 @@ $('.bottom-nav a').on('click', function () {
             $('#community').fadeIn(100);
             $('#assignment').hide();
             $('#tools').hide();
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            if (!isBigScreen()) $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles');
             $('#tab3').attr('name', 'file-tray-full-outline');
@@ -803,7 +803,7 @@ $('.bottom-nav a').on('click', function () {
             $('#community').hide();
             $('#assignment').fadeIn(100);
             $('#tools').hide();
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            if (!isBigScreen()) $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full');
@@ -815,7 +815,7 @@ $('.bottom-nav a').on('click', function () {
             $('#community').hide();
             $('#assignment').hide();
             $('#tools').fadeIn(100);
-            isBigScreen() ? $('.bottom-nav').css('border-radius', '20px') : $('.bottom-nav').css('border-radius', '20px 20px 0 0');
+            if (!isBigScreen()) $('.bottom-nav').css('border-radius', '20px 20px 0 0');
             $('#tab1').attr('name', 'planet-outline');
             $('#tab2').attr('name', 'chatbubbles-outline');
             $('#tab3').attr('name', 'file-tray-full-outline');

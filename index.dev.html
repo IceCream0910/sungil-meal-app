@@ -77,6 +77,7 @@
             <div class="mdc-fab__touch"></div>
     </div>
 </header>
+
 <div class="bottom-nav non-border">
     <a class="active" data-tab="home" id="home-btn">
         <ion-icon id="tab1" name="planet"></ion-icon>
@@ -97,7 +98,42 @@
         <ion-icon id="tab4" name="settings-outline"></ion-icon>
         <span>설정</span>
     </a>
+</div>
 
+<div class="bottom-nav pc-sidebar non-border">
+    <img loading="lazy" src="assets/icons/header_logo.png" style="width:30px;height:30px;filter:grayscale(100%);">
+    <a class="active" data-tab="home" id="home-btn">
+        <ion-icon id="tab1" name="planet"></ion-icon>
+        <span>홈</span>
+    </a>
+
+    <a data-tab="community" id="community-btn">
+        <ion-icon id="tab2" name="chatbubbles-outline"></ion-icon>
+        <span>커뮤니티</span>
+    </a>
+
+    <a data-tab="assignment" id="assignment-btn">
+        <ion-icon id="tab3" name="file-tray-full-outline"></ion-icon>
+        <span>할일</span>
+    </a>
+
+    <a data-tab="report" id="report-btn">
+        <ion-icon id="tab4" name="settings-outline"></ion-icon>
+        <span>설정</span>
+    </a>
+
+    <div class="header-btn-wrap">
+        <a href="javascript:shareApp()" id="appshare-btn" aria-label="앱 공유">
+            <ion-icon name="share"></ion-icon>
+        </a>
+
+        <div id="service-noti" onclick="window.open('https://log.sungil.me/tags/업데이트-내역');" aria-label="업데이트 내역 열기">
+            <span id="noti-preview"></span>
+            <div class="icon-bubble" style="font-size: 25px;margin-top: 20px;">
+                <ion-icon name="notifications"></ion-icon>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- confirm dialog -->
@@ -173,6 +209,9 @@
 
                     <div class="social-login">
                         <button class="custom-btn social-btn google" onclick="loginWithGoogle();">
+                        </button>
+
+                        <button class="custom-btn social-btn kakao" onclick="loginWithKakao();">
                         </button>
 
 
@@ -417,10 +456,8 @@
 
     <section id="home">
         <div class="home-header">
-            <div style="display:flex;flex-direction:row;">
-                <img loading="lazy" src="assets/icons/header_logo.png"
-                    style="width:30px;height:30px;filter:grayscale(100%);">
-            </div>
+            <img id="main-header-icon" loading="lazy" src="assets/icons/header_logo.png"
+                style="width:30px;height:30px;filter:grayscale(100%);">
             <div class="header-btn-wrap">
                 <a href="javascript:shareApp()" id="appshare-btn" aria-label="앱 공유">
                     <ion-icon name="share"></ion-icon>
@@ -782,7 +819,7 @@
     </section>
 
     <section id="assignment" style="display:none;">
-        <h3 class="card__primary__title__text" style="margin-top:10px;">우리 반 할 일</h3>
+        <h3 class="card__primary__title__text" style="margin-top:20px;">우리 반 할 일</h3>
         <span style="opacity:0.6">항목을 눌러 잘못된 내용을 삭제할 수 있어요.</span>
 
         <div id="before-setting-assign" style="margin-top:15px;">
@@ -875,7 +912,7 @@
         </div>
 
         <br>
-        <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WCT8chS2JYxIPFuG" data-ad-width="320"
+        <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-JYhTpU5uhgBKs7yD" data-ad-width="320"
             data-ad-height="100"></ins>
         <br>
         <hr>
