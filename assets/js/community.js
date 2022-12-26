@@ -66,105 +66,53 @@ function loginWithGoogle() {
 var tempData = [];
 const provider = new firebase.auth.GoogleAuthProvider();
 const loginGoogle = () => {
-    var is_iPad = navigator.userAgent.match(/iPad/i) != null;
-    if (is_iPad) { //아이패드인 경우 리다이렉트 방식
-        return firebase.auth().signInWithRedirect(provider)
-            .then((result) => {
-                $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-                $('#login-loader').hide();
-                closeModal();
+    return firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+            $('#login-loader').hide();
+            closeModal();
 
-                if (result.additionalUserInfo.isNewUser) {
-                    /** @type {firebase.auth.OAuthCredential} */
-                    //회원가입 성공 => DB에 사용자 정보 저장
-                    tempData = [];
-                    tempData[0] = result.user.uid;
-                    tempData[1] = result.user.email;
-                    tempData[2] = result.user.displayName;
-                    var data = {
-                        uid: tempData[0],
-                        email: tempData[1],
-                        nickname: result.user.displayName,
-                        profileImg: Math.floor(Math.random() * 5),
-                        admin: false,
-                    }
-
-                    db.collection('users').doc(tempData[0]).set(data).then((result) => {
-                        console.log('계정정보 1차 저장 완료')
-                    }).catch((err) => {
-                        console.log(err);
-                    })
-
-
-                    $('#login-username').val(result.user.displayName);
-
-                    openModal('시작하기', 'loginForm')
-                    $('.sheet-backdrop-nocancel').addClass('backdrop-in');
-                    $('.sheet-backdrop').removeClass('backdrop-in');
+            if (result.additionalUserInfo.isNewUser) {
+                /** @type {firebase.auth.OAuthCredential} */
+                //회원가입 성공 => DB에 사용자 정보 저장
+                tempData = [];
+                tempData[0] = result.user.uid;
+                tempData[1] = result.user.email;
+                tempData[2] = result.user.displayName;
+                var data = {
+                    uid: tempData[0],
+                    email: tempData[1],
+                    nickname: result.user.displayName,
+                    profileImg: Math.floor(Math.random() * 5),
+                    admin: false,
                 }
-            }).catch((error) => {
-                $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-                $('#login-loader').hide();
-                closeModal();
-                console.log(error.message);
-                if (error.message == "The popup has been closed by the user before finalizing the operation.") {
-                    toast('로그인이 취소되었습니다.');
-                } else if (error.message == "The user has cancelled authentication.") {
-                    toast('로그인이 취소되었습니다.');
-                } else {
-                    toast('로그인 에러 : ' + error.message);
-                }
-            });
-    } else { //기본은 팝업 로그인
-        return firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-                $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-                $('#login-loader').hide();
-                closeModal();
 
-                if (result.additionalUserInfo.isNewUser) {
-                    /** @type {firebase.auth.OAuthCredential} */
-                    //회원가입 성공 => DB에 사용자 정보 저장
-                    tempData = [];
-                    tempData[0] = result.user.uid;
-                    tempData[1] = result.user.email;
-                    tempData[2] = result.user.displayName;
-                    var data = {
-                        uid: tempData[0],
-                        email: tempData[1],
-                        nickname: result.user.displayName,
-                        profileImg: Math.floor(Math.random() * 5),
-                        admin: false,
-                    }
-
-                    db.collection('users').doc(tempData[0]).set(data).then((result) => {
-                        console.log('계정정보 1차 저장 완료')
-                    }).catch((err) => {
-                        console.log(err);
-                    })
+                db.collection('users').doc(tempData[0]).set(data).then((result) => {
+                    console.log('계정정보 1차 저장 완료')
+                }).catch((err) => {
+                    console.log(err);
+                })
 
 
-                    $('#login-username').val(result.user.displayName);
+                $('#login-username').val(result.user.displayName);
 
-                    openModal('시작하기', 'loginForm')
-                    $('.sheet-backdrop-nocancel').addClass('backdrop-in');
-                    $('.sheet-backdrop').removeClass('backdrop-in');
-                }
-            }).catch((error) => {
-                $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-                $('#login-loader').hide();
-                closeModal();
-                console.log(error.message);
-                if (error.message == "The popup has been closed by the user before finalizing the operation.") {
-                    toast('로그인이 취소되었습니다.');
-                } else if (error.message == "The user has cancelled authentication.") {
-                    toast('로그인이 취소되었습니다.');
-                } else {
-                    toast('로그인 에러 : ' + error.message);
-                }
-            });
-    }
-
+                openModal('시작하기', 'loginForm')
+                $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+                $('.sheet-backdrop').removeClass('backdrop-in');
+            }
+        }).catch((error) => {
+            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+            $('#login-loader').hide();
+            closeModal();
+            console.log(error.message);
+            if (error.message == "The popup has been closed by the user before finalizing the operation.") {
+                toast('로그인이 취소되었습니다.');
+            } else if (error.message == "The user has cancelled authentication.") {
+                toast('로그인이 취소되었습니다.');
+            } else {
+                toast('로그인 에러 : ' + error.message);
+            }
+        });
 };
 
 function finishGoogleLogin(res) {
@@ -222,6 +170,33 @@ function pushWebviewGoogleLoginToken(idTokenFromApp) {
         logError(`Error logging in: ${errorCode} ${errorMessage} token: ${idTokenFromApp}`, error);
     });
 }
+
+/* 페이스북 로그인
+function loginWithFacebook() {
+    var provider = new firebase.auth.FacebookAuthProvider();
+    provider.setCustomParameters({
+        'display': 'popup'
+    });
+    firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then((result) => {
+            var credential = result.credential;
+            firebase.auth().signInWithCredential(credential).then((resultAuth) => {
+                console.log(resultAuth);
+            }).catch((error) => {
+                console.log(error);
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                logError(`Error logging in: ${errorCode} ${errorMessage} token: ${idTokenFromApp}`, error);
+            });
+        })
+        .catch((error) => {
+            console.log("facebook err", error)
+        });
+}
+*/
+
 
 //TODO : https://lanicc.medium.com/%ED%8C%8C%EC%9D%B4%EC%96%B4%EB%B2%A0%EC%9D%B4%EC%8A%A4%EC%97%90-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%97%B0%EB%8F%99%ED%95%98%EA%B8%B0-1-455e0b5f50c8
 function loginWithKakao() {
