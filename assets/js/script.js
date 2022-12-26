@@ -1067,11 +1067,9 @@ function mealLikeBtn() {
     var reactionHistory = localStorage.getItem("ssoak_meal_reaction_history") || [];
     reactionHistory = reactionHistory.toString().split(',');
 
-    /*
     if (reactionHistory.indexOf(selectedDate) > -1) {
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
-        */
     var mealRef = db.collection("meal").doc(selectedDate);
     mealRef.get().then(function (doc) {
         if (doc.exists) {
@@ -1090,7 +1088,7 @@ function mealLikeBtn() {
             })
         }
     });
-    //}
+}
 
 }
 
@@ -1098,11 +1096,9 @@ function mealdislikeBtn() {
     var reactionHistory = localStorage.getItem("ssoak_meal_reaction_history") || [];
     reactionHistory = reactionHistory.toString().split(',');
 
-    /*
     if (reactionHistory.indexOf(selectedDate) > -1) {
         toast('이미 반응을 표시한 날짜의 급식이에요.');
     } else {
-        */
     var mealRef = db.collection("meal").doc(selectedDate);
     mealRef.get().then(function (doc) {
         if (doc.exists) {
@@ -1121,7 +1117,7 @@ function mealdislikeBtn() {
             })
         }
     });
-    //}
+}
 }
 
 
