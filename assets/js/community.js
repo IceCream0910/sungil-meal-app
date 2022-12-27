@@ -4,35 +4,70 @@ const auth = firebase.auth();
 var db = firebase.firestore();
 
 var currentCategory = 'all';
+
+
+//get searchParams from url and check 'loginProcess' is true
+const searchParams = new URLSearchParams('loginProcess=none');
+console.log(searchParams.get('loginProcess'))
+if (searchParams.get('loginProcess') == 'true') {
+    toast('로그인 중이에요. 잠시만 기다려주세요.');
+}
+
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
     loadPostList('all');
     if (user) {
+        db.collection('users').doc(firebase.auth().currentUser.uid).get().then((docSnapshot) => {
+            if (docSnapshot.exists) { //기존 계정
+                $('#header-username').text(docSnapshot.data().nickname);
+                if (docSnapshot.data().profileImg) {
+                    $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${docSnapshot.data().profileImg + 1}.png`);
+                } else {
+                    $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
+                }
+                if (docSnapshot.data().grade != localStorage.getItem("sungil_grade") || docSnapshot.data().class != localStorage.getItem("sungil_classNum")) { //유저 학년 반 정보 갱신
+                    var data = {
+                        grade: localStorage.getItem("sungil_grade"),
+                        class: localStorage.getItem("sungil_classNum"),
+                    }
+
+                    db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
+                        console.log('유저 학년 반 정보 db 갱신 완료')
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                }
+            } else { // 신규 계정
+                tempData = [];
+                tempData[0] = user.uid;
+                tempData[1] = user.email;
+                tempData[2] = user.displayName;
+                var data = {
+                    uid: tempData[0],
+                    email: tempData[1],
+                    nickname: user.displayName,
+                    profileImg: Math.floor(Math.random() * 5),
+                    admin: false,
+                }
+                db.collection('users').doc(tempData[0]).set(data).then((result) => {
+                    console.log('계정정보 1차 저장 완료')
+                }).catch((err) => {
+                    console.log(err);
+                })
+
+                $('#login-username').val(docSnapshot.data().displayName);
+
+                openModal('시작하기', 'loginForm')
+                $('.sheet-backdrop-nocancel').addClass('backdrop-in');
+                $('.sheet-backdrop').removeClass('backdrop-in');
+            }
+        });
+
         $('#community .header .header-signed-in').css("display", "flex");
         $('#community .header .header-unsigned').hide();
         $('.writePost-btn').show();
         $('.writeVote-btn').show();
-        db.collection('users').doc(firebase.auth().currentUser.uid).get().then((doc_user) => {
-            var user = doc_user.data();
-            $('#header-username').text(user.nickname);
-            if (user.profileImg) {
-                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter${user.profileImg + 1}.png`);
-            } else {
-                $('#header-profile-img').attr('src', `assets/icons/profileImg/letter1.png`);
-            }
-            if (user.grade != localStorage.getItem("sungil_grade") || user.class != localStorage.getItem("sungil_classNum")) { //유저 학년 반 정보 갱신
-                var data = {
-                    grade: localStorage.getItem("sungil_grade"),
-                    class: localStorage.getItem("sungil_classNum"),
-                }
 
-                db.collection('users').doc(firebase.auth().currentUser.uid).update(data).then((result2) => {
-                    console.log('유저 학년 반 정보 db 갱신 완료')
-                }).catch((err) => {
-                    console.log(err);
-                })
-            }
-        });
         if (isApp()) {
             Android.sendUserIdForFCM(firebase.auth().currentUser.uid)
         }
@@ -51,69 +86,18 @@ function loginWithGoogle() {
         $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
         $('#login-loader').show();
     } else {
+        const searchParams = new URLSearchParams('loginProcess=none');
+        searchParams.set('loginProcess', 'true');
+
         $('.sheet-backdrop-nocancel2').addClass('backdrop-in');
         $('#login-loader').show();
-        loginGoogle().then(function (result) {
-            console.log('구글 로그인 완료', result);
-            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-            $('#login-loader').hide();
-            closeModal();
-        })
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+        $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
+        $('#login-loader').hide();
+        closeModal();
     }
 }
-
-//Google 로그인
-var tempData = [];
-const provider = new firebase.auth.GoogleAuthProvider();
-const loginGoogle = () => {
-    return firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-            $('#login-loader').hide();
-            closeModal();
-
-            if (result.additionalUserInfo.isNewUser) {
-                /** @type {firebase.auth.OAuthCredential} */
-                //회원가입 성공 => DB에 사용자 정보 저장
-                tempData = [];
-                tempData[0] = result.user.uid;
-                tempData[1] = result.user.email;
-                tempData[2] = result.user.displayName;
-                var data = {
-                    uid: tempData[0],
-                    email: tempData[1],
-                    nickname: result.user.displayName,
-                    profileImg: Math.floor(Math.random() * 5),
-                    admin: false,
-                }
-
-                db.collection('users').doc(tempData[0]).set(data).then((result) => {
-                    console.log('계정정보 1차 저장 완료')
-                }).catch((err) => {
-                    console.log(err);
-                })
-
-
-                $('#login-username').val(result.user.displayName);
-
-                openModal('시작하기', 'loginForm')
-                $('.sheet-backdrop-nocancel').addClass('backdrop-in');
-                $('.sheet-backdrop').removeClass('backdrop-in');
-            }
-        }).catch((error) => {
-            $('.sheet-backdrop-nocancel2').removeClass('backdrop-in');
-            $('#login-loader').hide();
-            closeModal();
-            console.log(error.message);
-            if (error.message == "The popup has been closed by the user before finalizing the operation.") {
-                toast('로그인이 취소되었습니다.');
-            } else if (error.message == "The user has cancelled authentication.") {
-                toast('로그인이 취소되었습니다.');
-            } else {
-                toast('로그인 에러 : ' + error.message);
-            }
-        });
-};
 
 function finishGoogleLogin(res) {
     if (res.uid) {
@@ -126,7 +110,6 @@ function finishGoogleLogin(res) {
         })
     }
 }
-
 
 //android webview google login
 function pushWebviewGoogleLoginToken(idTokenFromApp) {
@@ -856,4 +839,277 @@ async function confirmLogout() {
             }
         });
     }
+}
+
+
+
+
+function getRandomNickname() {
+    const words = {
+        "adjective": [
+            "귀여운",
+            "익명의",
+            "용감한",
+            "튼튼한",
+            "상냥한",
+            "마당발",
+            "멋쟁이",
+            "씩씩한",
+            "키다리",
+            "웃는",
+            "세심한",
+            "대범한",
+            "똑똑한"
+        ],
+        "noun": [
+            "체리",
+            "자두",
+            "딸기",
+            "오렌지",
+            "사과",
+            "키위",
+            "메론",
+            "포도",
+            "버찌",
+            "야자수",
+            "복숭아",
+            "레몬",
+            "수박",
+            "망고",
+            "홍시",
+            "머루",
+            "자몽",
+            "살구",
+            "리치",
+            "참다래",
+            "모과",
+            "청포도",
+            "유자",
+            "산딸기",
+            "매실",
+            "코코넛",
+            "바나나",
+            "석류",
+            "대추",
+            "단감",
+            "망고스틴",
+            "산딸기",
+            "아보카도",
+            "구아바",
+            "무화과",
+            "파파야",
+            "블루베리",
+            "파인애플",
+            "한라봉",
+            "블림빙",
+            "용과",
+            "오미자",
+            "꿀수박",
+            "왕체리",
+            "감자",
+            "고구마",
+            "깻잎",
+            "당근",
+            "도라지",
+            "대파",
+            "마늘",
+            "토마토",
+            "미나리",
+            "버섯",
+            "배추",
+            "부추",
+            "케일",
+            "브로콜리",
+            "생강",
+            "시금치",
+            "연근",
+            "우엉",
+            "양파",
+            "양배추",
+            "호박",
+            "깻잎",
+            "옥수수",
+            "청경채",
+            "배추",
+            "시금치",
+            "부추",
+            "가지",
+            "실파",
+            "대파",
+            "미나리",
+            "애호박",
+            "단호박",
+            "오이",
+            "당근",
+            "감자",
+            "고구마",
+            "버섯",
+            "양송이",
+            "단무지",
+            "피클",
+            "무청",
+            "상추",
+            "양배추",
+            "양상추",
+            "바질",
+            "마늘",
+            "생강",
+            "순무",
+            "브로콜리",
+            "인삼",
+            "쑥갓",
+            "피망",
+            "피자",
+            "햄버거",
+            "떡볶이",
+            "토스트",
+            "개발자",
+            "고니",
+            "공작",
+            "거위",
+            "기러기",
+            "까치",
+            "까마귀",
+            "두루미",
+            "독수리",
+            "백조",
+            "비둘기",
+            "부엉이",
+            "오리",
+            "앵무새",
+            "제비",
+            "참새",
+            "칠면조",
+            "타조",
+            "펭귄",
+            "개구리",
+            "재규어",
+            "족제비",
+            "치타",
+            "청설모",
+            "친칠라",
+            "침팬지",
+            "캥거루",
+            "코알라",
+            "코요테",
+            "코뿔소",
+            "카피바라",
+            "토끼",
+            "판다",
+            "표범",
+            "퓨마",
+            "하마",
+            "호랑이",
+            "하이에나",
+            "박쥐",
+            "북극곰",
+            "북극여우",
+            "바다사자",
+            "바다표범",
+            "사슴",
+            "사자",
+            "수달",
+            "순록",
+            "스컹크",
+            "스라소니",
+            "양",
+            "여우",
+            "염소",
+            "영양",
+            "야크",
+            "원숭이",
+            "알파카",
+            "오소리",
+            "얼룩말",
+            "바둑이",
+            "낙타",
+            "노루",
+            "노새",
+            "늑대",
+            "너구리",
+            "나무늘보",
+            "담비",
+            "밤비",
+            "듀공",
+            "돌고래",
+            "다람쥐",
+            "두더지",
+            "당나귀",
+            "라마",
+            "래서판다",
+            "물개",
+            "물범",
+            "밍크",
+            "도라에몽",
+            "미어캣",
+            "강아지",
+            "곰돌이",
+            "가젤",
+            "고래",
+            "기린",
+            "고릴라",
+            "고라니",
+            "고양이",
+            "고슴도치",
+            "기니피그",
+            "개미핥기",
+            "크롱",
+            "퉁퉁이",
+            "피카츄",
+            "파이리",
+            "꼬부기",
+            "피죤투",
+            "또가스",
+            "디지몬",
+            "마리오",
+            "비욘세",
+            "참치",
+            "연어",
+            "초밥",
+            "매운탕",
+            "쭈꾸미",
+            "돌고래",
+            "백구",
+            "누렁이",
+            "흰둥이",
+            "된장찌개",
+            "김치찌개",
+            "루피",
+            "파스타",
+            "비타민",
+            "코카콜라",
+            "자일리톨",
+            "치즈피자",
+            "참치김밥",
+            "새우깡",
+            "고래밥",
+            "치킨버거",
+            "닭다리",
+            "닭날개",
+            "숯불갈비",
+            "레몬사탕",
+            "뽀로로",
+            "치즈",
+            "닭갈비",
+            "마카롱",
+            "도너츠",
+            "누룽지",
+            "모짜렐라",
+            "커피",
+            "야옹이",
+            "팝스타",
+            "파랑새",
+            "마그네슘",
+            "서포터",
+            "만수르",
+            "재벌",
+            "갑부",
+            "후원자"
+        ]
+    };
+    var adjective = words.adjective[Math.floor(Math.random() * words.adjective.length)];
+    var noun = words.noun[Math.floor(Math.random() * words.noun.length)];
+    var result = adjective + noun;
+    $('#account-username').val(result);
+    $('#login-username').val(result);
 }

@@ -1070,25 +1070,25 @@ function mealLikeBtn() {
     if (reactionHistory.indexOf(selectedDate) > -1) {
         toast('이미 반응을 표시한 날짜의 급식이에요');
     } else {
-    var mealRef = db.collection("meal").doc(selectedDate);
-    mealRef.get().then(function (doc) {
-        if (doc.exists) {
-            mealRef.update({
-                like: doc.data().like + 1,
-                lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
-            });
-            reactionHistory.push(selectedDate)
-            localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
-            console.log(reactionHistory);
-        } else {
-            mealRef.set({
-                like: 1,
-                dislike: 0,
-                lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
-            })
-        }
-    });
-}
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    like: doc.data().like + 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+                reactionHistory.push(selectedDate)
+                localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
+                console.log(reactionHistory);
+            } else {
+                mealRef.set({
+                    like: 1,
+                    dislike: 0,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+            }
+        });
+    }
 
 }
 
@@ -1098,25 +1098,25 @@ function mealdislikeBtn() {
     if (reactionHistory.indexOf(selectedDate) > -1) {
         toast('이미 반응을 표시한 날짜의 급식이에요');
     } else {
-    var mealRef = db.collection("meal").doc(selectedDate);
-    mealRef.get().then(function (doc) {
-        if (doc.exists) {
-            mealRef.update({
-                dislike: doc.data().dislike + 1,
-                lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
-            });
-            reactionHistory.push(selectedDate)
-            localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
-            console.log(reactionHistory);
-        } else {
-            mealRef.set({
-                like: 0,
-                dislike: 1,
-                lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
-            })
-        }
-    });
-}
+        var mealRef = db.collection("meal").doc(selectedDate);
+        mealRef.get().then(function (doc) {
+            if (doc.exists) {
+                mealRef.update({
+                    dislike: doc.data().dislike + 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+                reactionHistory.push(selectedDate)
+                localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
+                console.log(reactionHistory);
+            } else {
+                mealRef.set({
+                    like: 0,
+                    dislike: 1,
+                    lastupdated: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+            }
+        });
+    }
 }
 
 
