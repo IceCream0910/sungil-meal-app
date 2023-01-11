@@ -100,6 +100,7 @@
     </a>
 </div>
 
+
 <div class="bottom-nav pc-sidebar non-border">
     <img loading="lazy" src="assets/icons/header_logo.png" style="width:30px;height:30px;filter:grayscale(100%);">
     <a class="active" data-tab="home" id="home-btn">
@@ -135,6 +136,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- confirm dialog -->
 <div class="confirm" role="dialog">
@@ -451,6 +453,12 @@
     </div>
 
     <section id="home">
+        <div class="floating-btn" id="ai-btn"
+            style="bottom:100px;z-index:999999;background:inherit;border: 2px solid transparent;background-image: linear-gradient(#2f2f2f, #2f2f2f), linear-gradient(90deg, rgba(82,114,255,1) 0%, rgba(131,111,148,1) 100%);background-origin: border-box;background-clip: content-box, border-box;"
+            onclick="window.open('https://ai.sungil.me', '_blank');">
+            <img src="assets/icons/ai.png" style="width: 30px;height: 30px;">
+        </div>
+
         <div class="home-header">
             <img id="main-header-icon" loading="lazy" src="assets/icons/header_logo.png"
                 style="width:30px;height:30px;filter:grayscale(100%);">
@@ -471,9 +479,7 @@
         <div class="home-order-wrap" style="margin-bottom:50px;">
             <div class="meal-wrap" id="order-item">
 
-                <div class="callout custom-btn" id="2023-btn">
-                    <span id="2023-txt">🎉 2023년 새해까지&nbsp;<span id="countdown"></span>&nbsp;남았어요
-                    </span>
+                <div class="callout custom-btn" id="endVacation-dday">
                 </div>
                 <br><br>
                 <div class="d-flex flex-row" id="meal-flex">
@@ -563,7 +569,14 @@
                     </p>
                 </div>
 
+
+
                 <div class="timetable-wrap">
+                    <div class="vacation-wrap" style="display:none;">
+                        <br>
+                        방학 중에는 시간표가 제공되지 않아요.
+                    </div>
+
                     <table>
                         <thead>
                             <tr>
@@ -1061,8 +1074,6 @@
 
     </div>
 </div>
-
-<div class="fireworks"></div>
 
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>

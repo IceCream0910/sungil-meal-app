@@ -97,17 +97,15 @@ if (localStorage.getItem("sungil_favTagsList")) {
     favTagsList = ["훈제", "참치마요", "미트볼", "우동", "망고", "샌드위치", "피자", "햄버거", "돈까스", "브라운소스", "핫바", "새우튀김", "스파게티", "감자튀김", "빵", "떡꼬치", "와플", "바나나", "스테이크", "탕수육", "스크렘블", "초코", "맛탕", "바베큐", "떡갈비", "비엔나", "브라우니", "치킨마요", "타코야끼", "도넛", "치즈", "핫도그", "치킨", "스프", "소세지", "메론", "떡볶이", "샐러드", "모닝빵", "불고기", "햄"];
 }
 
-//d day
+
 var todayForDday = new Date();
-var ddayDate = new Date(2022, 11, 19);
+var ddayDate = new Date(2023, 1, 1);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-if (ddayResult <= 0) {
-    $('#exam-dday').html(` 기말고사 ${(ddayResult * -1) + 1}일차. 남은 시험 일정 확인 `);
-} else {
-    $('#exam-dday').html(` ${ddayResult}일 남은 기말고사 일정 확인하기 `);
-}
+$('#endVacation-dday').html(` ✅ ${-(ddayResult * -1)}일 후 개학해요(3일 후 다시 방학함)`);
 
+
+/*
 
 $('#examSchedule').on('click', function () {
     openModal('2학기 2차 지필평가 일정', 'exam');
@@ -148,6 +146,7 @@ $('.grade_btn').on('click', function () {
     }
     $('.sheet-modal').css('height', $('#' + id).height() + 150 + 'px');
 });
+*/
 
 $(document).ready(function () {
 
@@ -285,7 +284,6 @@ function updateInfo() {
         } else {
             $('.timetable-wrap').hide();
             $('#nosetting-timetable').hide();
-            $('#vacation-timetable').show();
             $('.timetable-wrap').show();
             $('#nosetting-timetable').hide();
 
@@ -551,6 +549,18 @@ function displayTimetable(data) {
     }
 
     timetableRaw = data;
+
+    // 시간표 모든 요일 없음
+    if (data.mon == "" && data.tue == "" && data.wed == "" && data.thu == "" && data.fri == "") {
+        console.log('시간표 없음');
+        $('.timetable-wrap table').hide();
+        $('.vacation-wrap').show();
+        return false;
+    } else {
+        $('.timetable-wrap table').show();
+        $('.vacation-wrap').hide();
+    }
+
 
     if (data.mon) {
         for (var i = 0; i < data.mon.length; i++) {
@@ -1165,45 +1175,3 @@ function onBoardingNext() {
         $('.sheet-modal').css('height', $('#onboarding').height() + 130 + 'px');
     }, 100);
 }
-
-
-//2023-01-01 00:00 countdown
-var countDownDate = new Date("Jan 1, 2023 00:00:00").getTime();
-
-var x = setInterval(function () {
-
-    var now = new Date().getTime();
-
-    var distance = countDownDate - now;
-
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerHTML = days + "일 " + hours + "시간 "
-        + minutes + "분 " + seconds + "초";
-
-    if (distance < 0) {
-        clearInterval(x);
-        $('#2023-txt').html('2023년, 새해 복 많이 받으세요!')
-        document.getElementById("countdown").innerHTML = "";
-    }
-}, 1000);
-
-
-var fireworkTimer;
-$('#2023-btn').click(function () {
-    clearTimeout(fireworkTimer);
-    var random = Math.floor(Math.random() * 50);
-    $('.fireworks').css('top', random + '%');
-    $('.fireworks').addClass('active');
-    $('.fireworks').show();
-    fireworkTimer = setTimeout(function () {
-        $('.fireworks').removeClass('active');
-        $('.fireworks').hide();
-    }, 2000);
-});
-
-
-

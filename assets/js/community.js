@@ -5,14 +5,6 @@ var db = firebase.firestore();
 
 var currentCategory = 'all';
 
-
-//get searchParams from url and check 'loginProcess' is true
-const searchParams = new URLSearchParams('loginProcess=none');
-console.log(searchParams.get('loginProcess'))
-if (searchParams.get('loginProcess') == 'true') {
-    toast('로그인 중이에요. 잠시만 기다려주세요.');
-}
-
 //로그인 여부 확인
 firebase.auth().onAuthStateChanged(function (user) {
     loadPostList('all');
