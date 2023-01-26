@@ -157,7 +157,12 @@ $(document).ready(function () {
     }
 
     updateInfo();
-    //가정통신문
+    loadNotices();
+});
+
+
+//가정통신문
+function loadNotices() {
     $.ajax({
         type: "GET",
         url: "https://sungil-school-api.vercel.app/notices",
@@ -189,7 +194,7 @@ $(document).ready(function () {
             }
         }
     });
-});
+}
 
 
 function backDate() {
@@ -233,26 +238,10 @@ function updateInfo() {
     $('#meal-loader').show();
     $('#meal-menus').empty();
     if (!isTest) {
-        var text = ["시간표 물어보는 중", "달력 체크중", "급식실 훔쳐보는 중"];
-        var counter = 0;
-        var elem = $("#loading-text");
-        setInterval(change, 1000);
-        function change() {
-            elem.fadeOut(function () {
-                elem.html(text[counter]);
-                counter++;
-                if (counter >= text.length) { counter = 0; }
-                elem.fadeIn();
-            });
-        }
-
-        document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
         $('#schedule-content').html('');
-
         if (cachedData && cachedData_date == requestDate) {
             displayMeal(cachedData);
             displaySchedule(cachedData);
-            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
         } else {
             $.ajax({
                 type: "GET",
@@ -264,7 +253,6 @@ function updateInfo() {
 
                     //급식
                     displayMeal(data);
-                    document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
 
                     //학사일정
                     if (data.schedule) {
@@ -293,26 +281,23 @@ function updateInfo() {
 
             if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
                 displayTimetable(cachedTimeData);
-                //변경 사항 체크
                 $.ajax({
                     type: "GET",
                     url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
                     success: function (result_time) {
                         var data = JSON.parse(result_time);
                         if (JSON.stringify(cachedTimeData) != JSON.stringify(data)) {
-                            console.log('시간표 변동 사항 발견!', cachedTimeData, data);
                             localStorage.setItem("sungil_timeapi_cache", JSON.stringify(data));
                             localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
                             displayTimetable(data);
-                        } else { console.log('시간표 변경 사항 없음, 기존 데이터 그대로 사용 유지'); }
+                        }
                     }
                 });
 
             } else {
-                if (!$('.loading-overlay').hasClass('is-active')) {
-                    document.getElementsByClassName('loading-overlay')[0].classList.add('is-active');
-                }
-
+                $('th').addClass('skeleton');
+                $('.timetable-wrap table').show();
+                $('.vacation-wrap').hide();
                 $.ajax({
                     type: "GET",
                     url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
@@ -323,9 +308,6 @@ function updateInfo() {
                         localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
 
                         displayTimetable(data);
-                        if ($('.loading-overlay').hasClass('is-active')) {
-                            document.getElementsByClassName('loading-overlay')[0].classList.remove('is-active');
-                        }
                     }
                 });
             }
@@ -334,7 +316,6 @@ function updateInfo() {
         //시간표 끝
     }
 }
-
 
 var realTimeMealRef;
 
@@ -393,7 +374,6 @@ function displayMeal(data) {
                 } else {
                     var isFavorite = false;
                     $.each(favTagsList, function (index, element) {
-                        console.log(element, menuName, element.indexOf(menuName) !== -1)
                         if ((menuName).includes(element)) {
                             isFavorite = true;
                             return true;
@@ -467,16 +447,28 @@ function showAllMeal() {
 
 function displaySchedule(data) {
     var schedules = data.schedule;
-    var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
-    for (var i = 1; i <= length; i++) {
-        if (schedules[i] != '') {
-            $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
-                `<span style="font-size: 20px;font-weight: 500;">${i}</span><span style="
-            font-size: 12px;
-            margin-top: -7px;
-        ">${getDay(moment(moment(selectedDate).format('YYYYMM') + i.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
+    var isAllEmpty = true;
+    $.each(schedules, function (key, value) {
+        if (key != 'today' && key != 'day' && key != 'year' && key != 'month' && value != '') {
+            isAllEmpty = false;
+            return false;
+        }
+    });
+    if (isAllEmpty) {
+        $('#schedule-content').html('<h3 class="no-schedule">일정이 없어요</h3>');
+    } else {
+        var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
+        for (var i = 1; i <= length; i++) {
+            if (schedules[i] != '') {
+                $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
+                    `<span style="font-size: 20px;font-weight: 500;">${i}</span><span style="
+                font-size: 12px;
+                margin-top: -7px;
+            ">${getDay(moment(moment(selectedDate).format('YYYYMM') + i.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
+            }
         }
     }
+
 }
 
 // 숫자를 요일로
@@ -549,10 +541,10 @@ function displayTimetable(data) {
     }
 
     timetableRaw = data;
+    console.log(data.mon)
 
     // 시간표 모든 요일 없음
-    if (data.mon == "" && data.tue == "" && data.wed == "" && data.thu == "" && data.fri == "") {
-        console.log('시간표 없음');
+    if (Object.keys(data.mon).length == 0 && Object.keys(data.tue).length == 0 && Object.keys(data.wed).length == 0 && Object.keys(data.thu).length == 0 && Object.keys(data.fri).length == 0) {
         $('.timetable-wrap table').hide();
         $('.vacation-wrap').show();
         return false;
@@ -587,6 +579,7 @@ function displayTimetable(data) {
             $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
         }
     }
+    $('th').removeClass('skeleton');
 }
 
 
@@ -655,7 +648,6 @@ function imageSearch(query) {
         type: "GET",
         url: 'https://www.googleapis.com/customsearch/v1?key=AIzaSyCSJZaed6FebVZm2mEqbeIeHyspQfHKjwI&cx=35cc76baf4e73d7f8&searchType=image&q=' + query,
         success: function (result) {
-            console.log(result.items[0].link)
             var image_result = `<figure itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
             <a href="${result.items[0].link}" itemprop="contentUrl"
                 data-size="${result.items[0].width}x${result.items[0].height}">
@@ -1089,7 +1081,6 @@ function mealLikeBtn() {
                 });
                 reactionHistory.push(selectedDate)
                 localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
-                console.log(reactionHistory);
             } else {
                 mealRef.set({
                     like: 1,
@@ -1117,7 +1108,6 @@ function mealdislikeBtn() {
                 });
                 reactionHistory.push(selectedDate)
                 localStorage.setItem("ssoak_meal_reaction_history", reactionHistory);
-                console.log(reactionHistory);
             } else {
                 mealRef.set({
                     like: 0,
