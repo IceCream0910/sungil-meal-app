@@ -98,8 +98,16 @@ if (localStorage.getItem("sungil_favTagsList")) {
 }
 
 
+// 새학기 학년/반 정보 수정 안내
+var isChangeNewInfo2023 = localStorage.getItem("sungil_isChangeNewInfo2023") || false;
+if (!isChangeNewInfo2023) {
+    openModal('새학년 정보를 알려주세요', 'gradeClassSettings');
+    localStorage.setItem("sungil_isChangeNewInfo2023", true)
+}
+
+
 var todayForDday = new Date();
-var ddayDate = new Date(2023, 1, 1);
+var ddayDate = new Date(2023, 2, 1);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
 $('#endVacation-dday').html(` ✅ ${-(ddayResult * -1)}일 후 개학해요(3일 후 다시 방학함)`);
@@ -992,7 +1000,7 @@ function shareApp() {
 
 
 function openModal(title, id) {
-    disablePullToRefresh();
+    if (refresher) disablePullToRefresh();
     $('.sheet-modal').css('height', '30%');
     $('#modal-title').html(title);
     $('.content-wrap').hide();
