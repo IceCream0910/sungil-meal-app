@@ -107,10 +107,10 @@ if (!isChangeNewInfo2023) {
 
 
 var todayForDday = new Date();
-var ddayDate = new Date(2023, 2, 1);
+var ddayDate = new Date(2023, 2, 2);
 var gap = ddayDate.getTime() - todayForDday.getTime();
 var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-$('#endVacation-dday').html(` 💫 ${-(ddayResult * -1)}일 후 새 학기 시작`);
+$('#endVacation-dday').html(` 💫 ${-(ddayResult * -1)}일 후 새 학기가 시작돼요`);
 
 
 /*
