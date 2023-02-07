@@ -186,12 +186,8 @@ function loadNotices() {
                     var fileName = data.articles[i].files[0].title;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
-            <h4>`+ title + `</h4>
-            <div class="file-box" onclick="window.open('` + fileUrl + `', '_blank')">
-            <ion-icon name="document-text-outline"></ion-icon>
-            `+ fileName + `
-            </div>
-            <p>`+ createdAt + `</p>
+            <h4 style="font-weight:600;">`+ title + `</h4>
+            <p style="opacity:0.7;">`+ createdAt + `</p>
         </div>`);
             }
             if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
@@ -463,7 +459,13 @@ function displaySchedule(data) {
         }
     });
     if (isAllEmpty) {
-        $('#schedule-content').html('<h3 class="no-schedule">일정이 없어요</h3>');
+        $('#schedule-content').html(`
+        <div class="vacation-wrap" style="text-align: center;opacity:0.7;">
+                        <span style="font-size:70px;">🥱</span>
+                        <br>
+                        이번 달에는 일정이 없어요
+                    </div>
+                    `);
     } else {
         var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
         for (var i = 1; i <= length; i++) {

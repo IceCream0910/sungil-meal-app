@@ -60,7 +60,6 @@
     </script>
     <script>
         if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("service-worker.js"); }); } jQuery.browser = {}; (function () { jQuery.browser.msie = false; jQuery.browser.version = 0; if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) { jQuery.browser.msie = true; jQuery.browser.version = RegExp.$1; } })(); </script>
-    <link rel="prefetch" href="settings.html">
 </head>
 <header class="main-nav">
     <div class="d-flex flex-row" id="nav-flex"><button class="mdc-fab mdc-fab--mini mdc-fab--touch"
@@ -453,11 +452,6 @@
     </div>
 
     <section id="home">
-        <div class="floating-btn" id="ai-btn"
-            style="bottom:100px;z-index:999998;background:inherit;border: 2px solid transparent;background-image: linear-gradient(#2f2f2f, #2f2f2f), linear-gradient(90deg, rgba(82,114,255,1) 0%, rgba(131,111,148,1) 100%);background-origin: border-box;background-clip: content-box, border-box;"
-            onclick="window.open('https://ai.sungil.me', '_blank');">
-            <img src="assets/icons/ai.png" style="width: 30px;height: 30px;">
-        </div>
 
         <div class="home-header">
             <img id="main-header-icon" loading="lazy" src="assets/icons/header_logo.png"
@@ -495,11 +489,8 @@
                     </div>
                 </div>
                 <div id="no-meal" style="opacity:0.7;">
-                    <picture>
-                        <source srcset="assets/icons/webp/drink.webp" type="image/webp" class="no-meal-img" />
-                        <img class="no-meal-img" src="assets/icons/drink.png" alt="급식 정보 없음 일러스트">
-                    </picture>
-                    <br><br><span>오늘은 급식이 없어요</span>
+                    <span style="font-size:70px;">🍴</span>
+                    <br><span>오늘은 급식이 없어요</span>
                 </div>
                 <div id="exist-meal">
                     <div class="card">
@@ -572,9 +563,10 @@
 
 
                 <div class="timetable-wrap">
-                    <div class="vacation-wrap" style="display:none;height:200px;">
+                    <div class="vacation-wrap" style="display:none;text-align: center;opacity:0.7;">
+                        <span style="font-size:70px;">🫥</span>
                         <br>
-                        등록된 시간표가 없어요.
+                        등록된 시간표가 없어요
                     </div>
                     <br>
                     <table>
@@ -644,9 +636,8 @@
                 <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-WCT8chS2JYxIPFuG" data-ad-width="320"
                     data-ad-height="100"></ins>
                 <br><br>
-                <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
-                    💡 쏙의 새로운 기능을 제안해주세요!
-                    <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
+                <div class="callout custom-btn" onclick="window.open('https://ai.sungil.me/', '_blank')">
+                    AI 선길이를 만나보세요 >
                 </div>
             </div>
 
@@ -718,7 +709,7 @@
         <ins class="kakao_ad_area" style="display:none;" data-ad-unit="DAN-tQSkVhsaftmuhLpL" data-ad-width="320"
             data-ad-height="100"></ins>
 
-        <br><br><br><br><br>
+        <br><br><br><br><br><br><br>
 
     </section>
 
@@ -861,7 +852,11 @@
     <section id="tools" style="display:none;display:flex;flex-direction:column;gap:10px;">
         <h3 class="card__primary__title__text" style="margin-top:10px;">설정</h3>
         <br>
-
+        <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
+            💡 쏙의 새로운 기능을 제안해주세요!
+            <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
+        </div>
+        <br>
         <h3 class="card__primary__title__text" id="profile-text"></h3>
         <button class="custom-btn"
             onclick="openModal('학년/반 설정', 'gradeClassSettings');$('#grade-select').val(grade);$('#class-select').val(classNum);"
