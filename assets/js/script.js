@@ -180,10 +180,10 @@ function loadNotices() {
             for (var i = 0; i < 5; i++) {
                 var title = data.articles[i].title;
                 var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
-                var link = data.articles[i].view_link;
                 if (data.articles[i].files) {
                     var fileUrl = data.articles[i].files[0].url;
                     var fileName = data.articles[i].files[0].title;
+                    var link = `https://docs.google.com/gview?url=${fileUrl}&embedded=true`;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4 style="font-weight:600;">`+ title + `</h4>
