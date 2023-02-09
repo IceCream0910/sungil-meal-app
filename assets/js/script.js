@@ -105,13 +105,36 @@ if (!isChangeNewInfo2023) {
     localStorage.setItem("sungil_isChangeNewInfo2023", true)
 }
 
+const flicking = new Flicking("#carousel", {
+    align: "prev",
+    circular: true,
+    bound: true,
+    renderOnlyVisible: true
+});
 
-var todayForDday = new Date();
-var ddayDate = new Date(2023, 2, 2);
-var gap = ddayDate.getTime() - todayForDday.getTime();
-var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-$('#endVacation-dday').html(` 💫 ${-(ddayResult * -1)}일 후 새 학기가 시작돼요`);
+const EVENTS = Flicking.EVENTS;
+flicking.on(EVENTS.MOVE, evt => {
+    updateDday();
+})
 
+// every 5 sec
+const flickingAutoplay = setInterval(function () {
+    flicking.next()
+}, 6000);
+
+function updateDday() {
+    var todayForDday = new Date();
+    var ddayDate = new Date(2023, 2, 2);
+    var gap = ddayDate.getTime() - todayForDday.getTime();
+    var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+    $('#dday-startSem').html(`D-${-(ddayResult * -1)}`);
+
+    var ddayDate_suneung = new Date(2023, 10, 16);
+    var gap_suneung = ddayDate_suneung.getTime() - todayForDday.getTime();
+    var ddayResult_suneung = Math.ceil(gap_suneung / (1000 * 60 * 60 * 24));
+    $('#dday-suneung').html(`D-${-(ddayResult_suneung * -1)}`);
+}
+updateDday();
 
 /*
 
@@ -285,6 +308,7 @@ function updateInfo() {
 
             if (cachedTimeData && cachedTimeData_date == requestTimeDate) {
                 displayTimetable(cachedTimeData);
+                $('#timetable-loader').show();
                 $.ajax({
                     type: "GET",
                     url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
@@ -295,13 +319,14 @@ function updateInfo() {
                             localStorage.setItem("sungil_timeapi_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "") + '--' + getWeekNo(moment(selectedDate).format('YYYY-MM-DD')));
                             displayTimetable(data);
                         }
+                        $('#timetable-loader').hide();
                     }
                 });
 
             } else {
-                $('th').addClass('skeleton');
                 $('.timetable-wrap table').show();
                 $('.vacation-wrap').hide();
+                $('#timetable-loader').show();
                 $.ajax({
                     type: "GET",
                     url: 'https://sungil-school-api.vercel.app/timetable?date=' + selectedDate + '&grade=' + grade + '&classNum=' + classNum,
@@ -450,6 +475,7 @@ function showAllMeal() {
 
 
 function displaySchedule(data) {
+    $('#schedule-content').html('');
     var schedules = data.schedule;
     var isAllEmpty = true;
     $.each(schedules, function (key, value) {
@@ -467,9 +493,10 @@ function displaySchedule(data) {
                     </div>
                     `);
     } else {
-        var length = Object.keys(schedules).length - 2; //year, month 제외 해당 월 일 수 산출
-        for (var i = 1; i <= length; i++) {
+        var length = Object.keys(schedules).length - 3;
+        for (var i = 1; i < length; i++) {
             if (schedules[i] != '') {
+                console.log(schedules[i])
                 $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
                     `<span style="font-size: 20px;font-weight: 500;">${i}</span><span style="
                 font-size: 12px;
@@ -489,6 +516,7 @@ function getDay(day) {
 
 
 function displayTimetable(data) {
+    $('#timetable-loader').hide();
     var day = moment(selectedDate).day();
     var sections = document.querySelectorAll("tbody th");
     for (var i = 0; i < sections.length; i++) {
@@ -551,7 +579,6 @@ function displayTimetable(data) {
     }
 
     timetableRaw = data;
-    console.log(data.mon)
 
     // 시간표 모든 요일 없음
     if (Object.keys(data.mon).length == 0 && Object.keys(data.tue).length == 0 && Object.keys(data.wed).length == 0 && Object.keys(data.thu).length == 0 && Object.keys(data.fri).length == 0) {
@@ -589,7 +616,6 @@ function displayTimetable(data) {
             $('#f' + ((i + 1).toString())).html(data.fri[i].ITRT_CNTNT);
         }
     }
-    $('th').removeClass('skeleton');
 }
 
 

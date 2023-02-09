@@ -96,6 +96,7 @@ function onDark() {
     //설정 화면 요소
     $(':root').addClass("dark");
     $('.mdc-radio__outer-circle').addClass("dark");
+    $('.checkbox').addClass("dark");
     var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
         border-color: rgba(255,255,255, 0.54);
     }`
@@ -108,7 +109,6 @@ function onDark() {
     $('.header').addClass("dark");
     $('.community-tab').addClass("dark");
     $('.post-item').addClass("dark");
-
 }
 
 function offDark() {
@@ -164,6 +164,7 @@ function offDark() {
     //설정 화면 요소
     $(':root').removeClass("dark");
     $('.mdc-radio__outer-circle').removeClass("dark");
+    $('.checkbox').removeClass("dark");
     var styles = `.mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
         border-color: rgba(0,0,0, 0.54);
     }`

@@ -471,10 +471,23 @@
         </div>
 
         <div class="home-order-wrap" style="margin-bottom:50px;">
+
             <div class="meal-wrap" id="order-item">
 
-                <div class="callout custom-btn" id="endVacation-dday">
+                <div id="carousel" class="flicking-viewport">
+                    <div class="flicking-camera">
+                        <div class="flicking-panel">
+                            <h1 id="dday-startSem" style="font-weight:900;"></h1><br>
+                            <h3 style="opacity:0.8;margin-top:-5px;">03.02 | 개학</h3>
+                        </div>
+                        <div class="flicking-panel">
+                            <h1 id="dday-suneung" style="font-weight:900;"></h1><br>
+                            <h3 style="opacity:0.8;margin-top:-5px;">11.16 | 2024학년도 수능</h3>
+                        </div>
+                    </div>
                 </div>
+
+
                 <br><br>
                 <div class="d-flex flex-row" id="meal-flex">
                     <h3 style="float:left" class="card__primary__title__text" onclick="showAllMeal()">급식 <ion-icon
@@ -538,6 +551,11 @@
             <div class="siganpyo-wrap" id="order-item">
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">시간표
+                        <div class="spinner-box" id="timetable-loader">
+                            <div class="circle-border">
+                                <div class="circle-core"></div>
+                            </div>
+                        </div>
                     </h3>
                     <div> <button class="mdc-button mdc-button--icon-leading"
                             onclick="openModal('학년/반 설정', 'gradeClassSettings');$('#grade-select').val(grade);$('#class-select').val(classNum);"
@@ -639,10 +657,6 @@
                 <div class="callout custom-btn" onclick="window.open('https://ai.sungil.me/', '_blank')">
                     AI 선길이를 만나보세요 >
                 </div>
-            </div>
-
-
-            <div class="selfcheck-wrap" id="order-item">
             </div>
 
 
@@ -851,7 +865,6 @@
 
     <section id="tools" style="display:none;display:flex;flex-direction:column;gap:10px;">
         <h3 class="card__primary__title__text" style="margin-top:10px;">설정</h3>
-        <br>
         <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
             💡 쏙의 새로운 기능을 제안해주세요!
             <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
@@ -1084,7 +1097,10 @@
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js" defer></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script src="https://unpkg.com/@egjs/flicking/dist/flicking.pkgd.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://unpkg.com/@egjs/flicking/dist/flicking.css" crossorigin="anonymous" />
+<script src="assets/js/external/flicking-ejs-plugins.js"></script>
+<link rel="stylesheet" href="https://naver.github.io/egjs-flicking-plugins/release/latest/dist/flicking-plugins.css">
 
 <script src="assets/js/script.js?v=221202"></script>
 <script src="assets/js/community.js?v=221202"></script>
