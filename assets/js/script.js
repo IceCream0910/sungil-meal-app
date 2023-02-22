@@ -100,7 +100,7 @@ if (localStorage.getItem("sungil_favTagsList")) {
 
 // 새학기 학년/반 정보 수정 안내
 var isChangeNewInfo2023 = localStorage.getItem("sungil_isChangeNewInfo2023") || false;
-if (!isChangeNewInfo2023) {
+if (!isChangeNewInfo2023 && grade && classNum) {
     openModal('새학년 정보를 알려주세요', 'gradeClassSettings');
     localStorage.setItem("sungil_isChangeNewInfo2023", true)
 }
