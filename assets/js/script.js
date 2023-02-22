@@ -256,35 +256,47 @@ String.prototype.insertAt = function (index, str) {
     return this.slice(0, index) + str + this.slice(index)
 }
 
-var data;
+var mealData;
+var scheduleData;
 var newData;
 function updateInfo() {
-    var cachedData = JSON.parse(localStorage.getItem("sungil_api_cache")) || null;
-    var cachedData_date = localStorage.getItem("sungil_api_cache_date") || null;
+    var cachedMealData = JSON.parse(localStorage.getItem("sungil_meal_cache")) || null;
+    var cachedMealData_date = localStorage.getItem("sungil_meal_cache_date") || null;
+    var cachedScheduleData = JSON.parse(localStorage.getItem("sungil_schedule_cache")) || null;
+    var cachedScheduleData_date = localStorage.getItem("sungil_schedule_cache_date") || null;
     var requestDate = selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, "");
     $('#meal-loader').show();
     $('#meal-menus').empty();
     if (!isTest) {
-        $('#schedule-content').html('');
-        if (cachedData && cachedData_date == requestDate) {
-            displayMeal(cachedData);
-            displaySchedule(cachedData);
+        if (cachedMealData && cachedMealData_date == requestDate) {
+            displayMeal(cachedMealData);
         } else {
             $.ajax({
                 type: "GET",
-                url: "https://sungil-school-api.vercel.app/api/" + selectedDate,
+                url: "https://sungil-school-api.vercel.app/meal/" + selectedDate,
                 success: function (result) {
-                    data = JSON.parse(result);
-                    localStorage.setItem("sungil_api_cache", JSON.stringify(data));
-                    localStorage.setItem("sungil_api_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, ""));
-
-                    //급식
-                    displayMeal(data);
-
-                    //학사일정
-                    if (data.schedule) {
-                        displaySchedule(data);
-                        //$('#schedule-content').html(data.schedule.EVENT_NM);
+                    mealData = JSON.parse(result);
+                    localStorage.setItem("sungil_meal_cache", JSON.stringify(mealData));
+                    localStorage.setItem("sungil_meal_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, ""));
+                    if (mealData) {
+                        displayMeal(mealData);
+                    }
+                }
+            });
+        }
+        $('#schedule-content').html('');
+        if (cachedScheduleData && cachedScheduleData_date == requestDate) {
+            displaySchedule(cachedScheduleData);
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "https://sungil-school-api.vercel.app/schedule/" + selectedDate,
+                success: function (result) {
+                    scheduleData = JSON.parse(result);
+                    localStorage.setItem("sungil_schedule_cache", JSON.stringify(scheduleData));
+                    localStorage.setItem("sungil_schedule_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, ""));
+                    if (scheduleData) {
+                        displaySchedule(scheduleData);
                     }
                 }
             });
@@ -459,14 +471,14 @@ function displayMeal(data) {
 
 function showAllMeal() {
     $('#meallist-result').html('');
-    var data = JSON.parse(localStorage.getItem("sungil_api_cache"));
+    var data = JSON.parse(localStorage.getItem("sungil_meal_cache"));
     if (data) {
         var year = selectedDate.substring(0, 4);
-        for (var i = 1; i < new Date(year, data.meal.month - 1, 0).getDate() + 2; i++) {
-            if (data.meal[i]) {
+        for (var i = 1; i < new Date(year, data.month - 1, 0).getDate() + 2; i++) {
+            if (data[i]) {
                 $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${moment(new Date(year, data.meal.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
-                ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
+                <h2>${moment(new Date(year, data.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
+                ${(data[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
         }
         openModal('이번 달 급식', 'mealList');
@@ -477,9 +489,10 @@ function showAllMeal() {
 function displaySchedule(data) {
     $('#schedule-content').html('');
     var schedules = data.schedule;
+    console.log(schedules)
     var isAllEmpty = true;
     $.each(schedules, function (key, value) {
-        if (key != 'today' && key != 'day' && key != 'year' && key != 'month' && value != '') {
+        if (value != '') {
             isAllEmpty = false;
             return false;
         }
@@ -493,17 +506,16 @@ function displaySchedule(data) {
                     </div>
                     `);
     } else {
-        var length = Object.keys(schedules).length - 3;
-        for (var i = 1; i < length; i++) {
-            if (schedules[i] != '') {
-                console.log(schedules[i])
-                $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
-                    `<span style="font-size: 20px;font-weight: 500;">${i}</span><span style="
-                font-size: 12px;
-                margin-top: -7px;
-            ">${getDay(moment(moment(selectedDate).format('YYYYMM') + i.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + schedules[i].replaceAll(',', "<br>") + '</h3></div>');
+        var length = Object.keys(schedules).length;
+        $.each(schedules, function (key, value) {
+            if (value) {
+                    $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
+                        `<span style="font-size: 20px;font-weight: 500;">${key}</span><span style="
+                    font-size: 12px;
+                    margin-top: -7px;
+                ">${getDay(moment(moment(selectedDate).format('YYYYMM') + key.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + value.replaceAll(',', "<br>") + '</h3></div>');
             }
-        }
+        });
     }
 
 }
