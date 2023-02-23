@@ -48,6 +48,23 @@ $('#datepicker').datepicker().on("input change", function (e) {
     updateInfo();
 });
 
+
+if(isApp() && navigator.userAgentua.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
+  $("#datepicker").datepicker('disable');
+}
+
+$('#datepicker').on('click', function () {
+    if(isApp() && navigator.userAgentua.indexOf('hybridApp8') > -1) {
+        Android.openDatePicker();
+    }
+});
+
+
+function androidDatePickerCallback(date) {
+    selectedDate = moment(date).format('YYYYMMDD');
+    updateInfo();
+}
+
 //안드로이드 앱인지 확인
 function isApp() {
     var ua = navigator.userAgent;
