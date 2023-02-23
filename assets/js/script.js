@@ -49,15 +49,15 @@ $('#datepicker').datepicker().on("input change", function (e) {
 });
 
 
-if(isApp() && navigator.userAgentua.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
+if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
   $("#datepicker").datepicker('disable');
 }
 
-$('#datepicker').on('click', function () {
-    if(isApp() && navigator.userAgentua.indexOf('hybridApp8') > -1) {
+function datepickerClick() {
+    if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) {
         Android.openDatePicker();
     }
-});
+}
 
 
 function androidDatePickerCallback(date) {
@@ -78,7 +78,7 @@ function isApp() {
 if (isApp()) {
     const isActiveMealPush = localStorage.getItem("android-noti") || true;
     if (isActiveMealPush) {
-        Android.setNotiEnable(true);
+        //Android.setNotiEnable(true);
     } else {
         Android.setNotiEnable(false);
     }
