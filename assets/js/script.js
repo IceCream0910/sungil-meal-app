@@ -55,13 +55,13 @@ if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이�
 
 function datepickerClick() {
     if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) {
-        Android.openDatePicker();
+        Android.openDatePicker(selectedDate);
     }
 }
 
 
 function androidDatePickerCallback(date) {
-    $("#datepicker").datepicker("setDate", new Date(date));
+    $("#datepicker").datepicker("setDate", new Date(moment(date)));
     selectedDate = moment(date).format('YYYYMMDD');
     updateInfo();
 }
