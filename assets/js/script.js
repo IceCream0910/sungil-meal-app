@@ -61,6 +61,7 @@ function datepickerClick() {
 
 
 function androidDatePickerCallback(date) {
+    $("#datepicker").datepicker("setDate", new Date(date));
     selectedDate = moment(date).format('YYYYMMDD');
     updateInfo();
 }
