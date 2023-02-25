@@ -51,6 +51,10 @@ $('#datepicker').datepicker().on("input change", function (e) {
 
 if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
   $("#datepicker").datepicker('disable');
+    var appVersion = navigator.userAgent.substr(navigator.userAgent.length - 1);
+  $('#app_version').html(`Build code ${appVersion} (app)`)
+} else if(isApp() && navigator.userAgent.indexOf('hybridApp8') <= -1) {
+    $('#app_version').html(`엡 최신 버전 업데이트 필요`)
 }
 
 function datepickerClick() {
@@ -489,15 +493,21 @@ function displayMeal(data) {
 
 function showAllMeal() {
     $('#meallist-result').html('');
+    var isAllEmpty = true;
     var data = JSON.parse(localStorage.getItem("sungil_meal_cache"));
-    if (data) {
-        var year = selectedDate.substring(0, 4);
-        for (var i = 1; i < new Date(year, data.month - 1, 0).getDate() + 2; i++) {
-            if (data[i]) {
+    if (data.meal) {
+        for (var i = 1; i < new Date(data.meal.year, data.meal.month - 1, 0).getDate() + 2; i++) {
+            if (data.meal[i]) {
+                isAllEmpty = false;
                 $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${moment(new Date(year, data.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
-                ${(data[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
+                <h2>${moment(new Date(data.meal.year, data.meal.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
+                ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
+        }
+        if(isAllEmpty){
+            $('#meallist-result').html(`<div class="meal-list-item">
+            이번 달에는 급식이 없어요
+            </div>`);
         }
         openModal('이번 달 급식', 'mealList');
     }

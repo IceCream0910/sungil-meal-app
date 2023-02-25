@@ -14,56 +14,9 @@ if (!grade || !classNum) {
 }
 
 var selectedDateAssign = new Date();
-// 시행 날짜 선택
-$('#date_assign').on('change', function () {
-    var date = moment(new Date($(this).val())).format('YYYYMMDD');
-    selectedDateAssign = new Date($(this).val());
-    $('.timetable_selector').html('해당 날짜의 시간표를 불러오는 중입니다.');
-    $.ajax({
-        type: "GET",
-        url: 'https://sungil-school-api.vercel.app/dayTimetable?date=' + date + '&grade=' + grade + '&classNum=' + classNum,
-        success: function (result) {
-            var data = JSON.parse(result);
-            console.log(data);
-            if (data.timetable) {
-                $('.timetable_selector').html('');
-                for (var i = 0; i < data.timetable.length; i++) {
-                    $('.timetable_selector').append(`
-                    <div class="item" data-period="`+ (i + 1) + `">
-                    <h6>`+ (i + 1) + `교시</h5>
-                    <h5>`+ data.timetable[i].ITRT_CNTNT + `</h3>
-                    </div>`);
-                }
-                //다크모드 적용
-                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-                    var items = document.getElementsByClassName('item');
-                    for (var i = 0; i < items.length; i++) {
-                        items[i].classList.add("dark");
-                    }
-                }
-            } else {
-                $('.timetable_selector').html('선택한 날짜에는 수업이 없어요.');
-            }
-            //bottom sheet 높이 조정
-            setTimeout(function () {
-                $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
-            }, 100);
-        }
-    });
-})
-
 
 var selectedPeriod = null;
 var selctedSubject = null;
-
-// 시간표에서 교시 선택
-$('.timetable_selector').on('click', '.item', function () {
-    $('.timetable_selector .item').removeClass('active');
-    $(this).addClass('active');
-    selectedPeriod = $(this).attr('data-period');
-    selctedSubject = $(this).find('h5').text();
-})
-
 
 var assignArr = [];
 
@@ -74,7 +27,7 @@ function addAssignment() {
         toast('제목을 입력해주세요');
     } else if (!$('#date_assign').val()) {
         toast('날짜를 선택해주세요');
-    } else if (selectedDateAssign <= new Date()) {
+    } else if (selectedDateAssign > new Date()) {
         toast('이미 지난 날짜는 선택할 수 없습니다.');
     } else {  //null 체크 통과
         var id = Math.random().toString(36).substr(2, 9);
@@ -134,51 +87,18 @@ function openAssignDetails(id) {
 
 // 수행평가 추가 모달 띄우기
 $('.addAssignment-btn').on('click', function () {
-    openModal('수행평가 추가', 'assessment');
-    $('.timetable_selector').html('로딩중...');
+    openModal('할 일 추가', 'assessment');
     var date = moment(new Date($('#assessment #date_assign').val())).format('YYYYMMDD');
-    $('.timetable_selector .item').removeClass('active');
     $(this).addClass('active');
     $('#assign-add-save-btn').show();
     $('#assign-edit-save-btn').hide();
-    $.ajax({
-        type: "GET",
-        url: 'https://sungil-school-api.vercel.app/dayTimetable?date=' + date + '&grade=' + grade + '&classNum=' + classNum,
-        success: function (result) {
-            var data = JSON.parse(result);
-            console.log(data);
-            if (data.timetable) {
-                $('.timetable_selector').html('');
-                for (var i = 0; i < data.timetable.length; i++) {
-                    $('.timetable_selector').append(`
-                            <div class="item" data-period="`+ (i + 1) + `">
-                            <h6>`+ (i + 1) + `교시</h5>
-                            <h5>`+ data.timetable[i].ITRT_CNTNT + `</h3>
-                            </div>`);
-                }
-                //다크모드 적용
-                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-                    var items = document.getElementsByClassName('item');
-                    for (var i = 0; i < items.length; i++) {
-                        items[i].classList.add("dark");
-                    }
-                }
-            } else {
-                $('.timetable_selector').html('선택한 날짜에는 수업이 없어요.');
-            }
-            //bottom sheet 높이 조정
-            setTimeout(function () {
-                $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
-            }, 100);
-        }
-    });
 });
 
 function assignEditMode() {
     var data = JSON.parse(localStorage.getItem('assignments'));
     var targetItem = data.find(item => item.id == selectedAssignId);
     $('.sheet-modal').css('height', '30%');
-    $('#modal-title').html('수행평가 편집');
+    $('#modal-title').html('할 일 편집');
     $('.content-wrap').hide();
     $('#assessment').show();
     $('#calculator').hide();
@@ -187,57 +107,15 @@ function assignEditMode() {
     $('#assign-edit-save-btn').show();
     $('#title').val(targetItem.title);
     $('#assessment #date_assign').val(moment(targetItem.date).format('YYYY-MM-DD'));
-    $('.timetable_selector').html('로딩중...');
     $('#exam').hide();
     $('body').css('overflow', 'hidden');
     $('.modal-in').css('display', 'block');
     $('.modal-in').css('bottom', '-1850px');
     var date = moment(new Date($('#assessment #date_assign').val())).format('YYYYMMDD');
-    $('.timetable_selector .item').removeClass('active');
     $(this).addClass('active');
     selectedDateAssign = new Date(targetItem.date);
     selectedPeriod = targetItem.period;
     selctedSubject = targetItem.subject;
-    $.ajax({
-        type: "GET",
-        url: 'https://sungil-school-api.vercel.app/dayTimetable?date=' + date + '&grade=' + grade + '&classNum=' + classNum,
-        success: function (result) {
-            var data = JSON.parse(result);
-            console.log(data);
-            if (data.timetable) {
-                $('.timetable_selector').html('');
-                for (var i = 0; i < data.timetable.length; i++) {
-                    if (i + 1 == targetItem.period) {
-                        $('.timetable_selector').append(`
-                        <div class="item active" data-period="`+ (i + 1) + `">
-                        <h6>`+ (i + 1) + `교시</h5>
-                        <h5>`+ data.timetable[i].ITRT_CNTNT + `</h3>
-                        </div>`);
-                    } else {
-                        $('.timetable_selector').append(`
-                            <div class="item" data-period="`+ (i + 1) + `">
-                            <h6>`+ (i + 1) + `교시</h5>
-                            <h5>`+ data.timetable[i].ITRT_CNTNT + `</h3>
-                            </div>`);
-                    }
-
-                }
-                //다크모드 적용
-                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-                    var items = document.getElementsByClassName('item');
-                    for (var i = 0; i < items.length; i++) {
-                        items[i].classList.add("dark");
-                    }
-                }
-            } else {
-                $('.timetable_selector').html('선택한 날짜에는 수업이 없어요.');
-            }
-            //bottom sheet 높이 조정
-            setTimeout(function () {
-                $('.sheet-modal').css('height', $('#assessment').height() + 130 + 'px');
-            }, 100);
-        }
-    });
     setTimeout(function () {
         $('.modal-in').css('bottom', '0px');
     }, 100);

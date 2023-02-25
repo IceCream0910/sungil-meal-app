@@ -182,10 +182,6 @@
                         <span class="bar"></span>
                         <label>날짜</label>
                     </div>
-
-                    <span style="margin-left:15px;opacity:0.5">수업은 꼭 선택하지 않아도 괜찮아요</span>
-                    <div class="timetable_selector">
-                    </div>
                     <br>
                     <button class="custom-btn modal-btn" id="assign-add-save-btn" aria-label="수행평가 저장"
                         onclick="addAssignment();" style="display:none;" class="mdc-button mdc-button--raised">
@@ -935,7 +931,8 @@
         <br>
         <hr>
         <h3 class="card__primary__title__text">정보</h3>
-        <p class="lead" onclick="alert($(this).html())">Build 220828_0001</p>
+        <p class="lead" onclick="alert($(this).html())">Build 230226.001(web)</p>
+        <p class="lead" onclick="alert($(this).html())" id="app_version"></p>
 
         <div style="display:flex;flex-direction:row;gap:20px;">
             <div class="card notice-card dark" style="width:50%;max-width:220px"
