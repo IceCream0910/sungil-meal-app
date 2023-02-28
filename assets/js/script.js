@@ -836,6 +836,7 @@ $('#tools').hide();
 
 
 $('.bottom-nav a').on('click', function () {
+    if ($(this).parent().attr('class') == 'header-btn-wrap') return;
     $('.bottom-nav a').removeClass('active');
     $('.bottom-nav a').removeClass('bounce');
     $(this).addClass('active');

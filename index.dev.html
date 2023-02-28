@@ -124,16 +124,12 @@
     </a>
 
     <div class="header-btn-wrap">
-        <a href="javascript:shareApp()" id="appshare-btn" aria-label="앱 공유">
-            <ion-icon name="share"></ion-icon>
+        <a href="https://ai.sungil.me" target="_blank" aria-label="AI선길이">
+            <ion-icon name="chatbubble-outline" style="font-size:20px;"></ion-icon>
         </a>
-
-        <div id="service-noti" onclick="window.open('https://log.sungil.me/tags/업데이트-내역');" aria-label="업데이트 내역 열기">
-            <span id="noti-preview"></span>
-            <div class="icon-bubble" style="font-size: 25px;margin-top: 20px;">
-                <ion-icon name="notifications"></ion-icon>
-            </div>
-        </div>
+        <a href="javascript:openModal('개발자의 다른 서비스', 'otherApps')" aria-label="다른 앱">
+            <ion-icon name="apps" style="font-size:20px;"></ion-icon>
+        </a>
     </div>
 </div>
 
@@ -394,7 +390,10 @@
                     </button>
                 </div>
 
-
+                <div class="content-wrap" id="otherApps">
+                    <button class="custom-btn modal-btn" onclick="closeModal();window.open('https://ai.sungil.me/wordcounter')">글자수 세기/맞춤법 검사
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -454,15 +453,11 @@
             <img id="main-header-icon" loading="lazy" src="assets/icons/header_logo.png"
                 style="width:30px;height:30px;filter:grayscale(100%);">
             <div class="header-btn-wrap">
-                <a href="javascript:shareApp()" id="appshare-btn" aria-label="앱 공유">
-                    <ion-icon name="share"></ion-icon>
+                <a href="https://ai.sungil.me" target="_blank" aria-label="AI선길이">
+                    <ion-icon name="chatbubble-outline" style="font-size:20px;"></ion-icon>
                 </a>
-
-                <a id="service-noti" href="https://log.sungil.me/tags/업데이트-내역" target="_blank" aria-label="업데이트 내역 열기">
-                    <span id="noti-preview"></span>
-                    <div class="icon-bubble">
-                        <ion-icon name="notifications"></ion-icon>
-                    </div>
+                <a href="javascript:openModal('개발자의 다른 서비스', 'otherApps')" aria-label="다른 앱">
+                    <ion-icon name="apps" style="font-size:20px;"></ion-icon>
                 </a>
             </div>
         </div>
@@ -888,7 +883,7 @@
 
         <hr>
 
-        <h3 class="card__primary__title__text">테마</h3>
+        <h3 class="card__primary__title__text">화면 테마</h3>
 
 
         <div class="mdc-form-field">
@@ -900,7 +895,7 @@
                 </div>
                 <div class="mdc-radio__ripple"></div>
             </div>
-            <label for="radio-1">시스템 설정 따르기</label>
+            <label for="radio-1">시스템 설정과 같이</label>
         </div>
         <div class="mdc-form-field">
             <div class="mdc-radio">
@@ -911,7 +906,7 @@
                 </div>
                 <div class="mdc-radio__ripple"></div>
             </div>
-            <label for="radio-2">라이트 테마</label>
+            <label for="radio-2">밝은 모드</label>
         </div>
         <div class="mdc-form-field">
             <div class="mdc-radio">
@@ -922,7 +917,7 @@
                 </div>
                 <div class="mdc-radio__ripple"></div>
             </div>
-            <label for="radio-3">다크 테마</label>
+            <label for="radio-3">어두운 모드</label>
         </div>
 
         <br>
