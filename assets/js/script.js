@@ -146,7 +146,7 @@ const flickingAutoplay = setInterval(function () {
 
 function updateDday() {
     var todayForDday = new Date();
-    var ddayDate = new Date(2023, 2, 2);
+    var ddayDate = new Date(2023, 3, 24);
     var gap = ddayDate.getTime() - todayForDday.getTime();
     var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
     $('#dday-startSem').html(`D-${-(ddayResult * -1)}`);
@@ -228,7 +228,7 @@ function loadNotices() {
                 if (data.articles[i].files) {
                     var fileUrl = data.articles[i].files[0].url;
                     var fileName = data.articles[i].files[0].title;
-                    var link = `https://docs.google.com/gview?url=${fileUrl}&embedded=true`;
+                    var link = `https://ai.sungil.me/pdf?url=${fileUrl}`;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4 style="font-weight:600;">`+ title + `</h4>
