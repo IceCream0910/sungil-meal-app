@@ -228,7 +228,7 @@ function loadNotices() {
                 if (data.articles[i].files) {
                     var fileUrl = data.articles[i].files[0].url;
                     var fileName = data.articles[i].files[0].title;
-                    var link = `https://ai.sungil.me/pdf?url=${fileUrl}`;
+                    var link = `https://docs.google.com/gview?url=${fileUrl}&embedded=true`;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
             <h4 style="font-weight:600;">`+ title + `</h4>
