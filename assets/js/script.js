@@ -222,12 +222,13 @@ function loadNotices() {
         success: function (result) {
             var data = JSON.parse(result);
             $('#notices-content').html('<h3 class="card__primary__title__text">가정통신문</h3><br>');
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 10; i++) {
                 var title = data.articles[i].title;
                 var createdAt = moment(new Date(data.articles[i].created_at)).format('YYYY-MM-DD');
                 if (data.articles[i].files) {
-                    var fileUrl = data.articles[i].files[0].url;
-                    var fileName = data.articles[i].files[0].title;
+                    var fileUrl = data.articles[i].files.find(function (file) {
+                        return file.url.endsWith('.pdf');
+                    }).url;
                     var link = `https://docs.google.com/gview?url=${fileUrl}&embedded=true`;
                 }
                 $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
@@ -691,15 +692,12 @@ function shareMeal() {
             text:
                 content,
             link: {
-                mobileWebUrl: 'https://hello.sungil.me/',
-                webUrl: 'https://hello.sungil.me/',
+                mobileWebUrl: 'https://sungil.me/',
+                webUrl: 'https://sungil.me/',
             },
         })
     } else {
-        $('#copied').text('내용 없음');
-        setTimeout(function () {
-            $('#copied').text('');
-        }, 1000);
+        toast('공유할 급식이 없어요');
     }
 
 }
@@ -923,18 +921,12 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "bottom", // `top` or `bottom`
+            gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(82, 114, 255, 0.3)",
-                color: "inherit",
-                border: "none",
-                borderRadius: "10px",
-                boxShadow: "none",
-                borderTop: "1px solid rgba(70, 70, 70, 0.4)",
+                borderRadius: "30px",
             },
-            onClick: function () { $('.toastify').fadeOut(); }
         }).showToast();
     } else {
         Toastify({
@@ -942,18 +934,12 @@ function toast(msg) {
             duration: 2200,
             newWindow: true,
             close: false,
-            gravity: "bottom", // `top` or `bottom`
+            gravity: "top", // `top` or `bottom`
             position: "center", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
             style: {
-                background: "rgba(82, 114, 255, 0.4)",
-                color: "inherit",
-                border: "none",
-                borderRadius: "10px",
-                boxShadow: "none",
-                borderTop: "1px solid rgba(58, 58, 58, 0.2)",
+                borderRadius: "30px",
             },
-            onClick: function () { $('.toastify').hide(); }
         }).showToast();
     }
 }
