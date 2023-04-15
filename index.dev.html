@@ -27,7 +27,9 @@
     <meta property="og:image" content="https://i.imgur.com/frj9qPN.png">
     <meta property="og:description" content="성일고의 모든 정보, 한 눈에 쏙">
 
-
+    <script type="module"
+        src="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/fontstream/djs/?sid=gAAAAABkOnZ6UuK5Iwj_IqmStZB7S_-4eUhn8Y5BUDTOJ9q93g1GMumfHElFVWVWmHq9gTgHWvMGf5AscOhluEz03ZxtXeFDCJAHUiunbM7czbhbOYs4oMon5e4j8_B328KEALPpZhOHUcgiMiHrD_Y0jPU4psKCnvFCw_tXX1bgo8_PGFsZ4DRBhpeEb6sobtPp2YnNlYkFYQ7fJNonqmI_pCmNNTgFyl0Efw7w-cgNfiw_hFiM55wj4P0ACetBmpG2GpOpDgEi"
+        charset="utf-8"></script>
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="Stylesheet"
         type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
@@ -70,8 +72,8 @@
         </button>
 
         <span onclick="datepickerClick()">
-        <input type="date" id="datepicker"/>
-    </span>
+            <input type="date" id="datepicker" />
+        </span>
         <button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick="forwardDate();" aria-label="날짜 1일 후로 이동">
             <div class="mdc-fab__ripple"></div><span class="material-icons mdc-button__icon">arrow_forward_ios</span>
             <div class="mdc-fab__touch"></div>
@@ -391,7 +393,8 @@
                 </div>
 
                 <div class="content-wrap" id="otherApps">
-                    <button class="custom-btn modal-btn" onclick="closeModal();window.open('https://ai.sungil.me/wordcounter')">글자수 세기/맞춤법 검사
+                    <button class="custom-btn modal-btn"
+                        onclick="closeModal();window.open('https://ai.sungil.me/wordcounter')">글자수 세기/맞춤법 검사
                     </button>
                 </div>
             </div>
@@ -658,7 +661,7 @@
             <div class="schedule-wrap" id="order-item">
                 <h3 class="card__primary__title__text">학사일정</h3>
                 <div id="schedule-content" style="margin-top:15px;"> </div>
-           
+
                 <br><br>
                 <div style="display:flex;flex-direction:row;gap:20px;">
                     <div class="card notice-card" style="width:50%;"
@@ -670,7 +673,7 @@
                         </ion-icon>
                         <br>
                     </div>
-            
+
                     <div class="card notice-card" style="width:50%;"
                         onclick="window.open('https://www.schoolinfo.go.kr/ei/ss/Pneiss_b01_s0.do?GS_CD=S090000620', '_blank')">
                         <h4>학교알리미</h4>
@@ -682,11 +685,11 @@
                     </div>
                 </div>
                 <br><br>
-        <button class="custom-btn modal-btn sub-btn" aria-label="캐시 초기화"
-        onclick="localStorage.removeItem('sungil_api_cache');localStorage.removeItem('sungil_timeapi_cache');updateInfo();toast('급식과 시간표를 다시 로딩할게요');$('html, body').animate({scrollTop: 0}, 'fast');">
-        <ion-icon name="refresh-outline"></ion-icon>급식/시간표 캐시 초기화
-    </button>
-    <br><br>
+                <button class="custom-btn modal-btn sub-btn" aria-label="캐시 초기화"
+                    onclick="localStorage.removeItem('sungil_api_cache');localStorage.removeItem('sungil_timeapi_cache');updateInfo();toast('급식과 시간표를 다시 로딩할게요');$('html, body').animate({scrollTop: 0}, 'fast');">
+                    <ion-icon name="refresh-outline"></ion-icon>급식/시간표 캐시 초기화
+                </button>
+                <br><br>
             </div>
 
 

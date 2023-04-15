@@ -120,12 +120,13 @@ if (localStorage.getItem("sungil_favTagsList")) {
 }
 
 
-// 새학기 학년/반 정보 수정 안내
+/* 새학기 학년/반 정보 수정 안내
 var isChangeNewInfo2023 = localStorage.getItem("sungil_isChangeNewInfo2023") || false;
 if (!isChangeNewInfo2023 && grade && classNum) {
     openModal('새학년 정보를 알려주세요', 'gradeClassSettings');
     localStorage.setItem("sungil_isChangeNewInfo2023", true)
 }
+*/
 
 const flicking = new Flicking("#carousel", {
     align: "prev",
@@ -497,7 +498,7 @@ function showAllMeal() {
     var isAllEmpty = true;
     var data = JSON.parse(localStorage.getItem("sungil_meal_cache"));
     if (data.meal) {
-        for (var i = 1; i < new Date(data.meal.year, data.meal.month - 1, 0).getDate() + 2; i++) {
+        for (var i = 1; i < new Date(data.meal.year, data.meal.month - 1, 0).getDate() + 4; i++) {
             if (data.meal[i]) {
                 isAllEmpty = false;
                 $('#meallist-result').append(`<div class="meal-list-item">
