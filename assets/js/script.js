@@ -150,7 +150,11 @@ function updateDday() {
     var ddayDate = new Date(2023, 3, 24);
     var gap = ddayDate.getTime() - todayForDday.getTime();
     var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
+    if(ddayResult <= 0) {
+    $('#dday-startSem').html(`D+${-(ddayResult)}`);
+} else {
     $('#dday-startSem').html(`D-${-(ddayResult * -1)}`);
+}
 
     var ddayDate_suneung = new Date(2023, 10, 16);
     var gap_suneung = ddayDate_suneung.getTime() - todayForDday.getTime();
