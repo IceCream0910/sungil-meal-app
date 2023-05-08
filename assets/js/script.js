@@ -147,7 +147,7 @@ const flickingAutoplay = setInterval(function () {
 
 function updateDday() {
     var todayForDday = new Date();
-    var ddayDate = new Date(2023, 3, 24);
+    var ddayDate = new Date(2023, 5, 29);
     var gap = ddayDate.getTime() - todayForDday.getTime();
     var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
     if(ddayResult <= 0) {
