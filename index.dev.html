@@ -544,6 +544,12 @@
             </div>
 
             <div class="siganpyo-wrap" id="order-item">
+
+                <div class="custom-btn" style="text-align:left;backround:inherit;padding-top:40px;padding-bottom:40px;">
+                    ⚠️ 5.26 ~ 05.30 / 6.15 ~ 06.20에 나이스 서비스 일시중단으로 인해 시간표 조회가 불가능할 수 있습니다.
+                </div>
+
+                <br><br>
                 <div class="d-flex flex-row" style="display: flex;justify-content: space-between;">
                     <h3 style="float:left" class="card__primary__title__text">시간표
                         <div class="spinner-box" id="timetable-loader">
@@ -886,11 +892,7 @@
 
     <section id="tools" style="display:none;display:flex;flex-direction:column;gap:10px;">
         <h3 class="card__primary__title__text" style="margin-top:10px;">설정</h3>
-        <div class="callout custom-btn" onclick="window.open('https://walla.my/ssoak', '_blank')">
-            💡 쏙의 새로운 기능을 제안해주세요!
-            <ion-icon name="chevron-forward-outline" style="font-size:20px;"></ion-icon>
-        </div>
-        <br>
+        
         <h3 class="card__primary__title__text" id="profile-text"></h3>
         <button class="custom-btn"
             onclick="openModal('학년/반 설정', 'gradeClassSettings');$('#grade-select').val(grade);$('#class-select').val(classNum);"
