@@ -49,16 +49,16 @@ $('#datepicker').datepicker().on("input change", function (e) {
 });
 
 
-if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
-  $("#datepicker").datepicker('disable');
+if (isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
+    $("#datepicker").datepicker('disable');
     var appVersion = navigator.userAgent.substr(navigator.userAgent.length - 1);
-  $('#app_version').html(`Build code ${appVersion} (app)`)
-} else if(isApp() && navigator.userAgent.indexOf('hybridApp8') <= -1) {
+    $('#app_version').html(`Build code ${appVersion} (app)`)
+} else if (isApp() && navigator.userAgent.indexOf('hybridApp8') <= -1) {
     $('#app_version').html(`엡 최신 버전 업데이트 필요`)
 }
 
 function datepickerClick() {
-    if(isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) {
+    if (isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) {
         Android.openDatePicker(selectedDate);
     }
 }
@@ -150,11 +150,11 @@ function updateDday() {
     var ddayDate = new Date(2023, 5, 29);
     var gap = ddayDate.getTime() - todayForDday.getTime();
     var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
-    if(ddayResult <= 0) {
-    $('#dday-startSem').html(`D+${-(ddayResult)}`);
-} else {
-    $('#dday-startSem').html(`D-${-(ddayResult * -1)}`);
-}
+    if (ddayResult <= 0) {
+        $('#dday-startSem').html(`D+${-(ddayResult)}`);
+    } else {
+        $('#dday-startSem').html(`D-${-(ddayResult * -1)}`);
+    }
 
     var ddayDate_suneung = new Date(2023, 10, 16);
     var gap_suneung = ddayDate_suneung.getTime() - todayForDday.getTime();
@@ -236,16 +236,19 @@ function loadNotices() {
                     }).url;
                     var link = `https://docs.google.com/gview?url=${fileUrl}&embedded=true`;
                 }
-                $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
+                if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                    //다크모드
+                    $('#notices-content').append(`<div class="card notice-card dark" onclick="window.open('` + link + `', '_blank')">
             <h4 style="font-weight:600;">`+ title + `</h4>
             <p style="opacity:0.7;">`+ createdAt + `</p>
         </div>`);
-            }
-            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
-                var notice_items = document.getElementsByClassName('notice-card');
-                for (var i = 0; i < notice_items.length; i++) {
-                    notice_items[i].classList.add("dark");
+                } else {
+                    $('#notices-content').append(`<div class="card notice-card" onclick="window.open('` + link + `', '_blank')">
+            <h4 style="font-weight:600;">`+ title + `</h4>
+            <p style="opacity:0.7;">`+ createdAt + `</p>
+        </div>`);
                 }
+
             }
         }
     });
@@ -296,7 +299,7 @@ function updateInfo() {
     $('#meal-loader').show();
     $('#meal-menus').empty();
     if (!isTest) {
-        if (cachedMealData && cachedMealData_date == requestDate) {
+        if (cachedMealData && cachedMealData_date == requestDate && cachedMealData.length > 0) {
             displayMeal(cachedMealData);
         } else {
             $.ajax({
@@ -313,7 +316,7 @@ function updateInfo() {
             });
         }
         $('#schedule-content').html('');
-        if (cachedScheduleData && cachedScheduleData_date == requestDate) {
+        if (cachedScheduleData && cachedScheduleData_date == requestDate && cachedScheduleData.length > 0) {
             displaySchedule(cachedScheduleData);
         } else {
             $.ajax({
@@ -390,8 +393,8 @@ var realTimeMealRef;
 
 function displayMeal(data) {
     //급식
+    data = JSON.parse(data);
     var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
-
     if (data.meal[day]) {
         $('#no-meal').hide();
         $('#exist-meal').fadeIn();
@@ -510,7 +513,7 @@ function showAllMeal() {
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
         }
-        if(isAllEmpty){
+        if (isAllEmpty) {
             $('#meallist-result').html(`<div class="meal-list-item">
             이번 달에는 급식이 없어요
             </div>`);
@@ -543,8 +546,8 @@ function displaySchedule(data) {
         var length = Object.keys(schedules).length;
         $.each(schedules, function (key, value) {
             if (value) {
-                    $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
-                        `<span style="font-size: 20px;font-weight: 500;">${key}</span><span style="
+                $('#schedule-content').append('<div class="schedule-item"><span class="day-text">' +
+                    `<span style="font-size: 20px;font-weight: 500;">${key}</span><span style="
                     font-size: 12px;
                     margin-top: -7px;
                 ">${getDay(moment(moment(selectedDate).format('YYYYMM') + key.toString().padStart(2, '0')).format('d'))}</span></span>` + '<h3 class="schedule-name">' + value.replaceAll(',', "<br>") + '</h3></div>');
