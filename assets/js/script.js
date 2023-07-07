@@ -504,6 +504,7 @@ function showAllMeal() {
     $('#meallist-result').html('');
     var isAllEmpty = true;
     var data = JSON.parse(localStorage.getItem("sungil_meal_cache"));
+    data = JSON.parse(data)
     if (data.meal) {
         for (var i = 1; i < new Date(data.meal.year, data.meal.month - 1, 0).getDate() + 4; i++) {
             if (data.meal[i]) {
