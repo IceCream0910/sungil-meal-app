@@ -304,7 +304,7 @@ function updateInfo() {
         } else {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:3000/meal/" + selectedDate,
+                url: "https://sungil-school-api.vercel.app/meal/" + selectedDate,
                 success: function (result) {
                     mealData = result;
                     localStorage.setItem("sungil_meal_cache", JSON.stringify(mealData));
