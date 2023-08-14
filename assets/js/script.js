@@ -147,7 +147,7 @@ const flickingAutoplay = setInterval(function () {
 
 function updateDday() {
     var todayForDday = new Date();
-    var ddayDate = new Date(2023, 5, 29);
+    var ddayDate = new Date(2023, 7, 21);
     var gap = ddayDate.getTime() - todayForDday.getTime();
     var ddayResult = Math.ceil(gap / (1000 * 60 * 60 * 24));
     if (ddayResult <= 0) {
@@ -304,7 +304,7 @@ function updateInfo() {
         } else {
             $.ajax({
                 type: "GET",
-                url: "https://sungil-school-api.vercel.app/meal/" + selectedDate,
+                url: "http://localhost:3000/meal/" + selectedDate,
                 success: function (result) {
                     mealData = result;
                     localStorage.setItem("sungil_meal_cache", JSON.stringify(mealData));
@@ -392,8 +392,12 @@ function updateInfo() {
 var realTimeMealRef;
 
 function displayMeal(data) {
+    try {
+        data = JSON.parse(data);
+    } catch (error) {
+        console.log(error)
+    }
     //급식
-    data = JSON.parse(data);
     var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
     if (data.meal[day]) {
         $('#no-meal').hide();
@@ -416,7 +420,7 @@ function displayMeal(data) {
         });
 
         currentMenuRaw = data.meal[day].toString().replace(':', '');
-        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').split('\n');
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').split('<br/>');
         var menuInfoTag = '';
 
         for (var i = 0; i < menuArr.length; i++) {
