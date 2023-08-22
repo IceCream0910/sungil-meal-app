@@ -301,6 +301,18 @@ function updateInfo() {
     if (!isTest) {
         if (cachedMealData && cachedMealData_date == requestDate && cachedMealData.length > 0) {
             displayMeal(cachedMealData);
+            $.ajax({
+                type: "GET",
+                url: "https://sungil-school-api.vercel.app/meal/" + selectedDate,
+                success: function (result) {
+                    mealData = result;
+                    localStorage.setItem("sungil_meal_cache", JSON.stringify(mealData));
+                    localStorage.setItem("sungil_meal_cache_date", selectedDate.substring(0, 4) + '-' + selectedDate.substring(4, 6).replace(/(^0+)/, ""));
+                    if (mealData) {
+                        displayMeal(mealData);
+                    }
+                }
+            });
         } else {
             $.ajax({
                 type: "GET",
