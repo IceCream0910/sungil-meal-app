@@ -432,7 +432,7 @@ function displayMeal(data) {
         });
 
         currentMenuRaw = data.meal[day].toString().replace(':', '');
-        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').split('<br/>');
+        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').replaceAll("**", "").replaceAll("(ㅆ)", "").split('<br/>');
         var menuInfoTag = '';
 
         for (var i = 0; i < menuArr.length; i++) {
