@@ -45,8 +45,22 @@ document.addEventListener("visibilitychange", () => {
                 $('.timetable-horizontal-progress').css({ 'width': 0 });
             }
         } else {
-            $('#timetable_horz_' + currentPeriod).addClass('active');
-            $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
+            if (day === 6 || day === 0) {
+                // 다음주 월요일로 selectedDate를 변경
+                let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
+                selectedDate = nextMonday.format('YYYYMMDD');
+                updateInfo();
+                $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#timetable_horz_' + currentPeriod).removeClass('active');
+                $('.timetable-horizontal-progress').css({ 'width': 0 })
+            } else {
+                $('#timetable_horz_' + currentPeriod).addClass('active');
+                $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
+            }
+            
         }
     }
 });
