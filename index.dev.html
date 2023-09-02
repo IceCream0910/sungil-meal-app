@@ -64,18 +64,6 @@
         })), jQuery.browser = {}, jQuery.browser.msie = !1, jQuery.browser.version = 0, navigator.userAgent.match(/MSIE ([0-9]+)\./) && (jQuery.browser.msie = !0, jQuery.browser.version = RegExp.$1)
     </script>
 </head>
-<header class=main-nav>
-    <div class="d-flex flex-row" id=nav-flex><button class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick=backDate()
-            aria-label="날짜 1일 전으로 이동">
-            <div class=mdc-fab__ripple></div><span class="material-icons mdc-button__icon"
-                style=margin-left:10px>arrow_back_ios_new</span>
-            <div class=mdc-fab__touch></div>
-        </button><span onclick=datepickerClick()><input type=date id=datepicker></span><button
-            class="mdc-fab mdc-fab--mini mdc-fab--touch" onclick=forwardDate() aria-label="날짜 1일 후로 이동">
-            <div class=mdc-fab__ripple></div><span class="material-icons mdc-button__icon">arrow_forward_ios</span>
-            <div class=mdc-fab__touch></div>
-        </button></div>
-</header>
 <div class="bottom-nav non-border"><a class=active data-tab=home id=home-btn>
         <ion-icon id=tab1 name=planet></ion-icon><span>홈</span>
     </a><a data-tab=community id=community-btn>
@@ -95,10 +83,8 @@
     </a><a data-tab=report id=report-btn>
         <ion-icon id=tab4 name=settings-outline></ion-icon><span>설정</span>
     </a>
-    <div class=header-btn-wrap><a href=https://ai.sungil.me target=_blank aria-label=AI선길이>
-            <ion-icon name=chatbubble-outline style=font-size:20px></ion-icon>
-        </a><a href="javascript:openModal('개발자의 다른 서비스', 'otherApps')" aria-label="다른 앱">
-            <ion-icon name=apps style=font-size:20px></ion-icon>
+    <div class=header-btn-wrap><a href=https://slashpage.com/ssoak/notice target=_blank>
+            <ion-icon name=notifications-outline style=font-size:20px></ion-icon>
         </a></div>
 </div>
 <div class=confirm role=dialog>
@@ -268,6 +254,89 @@
                 <div class=content-wrap id=otherApps><button class="custom-btn modal-btn"
                         onclick='closeModal(),window.open("https://ai.sungil.me/wordcounter")'>글자수 세기/맞춤법 검사</button>
                 </div>
+                <div class="content-wrap" id="timetable_modal">
+                    <div class="d-flex flex-row" style=display:flex;justify-content:space-between>
+                        <div><button class="mdc-button mdc-button--icon-leading"
+                                onclick='openModal("학년/반 설정","gradeClassSettings"),$("#grade-select").val(grade),$("#class-select").val(classNum)'
+                                aria-label="학년 반 설정 버튼"><span class=mdc-button__ripple></span><i
+                                    class="material-icons mdc-button__icon" aria-hidden=true>settings</i><span
+                                    class=mdc-button__label id=gradeClassLabel>설정</span></button></div>
+                    </div>
+                    <div class=card id=nosetting-timetable>
+                        <p class=card__supporting__text><span>학년/반을 먼저 설정하고<br>시간표를 확인해보세요.</span><button
+                                class=custom-btn
+                                onclick='openModal("학년/반 설정","gradeClassSettings"),$("#grade-select").val(grade),$("#class-select").val(classNum)'
+                                style=margin-top:10px aria-label="학년 반 설정 버튼">
+                                <ion-icon name=settings-outline></ion-icon> 학년/반 설정
+                            </button></p>
+                    </div>
+                    <div class=timetable-wrap>
+                        <div class=vacation-wrap style=display:none;text-align:center;opacity:.7><span
+                                style=font-size:70px>🫥</span><br>등록된 시간표가 없어요</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>월</th>
+                                    <th>화</th>
+                                    <th>수</th>
+                                    <th>목</th>
+                                    <th>금</th>
+                                </tr>
+                            </thead>
+                            <tbody id=tbody-timetable>
+                                <tr>
+                                    <th id=m1></th>
+                                    <th id=tu1></th>
+                                    <th id=w1></th>
+                                    <th id=th1></th>
+                                    <th id=f1></th>
+                                </tr>
+                                <tr>
+                                    <th id=m2></th>
+                                    <th id=tu2></th>
+                                    <th id=w2></th>
+                                    <th id=th2></th>
+                                    <th id=f2></th>
+                                </tr>
+                                <tr>
+                                    <th id=m3></th>
+                                    <th id=tu3></th>
+                                    <th id=w3></th>
+                                    <th id=th3></th>
+                                    <th id=f3></th>
+                                </tr>
+                                <tr>
+                                    <th id=m4></th>
+                                    <th id=tu4></th>
+                                    <th id=w4></th>
+                                    <th id=th4></th>
+                                    <th id=f4></th>
+                                </tr>
+                                <tr>
+                                    <th id=m5></th>
+                                    <th id=tu5></th>
+                                    <th id=w5></th>
+                                    <th id=th5></th>
+                                    <th id=f5></th>
+                                </tr>
+                                <tr>
+                                    <th id=m6></th>
+                                    <th id=tu6></th>
+                                    <th id=w6></th>
+                                    <th id=th6></th>
+                                    <th id=f6></th>
+                                </tr>
+                                <tr>
+                                    <th id=m7></th>
+                                    <th id=tu7></th>
+                                    <th id=w7></th>
+                                    <th id=th7></th>
+                                    <th id=f7></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -307,180 +376,116 @@
     <section id=home>
         <div class=home-header><img id=main-header-icon loading=lazy src=assets/icons/header_logo.png
                 style=width:30px;height:30px;filter:grayscale(100%)>
-            <div class=header-btn-wrap><a href=https://ai.sungil.me target=_blank aria-label=AI선길이>
-                    <ion-icon name=chatbubble-outline style=font-size:20px></ion-icon>
-                </a><a href="javascript:openModal('개발자의 다른 서비스', 'otherApps')" aria-label="다른 앱">
-                    <ion-icon name=apps style=font-size:20px></ion-icon>
+            <div class=header-btn-wrap><a href=https://slashpage.com/ssoak/notice target=_blank aria-label=AI선길이>
+                    <ion-icon name=notifications-outline style=font-size:20px></ion-icon>
                 </a></div>
         </div>
-        <div class=home-order-wrap style=margin-bottom:50px>
+        <div class=home-order-wrap style=margin-bottom:20px>
             <div class=meal-wrap id=order-item>
-                <div id=carousel class=flicking-viewport>
-                    <div class=flicking-camera>
-                        <div class=flicking-panel>
-                            <h1 id=dday-suneung style=font-weight:900></h1><br>
-                            <h3 style=opacity:.8;margin-top:-5px>11.16 | 2024학년도 수능</h3>
-                        </div>
-                        <div class=flicking-panel>
-                            <h1 id=dday-startSem style=font-weight:900></h1><br>
-                            <h3 style=opacity:.8;margin-top:-5px>08.21 | 2학기 개학</h3>
-                        </div>
-                    </div>
-                </div><br><br>
-                <div class="d-flex flex-row" id=meal-flex>
-                    <h3 style=float:left class=card__primary__title__text onclick=showAllMeal()>급식 <ion-icon
-                            name=chevron-forward-outline></ion-icon>
-                    </h3>
-                    <div><button id=shareBtn class="mdc-button mdc-button--icon-leading" onclick=shareMeal()
-                            aria-label="급식 공유"><span class=mdc-button__ripple></span><span class=mdc-button__label
-                                id=copied></span><i class="material-icons mdc-button__icon"
-                                aria-hidden=true>share</i></button></div>
-                </div>
-                <div id=no-meal style=opacity:.7><span style=font-size:70px>🍴</span><br><span>오늘은 급식이 없어요</span></div>
                 <div id=exist-meal>
-                    <div class=card>
-                        <div class=card__primary__title><small class=card__primary__title__subtext id=kcal></small>
+                    <div class=card style="padding-bottom: 20px;">
+                        <div class=card__primary__title><small class=card__primary__title__subtext onclick=showAllMeal()
+                                id="meal-title">급식 <ion-icon name=chevron-forward-outline></ion-icon></small>
                             <br>
-                            <div class=help-tip role=tooltip id=name-tooltip
-                                aria-label="각 메뉴를 클릭하면 알레르기 정보 등 상세 정보 확인 가능">
-                                <div class=help-tip__content>
-                                    <p class=help-tip__text style=margin-bottom:0;font-size:12px>설정한 알레르기 성분이 함유된 메뉴는
-                                        빨간색으로 표시됩니다.<br>맛있는 메뉴 키워드가 포함된 메뉴는 밑줄과 별표가 표시됩니다.<br>각 메뉴를 클릭하면 알레르기 정보와 이미지 검색
-                                        결과를 확인할 수 있어요.</p>
-                                </div>
-                            </div>
                         </div>
                         <div class=card-body id=meal-loader style="background:0 0">
                             <h2 class="card-title skeleton"></h2>
                             <h2 class="card-title skeleton"></h2>
                         </div>
-                        <p class=card__supporting__text id=meal-menus style=margin-top:-50px></p>
-                        <div class=reaction-wrap style=display:none>
-                            <div class=reaction onclick=mealLikeBtn()>
-                                <div class=reaction__icon>
-                                    <ion-icon name=happy style=color:#5c90ff></ion-icon>
-                                </div>
-                                <div class=reaction__count id=meal-like-count>0</div>
+                        <p class=card__supporting__text id=meal-menus></p>
+
+                    </div>
+                    <div class=reaction-wrap style=display:none>
+                        <div class=reaction onclick=mealLikeBtn()>
+                            <div class=reaction__icon>
+                                <ion-icon name=happy style=color:#5c90ff></ion-icon>
                             </div>
-                            <div class=reaction onclick=mealdislikeBtn()>
-                                <div class=reaction__icon>
-                                    <ion-icon name=sad style=color:#ff7373></ion-icon>
-                                </div>
-                                <div class=reaction__count id=meal-dislike-count>0</div>
+                            <div class=reaction__count id=meal-like-count>0</div>
+                        </div>
+                        <div class=reaction onclick=mealdislikeBtn()>
+                            <div class=reaction__icon>
+                                <ion-icon name=sad style=color:#ff7373></ion-icon>
                             </div>
+                            <div class=reaction__count id=meal-dislike-count>0</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class=siganpyo-wrap id=order-item>
-                <div class="d-flex flex-row" style=display:flex;justify-content:space-between>
-                    <h3 style=float:left class=card__primary__title__text>시간표<div class=spinner-box id=timetable-loader>
-                            <div class=circle-border>
-                                <div class=circle-core></div>
-                            </div>
+
+            <div class=card style="padding-bottom:20px;" id="timetable-horizontal-wrap">
+                <div class=card__primary__title><small class=card__primary__title__subtext
+                        onclick="openModal('시간표', 'timetable_modal')" id="timetable-title">시간표
+                        <ion-icon name=chevron-forward-outline></ion-icon></small>
+
+                    <div class=spinner-box id=timetable-loader>
+                        <div class=circle-border>
+                            <div class=circle-core></div>
                         </div>
-                    </h3>
-                    <div><button class="mdc-button mdc-button--icon-leading"
-                            onclick='openModal("학년/반 설정","gradeClassSettings"),$("#grade-select").val(grade),$("#class-select").val(classNum)'
-                            aria-label="학년 반 설정 버튼"><span class=mdc-button__ripple></span><i
-                                class="material-icons mdc-button__icon" aria-hidden=true>settings</i><span
-                                class=mdc-button__label id=gradeClassLabel>설정</span></button></div>
+                    </div>
                 </div>
-                <div class=card id=nosetting-timetable>
-                    <p class=card__supporting__text><span>학년/반을 먼저 설정하고<br>시간표를 확인해보세요.</span><button class=custom-btn
-                            onclick='openModal("학년/반 설정","gradeClassSettings"),$("#grade-select").val(grade),$("#class-select").val(classNum)'
-                            style=margin-top:10px aria-label="학년 반 설정 버튼">
-                            <ion-icon name=settings-outline></ion-icon> 학년/반 설정
-                        </button></p>
+
+                <div class="timetable-horizontal">
+                    <div class="timetable-horizontal-item" id="timetable_horz_1">
+                        <span>1</span>
+                        <h6 id="timetable_horz_name1"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_2">
+                        <span>2</span>
+                        <h6 id="timetable_horz_name2"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_3">
+                        <span>3</span>
+                        <h6 id="timetable_horz_name3"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_4">
+                        <span>4</span>
+                        <h6 id="timetable_horz_name4"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_5">
+                        <span>5</span>
+                        <h6 id="timetable_horz_name5"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_6">
+                        <span>6</span>
+                        <h6 id="timetable_horz_name6"></h6>
+                    </div>
+                    <div class="timetable-horizontal-item" id="timetable_horz_7">
+                        <span>7</span>
+                        <h6 id="timetable_horz_name7"></h6>
+                    </div>
                 </div>
-                <div class=timetable-wrap>
-                    <div class=vacation-wrap style=display:none;text-align:center;opacity:.7><span
-                            style=font-size:70px>🫥</span><br>등록된 시간표가 없어요</div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>월</th>
-                                <th>화</th>
-                                <th>수</th>
-                                <th>목</th>
-                                <th>금</th>
-                            </tr>
-                        </thead>
-                        <tbody id=tbody-timetable>
-                            <tr>
-                                <th id=m1></th>
-                                <th id=tu1></th>
-                                <th id=w1></th>
-                                <th id=th1></th>
-                                <th id=f1></th>
-                            </tr>
-                            <tr>
-                                <th id=m2></th>
-                                <th id=tu2></th>
-                                <th id=w2></th>
-                                <th id=th2></th>
-                                <th id=f2></th>
-                            </tr>
-                            <tr>
-                                <th id=m3></th>
-                                <th id=tu3></th>
-                                <th id=w3></th>
-                                <th id=th3></th>
-                                <th id=f3></th>
-                            </tr>
-                            <tr>
-                                <th id=m4></th>
-                                <th id=tu4></th>
-                                <th id=w4></th>
-                                <th id=th4></th>
-                                <th id=f4></th>
-                            </tr>
-                            <tr>
-                                <th id=m5></th>
-                                <th id=tu5></th>
-                                <th id=w5></th>
-                                <th id=th5></th>
-                                <th id=f5></th>
-                            </tr>
-                            <tr>
-                                <th id=m6></th>
-                                <th id=tu6></th>
-                                <th id=w6></th>
-                                <th id=th6></th>
-                                <th id=f6></th>
-                            </tr>
-                            <tr>
-                                <th id=m7></th>
-                                <th id=tu7></th>
-                                <th id=w7></th>
-                                <th id=th7></th>
-                                <th id=f7></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div><br><br><ins class=kakao_ad_area style=display:none data-ad-unit=DAN-WCT8chS2JYxIPFuG
-                    data-ad-width=320 data-ad-height=100></ins><br><br>
-                <div class="callout custom-btn" onclick='window.open("https://ai.sungil.me/","_blank")'>AI 챗봇, 선길이를
-                    만나보세요 ></div><br><br>
-                <div class="callout custom-btn" onclick='window.open("https://ai.sungil.me/wordcounter","_blank")'>세특 쓸
-                    때, 글자 바이트 수 계산해보세요 ></div>
+                <div class="timetable-horizontal-progress"></div>
+                <div class="timetable-horizontal-desc">
+                    <span>조회</span>
+                    <span>종례</span>
+                </div>
+
             </div>
+            <br><br><ins class=kakao_ad_area style=display:none data-ad-unit=DAN-WCT8chS2JYxIPFuG data-ad-width=320
+                data-ad-height=100></ins><br><br>
+
+
+            <div class="custom-btn callout" onclick="window.open('https://suneung.kr/', '_blank')">
+                2024학년도 수능,&nbsp; <span id=dday-suneung></span>
+            </div>
+
             <div class=schedule-wrap id=order-item>
+                <br><br>
                 <h3 class=card__primary__title__text>학사일정</h3>
                 <div id=schedule-content style=margin-top:15px></div><br><br>
                 <div style=display:flex;flex-direction:row;gap:20px>
                     <div class="card notice-card" style=width:50%
                         onclick='window.open("https://sungil-h.goesn.kr/sungil-h/main.do","_blank")'>
-                        <h4>성일고 홈페이지</h4>
+                        <h4>학교 홈페이지</h4>
                         <p>공식 홈페이지 바로가기</p>
                         <ion-icon name=school-outline
                             style=background:0;position:absolute;top:60%;right:-20px;font-size:50px;opacity:.3;color:#819fff></ion-icon><br>
                     </div>
                     <div class="card notice-card" style=width:50%
-                        onclick='window.open("https://www.schoolinfo.go.kr/ei/ss/Pneiss_b01_s0.do?GS_CD=S090000620","_blank")'>
-                        <h4>학교알리미</h4>
-                        <p>학교의 세부 현황 정보를 제공합니다</p>
-                        <ion-icon name=analytics-outline
+                        onclick='window.open("https://youtube.com/@sungilofficial","_blank")'>
+                        <h4>성일고 유튜브</h4>
+                        <p>입시 정보 및 학교 소식을 영상으로</p>
+                        <ion-icon name=logo-youtube
                             style=background:0;position:absolute;top:60%;right:-20px;font-size:50px;opacity:.3;color:#819fff></ion-icon><br>
                     </div>
                 </div><br><br><button class="custom-btn modal-btn sub-btn" aria-label="캐시 초기화"

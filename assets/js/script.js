@@ -19,56 +19,37 @@ moment.lang('en', {
     weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
 });
 
-
-$.datepicker.setDefaults({
-    dateFormat: 'yy-mm-dd',
-    prevText: '이전 달',
-    nextText: '다음 달',
-    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-    showMonthAfterYear: true,
-    yearSuffix: '년'
-});
-
-$("#datepicker").datepicker({
-    defaultDate: new Date(),
-    ignoreReadonly: true,
-    beforeShowDay: function (date) {
-        var day = date.getDay();
-        return [(day != 0 && day != 6)];
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState == 'visible') {
+        console.log('시간표 현재 교시 갱신')
+        const currentPeriod = getCurrentPeriod();
+        if (currentPeriod == 'null') {
+            if (day === 5) {
+                // 다음주 월요일로 selectedDate를 변경
+                let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
+                selectedDate = nextMonday.format('YYYYMMDD');
+                updateInfo();
+                $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#timetable_horz_' + currentPeriod).removeClass('active');
+                $('.timetable-horizontal-progress').css({ 'width': 0 })
+            } else {
+                forwardDate();
+                $('#timetable-title').html(`내일 시간표
+        <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#meal-title').html(`내일 먹게 될 급식
+        <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#timetable_horz_' + currentPeriod).removeClass('active');
+                $('.timetable-horizontal-progress').css({ 'width': 0 });
+            }
+        } else {
+            $('#timetable_horz_' + currentPeriod).addClass('active');
+            $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
+        }
     }
 });
-$("#datepicker").datepicker("setDate", new Date());
-
-$('#datepicker').datepicker().on("input change", function (e) {
-    selectedDate = moment(e.target.value).format('YYYYMMDD');
-    updateInfo();
-});
-
-
-if (isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) { // 안드로이드 앱 8버전 이상인 경우 datepicker 네이티브 대체
-    $("#datepicker").datepicker('disable');
-    var appVersion = navigator.userAgent.substr(navigator.userAgent.length - 1);
-    $('#app_version').html(`Build code ${appVersion} (app)`)
-} else if (isApp() && navigator.userAgent.indexOf('hybridApp8') <= -1) {
-    $('#app_version').html(`엡 최신 버전 업데이트 필요`)
-}
-
-function datepickerClick() {
-    if (isApp() && navigator.userAgent.indexOf('hybridApp8') > -1) {
-        Android.openDatePicker(selectedDate);
-    }
-}
-
-
-function androidDatePickerCallback(date) {
-    $("#datepicker").datepicker("setDate", new Date(moment(date)));
-    selectedDate = moment(date).format('YYYYMMDD');
-    updateInfo();
-}
 
 //안드로이드 앱인지 확인
 function isApp() {
@@ -90,7 +71,7 @@ if (isApp()) {
 }
 
 var today = moment(new Date()).format('YYYYMMDD');
-
+var day = new Date().getDay();
 var selectedDate = today;
 $('#date').html(moment(selectedDate).lang("ko").format('M월 D일 (dddd)'));
 $('#date').addClass('today');
@@ -127,23 +108,6 @@ if (!isChangeNewInfo2023 && grade && classNum) {
     localStorage.setItem("sungil_isChangeNewInfo2023", true)
 }
 */
-
-const flicking = new Flicking("#carousel", {
-    align: "prev",
-    circular: true,
-    bound: true,
-    renderOnlyVisible: true
-});
-
-const EVENTS = Flicking.EVENTS;
-flicking.on(EVENTS.MOVE, evt => {
-    updateDday();
-})
-
-// every 5 sec
-const flickingAutoplay = setInterval(function () {
-    flicking.next()
-}, 6000);
 
 function updateDday() {
     var todayForDday = new Date();
@@ -216,7 +180,54 @@ $(document).ready(function () {
 
     updateInfo();
     loadNotices();
+
+    //주말인경우
+    if (day === 6 || day === 0) {
+        // 다음주 월요일로 selectedDate를 변경
+        let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
+        selectedDate = nextMonday.format('YYYYMMDD');
+        updateInfo();
+        $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+        $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+        $('.timetable-horizontal-item').forEach(function (item) {
+            $(item).removeClass('active')
+        });
+        $('.timetable-horizontal-progress').css({ 'width': 0 });
+    }
+
+    //종례 후
+    const currentPeriod = getCurrentPeriod();
+    if (currentPeriod == 'null') {
+        if (day === 5) {
+            // 다음주 월요일로 selectedDate를 변경
+            let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
+            selectedDate = nextMonday.format('YYYYMMDD');
+            updateInfo();
+            $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+            $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+            $('#timetable_horz_' + currentPeriod).removeClass('active');
+            $('.timetable-horizontal-progress').css({ 'width': 0 })
+        } else {
+            forwardDate();
+            $('#timetable-title').html(`내일 시간표
+        <ion-icon name=chevron-forward-outline></ion-icon>`);
+            $('#meal-title').html(`내일 먹게 될 급식
+        <ion-icon name=chevron-forward-outline></ion-icon>`);
+            $('#timetable_horz_' + currentPeriod).removeClass('active');
+            $('.timetable-horizontal-progress').css({ 'width': 0 });
+        }
+    } else {
+        $('#timetable_horz_' + currentPeriod).removeClass('active');
+        $('#timetable_horz_' + currentPeriod).addClass('active');
+        $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
+    }
 });
+
+
 
 
 //가정통신문
@@ -412,7 +423,6 @@ function displayMeal(data) {
     //급식
     var day = selectedDate.substring(6, 8).replace(/(^0+)/, "");
     if (data.meal[day]) {
-        $('#no-meal').hide();
         $('#exist-meal').fadeIn();
         db.collection("meal").doc(selectedDate).onSnapshot(function (doc) {
             $('.reaction-wrap').fadeIn();
@@ -432,7 +442,7 @@ function displayMeal(data) {
         });
 
         currentMenuRaw = data.meal[day].toString().replace(':', '');
-        var menuArr = currentMenuRaw.replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').replaceAll("**", "").replaceAll("(ㅆ)", "").split('<br/>');
+        var menuArr = currentMenuRaw.replaceAll('\n', '<br/>').replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').replaceAll("**", "").replaceAll("(ㅆ)", "").split('<br/>');
         var menuInfoTag = '';
 
         for (var i = 0; i < menuArr.length; i++) {
@@ -458,7 +468,7 @@ function displayMeal(data) {
 
 
                 if (isDanger) {
-                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a>';
                 } else {
                     var isFavorite = false;
                     $.each(favTagsList, function (index, element) {
@@ -469,9 +479,9 @@ function displayMeal(data) {
                     });
 
                     if (isFavorite) {
-                        menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                        menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a>, ';
                     } else {
-                        menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                        menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a>, ';
                     }
                 }
             } else {
@@ -484,18 +494,15 @@ function displayMeal(data) {
                 });
 
                 if (isFavorite) {
-                    menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a><br>';
+                    menuInfoTag += '<a class="mealItem favMenu" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '✨</a>, ';
                 } else {
-                    menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a><br>';
+                    menuInfoTag += '<a class="mealItem" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a>, ';
                 }
             }
-
-
-
         }
 
 
-        $('#meal-menus').html(menuInfoTag);
+        $('#meal-menus').html(menuInfoTag.slice(0, -2));
         $('#meal-loader').hide();
 
 
@@ -509,7 +516,6 @@ function displayMeal(data) {
     } else {
         currentMenuRaw = '';
         $('#meal-loader').hide();
-        $('#no-meal').fadeIn();
         $('#exist-meal').hide();
         $('#kcal').html('');
         $('#meal-menus').html('');
@@ -518,22 +524,17 @@ function displayMeal(data) {
 
 function showAllMeal() {
     $('#meallist-result').html('');
-    var isAllEmpty = true;
     var data = JSON.parse(localStorage.getItem("sungil_meal_cache"));
-    data = JSON.parse(data)
+    data = JSON.parse(data);
+
     if (data.meal) {
-        for (var i = 1; i < new Date(data.meal.year, data.meal.month - 1, 0).getDate() + 4; i++) {
+        for (var i = 1; i < Object.keys(data.meal).length; i++) {
+            console.log(i, data.meal[i])
             if (data.meal[i]) {
-                isAllEmpty = false;
                 $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${moment(new Date(data.meal.year, data.meal.month - 1, i)).lang("ko").format('M월 D일(dddd)')}</h2>
+                <h2>${Object.keys(data.meal)[i]}일</h2>
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
-        }
-        if (isAllEmpty) {
-            $('#meallist-result').html(`<div class="meal-list-item">
-            이번 달에는 급식이 없어요
-            </div>`);
         }
         openModal('이번 달 급식', 'mealList');
     }
@@ -581,6 +582,79 @@ function getDay(day) {
 }
 
 
+// Your object with replacements
+function SimplifySubjectName(str) {
+    var replacements = {
+        "통합과학": "통과",
+        "통합사회": "통사",
+        "과학탐구실험": "과탐실",
+        "일본어": "일",
+        "생활과 윤리": "생윤",
+        "생활과 과학": "생과",
+        "심화 국어": "심국",
+        "음악 감상과 비평": "음악",
+        "운동과 건강": "운동",
+        "정치와 법": "정법",
+        "여행지리": "여행",
+        "지구과학": "지구",
+        "중국어": "중",
+        "미술 감상과 비평": "미술",
+        "생명과학": "생",
+        "언어와 매체": "언매",
+        "경제 수학": "경수",
+        "확률과 통계": "확통",
+        "영어권 문화": "영문",
+        "사회문제 탐구": "사문탐",
+        "윤리와 사상": "윤사",
+        "동아시아사": "동아",
+        "한국지리": "한지",
+        "세계지리": "세지",
+        "심화 수학": "심수",
+        "과학과제 연구": "과과연",
+        "정보과학": "정보",
+        "스포츠 생활": "스포츠",
+        "융합과학": "융과",
+        "물리학": "물",
+        "화학": "화",
+        "수학과제 탐구": "수탐",
+        "진로활동": "진로",
+        "화법과 작문": "화작",
+        "영어 독해와 작문": "영독",
+        "인공지능 수학": "인수",
+        "미적분": "미적",
+        "자율활동": "자율",
+        "동아리활동": "동아리"
+    };
+
+    var re = new RegExp(Object.keys(replacements).join("|"), "gi");
+    return str.replace(re, function (matched) {
+        return replacements[matched.toLowerCase()];
+    });
+}
+
+function getCurrentPeriod() {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    const intervals = [
+        { start: 0, end: 580, period: 1 }, // 8:30 - 9:40
+        { start: 580, end: 640, period: 2 }, // 9:40 - 10:40
+        { start: 640, end: 700, period: 3 }, // 10:40 - 11:40
+        { start: 700, end: 810, period: 4 }, // 11:40 - 13:30
+        { start: 810, end: 870, period: 5 }, // 13:30 - 14:30
+        { start: 870, end: 930, period: 6 }, // 14:30 - 15:30
+        { start: 930, end: 990, period: 7 }  // 15:30 - 16:30
+    ];
+
+    for (let i = 0; i < intervals.length; i++) {
+        if (intervals[i].start <= currentTime && currentTime <= intervals[i].end) {
+            return intervals[i].period;
+        }
+    }
+
+    return 'null';
+}
+
+
 function displayTimetable(data) {
     $('#timetable-loader').hide();
     var day = moment(selectedDate).day();
@@ -593,8 +667,12 @@ function displayTimetable(data) {
         }
     }
 
+    $('#timetable-horizontal-wrap').show();
     switch (day) {
         case 1:
+            for (var i = 0; i < data.mon.length; i++) {
+                $('#timetable_horz_name' + ((i + 1).toString())).html(SimplifySubjectName(data.mon[i].ITRT_CNTNT));
+            }
             $('#m1').addClass('active');
             $('#m2').addClass('active');
             $('#m3').addClass('active');
@@ -604,6 +682,9 @@ function displayTimetable(data) {
             $('#m7').addClass('active');
             break;
         case 2:
+            for (var i = 0; i < data.tue.length; i++) {
+                $('#timetable_horz_name' + ((i + 1).toString())).html(SimplifySubjectName(data.tue[i].ITRT_CNTNT));
+            }
             $('#tu1').addClass('active');
             $('#tu2').addClass('active');
             $('#tu3').addClass('active');
@@ -613,6 +694,9 @@ function displayTimetable(data) {
             $('#tu7').addClass('active');
             break;
         case 3:
+            for (var i = 0; i < data.wed.length; i++) {
+                $('#timetable_horz_name' + ((i + 1).toString())).html(SimplifySubjectName(data.wed[i].ITRT_CNTNT));
+            }
             $('#w1').addClass('active');
             $('#w2').addClass('active');
             $('#w3').addClass('active');
@@ -622,6 +706,9 @@ function displayTimetable(data) {
             $('#w7').addClass('active');
             break;
         case 4:
+            for (var i = 0; i < data.thu.length; i++) {
+                $('#timetable_horz_name' + ((i + 1).toString())).html(SimplifySubjectName(data.thu[i].ITRT_CNTNT));
+            }
             $('#th1').addClass('active');
             $('#th2').addClass('active');
             $('#th3').addClass('active');
@@ -631,6 +718,9 @@ function displayTimetable(data) {
             $('#th7').addClass('active');
             break;
         case 5:
+            for (var i = 0; i < data.fri.length; i++) {
+                $('#timetable_horz_name' + ((i + 1).toString())).html(SimplifySubjectName(data.fri[i].ITRT_CNTNT));
+            }
             $('#f1').addClass('active');
             $('#f2').addClass('active');
             $('#f3').addClass('active');
@@ -640,20 +730,20 @@ function displayTimetable(data) {
             $('#f7').addClass('active');
             break;
         default:
+            $('#timetable-horizontal-wrap').hide();
             break;
 
     }
-
     timetableRaw = data;
 
     // 시간표 모든 요일 없음
     if (Object.keys(data.mon).length == 0 && Object.keys(data.tue).length == 0 && Object.keys(data.wed).length == 0 && Object.keys(data.thu).length == 0 && Object.keys(data.fri).length == 0) {
         $('.timetable-wrap table').hide();
-        $('.vacation-wrap').show();
+        $('.timetable-horizontal-wrap').hide();
         return false;
     } else {
         $('.timetable-wrap table').show();
-        $('.vacation-wrap').hide();
+        $('.timetable-horizontal-wrap').show();
     }
 
 
@@ -851,7 +941,6 @@ $('.grade_btn').on('click', function () {
 
 
 
-$('.main-nav').show();
 $('#home').show();
 $('#community').hide();
 $('#assignment').hide();
@@ -873,7 +962,6 @@ $('.bottom-nav a').on('click', function () {
     disablePullToRefresh();
     switch (tab) {
         case 'home':
-            $('.main-nav').show();
             $('#home').fadeIn();
             $('#community').hide();
             $('#assignment').hide();
@@ -887,7 +975,6 @@ $('.bottom-nav a').on('click', function () {
             break;
         case 'community':
             enablePullToRefresh();
-            $('.main-nav').hide();
             $('#home').hide();
             $('#community').fadeIn(100);
             $('#assignment').hide();
@@ -900,7 +987,6 @@ $('.bottom-nav a').on('click', function () {
             $('#community-frame').height($(window).height() - $('.bottom-nav').height() - 20);
             break;
         case 'assignment':
-            $('.main-nav').hide();
             $('#home').hide();
             $('#community').hide();
             $('#assignment').fadeIn(100);
@@ -912,7 +998,6 @@ $('.bottom-nav a').on('click', function () {
             $('#tab4').attr('name', 'settings-outline');
             break;
         case 'report':
-            $('.main-nav').hide();
             $('#home').hide();
             $('#community').hide();
             $('#assignment').hide();
