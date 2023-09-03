@@ -19,61 +19,6 @@ moment.lang('en', {
     weekdaysShort: ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
 });
 
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState == 'visible') {
-        console.log('시간표 현재 교시 갱신')
-        const currentPeriod = getCurrentPeriod();
-        if (currentPeriod == 'null') {
-            if (day === 5) {
-                // 다음주 월요일로 selectedDate를 변경
-                let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
-                selectedDate = nextMonday.format('YYYYMMDD');
-                updateInfo();
-                $('#timetable-title').html(`미리보는 월요일 시간표
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#meal-title').html(`월요일에 먹게 될 급식
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#timetable_horz_' + currentPeriod).removeClass('active');
-                $('.timetable-horizontal-progress').css({ 'width': 0 })
-            } else {
-                forwardDate();
-                $('#timetable-title').html(`내일 시간표
-        <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#meal-title').html(`내일 먹게 될 급식
-        <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#timetable_horz_' + currentPeriod).removeClass('active');
-                $('.timetable-horizontal-progress').css({ 'width': 0 });
-            }
-        } else {
-            if (day === 6) {
-                // 다음주 월요일로 selectedDate를 변경
-                let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
-                selectedDate = nextMonday.format('YYYYMMDD');
-                updateInfo();
-                $('#timetable-title').html(`미리보는 월요일 시간표
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#meal-title').html(`월요일에 먹게 될 급식
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#timetable_horz_' + currentPeriod).removeClass('active');
-                $('.timetable-horizontal-progress').css({ 'width': 0 })
-            } else if (day === 0) {
-                // 다음주 월요일로 selectedDate를 변경
-                forwardDate();
-                $('#timetable-title').html(`미리보는 월요일 시간표
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#meal-title').html(`월요일에 먹게 될 급식
-    <ion-icon name=chevron-forward-outline></ion-icon>`);
-                $('#timetable_horz_' + currentPeriod).removeClass('active');
-                $('.timetable-horizontal-progress').css({ 'width': 0 })
-            } else {
-                $('#timetable_horz_' + currentPeriod).addClass('active');
-                $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
-            }
-            
-        }
-    }
-});
-
 //안드로이드 앱인지 확인
 function isApp() {
     var ua = navigator.userAgent;
