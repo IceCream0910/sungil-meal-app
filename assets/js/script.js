@@ -45,11 +45,20 @@ document.addEventListener("visibilitychange", () => {
                 $('.timetable-horizontal-progress').css({ 'width': 0 });
             }
         } else {
-            if (day === 6 || day === 0) {
+            if (day === 6) {
                 // 다음주 월요일로 selectedDate를 변경
                 let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
                 selectedDate = nextMonday.format('YYYYMMDD');
                 updateInfo();
+                $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+                $('#timetable_horz_' + currentPeriod).removeClass('active');
+                $('.timetable-horizontal-progress').css({ 'width': 0 })
+            } else if (day === 0) {
+                // 다음주 월요일로 selectedDate를 변경
+                forwardDate();
                 $('#timetable-title').html(`미리보는 월요일 시간표
     <ion-icon name=chevron-forward-outline></ion-icon>`);
                 $('#meal-title').html(`월요일에 먹게 될 급식
@@ -196,7 +205,7 @@ $(document).ready(function () {
     loadNotices();
 
     //주말인경우
-    if (day === 6 || day === 0) {
+    if (day === 6) {
         // 다음주 월요일로 selectedDate를 변경
         let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
         selectedDate = nextMonday.format('YYYYMMDD');
@@ -209,8 +218,17 @@ $(document).ready(function () {
             $(item).removeClass('active')
         });
         $('.timetable-horizontal-progress').css({ 'width': 0 });
+    } else if(day === 0) {
+        forwardDate();
+        $('#timetable-title').html(`미리보는 월요일 시간표
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+        $('#meal-title').html(`월요일에 먹게 될 급식
+    <ion-icon name=chevron-forward-outline></ion-icon>`);
+        $('.timetable-horizontal-item').forEach(function (item) {
+            $(item).removeClass('active')
+        });
+        $('.timetable-horizontal-progress').css({ 'width': 0 });
     }
-
     //종례 후
     const currentPeriod = getCurrentPeriod();
     if (currentPeriod == 'null') {
@@ -546,7 +564,7 @@ function showAllMeal() {
             console.log(i, data.meal[i])
             if (data.meal[i]) {
                 $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${Object.keys(data.meal)[i]}일</h2>
+                <h2>${Object.keys(data.meal)[i]-1}일</h2>
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
         }
