@@ -198,7 +198,7 @@ $(document).ready(function () {
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('#timetable_horz_' + currentPeriod).addClass('active');
             $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` });
-            $('#timetable-countdown').html(`종례까지 ${Math.round(((new Date().getHours() - 8) * 60 + new Date().getMinutes() - 30)*0.2)}%`)
+            $('#timetable-countdown').html(`종례까지 ${Math.round(((new Date().getHours() - 9) * 60 + new Date().getMinutes())*0.22)}%`)
         }
     }
 });
