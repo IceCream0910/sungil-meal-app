@@ -137,7 +137,6 @@ $('.grade_btn').on('click', function () {
     $('.sheet-modal').css('height', $('#' + id).height() + 150 + 'px');
 });
 */
-
 $(document).ready(function () {
 
     if (grade == null || classNum == null) { //학년반 정보가 없을 경우 온보딩 표시
@@ -159,9 +158,6 @@ $(document).ready(function () {
     <ion-icon name=chevron-forward-outline></ion-icon>`);
         $('#meal-title').html(`월요일에 먹게 될 급식
     <ion-icon name=chevron-forward-outline></ion-icon>`);
-        $('.timetable-horizontal-item').forEach(function (item) {
-            $(item).removeClass('active')
-        });
         $('.timetable-horizontal-progress').css({ 'width': 0 });
     } else if(day === 0) {
         forwardDate();
@@ -169,26 +165,23 @@ $(document).ready(function () {
     <ion-icon name=chevron-forward-outline></ion-icon>`);
         $('#meal-title').html(`월요일에 먹게 될 급식
     <ion-icon name=chevron-forward-outline></ion-icon>`);
-        $('.timetable-horizontal-item').forEach(function (item) {
-            $(item).removeClass('active')
-        });
         $('.timetable-horizontal-progress').css({ 'width': 0 });
     }
-    //종례 후
+
     const currentPeriod = getCurrentPeriod();
-    if (currentPeriod == 'null') {
-        if (day === 5) {
+    if (currentPeriod == 'null' || currentPeriod == 8) { //종례 후
+        if (day === 5) { //금요일
             // 다음주 월요일로 selectedDate를 변경
             let nextMonday = moment().add(1, 'weeks').startOf('week').add(1, 'days');
             selectedDate = nextMonday.format('YYYYMMDD');
             updateInfo();
-            $('#timetable-title').html(`미리보는 월요일 시간표
+            $('#timetable-title').html(`다음주 월요일 시간표
     <ion-icon name=chevron-forward-outline></ion-icon>`);
-            $('#meal-title').html(`월요일에 먹게 될 급식
+            $('#meal-title').html(`댜음 주 월요일에 먹게 될 급식
     <ion-icon name=chevron-forward-outline></ion-icon>`);
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('.timetable-horizontal-progress').css({ 'width': 0 })
-        } else {
+        } else { //월~목 -> 내일 정보
             forwardDate();
             $('#timetable-title').html(`내일 시간표
         <ion-icon name=chevron-forward-outline></ion-icon>`);
@@ -198,9 +191,15 @@ $(document).ready(function () {
             $('.timetable-horizontal-progress').css({ 'width': 0 });
         }
     } else {
-        $('#timetable_horz_' + currentPeriod).removeClass('active');
-        $('#timetable_horz_' + currentPeriod).addClass('active');
-        $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` })
+        if(currentPeriod == 0) { //등교 전
+            $('.timetable-horizontal-progress').css({ 'width': 0 });
+            $('#timetable-countdown').html(``);
+        } else {
+            $('#timetable_horz_' + currentPeriod).removeClass('active');
+            $('#timetable_horz_' + currentPeriod).addClass('active');
+            $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` });
+            $('#timetable-countdown').html(`종례까지 ${Math.round(((new Date().getHours() - 8) * 60 + new Date().getMinutes() - 30)*0.2)}%`)
+        }
     }
 });
 
@@ -613,13 +612,15 @@ function getCurrentPeriod() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
     const intervals = [
-        { start: 0, end: 580, period: 1 }, // 8:30 - 9:40
+        { start: 0, end: 470, period: 0 }, // 8:30 - 9:40
+        { start: 470, end: 580, period: 1 }, // 8:30 - 9:40
         { start: 580, end: 640, period: 2 }, // 9:40 - 10:40
         { start: 640, end: 700, period: 3 }, // 10:40 - 11:40
         { start: 700, end: 810, period: 4 }, // 11:40 - 13:30
         { start: 810, end: 870, period: 5 }, // 13:30 - 14:30
         { start: 870, end: 930, period: 6 }, // 14:30 - 15:30
-        { start: 930, end: 990, period: 7 }  // 15:30 - 16:30
+        { start: 930, end: 990, period: 7 },  // 15:30 - 16:30
+        { start: 990, end: 1440, period: 8}  // 16:30 - 24:00
     ];
 
     for (let i = 0; i < intervals.length; i++) {
