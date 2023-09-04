@@ -612,8 +612,8 @@ function getCurrentPeriod() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
     const intervals = [
-        { start: 0, end: 470, period: 0 }, // 8:30 - 9:40
-        { start: 470, end: 580, period: 1 }, // 8:30 - 9:40
+        { start: 0, end: 540, period: 0 }, // 8:30 - 9:40
+        { start: 540, end: 580, period: 1 }, // 8:30 - 9:40
         { start: 580, end: 640, period: 2 }, // 9:40 - 10:40
         { start: 640, end: 700, period: 3 }, // 10:40 - 11:40
         { start: 700, end: 810, period: 4 }, // 11:40 - 13:30
