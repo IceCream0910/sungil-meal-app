@@ -159,7 +159,7 @@ $(document).ready(function () {
         $('#meal-title').html(`월요일에 먹게 될 급식
     <ion-icon name=chevron-forward-outline></ion-icon>`);
         $('.timetable-horizontal-progress').css({ 'width': 0 });
-    } else if(day === 0) {
+    } else if (day === 0) {
         forwardDate();
         $('#timetable-title').html(`미리보는 월요일 시간표
     <ion-icon name=chevron-forward-outline></ion-icon>`);
@@ -182,6 +182,7 @@ $(document).ready(function () {
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('.timetable-horizontal-progress').css({ 'width': 0 })
         } else { //월~목 -> 내일 정보
+            if (day === 6) return;
             forwardDate();
             $('#timetable-title').html(`내일 시간표
         <ion-icon name=chevron-forward-outline></ion-icon>`);
@@ -191,14 +192,14 @@ $(document).ready(function () {
             $('.timetable-horizontal-progress').css({ 'width': 0 });
         }
     } else {
-        if(currentPeriod == 0) { //등교 전
+        if (currentPeriod == 0) { //등교 전
             $('.timetable-horizontal-progress').css({ 'width': 0 });
             $('#timetable-countdown').html(``);
         } else {
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('#timetable_horz_' + currentPeriod).addClass('active');
             $('.timetable-horizontal-progress').css({ 'width': `${7.14 * (currentPeriod * 2 - 1)}%` });
-            $('#timetable-countdown').html(`종례까지 ${Math.round(((new Date().getHours() - 9) * 60 + new Date().getMinutes())*0.22)}%`)
+            $('#timetable-countdown').html(`종례까지 ${Math.round(((new Date().getHours() - 9) * 60 + new Date().getMinutes()) * 0.22)}%`)
         }
     }
 });
@@ -508,7 +509,7 @@ function showAllMeal() {
             console.log(i, data.meal[i])
             if (data.meal[i]) {
                 $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${Object.keys(data.meal)[i]-1}일</h2>
+                <h2>${Object.keys(data.meal)[i] - 1}일</h2>
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
         }
@@ -620,7 +621,7 @@ function getCurrentPeriod() {
         { start: 810, end: 870, period: 5 }, // 13:30 - 14:30
         { start: 870, end: 930, period: 6 }, // 14:30 - 15:30
         { start: 930, end: 990, period: 7 },  // 15:30 - 16:30
-        { start: 990, end: 1440, period: 8}  // 16:30 - 24:00
+        { start: 990, end: 1440, period: 8 }  // 16:30 - 24:00
     ];
 
     for (let i = 0; i < intervals.length; i++) {
