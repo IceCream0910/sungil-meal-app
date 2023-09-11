@@ -182,7 +182,7 @@ $(document).ready(function () {
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('.timetable-horizontal-progress').css({ 'width': 0 })
         } else { //월~목 -> 내일 정보
-            if (day === 6) return;
+            if (day === 6 || day===0) return;
             forwardDate();
             $('#timetable-title').html(`내일 시간표
         <ion-icon name=chevron-forward-outline></ion-icon>`);
