@@ -73,8 +73,8 @@
     </a><a data-tab=report id=report-btn>
         <ion-icon id=tab4 name=settings-outline></ion-icon><span>설정</span>
     </a></div>
-<div class="bottom-nav pc-sidebar non-border"><img loading=lazy src=assets/icons/header_logo.png
-        style=width:30px;height:30px;filter:grayscale(100%)><a class=active data-tab=home id=home-btn>
+<div class="bottom-nav pc-sidebar non-border">
+    <h1 class="hanguelLogo">쏘:옥</h1><a class=active data-tab=home id=home-btn>
         <ion-icon id=tab1 name=planet></ion-icon><span>홈</span>
     </a><a data-tab=community id=community-btn>
         <ion-icon id=tab2 name=chatbubbles-outline></ion-icon><span>커뮤니티</span>
@@ -373,18 +373,26 @@
         <div class=donut></div>
         <h6 id=loading-text>급식실 훔쳐보는 중</h6>
     </div>
+    <style>
+        @font-face {
+            font-family: 'EBSHunminjeongeumSBA';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHunminjeongeum.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .hanguelLogo {
+            font-family: 'EBSHunminjeongeumSBA'
+        }
+    </style>
     <section id=home>
-        <div class=home-header><img id=main-header-icon loading=lazy src=assets/icons/header_logo.png
-                style=width:30px;height:30px;filter:grayscale(100%)>
+        <div class=home-header>
+            <h1 class="hanguelLogo">쏘:옥</h1>
             <div class=header-btn-wrap><a href=https://slashpage.com/ssoak/notice target=_blank aria-label=AI선길이>
                     <ion-icon name=notifications-outline style=font-size:20px></ion-icon>
                 </a></div>
         </div>
         <div class=home-order-wrap style=margin-bottom:20px>
-            <div class="custom-btn callout" onclick="window.open('https://apply.jinhakapply.com/SmartRatio', '_blank')">
-                지금, 대학 별 수시모집 경쟁률 확인 >
-            </div>
-            <br><br>
 
             <div class=meal-wrap id=order-item>
                 <div id=exist-meal>
