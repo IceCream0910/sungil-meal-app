@@ -2,6 +2,43 @@
     "name": "쏙",
     "short_name": "쏙",
     "description": "성일고 급식, 시간표, 학사일정을 한 눈에",
+    "screenshots": [
+        {
+            "src": "screenshots/001.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/002.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/003.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/004.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/005.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/006.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        },
+        {
+            "src": "screenshots/007.png",
+            "type": "image/png",
+            "sizes": "1620x2880"
+        }
+    ],
     "icons": [
         {
             "src": "assets/icons/icon-192x192.png",
@@ -17,6 +54,5 @@
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#5271FF",
-    "theme_color": "#5271FF",
-    "start_url": "/index.html"
+    "start_url": "/"
 }

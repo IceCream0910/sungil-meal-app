@@ -74,7 +74,8 @@
         <ion-icon id=tab4 name=settings-outline></ion-icon><span>설정</span>
     </a></div>
 <div class="bottom-nav pc-sidebar non-border">
-    <h1 class="hanguelLogo">쏘:옥</h1><a class=active data-tab=home id=home-btn>
+    <img loading=lazy src=assets/icons/header_logo.png style=width:30px;height:30px;filter:grayscale(100%)><a
+        class=active data-tab=home id=home-btn>
         <ion-icon id=tab1 name=planet></ion-icon><span>홈</span>
     </a><a data-tab=community id=community-btn>
         <ion-icon id=tab2 name=chatbubbles-outline></ion-icon><span>커뮤니티</span>
@@ -85,7 +86,11 @@
     </a>
     <div class=header-btn-wrap><a href=https://slashpage.com/ssoak/notice target=_blank>
             <ion-icon name=notifications-outline style=font-size:20px></ion-icon>
-        </a></div>
+        </a>
+        <a href="javascript:openModal('앱 설치', 'installApp')" aria-label=앱설치><ion-icon name="arrow-down-circle-outline"
+                style=font-size:20px></ion-icon>
+        </a>
+    </div>
 </div>
 <div class=confirm role=dialog>
     <div></div>
@@ -251,8 +256,24 @@
                     </div><button style=margin-top:20px class="custom-btn modal-btn" id=onBoardingNextBtn
                         onclick=onBoardingNext()>시작하기</button>
                 </div>
-                <div class=content-wrap id=otherApps><button class="custom-btn modal-btn"
-                        onclick='closeModal(),window.open("https://ai.sungil.me/wordcounter")'>글자수 세기/맞춤법 검사</button>
+                <div class=content-wrap id=installApp>
+                    <div style=display:flex;flex-direction:row;gap:20px>
+                        <div class="card notice-card" style=width:50% onclick='closeModal();installPWA();'
+                            id="pwa-install-btn">
+                            <h4>iOS/Android용 웹앱</h4>
+                            <p>홈화면에 바로가기 형태로 쏙을 추가할 수 있어요.</p>
+                            <ion-icon name=layers-outline
+                                style=background:0;position:absolute;top:60%;right:-20px;font-size:50px;opacity:.3;color:#819fff></ion-icon><br>
+                        </div>
+                        <div class="card notice-card" style=width:50%
+                            onclick='closeModal();window.open("https://play.google.com/store/apps/details?id=com.icecream.sungilmeal&pcampaignid=web_share","_blank")'>
+                            <h4>안드로이드 앱</h4>
+                            <p>매일 아침 급식 푸시 알림, 위젯 등 기능을 사용할 수 있어요.</p>
+                            <ion-icon name=logo-google-playstore
+                                style=background:0;position:absolute;top:60%;right:-20px;font-size:50px;opacity:.3;color:#819fff></ion-icon><br>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="content-wrap" id="timetable_modal">
                     <div class="d-flex flex-row" style=display:flex;justify-content:space-between>
@@ -373,24 +394,24 @@
         <div class=donut></div>
         <h6 id=loading-text>급식실 훔쳐보는 중</h6>
     </div>
-    <style>
-        @font-face {
-            font-family: 'EBSHunminjeongeumSBA';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/EBSHunminjeongeum.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        .hanguelLogo {
-            font-family: 'EBSHunminjeongeumSBA'
-        }
-    </style>
     <section id=home>
         <div class=home-header>
-            <h1 class="hanguelLogo">쏘:옥</h1>
-            <div class=header-btn-wrap><a href=https://slashpage.com/ssoak/notice target=_blank aria-label=AI선길이>
+            <img loading=lazy src=assets/icons/header_logo.png style=width:30px;height:30px;filter:grayscale(100%)>
+
+
+            <div class=header-btn-wrap>
+                <a id="open-appinstallModal-btn" href="javascript:openModal('앱 설치', 'installApp')" aria-label=앱설치 style="font-size: 13px;
+                display: flex;
+                align-items: center;
+                justify-content: center;">
+                    <span style=margin-top:-2px;>앱 설치</span>&nbsp;<ion-icon name="arrow-down-circle-outline"
+                        style=font-size:20px;top:0;></ion-icon>
+                </a>
+
+                <a href=https://slashpage.com/ssoak/notice target=_blank aria-label=AI선길이>
                     <ion-icon name=notifications-outline style=font-size:20px></ion-icon>
-                </a></div>
+                </a>
+            </div>
         </div>
         <div class=home-order-wrap style=margin-bottom:20px>
 
@@ -477,11 +498,9 @@
             <br><br><ins class=kakao_ad_area style=display:none data-ad-unit=DAN-WCT8chS2JYxIPFuG data-ad-width=320
                 data-ad-height=100></ins><br><br>
 
-
             <div class="custom-btn callout" onclick="window.open('https://suneung.kr/', '_blank')">
                 2024학년도 수능,&nbsp; <span id=dday-suneung></span>
-            </div>
-            <br><br>
+            </div><br></br>
             <div style=display:flex;flex-direction:row;gap:20px>
                 <div class="card notice-card" style=width:50%
                     onclick='window.open("https://sungil-h.goesn.kr/sungil-h/main.do","_blank")'>

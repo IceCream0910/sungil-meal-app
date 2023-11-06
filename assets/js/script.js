@@ -36,7 +36,46 @@ if (isApp()) {
     } else {
         Android.setNotiEnable(false);
     }
+    $('#open-appinstallModal-btn').hide();
 }
+
+/* pwa 대응 */
+let installPrompt = null;
+
+window.addEventListener("beforeinstallprompt", async (event) => {
+    const relatedApps = await navigator.getInstalledRelatedApps();
+
+    // Search for a specific installed platform-specific app
+    const psApp = relatedApps.find((app) => app.id === "com.icecream.sungilmeal");
+
+    if (psApp) {
+        event.preventDefault();
+        toast('이미 안드로이드 앱이 설치되어 있습니다.');
+    } else {
+        installPrompt = event;
+    }
+});
+
+window.addEventListener("appinstalled", () => {
+    disableInAppInstallPrompt();
+});
+
+function disableInAppInstallPrompt() {
+    installPrompt = null;
+}
+
+async function installPWA() {
+    if (!installPrompt) {
+        toast('이미 웹앱이 설치되어 있습니다.');
+        return;
+    }
+    const result = await installPrompt.prompt();
+    console.log(`Install prompt was: ${result.outcome}`);
+    disableInAppInstallPrompt();
+}
+
+
+/* */
 
 var today = moment(new Date()).format('YYYYMMDD');
 var day = new Date().getDay();
@@ -182,7 +221,7 @@ $(document).ready(function () {
             $('#timetable_horz_' + currentPeriod).removeClass('active');
             $('.timetable-horizontal-progress').css({ 'width': 0 })
         } else { //월~목 -> 내일 정보
-            if (day === 6 || day===0) return;
+            if (day === 6 || day === 0) return;
             forwardDate();
             $('#timetable-title').html(`내일 시간표
         <ion-icon name=chevron-forward-outline></ion-icon>`);
@@ -419,7 +458,7 @@ function displayMeal(data) {
         });
 
         currentMenuRaw = data.meal[day].toString().replace(':', '');
-        var menuArr = currentMenuRaw.replaceAll('\n', '<br/>').replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').replaceAll("**", "").replaceAll("(ㅆ)", "").split('<br/>');
+        var menuArr = currentMenuRaw.replaceAll('\n', '<br/>').replaceAll('\'', '').replaceAll('[중식]', '').replaceAll('``', '').replaceAll(' (', '').replaceAll("*", "").replaceAll("(ㅆ)", "").split('<br/>');
         var menuInfoTag = '';
 
         for (var i = 0; i < menuArr.length; i++) {
@@ -445,7 +484,7 @@ function displayMeal(data) {
 
 
                 if (isDanger) {
-                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + '</a>';
+                    menuInfoTag += '<a class="mealItem dangerMeal" href="javascript:openMenuBanner(\'' + menuName + '\', \'' + alle + '\')">' + menuName + ', </a>';
                 } else {
                     var isFavorite = false;
                     $.each(favTagsList, function (index, element) {
@@ -505,15 +544,24 @@ function showAllMeal() {
     data = JSON.parse(data);
 
     if (data.meal) {
-        for (var i = 1; i < Object.keys(data.meal).length; i++) {
-            console.log(i, data.meal[i])
+        for (var i = 1; i < 30; i++) {
             if (data.meal[i]) {
-                $('#meallist-result').append(`<div class="meal-list-item">
-                <h2>${Object.keys(data.meal)[i] - 1}일</h2>
+                $('#meallist-result').append(`<div class="meal-list-item" id="meal-${i}">
+                <h2 id="allMeal-title-${i}">${i}일(${getDay(moment(moment(selectedDate).format('YYYYMM') + i.toString().padStart(2, '0')).format('d'))})</h2>
                 ${(data.meal[i]).replaceAll('[중식]\n', '').replaceAll('\n', '<br>')}</div>`);
             }
         }
         openModal('이번 달 급식', 'mealList');
+        var day = moment(selectedDate).format('D');
+        var element = document.getElementById(`meal-${day}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            if (storedTheme == 'true' || (storedTheme == 'system' && mql.matches)) {
+                $(`#allMeal-title-${day}`).css('color', '#b0bfff');
+            } else {
+                $(`#allMeal-title-${day}`).css('color', '#5272ff');
+            }
+        }
     }
 }
 
@@ -849,7 +897,7 @@ function openMenuBanner(name, allegy) {
 
         var allegyString = allegy.replace('10', '돼지고기').replace('11', '복숭아').replace('12', '토마토').replace('13', '아황산염').replace('14', '호두').replace('15', '닭고기').replace('16', '쇠고기').replace('17', '오징어').replace('18', '조개류(굴, 전복, 홍합 포함)').replace('19', '잣').replaceAll('.', ', ').replace('1', '난류').replace('2', '우유').replace('3', '메밀').replace('4', '땅콩').replace('5', '대두').replace('6', '밀').replace('7', '고등어').replace('8', '게').replace('9', '새우')
             .replaceAll('?', '<span id="dangerAllegy">').replaceAll('!', '</span>');
-        $('#allergy-info').html(allegyString.substring(0, allegyString.length - 2));
+        $('#allergy-info').html(allegyString.substring(0, allegyString.length - 1));
     }
     $('#menu-name').html(name);
     imageSearch(name);
